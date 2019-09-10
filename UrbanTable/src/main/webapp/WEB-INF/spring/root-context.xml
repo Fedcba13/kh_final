@@ -9,7 +9,7 @@
 	<!-- #7.1. myBatis(JDBC)설정 연결 설정하기 -->
 	<!-- 프로퍼티 파일에서 읽어옵니다. -->
 	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="/WEB-INF/config/driver.properties"/>
+        <property name="location" value="/WEB-INF/configProperties/driver.properties"/>
         <property name="fileEncoding" value="UTF-8" />
     </bean>
 
