@@ -10,7 +10,6 @@
     <title>Urban Table</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/default.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumBarunGothic@1.0/nanumbarungothicsubset.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/main.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/resources/css/slick.css"/>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/resources/css/slick-theme.css"/>
     <script type="text/javascript" src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -35,6 +34,7 @@
                 <li class="cs_center">
                     <a href="" class="dp_block">관리자</a>
                     <ul>
+                    	<li><a href="" class="dp_block">창업 신청 리스트</a></li>
                         <li><a href="" class="dp_block">매장 리스트</a></li>
                         <li><a href="" class="dp_block">발주 리스트</a></li>
                         <li><a href="" class="dp_block">식자재 등록</a></li>
@@ -43,7 +43,7 @@
                     </ul>
                 </li>
                 <li><a href="" class="dp_block">배송지역 검색</a></li>
-                <li><a href="" class="dp_block">창업 신청</a></li>
+                <li><a href="${pageContext.request.contextPath}/market/founded.do" class="dp_block">창업 신청</a></li>
             </ul>
         </div>
         <h1 id="logo" class="txt_center point">urban table</h1>
