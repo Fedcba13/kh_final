@@ -99,6 +99,38 @@ a:visited {color: #333;}
     background: #f4f4f0;
 }
 
+input {
+	height: 40px;
+	line-heihgt: 40px;
+	border: 1px solid #e9e9e9;
+	box-sizing: border-box;
+	border-radius: 5px;
+	padding-left: 15px;
+	color: #555;
+}
+
+.btn {
+	display: inline-block;
+	width: 150px;
+	padding: 0;
+	height: 40px;
+	line-height: 40px;
+	border:1px solid #374818;
+	box-sizing:border-box;
+	font-size: 14px;
+	font-weight: 600;
+	color: #fff;
+	background:#374818;
+	cursor: pointer;
+	transition: all .25s linear;
+	-webkit-transition: all .25s linear;
+}
+
+.btn:hover {
+	background: #fff;
+	color: #374818;
+}
+
 /*헤더*/
 #header {
     border-bottom: 1px solid #e9e9e9;
@@ -369,5 +401,5 @@ a:visited {color: #333;}
 }
 
 .tbl_view tr td {
-    padding: 10px 0 10px 15px;
+    padding: 10px 15px;
 }
