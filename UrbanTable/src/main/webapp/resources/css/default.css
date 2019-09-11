@@ -382,6 +382,7 @@ input {
 .tbl {
     width: 100%;
     border-top: 2px solid #374818;
+    border-bottom: 2px solid #374818;
     border-collapse: collapse;
     font-size: 15px;
     color: #555;
