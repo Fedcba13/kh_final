@@ -62,7 +62,7 @@
                         <input type="submit" value="검색">
                     </form>
                 </div>
-                <a href="" class="go_cart dp_block"><img src="${pageContext.request.contextPath }/resources/images/cart.png" alt="장바구니"></a>
+                <a href="${pageContext.request.contextPath}/cart/cartList.do" class="go_cart dp_block"><img src="${pageContext.request.contextPath }/resources/images/cart.png" alt="장바구니"></a>
             </div>
             <div id="gnb_menu_wrap">
                 <ul class="gnb_menu"> <!--밑에 메뉴는 예시이고 관리자가 메뉴 관리를 통해 관리하게 해주세요.-->

@@ -124,16 +124,14 @@
 			<groupId>javax.servlet</groupId>
 			<artifactId>jstl</artifactId>
 			<version>1.2</version>
-		</dependency>
-	
+		</dependency>	
 		<!-- Test -->
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.7</version>
 			<scope>test</scope>
-		</dependency>      
-		
+		</dependency>      		
 		<!-- #6.1 Database 연결관련 의존등록 -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
