@@ -23,4 +23,16 @@ public class NoticeServiceImpl implements NoticeService{
 		
 		return noticeDAO.noticeList();
 	}
+
+	@Override
+	public Notice selectOne(String noticeNo) {
+		
+		return noticeDAO.selectOne(noticeNo);
+	}
+
+	@Override
+	public int readcount(String noticeNo) {
+		
+		return noticeDAO.readcount(noticeNo);
+	}
 }

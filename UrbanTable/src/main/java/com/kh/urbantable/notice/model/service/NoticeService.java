@@ -8,4 +8,8 @@ public interface NoticeService {
 
 	List<Notice> noticeList();
 
+	Notice selectOne(String noticeNo);
+
+	int readcount(String noticeNo);
+
 }
