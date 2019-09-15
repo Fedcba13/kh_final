@@ -3,12 +3,14 @@
   PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
- <settings>
- 	<setting name="jdbcTypeForNull" value="NULL"/>
- 	<setting name="mapUnderscoreToCamelCase" value="true"/>
- </settings>
- <typeAliases>
- 	<typeAlias type="com.kh.urbantable.notice.model.vo.Notice" 
-  			   alias="notice"/>
- </typeAliases>
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL" />
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+	</settings>
+	<typeAliases>
+		<typeAlias type="com.kh.urbantable.notice.model.vo.Notice"
+			alias="notice" />
+		<typeAlias type="com.kh.urbantable.member.model.vo.Member"
+			alias="member" />
+	</typeAliases>
 </configuration>

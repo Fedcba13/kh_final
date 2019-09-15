@@ -228,9 +228,9 @@
 		<!-- 휴대폰 인증 -->
 		<!-- https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit -->
 		<dependency>
-			<groupId>com.squareup.retrofit2</groupId>
-			<artifactId>retrofit</artifactId>
-			<version>2.3.0</version>
+		    <groupId>com.squareup.retrofit2</groupId>
+		    <artifactId>retrofit</artifactId>
+		    <version>2.5.0</version>
 		</dependency>
 		<!-- 휴대폰 인증 -->
 		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
