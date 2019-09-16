@@ -5,32 +5,66 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
+<script>
+function updateFrm(){
+	var noticeNo = $("#noticeNo").val();
+	console.log(noticeNo);
+	location.href="${pageContext.request.contextPath}/notice/noticeUpdateFrm.do?noticeNo="+noticeNo;
+}
+function deleteFrm(){
+	var bool = confirm("정말로 삭제하시겠습니까?");
+	var noticeNo = $("#noticeNo").val();
+	if(!bool){
+		return;
+	}
+	
+	location.href="${pageContext.request.contextPath}/notice/deleteNotice.do?noticeNo="+noticeNo;
+	}
 
+</script>
+<style>
+li input.btn{
+		float : right;
+	    margin: 5px;
+}
+</style>
 <section class="sec_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 	    <h3 class="sub_tit">공지사항</h3>
-	    <div class="txt_right"><input type="button" class="btn" value="수정"></div>
-	    <br/>
+	    <div class="txt_right">
 	    
+	    <li>
+	    <input type="button" class="btn" value="수정"  onclick="updateFrm();">
+	   	<input type="hidden" id="noticeNo" value="${notice.noticeNo }"/>
+	    </li>
+	    <li>
+	    <input type="button" value="삭제" class="btn" onclick="deleteFrm();"/>
+	    </li>
+	    
+	    </div>
+	    <br/>
 	    <table class="tbl txt_center"> 
             <tr>
-                <th>구분</th>
-                <th>제목</th>
-                <th>등록일</th>
+                <th style="width:50px;">구분</th>
+                <th style="width:150px;">제목</th>
+                <th style="width:50px;">등록일</th>
+                <th style="width:30px;">조회수</th>
             </tr>
             <tr>
             	<td>${notice.noticeCategory }</td>
             	<td class="txt_left">${notice.noticeTitle }</td>
             	<td>${notice.noticeDate }</td>
+            	<td>${notice.noticeReadcount }</td>
             </tr>
             <tr>
-            	<td colspan="3">
-            	<img src='${pageContext.request.contextPath}/resources/images/${notice.noticeContent }'/>
+            	<td class="txt_left" colspan="3">
+               	<pre style="font-family: 'NanumBarunGothic', sans-serif;">
+               	${notice.noticeContent }
+               	</pre>
             	</td>
             </tr>
         </table>
 
-        ${notice }
     </article>
 </section>
 

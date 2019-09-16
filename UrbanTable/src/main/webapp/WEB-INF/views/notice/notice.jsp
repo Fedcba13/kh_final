@@ -6,17 +6,16 @@
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <script>
-function noticeView(no){
+function writeNotice(){
 	
-	console.log(no);
-	//location.href = "${pageContext.request.contextPath}/notice/noticeView.do?noticeNo="+no;
+	location.href = "${pageContext.request.contextPath}/notice/insertNotice.do";
 }
 </script>
 <section class="sub_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 
 	<article class="subPage inner">
 	    <h3 class="sub_tit">공지사항</h3>
-	    <div class="txt_right"><input type="button" class="btn" value="글쓰기"></div>
+	    <div class="txt_right"><input type="button" class="btn" value="글쓰기" onclick="writeNotice();"></div>
 	    <br/>    
 	    
 	    <table class="tbl txt_center"> <!--가운데 정렬 아니면 txt_center 빼셔도 됩니다.
@@ -33,12 +32,16 @@ function noticeView(no){
                 <td>${n.noticeCategory }</td>
                 <td class="txt_left"><a href='${pageContext.request.contextPath }/notice/noticeView.do?noticeNo=${n.noticeNo}'>${n.noticeTitle }</a></td>
                 <td>${n.noticeWriter }</td>
+                <c:if test="${n.noticeDateModified > n.noticeDate }">
+                	<td>${n.noticeDateModified }</td>
+                </c:if>
+                <c:if test="${n.noticeDateModified <= n.noticeDate }">
                 <td>${n.noticeDate }</td>
-                <td>${n.notice_readCount }</td>
+                </c:if>
+                <td>${n.noticeReadcount }</td>
             </tr>
             </c:forEach>
-        </table>
-
+        </table>        
     </article>
 </section>
 
