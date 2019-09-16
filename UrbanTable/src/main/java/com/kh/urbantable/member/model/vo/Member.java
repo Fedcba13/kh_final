@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class Member {
-	private String memberId;
+	private String memberID;
 	private String memberPassword;
 	private String memberName;
 	private int memberPoint;

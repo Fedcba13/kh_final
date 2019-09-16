@@ -133,9 +133,22 @@ input[type=text] {
 	-webkit-transition: all .25s linear;
 }
 
+.btn_disabled {
+	color: #000;
+	background: #ebebe4;
+	cursor: default;
+	transition: initial;
+	-webkit-transition: initial;
+}
+
 .btn:hover {
 	background: #fff;
 	color: #374818;
+}
+
+.btn_disabled:hover {
+	color: #000;
+	background: #ebebe4;
 }
 
 /*헤더*/
