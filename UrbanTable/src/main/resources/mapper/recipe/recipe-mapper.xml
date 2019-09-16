@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="recipe">
+	<select id="selectRecipeList" resultMap="recipeMap">
+		select * from recipe
+	</select>
+	<resultMap type="recipe" id="recipeMap">
+		<result column="recipe_no" property="recipeNo" />
+		<result column="member_id" property="memberId" />
+		<result column="recipe_title" property="recipeTitle" />
+		<result column="recipe_readcount" property="recipeReadcount" />
+		<result column="recipe_date" property="recipeDate" />
+		<result column="recipe_enabled" property="recipeEnabled" />
+	</resultMap>
+</mapper>
