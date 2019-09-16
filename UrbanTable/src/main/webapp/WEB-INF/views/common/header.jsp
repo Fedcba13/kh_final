@@ -26,7 +26,7 @@
                 <li class="cs_center">
                     <a href="" class="dp_block">고객센터</a>
                     <ul>
-                        <li><a href="${pageContext.request.contextPath }/admin2/noticeList.do" class="dp_block">공지사항</a></li>
+                        <li><a href="${pageContext.request.contextPath }/notice/noticeList.do" class="dp_block">공지사항</a></li>
                         <li><a href="" class="dp_block">자주하는 질문</a></li>
                         <li><a href="" class="dp_block">상품 제안</a></li>
                     </ul>

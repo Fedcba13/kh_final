@@ -8,4 +8,8 @@ public interface NoticeDAO {
 
 	List<Notice> noticeList();
 
+	Notice selectOne(String noticeNo);
+
+	int readcount(String noticeNo);
+
 }

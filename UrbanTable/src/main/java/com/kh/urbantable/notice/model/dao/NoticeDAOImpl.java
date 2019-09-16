@@ -17,11 +17,20 @@ public class NoticeDAOImpl implements NoticeDAO{
 	
 	@Override
 	public List<Notice> noticeList() {
-		List<Notice> asd = sqlSession.selectList("notice.noticeList");
-		if(asd == null) {
-			System.out.println("망했다");
-		}
-		return asd; 
+		
+		return sqlSession.selectList("notice.noticeList"); 
+	}
+
+	@Override
+	public Notice selectOne(String noticeNo) {
+		
+		return sqlSession.selectOne("notice.selectOne", noticeNo);
+	}
+
+	@Override
+	public int readcount(String noticeNo) {
+		
+		return sqlSession.update("notice.readcount", noticeNo);
 	}
 
 	

@@ -8,4 +8,11 @@
 		select * from notice where notice_enabled = 1
 	</select>
 	
+	<select id="selectOne" resultType="notice">
+		select * from notice where notice_no = #{noticeNo}
+	</select>
+	
+	<update id="readcount">
+		update notice set notice_readcount = notice_readcount + 1 where notice_no = #{noticeNo}
+	</update>
 </mapper>
