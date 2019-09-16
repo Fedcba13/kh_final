@@ -54,7 +54,7 @@
                     <li><a href="" class="dp_block">신상품</a></li>
                     <li><a href="" class="dp_block">베스트</a></li>
                     <li><a href="" class="dp_block">알뜰 쇼핑</a></li>
-                    <li><a href="" class="dp_block">레시피</a></li>
+                    <li><a href="${pageContext.request.contextPath }/recipe/recipe" class="dp_block">레시피</a></li>
                 </ul>
                 <div id="main_search">
                     <form action="" class="dp_block">
