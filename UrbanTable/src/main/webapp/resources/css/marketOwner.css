@@ -18,6 +18,68 @@
 	color:#fff;
 }
 
-#marketAddress1, #marketAddress2, #sample6_extraAddress {
+#marketAddress, 
+#marketAddress2, 
+#sample6_extraAddress {
 	width: 350px;
+}
+
+.tit_wrap h3 {
+	float:left;
+}
+
+.tit_wrap p {
+	float:right;
+	font-size: 15px;
+}
+
+#marketOrder table .btn,
+form[name=orderSearchFrm2] input[type=submit] {
+	width: 60px;
+	border-radius:3px;
+}
+
+form[name=orderSearchFrm1] {
+	position:relative;
+	width:330px;
+	margin-bottom:10px;
+}
+
+form[name=orderSearchFrm1] input[type=submit] {
+	position: absolute;
+    right: 0;
+    top: 0;
+    width: 42px;
+    height: 38px;
+    background: url(../images/search.png) no-repeat center center;
+    background-size: 20px;
+    border: none;
+    font-size: 0;
+    cursor: pointer;
+}
+
+form[name=orderSearchFrm2] {
+	margin-bottom:10px;
+	padding:15px;
+	font-size:15px;
+	border-radius:3px;
+	box-sizing:border-box;
+}
+
+form[name=orderSearchFrm2] > div > p {
+	float:left;
+	width: 80px;
+	line-height:42px;
+}
+
+form[name=orderSearchFrm2] > div > div {
+	float:left;
+}
+
+.mapAddress {
+	cursor:pointer;
+}
+
+.mapAddress img {
+	vertical-align:text-top;
 }

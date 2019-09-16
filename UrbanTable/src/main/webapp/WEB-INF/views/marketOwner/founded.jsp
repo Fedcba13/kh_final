@@ -49,7 +49,7 @@
 
                 // 우편번호와 주소 정보를 해당 필드에 넣는다.
                 document.getElementById('sample6_postcode').value = data.zonecode;
-                document.getElementById("marketAddress1").value = addr;
+                document.getElementById("marketAddress").value = addr;
                 // 커서를 상세주소 필드로 이동한다.
                 document.getElementById("marketAddress2").focus();
             }
@@ -59,32 +59,35 @@
 
 <section>
 	<article class="subPage inner">
-	    <h3 class="sub_tit">창업 신청</h3>
-	    <form action="">
+		<div class="tit_wrap clearfix">
+			<h3 class="sub_tit">창업 신청</h3>
+	    	<p class="txt_right"><span class="red">*</span>은 필수 항목입니다.</p>
+		</div>
+	    <form name="foundedFrm" action="${pageContext.request.contextPath}/market/foundedEnd.do" method="post">
 	        <table class="tbl tbl_view">
 	            <tr>
-	                <th>신청 아이디</th>
-	                <td><input type="text" name="marketMemberId" id="marketMemberId" value="로그인한 아이디" class="dp_block" style="width:200px;" /></td>
+	                <th><span class="red">*</span>신청 아이디</th>
+	                <td><input type="text" name="marketMemberId" id="marketMemberId" value="로그인한 아이디" class="dp_block" required style="width:200px;" /></td>
 	            </tr>
 	            <tr>
-	                <th>신청자명</th>
-	                <td><input type="text" name="marketMemberName" id="marketMemberName" value="로그인한 아이디의 이름" class="dp_block" style="width:200px;" /></td>
+	                <th><span class="red">*</span>신청자명</th>
+	                <td><input type="text" name="marketMemberName" id="marketMemberName" value="로그인한 아이디의 이름" required class="dp_block" style="width:200px;" /></td>
 	            </tr>
 	            <tr>
-	                <th>주민번호</th>
-	                <td><input type="text" name="marketResident" id="marketResident" class="dp_block" style="width:200px;" /></td>
+	                <th><span class="red">*</span>주민번호</th>
+	                <td><input type="text" name="marketResident" id="marketResident" class="dp_block" required style="width:200px;" /></td>
 	            </tr>
 	            <tr>
-	                <th>연락처</th>
-	                <td><input type="text" name="marketMemberPhone" id="marketMemberPhone" value="로그인한 아이디의 전화번호" class="dp_block" style="width:200px;" /></td>
+	                <th><span class="red">*</span>연락처</th>
+	                <td><input type="text" name="marketTelephone" id="marketMemberPhone" value="로그인한 아이디의 전화번호" required class="dp_block" style="width:200px;" /></td>
 	            </tr>
 	            <tr>
-	                <th>창업 희망 주소</th>
+	                <th><span class="red">*</span>창업 희망 주소</th>
 	                <td>
 	                	<input type="text" id="sample6_postcode" placeholder="우편번호" class="mb10">
-						<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" class="btn postBtn fw400 mb10"><br>
-						<input type="text" id="marketAddress1" name="marketAddress1" placeholder="주소" class="mb10"><br>
-						<input type="text" id="marketAddress2" name="marketAddress2" placeholder="상세주소">
+						<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" required class="btn postBtn fw400 mb10"><br>
+						<input type="text" id="marketAddress" name="marketAddress" placeholder="주소" class="mb10" required><br>
+						<input type="text" id="marketAddress2" name="marketAddress2" placeholder="상세주소" required>
 						<input type="text" id="sample6_extraAddress" placeholder="참고항목">
 	                </td>
 	            </tr>

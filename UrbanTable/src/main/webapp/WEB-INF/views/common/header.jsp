@@ -15,7 +15,6 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/slick.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/common.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/main.js"></script>
 </head>
 <body>
     <header id="header">
@@ -35,10 +34,21 @@
                     <a href="" class="dp_block">관리자</a>
                     <ul>
                     	<li><a href="" class="dp_block">창업 신청 리스트</a></li>
-                        <li><a href="" class="dp_block">매장 리스트</a></li>
+                        <li><a href="${pageContext.request.contextPath}/market/marketList.do" class="dp_block">매장 리스트</a></li>
                         <li><a href="" class="dp_block">발주 리스트</a></li>
                         <li><a href="" class="dp_block">식자재 등록</a></li>
+                        <li><a href="" class="dp_block">배너 등록</a></li>
+                    </ul>
+                </li>
+                <li class="cs_center">
+                    <a href="" class="dp_block">점주</a>
+                    <ul>
+                        <li><a href="${pageContext.request.contextPath}/market/myMarket.do" class="dp_block">내 지점 관리</a></li>
+                        <li><a href="${pageContext.request.contextPath}/market/marketOrder.do" class="dp_block">지점 주문 내역</a></li>
                         <li><a href="" class="dp_block">배송 관리</a></li>
+                        <li><a href="" class="dp_block">지점 인기 상품</a></li>
+                        <li><a href="" class="dp_block">지점 매출 현황</a></li>
+                        <li><a href="" class="dp_block">발주 요청</a></li>
                         <li><a href="" class="dp_block">재고 관리</a></li>
                     </ul>
                 </li>
@@ -46,7 +56,7 @@
                 <li><a href="${pageContext.request.contextPath}/market/founded.do" class="dp_block">창업 신청</a></li>
             </ul>
         </div>
-        <h1 id="logo" class="txt_center point">urban table</h1>
+        <h1 id="logo" class="txt_center point"><a href="${pageContext.request.contextPath}" class="dp_ib">urban table</a></h1>
         <div id="menu_container" class="inner">
             <div id="menu_wrap">
                 <ul id="gnb" class="clearfix">
