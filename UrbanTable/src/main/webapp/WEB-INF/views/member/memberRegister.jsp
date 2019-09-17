@@ -55,6 +55,10 @@
 </style>
 
 <script>
+
+var time = 180;
+var timer = null;
+
 $(()=>{
 
 	$('.txt_guide').hide();
@@ -67,7 +71,61 @@ $(()=>{
 		var $target = $(this).parent().find('.txt_guide');
 	});
 	
+	//sendMSg => 인증번호 받기
+	$("#sendMsg").click(()=>{
+		time = 180;
+		var phone = $("[name=memberPhone]").val();
+		$.ajax({
+			url: "${pageContext.request.contextPath}/member/sendMessage.do",
+			data: {phone: phone},
+			success: (data)=>{
+				alert(data.msg);
+				if(data.msg == '인증번호 발송 성공!'){
+					$("[name=memberPhone]").css
+					timer = setInterval(PrintTime, 1000);
+				}
+				
+			},
+			error: (xhr, txtStatus, err)=>{
+				console.log("ajax처리실패!", xhr, txtStatus, err);
+			}
+		});
+	});
+	
+	//checkMsg => 인증번호 확인
+	$("#checkMsg").click(()=>{
+		var param = {
+			phone : $("[name=memberPhone]").val(),
+			authCode: $("[name=auth_code]").val()
+		}
+		$.ajax({
+			url: "${pageContext.request.contextPath}/member/checkMessage.do",
+			data: param,
+			success: (data)=>{
+				alert(data.msg);
+				
+				
+			},
+			error: (xhr, txtStatus, err)=>{
+				console.log("ajax처리실패!", xhr, txtStatus, err);
+			}
+		});
+	});
+	
 });
+
+function PrintTime() {
+	
+	time = time - 1;
+    
+    $("#time").html(time);
+    
+    if(time <= 0){
+    	$("#time").html('시간 종료');
+    	clearInterval(timer);
+    }
+
+}
 
 //카카오 주소찾기 api
 function sample6_execDaumPostcode() {
@@ -96,10 +154,10 @@ function sample6_execDaumPostcode() {
 			if($(".tbl_addr1").length == 0){
 				var html = '';
 					html += '<tr class="tbl_addr1">';
-					html += '<td><input type="text" value=""></td>';
+					html += '<td><input type="text" value="" name="memberAddress"></td>';
 					html += '</tr>';
 					html += '<tr class="tbl_addr2">';
-					html += '<td><input type="text" value="" placeholder="세부주소를 입력해주세요." maxlength="35">';
+					html += '<td><input type="text" value="" placeholder="세부주소를 입력해주세요." maxlength="35" name="memberAddress2">';
 					html += '<p>';
 					html += '<span class="txt"></span>';
 					html += '</p>';
@@ -125,53 +183,59 @@ function sample6_execDaumPostcode() {
 <section> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 		<h3 class="sub_tit txt_center">회원가입</h3>
+		<c:if test="${not empty phone }">
+			<span id="time"></span>
+		</c:if>
 		<span class="register_require">*필수입력사항</span>
-		<table class="tbl tbl_view member_register">
-			<tr>
-				<th>아이디*</th>
-				<td>
-					<input type="text" name="memberId" placeholder="예: UrbanTable"><input type="button" class="btn" value="중복확인">
-					<p class="txt_guide">
-						<span class="txt txt_case1">6자 이상의 영문 혹은 영문과 숫자를 조합</span>
-						<span class="txt txt_case2">아이디 중복확인</span>
-					</p>
-				</td>
-				<td></td>
-			</tr>
-			<tr>
-				<th>비밀번호</th>
-				<td><input type="password" placeholder="비밀번호를 입력해주세요." maxlength="16">
-					<p class="txt_guide" style="display: block;">
-						<span class="txt txt_case1">10자 이상 입력</span>
-						<span class="txt txt_case2">영문/숫자/특수문자(!@#$*-_)만 허용하며, 2개 이상 조합</span>
-					</p>
-				</td>
-			</tr>
-			<tr>
-				<th>비밀번호확인*</th>
-				<td colspan="2">
-					<input type="password" name="password2" maxlength="16" placeholder="비밀번호를 한번 더 입력해주세요.">
-					<p class="txt_guide">
-						<span class="txt txt_case1">동일한 비밀번호를 입력해주세요.</span>
-					</p>
-				</td>
-			</tr>
-			<tr>
-				<th>이름*</th>
-				<td><input type="text" name="name" placeholder="예: 김어반"></td>
-			</tr>
-			<tr>
-				<th rowspan="2">휴대폰*</th>
-				<td><input type="text" maxlength="11" placeholder="'-'없이 숫자만 입력해주세요."><input type="button" class="btn" value="인증번호받기"></td>
-			</tr>
-			<tr>
-				<td><input type="text" name="auth_code"><input type="button" class="btn" value="인증번호확인"></td>
-			</tr>
-			<tr class="tbl_addr">
-				<th>배송주소*</th>
-				<td><input type="button" value="주소 검색" class="btn" onclick="sample6_execDaumPostcode()"></td>
-			</tr>
-		</table>
+		<form action="${pageContext.request.contextPath}/member/register.do" method="post">
+			<table class="tbl tbl_view member_register">
+				<tr>
+					<th>아이디*</th>
+					<td>
+						<input type="text" name="memberID" placeholder="예: UrbanTable"><input type="button" class="btn" value="중복확인">
+						<p class="txt_guide">
+							<span class="txt txt_case1">6자 이상의 영문 혹은 영문과 숫자를 조합</span>
+							<span class="txt txt_case2">아이디 중복확인</span>
+						</p>
+					</td>
+					<td></td>
+				</tr>
+				<tr>
+					<th>비밀번호</th>
+					<td><input type="password" placeholder="비밀번호를 입력해주세요." maxlength="16" name="memberPassword">
+						<p class="txt_guide" style="display: block;">
+							<span class="txt txt_case1">10자 이상 입력</span>
+							<span class="txt txt_case2">영문/숫자/특수문자(!@#$*-_)만 허용하며, 2개 이상 조합</span>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<th>비밀번호확인*</th>
+					<td colspan="2">
+						<input type="password" name="password2" maxlength="16" placeholder="비밀번호를 한번 더 입력해주세요.">
+						<p class="txt_guide">
+							<span class="txt txt_case1">동일한 비밀번호를 입력해주세요.</span>
+						</p>
+					</td>
+				</tr>
+				<tr>
+					<th>이름*</th>
+					<td><input type="text" name="memberName" placeholder="예: 김어반"></td>
+				</tr>
+				<tr>
+					<th rowspan="2">휴대폰*</th>
+					<td><input type="text" name="memberPhone" maxlength="11" placeholder="'-'없이 숫자만 입력해주세요."><input type="button" class="btn" id="sendMsg" value="인증번호받기"></td>
+				</tr>
+				<tr>
+					<td><input type="text" name="auth_code" maxlength="6"><input type="button" class="btn" id="checkMsg" value="인증번호확인"></td>
+				</tr>
+				<tr class="tbl_addr">
+					<th>배송주소*</th>
+					<td><input type="button" value="주소 검색" class="btn" onclick="sample6_execDaumPostcode()"></td>
+				</tr>
+			</table>
+		<input type="submit" class="btn" value="회원가입">
+		</form>
 	</article>
 </section>
 

@@ -10,5 +10,34 @@
 		where
 		member_id = #{memberId}
 	</select>
+	
+	<select id="phoneDuplicate" resultType="member">
+		select *
+			from member
+		where
+			member_phone = #{phone}
+	</select>
+	
+	<insert id="insertPhoneAuth">
+		insert into authPhone
+		values(#{phone}, #{authCode})
+	</insert>
+	
+	<delete id="deletePhoneAuth">
+		delete from authPhone
+		where phone = #{phone}
+	</delete>
+	
+	<select id="checkMessage" resultType="int">
+		select count(*)
+		from authPhone
+		where phone = #{phone}
+		and authcode = #{authCode}
+	</select>
+	
+	<insert id="insertMember">
+		insert into member(member_id, member_password, member_name, member_address, member_address2, member_phone)
+		 values(#{memberID}, #{memberPassword}, #{memberName}, #{memberAddress}, #{memberAddress2}, #{memberPhone})
+	</insert>
 
 </mapper>

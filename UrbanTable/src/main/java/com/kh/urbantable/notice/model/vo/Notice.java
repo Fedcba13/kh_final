@@ -9,27 +9,35 @@ public class Notice {
 	private String noticeWriter;
 	private String noticeContent;
 	private Date noticeDate;
-	private int notice_readCount;
+	private int noticeReadcount;
 	private String noticeCategory;
 	private int noticeEnabled;
 	private Date noticeDateModified;
 
 	public Notice() {
-		// TODO Auto-generated constructor stub
+
 	}
 
 	public Notice(String noticeNo, String noticeTitle, String noticeWriter, String noticeContent, Date noticeDate,
-			int notice_readCount, String noticeCategory, int noticeEnabled, Date noticeDateModified) {
+			int noticeReadcount, String noticeCategory, int noticeEnabled, Date noticeDateModified) {
 		super();
 		this.noticeNo = noticeNo;
 		this.noticeTitle = noticeTitle;
 		this.noticeWriter = noticeWriter;
 		this.noticeContent = noticeContent;
 		this.noticeDate = noticeDate;
-		this.notice_readCount = notice_readCount;
+		this.noticeReadcount = noticeReadcount;
 		this.noticeCategory = noticeCategory;
 		this.noticeEnabled = noticeEnabled;
 		this.noticeDateModified = noticeDateModified;
+	}
+
+	@Override
+	public String toString() {
+		return "Notice [noticeNo=" + noticeNo + ", noticeTitle=" + noticeTitle + ", noticeWriter=" + noticeWriter
+				+ ", noticeContent=" + noticeContent + ", noticeDate=" + noticeDate + ", noticeReadcount="
+				+ noticeReadcount + ", noticeCategory=" + noticeCategory + ", noticeEnabled=" + noticeEnabled
+				+ ", noticeDateModified=" + noticeDateModified + "]";
 	}
 
 	public String getNoticeNo() {
@@ -72,12 +80,12 @@ public class Notice {
 		this.noticeDate = noticeDate;
 	}
 
-	public int getNotice_readCount() {
-		return notice_readCount;
+	public int getNoticeReadcount() {
+		return noticeReadcount;
 	}
 
-	public void setNotice_readCount(int notice_readCount) {
-		this.notice_readCount = notice_readCount;
+	public void setNoticeReadcount(int noticeReadcount) {
+		this.noticeReadcount = noticeReadcount;
 	}
 
 	public String getNoticeCategory() {
@@ -102,14 +110,6 @@ public class Notice {
 
 	public void setNoticeDateModified(Date noticeDateModified) {
 		this.noticeDateModified = noticeDateModified;
-	}
-
-	@Override
-	public String toString() {
-		return "Notice [noticeNo=" + noticeNo + ", noticeTitle=" + noticeTitle + ", noticeWriter=" + noticeWriter
-				+ ", noticeContent=" + noticeContent + ", noticeDate=" + noticeDate + ", notice_readCount="
-				+ notice_readCount + ", noticeCategory=" + noticeCategory + ", noticeEnabled=" + noticeEnabled
-				+ ", noticeDateModified=" + noticeDateModified + "]";
 	}
 
 }

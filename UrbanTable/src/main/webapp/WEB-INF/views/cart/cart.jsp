@@ -11,6 +11,18 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <script>
 	$(()=>{
+		getList();
+		totalPrice();
+		deliveryCost("n");
+		totalPayment();
+		
+		$("#order").on("click", ()=>{
+			location.href = "${pageContext.request.contextPath}/cart/order.do";
+		});
+		
+	});
+	
+	function getList(){
 		<c:forEach items="${list}" var="l" varStatus="vs">
 			var param ={
 				foodNo: '${l.foodNo}'
@@ -25,10 +37,12 @@
 				success: function(data){
 					console.log(data);
 					foodInfo += "<tr id='item"+${vs.count}+"'>";
-					foodInfo += "<td><input type='checkbox' name='list' checked='true'/>&nbsp;&nbsp;";
+					foodInfo += "<input type='hidden' name='price' value='"+ data.FOOD_MEMBER_PRICE +"'>";
+					foodInfo += "<input type='hidden' name='foodNo' value='"+ data.FOOD_NO +"'>";
+					foodInfo += "<td><input type='checkbox' name='list' checked='true' onclick='checkManage(this)'/>&nbsp;&nbsp;";
 					foodInfo += "<img src='"+data.FOOD_IMG+"' width='92px' height='130px'/></td>";
 					foodInfo += "<td>[" + data.FOOD_COMPANY + "] " + data.FOOD_NAME + "</td>";
-					foodInfo += "<td> <input type='button' value='-' onclick='del();'>&nbsp;<input type='text' name='amount' value='" + ${l.cartAmount} + "' size='5' style='text-align:center;' onchage='change();'>&nbsp;<input type='button' value='+' onclick='add();'></td>";
+					foodInfo += "<td> <input type='button' value='-' onclick='del(this);'>&nbsp;<input type='text' name='amount' value='" + ${l.cartAmount} + "' size='5' style='text-align:center;' onchange='change(this);'>&nbsp;<input type='button' value='+' onclick='add(this);'></td>";
 					foodInfo += "<td><input type='text' name='totalPrice' value='" + data.FOOD_MEMBER_PRICE * ${l.cartAmount} + "' size='11' style='text-align:center;' readonly></td>";
 					foodInfo += "</tr>";
 					$("#tail").before(foodInfo);
@@ -38,40 +52,108 @@
 				}				
 			});		
 		</c:forEach>
-		
-		$("#order").on("click", ()=>{
-			location.href = "${pageContext.request.contextPath}/cart/order.do";
-		});
-		
-		
-	});
-	
-	function add(){
-		
 	}
 	
-	function del(){
-		
+	function checkManage(e){
+		var checkedAll = false;
+		if($(e).is(":checked") == false){
+			$(e).prop("checked", false);
+			$("input:checkbox[name='listAll']").prop("checked", false);
+		} else {
+			$("input:checkbox[name='list']").each(function(){
+				if(this.checked == false){
+					checkedAll = false;
+					return false;
+				}
+				checkedAll = true;
+			})
+			if(checkedAll == true)
+				$("input:checkbox[name='listAll']").prop("checked", true);
+		}
+		totalPrice();
+		totalPayment();
 	}
 	
-	function change(){
-		
+	function checkAll(e){
+		if($(e).is(":checked") == true){
+			$("input:checkbox[name='list']").prop("checked", true);
+			$("input:checkbox[name='listAll']").prop("checked", true);
+		} else {
+			$("input:checkbox[name='list']").each(function(){
+				$("input:checkbox[name='list']").prop("checked", false);
+				$("input:checkbox[name='listAll']").prop("checked", false);
+			}) 	
+		}
+		totalPrice();
+		totalPayment();
+	}
+	
+	function add(e){
+		var root = $(e).parent().parent();
+		var amount = root.find("input[name='amount']");
+		var total = root.find("input[name='totalPrice']");
+		var price = root.children("input[type='hidden']").val();
+		amount.val(parseInt(amount.val())+1);
+		total.val(amount.val()*price);
+		totalPrice();
+		totalPayment();
+	}
+	
+	function del(e){
+		var root = $(e).parent().parent();
+		var amount = root.find("input[name='amount']");
+		var total = root.find("input[name='totalPrice']");
+		var price = root.children("input[type='hidden']").val();
+		if(parseInt(amount.val())-1 < 1){
+			alert("최소 구매수량은 1개입니다 주문을 취소하시려면 구매삭제 버튼을 이용해주세요")
+			return ;
+		}
+		amount.val(parseInt(amount.val())-1);
+		total.val(amount.val()*price);
+		totalPrice();
+		totalPayment();
+	}
+	
+	function change(e){
+		var root = $(e).parent().parent();
+		var amount = root.find("input[name='amount']");
+		var total = root.find("input[name='totalPrice']");
+		var price = root.children("input[type='hidden']").val();
+		total.val(amount.val()*price);
+		totalPrice();
+		totalPayment();
 	}
 	
 	function totalPrice(){
-			
-	}
+		var sum = 0;
+		for(var i = 1; i <= ${fn:length(list)}; i++){
+			if($("#item"+i).find("input:checkbox[name='list']").is(":checked")==true)
+				sum += parseInt($("#item" + i).find("input[name='totalPrice']").val());
+		}
+		$("#priceSum").text(sum + " 원");
+		return sum;
+	}	
 		
 	function totalDiscount(){
 			
 	}
 		
-	function deliveryCost(){
-			
+	function deliveryCost(v){
+		if(v == "d"){
+			$("#deliveryCost").text("5000 원(샛별배송)")	
+			totalPayment();
+		} else if(v == "n") {
+			$("#deliveryCost").text("2500 원(일반배송)")	
+			totalPayment();
+		} else if(v == "r") {
+			$("#deliveryCost").text("30000 원(정기배송)")
+			totalPayment();
+		}		
 	}
 		
 	function totalPayment(){
-			
+		var total = parseInt($("#priceSum").text()) + parseInt($("#deliveryCost").text());
+		$("#totalPayment").text(total + " 원");
 	}
 
 </script>
@@ -83,7 +165,7 @@
 	                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->
             <tr id="head">
                 <th>
-                	<input type="checkbox" name="list" id="checkAll" checked="true"/>
+                	<input type="checkbox" name="listAll" id="checkAll" checked="true" onclick="checkAll(this);"/>
                 	<label for="checkAll">전체선택(${fn:length(list)}개 품목)</label>
                 </th>
                 <th>
@@ -114,7 +196,7 @@
             </c:forEach>
  --%>       <tr id="tail">
             	<td>
-            		<input type="checkbox" name="list" id="checkAll" checked="true"/>
+            		<input type="checkbox" name="listAll" id="checkAll" checked="true" onclick="checkAll(this);"/>
                 	<label for="checkAll">전체선택(3/3)</label>
             	</td>	
             	<td>
@@ -122,11 +204,11 @@
             		<button type="button" class="btn btn-outline-secondary">전체삭제</button>
             	</td>	
             	<td colspan="2">
-            		<input type="radio" name="dilivery" id="dawn" value="d"/>
+            		<input type="radio" name="dilivery" id="dawn" value="d" onclick="deliveryCost(this.value)"/>
             		<label for="dawn">샛별배송</label>
-            		<input type="radio" name="dilivery" id="nomal" vlue="n" checked/>
+            		<input type="radio" name="dilivery" id="nomal" value="n" onclick="deliveryCost(this.value)" checked/>
             		<label for="nomal">일반배송</label>
-            		<input type="radio" name="dilivery" id="regular" value="r"/>
+            		<input type="radio" name="dilivery" id="regular" value="r" onclick="deliveryCost(this.value)"/>
             		<label for="regular">정기배송</label>
             	</td>	
             </tr>
@@ -134,19 +216,19 @@
         <table class="tbl tbl_view">
             <tr>
                 <th>총 상품금액</th>
-                <td>행 내용</td>
+                <td id="priceSum">행 내용</td>
             </tr>
             <tr>
                 <th>할인금액</th>
-                <td>행 내용</td>
+                <td id="discount">행 내용</td>
             </tr>
             <tr>
                 <th>배송비</th>
-                <td>행 내용</td>
+                <td id="deliveryCost">행 내용</td>
             </tr>
             <tr>
                 <th>총 결제금액</th>
-                <td>행 내용</td>
+                <td id="totalPayment">행 내용</td>
             </tr>
         </table>
         <hr />

@@ -6,6 +6,7 @@
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/main.css">
+<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/main.js"></script>
 <section id="banner">
     <article class="inner">
         <div class="main_banner clearfix">
@@ -119,89 +120,104 @@
         <h3 class="main_tit txt_center">Urban의 추천</h3>
         <div class="recom_tab txt_center">
             <ul class="clearfix">
-                <li><a href="" class="dp_block ac_recom" data-target="recom1">채소</a></li>
-                <li><a href="" class="dp_block" data-target="recom2">과일·견과·쌀</a></li>
-                <li><a href="" class="dp_block" data-target="recom3">수산·해산·건어물</a></li>
-                <li><a href="" class="dp_block" data-target="recom4">정육·계란</a></li>
-                <li><a href="" class="dp_block" data-target="recom5">더있음</a></li>
+                <li data-target="recom1" class="ac_recom">채소</li>
+                <li data-target="recom2">과일·견과·쌀</li>
+                <li data-target="recom3">수산·해산·건어물</li>
+                <li data-target="recom4">정육·계란</li>
+                <li data-target="recom5">더있음</li>
             </ul>
         </div>
         <div class="recom_conts">
-            <ul id="recom1" class="main_prd_list clearfix">
-                <li>
-                    <a href="" class="dp_block">
-                        <div class="prd_img_area">
-                            <p class="fw600 txt_center"><span>SALE</span><br>20%</p>
-                            <img src="${pageContext.request.contextPath }/resources/images/example.PNG" alt="상품 사진">
-                        </div>
-                        <div class="prd_info_area">
-                            <h4>상품명</h4>
-                            <p class="prd_price fw600">할인가</p>
-                            <p class="prd_price2">정가</p>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-            <ul id="recom2" class="main_prd_list clearfix">
-                <li>
-                    <a href="" class="dp_block">
-                        <div class="prd_img_area">
-                            <p class="fw600 txt_center"><span>SALE</span><br>20%</p>
-                            <img src="${pageContext.request.contextPath }/resources/images/example.PNG" alt="상품 사진">
-                        </div>
-                        <div class="prd_info_area">
-                            <h4>상품명</h4>
-                            <p class="prd_price fw600">할인가</p>
-                            <p class="prd_price2">정가</p>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-            <ul id="recom3" class="main_prd_list clearfix">
-                <li>
-                    <a href="" class="dp_block">
-                        <div class="prd_img_area">
-                            <p class="fw600 txt_center"><span>SALE</span><br>20%</p>
-                            <img src="${pageContext.request.contextPath }/resources/images/example.PNG" alt="상품 사진">
-                        </div>
-                        <div class="prd_info_area">
-                            <h4>상품명</h4>
-                            <p class="prd_price fw600">할인가</p>
-                            <p class="prd_price2">정가</p>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-            <ul id="recom4" class="main_prd_list clearfix">
-                <li>
-                    <a href="" class="dp_block">
-                        <div class="prd_img_area">
-                            <p class="fw600 txt_center"><span>SALE</span><br>20%</p>
-                            <img src="${pageContext.request.contextPath }/resources/images/example.PNG" alt="상품 사진">
-                        </div>
-                        <div class="prd_info_area">
-                            <h4>상품명</h4>
-                            <p class="prd_price fw600">할인가</p>
-                            <p class="prd_price2">정가</p>
-                        </div>
-                    </a>
-                </li>
-            </ul>
-            <ul id="recom5" class="main_prd_list clearfix">
-                <li>
-                    <a href="" class="dp_block">
-                        <div class="prd_img_area">
-                            <p class="fw600 txt_center"><span>SALE</span><br>20%</p>
-                            <img src="${pageContext.request.contextPath }/resources/images/example.PNG" alt="상품 사진">
-                        </div>
-                        <div class="prd_info_area">
-                            <h4>상품명</h4>
-                            <p class="prd_price fw600">할인가</p>
-                            <p class="prd_price2">정가</p>
-                        </div>
-                    </a>
-                </li>
-            </ul>
+        	<div id="recom1">
+        		<ul class="main_prd_list clearfix">
+	                <li>
+	                    <a href="" class="dp_block">
+	                        <div class="prd_img_area">
+	                            <p class="fw600 txt_center"><span>SALE</span><br>20%</p>
+	                            <img src="${pageContext.request.contextPath }/resources/images/example.PNG" alt="상품 사진">
+	                        </div>
+	                        <div class="prd_info_area">
+	                            <h4>상품명</h4>
+	                            <p class="prd_price fw600">할인가</p>
+	                            <p class="prd_price2">정가</p>
+	                        </div>
+	                    </a>
+	                </li>
+	            </ul>
+	            <a href="" class="dp_block">채소 전체보기 <img src="${pageContext.request.contextPath }/resources/images/more.png" alt="" /></a>
+        	</div>
+            <div id="recom2">
+        		<ul class="main_prd_list clearfix">
+	                <li>
+	                    <a href="" class="dp_block">
+	                        <div class="prd_img_area">
+	                            <p class="fw600 txt_center"><span>SALE</span><br>20%</p>
+	                            <img src="${pageContext.request.contextPath }/resources/images/example.PNG" alt="상품 사진">
+	                        </div>
+	                        <div class="prd_info_area">
+	                            <h4>상품명</h4>
+	                            <p class="prd_price fw600">할인가</p>
+	                            <p class="prd_price2">정가</p>
+	                        </div>
+	                    </a>
+	                </li>
+	            </ul>
+	            <a href="" class="dp_block">과일·견과·쌀 전체보기 <img src="${pageContext.request.contextPath }/resources/images/more.png" alt="" /></a>
+        	</div>
+        	<div id="recom3">
+        		<ul class="main_prd_list clearfix">
+	                <li>
+	                    <a href="" class="dp_block">
+	                        <div class="prd_img_area">
+	                            <p class="fw600 txt_center"><span>SALE</span><br>20%</p>
+	                            <img src="${pageContext.request.contextPath }/resources/images/example.PNG" alt="상품 사진">
+	                        </div>
+	                        <div class="prd_info_area">
+	                            <h4>상품명</h4>
+	                            <p class="prd_price fw600">할인가</p>
+	                            <p class="prd_price2">정가</p>
+	                        </div>
+	                    </a>
+	                </li>
+	            </ul>
+	            <a href="" class="dp_block">수산·해산·건어물 전체보기 <img src="${pageContext.request.contextPath }/resources/images/more.png" alt="" /></a>
+        	</div>
+        	<div id="recom4">
+        		<ul class="main_prd_list clearfix">
+	                <li>
+	                    <a href="" class="dp_block">
+	                        <div class="prd_img_area">
+	                            <p class="fw600 txt_center"><span>SALE</span><br>20%</p>
+	                            <img src="${pageContext.request.contextPath }/resources/images/example.PNG" alt="상품 사진">
+	                        </div>
+	                        <div class="prd_info_area">
+	                            <h4>상품명</h4>
+	                            <p class="prd_price fw600">할인가</p>
+	                            <p class="prd_price2">정가</p>
+	                        </div>
+	                    </a>
+	                </li>
+	            </ul>
+	            <a href="" class="dp_block">정육·계란 전체보기 <img src="${pageContext.request.contextPath }/resources/images/more.png" alt="" /></a>
+        	</div>
+        	<div id="recom5">
+        		<ul class="main_prd_list clearfix">
+	                <li>
+	                    <a href="" class="dp_block">
+	                        <div class="prd_img_area">
+	                            <p class="fw600 txt_center"><span>SALE</span><br>20%</p>
+	                            <img src="${pageContext.request.contextPath }/resources/images/example.PNG" alt="상품 사진">
+	                        </div>
+	                        <div class="prd_info_area">
+	                            <h4>상품명</h4>
+	                            <p class="prd_price fw600">할인가</p>
+	                            <p class="prd_price2">정가</p>
+	                        </div>
+	                    </a>
+	                </li>
+	            </ul>
+	            <a href="" class="dp_block">더있음 전체보기 <img src="${pageContext.request.contextPath }/resources/images/more.png" alt="" /></a>
+        	</div>
         </div>
     </article>
 </section>

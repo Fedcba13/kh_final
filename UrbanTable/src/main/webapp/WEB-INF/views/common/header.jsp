@@ -14,15 +14,19 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/resources/css/slick-theme.css"/>
     <script type="text/javascript" src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/slick.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/common.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/main.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/common.js" charset="UTF-8"></script>
 </head>
 <body>
     <header id="header">
         <div id="util_wrap">
             <ul>
                 <li><a href="" class="dp_block point">회원가입</a></li>
-                <li><a href="" class="dp_block">로그인</a></li>
+                <c:if test="${empty memberLoggedIn }">                
+                	<li><a href="#" class="dp_block login-btn">로그인</a></li>
+                </c:if>
+                <c:if test="${not empty memberLoggedIn }">
+                	<li><a href="${pageContext.request.contextPath }/member/memberLogout.do" class="dp_block">로그아웃</a></li>
+                </c:if>
                 <li class="cs_center">
                     <a href="" class="dp_block">고객센터</a>
                     <ul>
@@ -35,10 +39,21 @@
                     <a href="" class="dp_block">관리자</a>
                     <ul>
                     	<li><a href="" class="dp_block">창업 신청 리스트</a></li>
-                        <li><a href="" class="dp_block">매장 리스트</a></li>
+                        <li><a href="${pageContext.request.contextPath}/market/marketList.do" class="dp_block">매장 리스트</a></li>
                         <li><a href="" class="dp_block">발주 리스트</a></li>
                         <li><a href="" class="dp_block">식자재 등록</a></li>
+                        <li><a href="" class="dp_block">배너 등록</a></li>
+                    </ul>
+                </li>
+                <li class="cs_center">
+                    <a href="" class="dp_block">점주</a>
+                    <ul>
+                        <li><a href="${pageContext.request.contextPath}/market/myMarket.do" class="dp_block">내 지점 관리</a></li>
+                        <li><a href="${pageContext.request.contextPath}/market/marketOrder.do" class="dp_block">지점 주문 내역</a></li>
                         <li><a href="" class="dp_block">배송 관리</a></li>
+                        <li><a href="" class="dp_block">지점 인기 상품</a></li>
+                        <li><a href="" class="dp_block">지점 매출 현황</a></li>
+                        <li><a href="" class="dp_block">발주 요청</a></li>
                         <li><a href="" class="dp_block">재고 관리</a></li>
                     </ul>
                 </li>
@@ -46,7 +61,7 @@
                 <li><a href="${pageContext.request.contextPath}/market/founded.do" class="dp_block">창업 신청</a></li>
             </ul>
         </div>
-        <h1 id="logo" class="txt_center point">urban table</h1>
+        <h1 id="logo" class="txt_center point"><a href="${pageContext.request.contextPath}" class="dp_ib">urban table</a></h1>
         <div id="menu_container" class="inner">
             <div id="menu_wrap">
                 <ul id="gnb" class="clearfix">
@@ -54,7 +69,7 @@
                     <li><a href="" class="dp_block">신상품</a></li>
                     <li><a href="" class="dp_block">베스트</a></li>
                     <li><a href="" class="dp_block">알뜰 쇼핑</a></li>
-                    <li><a href="" class="dp_block">레시피</a></li>
+                    <li><a href="${pageContext.request.contextPath }/recipe/recipe" class="dp_block">레시피</a></li>
                 </ul>
                 <div id="main_search">
                     <form action="" class="dp_block">
@@ -81,4 +96,21 @@
             </div>
         </div>
     </header>
+	<div class="login-modal txt_center">
+		<form class="modal-content animate">
+			<div class="container txt_center">
+				<label for="uname"><b>Username</b></label>
+				<input type="text" placeholder="Enter Username" name="memberId" required>
+				<label for="psw"><b>Password</b></label>
+				<input type="password" placeholder="Enter Password" name="password" required>
+				<button type="button" class="btn login">Login</button>
+				<input type="checkbox" checked="checked" name="remember" id="saveID">
+				<label for="saveID">Remember me</label>
+			</div>
+			<div class="container txt_center" style="background-color:#f4f4f0">
+				<button type="button" class="btn cancelbtn">Cancel</button>
+				<span class="psw">Forgot <a href="#">password?</a></span>
+		    </div>
+		</form>
+	</div>
     <div id="container">

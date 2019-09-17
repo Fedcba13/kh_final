@@ -33,8 +33,7 @@ table {border-collapse: collapse; border-spacing:0; }
 caption {overflow: hidden;width: 0;height: 0;font-size: 0; line-height: 0;} 
 th, td { vertical-align: middle;/* white-space: nowrap */} 
 a {color: #333; text-decoration: none; line-height: 1.5;} 
-a:hover, a:focus, a:active, input:focus, textarea:focus {text-decoration: none; outline: none;} 
-a:visited {color: #333;} 
+a:hover, a:focus, a:active, input:focus, textarea:focus, select:focus {text-decoration: none; outline: none;} 
 *, html {box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; } 
 *, *:before, *:after {box-sizing: border-box;-webkit-box-sizing: border-box; -moz-box-sizing: border-box;}
 /*
@@ -103,13 +102,14 @@ a:visited {color: #333;}
     background: #f4f4f0;
 }
 
-input {
+input, select {
 	height: 40px;
 	line-heihgt: 40px;
 	border: 1px solid #e9e9e9;
 	box-sizing: border-box;
 	border-radius: 5px;
 	color: #555;
+	vertical-align:middle;
 }
 
 input[type=text] {
@@ -133,9 +133,26 @@ input[type=text] {
 	-webkit-transition: all .25s linear;
 }
 
+.btn_disabled {
+	color: #000;
+	background: #ebebe4;
+	cursor: default;
+	transition: initial;
+	-webkit-transition: initial;
+}
+
 .btn:hover {
 	background: #fff;
 	color: #374818;
+}
+
+.btn_disabled:hover {
+	color: #000;
+	background: #ebebe4;
+}
+
+.red {
+	color: #e22f26;
 }
 
 /*헤더*/
@@ -195,7 +212,7 @@ input[type=text] {
 
 #util_wrap ul ul {
     position: absolute;
-    width: 85px;
+    width: 95px;
     border: 1px solid #d8d8d8;
     background: #fff;
     box-sizing: border-box;
@@ -217,10 +234,11 @@ input[type=text] {
     padding-top: 5px;
 }
 
-#logo {
+#logo a {
     text-transform: uppercase;
     font-size: 34px;
     line-height: 64px;
+    color:#374818;
 }
 
 #gnb, #main_search, .go_cart {
@@ -395,6 +413,10 @@ input[type=text] {
     color: #555;
 }
 
+.tbl_bg tr th {
+	background:#f4f4f0;
+}
+
 .tbl tr th,
 .tbl tr td {
     padding: 10px 0;
@@ -410,4 +432,85 @@ input[type=text] {
 
 .tbl_view tr td {
     padding: 10px 15px;
+}
+
+
+/* 로그인 모달 */
+.login-modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 10; /* Sit on top */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0, 0, 0); /* Fallback color */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+	padding-top: 60px;
+}
+.login-modal .modal-content{
+	width: 500px;
+	background-color: #fefefe;
+	border: 1px solid #888;
+	margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+}
+
+.login-modal .container{
+	padding: 16px;
+	overflow: hidden;
+}
+
+
+/* Full-width input fields */
+.login-modal input[type=text], .login-modal input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* 닫기버튼 */
+.login-modal .close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.login-modal .animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+/* 로그인 버튼 */
+.login-modal button.login {
+  width: 100%;
+  margin: 10px 0px;
+}
+
+.login-modal .cancelbtn {
+  width: auto;
+  padding: 0px 18px;
+  background-color: #f44336;
+  float: left;
+}
+
+.login-modal span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+.login-modal input[type=checkbox]{
+	height:20px;
+	vertical-align:text-top;
+}
+
+.login-modal input[type=checkbox]+label{
+	height:20px;
+	vertical-align:-1px;
 }

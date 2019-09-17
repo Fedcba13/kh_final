@@ -33,5 +33,23 @@ public class NoticeDAOImpl implements NoticeDAO{
 		return sqlSession.update("notice.readcount", noticeNo);
 	}
 
+	@Override
+	public int insertNotice(Notice notice) {
+		
+		return sqlSession.insert("notice.insertNotice", notice);
+	}
+
+	@Override
+	public int updateNotice(Notice notice) {
+		
+		return sqlSession.update("notice.updateNotice", notice);
+	}
+
+	@Override
+	public int deleteNotice(String noticeNo) {
+		
+		return sqlSession.update("notice.deleteNotice", noticeNo);
+	}
+
 	
 }

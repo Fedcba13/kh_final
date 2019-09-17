@@ -3,5 +3,12 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="marketOwner">
-
+	
+	<insert id="insertMarketFounded">
+		insert into market
+		values('mar'||LPAD(seq_market_no.nextval, 5, '0'), 
+		#{marketMemberId}, #{marketResident}, #{marketTelephone}, 
+		#{marketAddress}, #{marketAddress2}, 1, default)
+	</insert>
+	
 </mapper>
