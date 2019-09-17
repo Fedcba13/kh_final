@@ -1,0 +1,23 @@
+@charset "utf-8"; 
+
+.founded_btn {
+	margin-top:20px;
+}
+
+.postBtn {
+	background:#9d8420;
+	font-weight:400;
+	width:120px;
+	border:1px solid #9d8420;
+	vertical-align:bottom;
+}
+
+.postBtn:hover {
+	background:#9d8420;
+	border:1px solid #9d8420;
+	color:#fff;
+}
+
+#marketAddress1, #marketAddress2, #sample6_extraAddress {
+	width: 350px;
+}

@@ -4,17 +4,17 @@ public class Cart {
 	
 	private String memberId;
 	private String foodNo;
-	private int foodAmount;
+	private int cartAmount;
 	
 	public Cart() {
 		
 	}
 	
-	public Cart(String memberId, String foodNo, int foodAmount) {
+	public Cart(String memberId, String foodNo, int cartAmount) {
 		super();
 		this.memberId = memberId;
 		this.foodNo = foodNo;
-		this.foodAmount = foodAmount;
+		this.cartAmount = cartAmount;
 	}
 
 	public String getMemberId() {
@@ -33,17 +33,17 @@ public class Cart {
 		this.foodNo = foodNo;
 	}
 
-	public int getFoodAmount() {
-		return foodAmount;
+	public int getCartAmount() {
+		return cartAmount;
 	}
 
-	public void setFoodAmount(int foodAmount) {
-		this.foodAmount = foodAmount;
+	public void setCartAmount(int cartAmount) {
+		this.cartAmount = cartAmount;
 	}
 
 	@Override
 	public String toString() {
-		return "Cart [memberId=" + memberId + ", foodNo=" + foodNo + ", foodAmount=" + foodAmount + "]";
+		return "Cart [memberId=" + memberId + ", foodNo=" + foodNo + ", cartAmount=" + cartAmount + "]";
 	}
 	
 

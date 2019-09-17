@@ -10,7 +10,6 @@
     <title>Urban Table</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/default.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumBarunGothic@1.0/nanumbarungothicsubset.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/main.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/resources/css/slick.css"/>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/resources/css/slick-theme.css"/>
     <script type="text/javascript" src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -27,7 +26,7 @@
                 <li class="cs_center">
                     <a href="" class="dp_block">고객센터</a>
                     <ul>
-                        <li><a href="" class="dp_block">공지사항</a></li>
+                        <li><a href="${pageContext.request.contextPath }/notice/noticeList.do" class="dp_block">공지사항</a></li>
                         <li><a href="" class="dp_block">자주하는 질문</a></li>
                         <li><a href="" class="dp_block">상품 제안</a></li>
                     </ul>
@@ -35,6 +34,7 @@
                 <li class="cs_center">
                     <a href="" class="dp_block">관리자</a>
                     <ul>
+                    	<li><a href="" class="dp_block">창업 신청 리스트</a></li>
                         <li><a href="" class="dp_block">매장 리스트</a></li>
                         <li><a href="" class="dp_block">발주 리스트</a></li>
                         <li><a href="" class="dp_block">식자재 등록</a></li>
@@ -43,7 +43,7 @@
                     </ul>
                 </li>
                 <li><a href="" class="dp_block">배송지역 검색</a></li>
-                <li><a href="" class="dp_block">창업 신청</a></li>
+                <li><a href="${pageContext.request.contextPath}/market/founded.do" class="dp_block">창업 신청</a></li>
             </ul>
         </div>
         <h1 id="logo" class="txt_center point">urban table</h1>
@@ -62,7 +62,7 @@
                         <input type="submit" value="검색">
                     </form>
                 </div>
-                <a href="${pageContext.request.contextPath}/cart/cartList.do" class="go_cart dp_block"><img src="${pageContext.request.contextPath }/resources/images/cart.png" alt="장바구니"></a>
+                <a href="${pageContext.request.contextPath}/cart/cartList.do?memberId=jsi124" class="go_cart dp_block"><img src="${pageContext.request.contextPath }/resources/images/cart.png" alt="장바구니"></a>
             </div>
             <div id="gnb_menu_wrap">
                 <ul class="gnb_menu"> <!--밑에 메뉴는 예시이고 관리자가 메뉴 관리를 통해 관리하게 해주세요.-->

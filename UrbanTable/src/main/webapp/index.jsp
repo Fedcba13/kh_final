@@ -5,7 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
-
+<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/main.css">
 <section id="banner">
     <article class="inner">
         <div class="main_banner clearfix">
