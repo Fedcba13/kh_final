@@ -12,4 +12,10 @@ public interface NoticeDAO {
 
 	int readcount(String noticeNo);
 
+	int insertNotice(Notice notice);
+
+	int updateNotice(Notice notice);
+
+	int deleteNotice(String noticeNo);
+
 }

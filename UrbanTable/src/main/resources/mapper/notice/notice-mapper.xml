@@ -15,4 +15,29 @@
 	<update id="readcount">
 		update notice set notice_readcount = notice_readcount + 1 where notice_no = #{noticeNo}
 	</update>
+	
+	<insert id="insertNotice" >
+		insert into notice (notice_no, notice_title, notice_writer, notice_content, notice_category)
+		values(
+			'nseq' || lpad(notiseq_seq.nextval, 5, '0'),
+			#{noticeTitle},
+			'Urban Table',
+			#{noticeContent},
+			#{noticeCategory}
+		)
+	</insert>
+	
+	<update id="updateNotice">
+		update notice 
+		set notice_title = #{noticeTitle}, 
+		notice_content = #{noticeContent}, 
+		notice_category = #{noticeCategory}, 
+		notice_date_modified = sysdate
+		where notice_no = #{noticeNo} 
+	</update>
+	
+	<update id="deleteNotice">
+		update notice set notice_enabled = 0 where notice_no = #{noticeNo}
+	</update>
+	
 </mapper>
