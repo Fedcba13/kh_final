@@ -31,8 +31,8 @@ li input.btn{
 <section class="sec_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 	    <h3 class="sub_tit">공지사항</h3>
+	   	<c:if test="${memberLoggedIn.memberCheck == 9 }">
 	    <div class="txt_right">
-	    
 	    <li>
 	    <input type="button" class="btn" value="수정"  onclick="updateFrm();">
 	   	<input type="hidden" id="noticeNo" value="${notice.noticeNo }"/>
@@ -43,6 +43,7 @@ li input.btn{
 	    
 	    </div>
 	    <br/>
+		</c:if>
 	    <table class="tbl txt_center"> 
             <tr>
                 <th style="width:50px;">구분</th>
