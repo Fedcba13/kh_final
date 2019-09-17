@@ -15,8 +15,10 @@ function writeNotice(){
 
 	<article class="subPage inner">
 	    <h3 class="sub_tit">공지사항</h3>
+	    <c:if test="${memberLoggedIn.memberCheck == 9 }">
 	    <div class="txt_right"><input type="button" class="btn" value="글쓰기" onclick="writeNotice();"></div>
 	    <br/>    
+	    </c:if>
 	    
 	    <table class="tbl txt_center"> <!--가운데 정렬 아니면 txt_center 빼셔도 됩니다.
 	                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="admin">
+
+	<select id="selectList" resultMap="marketMember">
+		select mar.*, mem.*
+		from market mar join member mem 
+		on mar.member_id = mem.member_id
+	</select>
+	
+	<resultMap type="com.kh.urbantable.admin.model.vo.MarketMember" id="marketMember">
+		<id column="member_id" property="memberId"/>
+		<result column="market_no" property="marketNo"/>
+		<result column="market_resident" property="marketResident"/>
+		<result column="market_telephone" property="marketTelephone"/>
+		<result column="market_address" property="marketAddress"/>
+		<result column="market_address2" property="marketAddress2"/>
+		<result column="market_enabled" property="marketEnabled"/>
+		<result column="flag" property="flag"/>	
+		<association javaType="com.kh.urbantable.member.model.vo.Member" property="member">
+			<id column="member_id" property="memberId"/>
+		    <result column="member_password" property="memberPassword"/>
+		    <result column="member_name" property="memberName"/>
+		    <result column="member_point" property="memberPoint"/>
+		    <result column="member_address" property="memberAddress"/>
+		    <result column="member_address2" property="memberAddress2"/>
+		    <result column="member_phone" property="memberPhone"/>
+		    <result column="member_enrolldate" property="memberEnrolldate"/>
+		    <result column="member_check" property="memberCheck"/>
+		    <result column="member_enabled" property="memberEnabled"/>
+	    </association>
+	</resultMap>
+
+</mapper>

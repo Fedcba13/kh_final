@@ -15,5 +15,10 @@
 		<typeAlias type="com.kh.urbantable.cart.model.vo.Cart" alias="cart" />
 		<typeAlias type="com.kh.urbantable.recipe.model.vo.Recipe"
 			alias="recipe" />
+		<typeAlias type="com.kh.urbantable.marketOwner.model.vo.Market"
+			alias="market" />
+		<typeAlias type="com.kh.urbantable.admin.model.vo.MarketMember"
+			alias="marketMember" />
+			
 	</typeAliases>
 </configuration>

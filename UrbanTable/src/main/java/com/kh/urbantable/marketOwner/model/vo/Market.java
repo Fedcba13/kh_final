@@ -14,18 +14,18 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class Market {
 
-	private String marketNo;
-	private String marketMemberId;
-	private String marketResident;
-	private String marketTelephone;
-	private String marketAddress;
-	private String marketAddress2;
-	private int marketEnabled;
-	private int flag;
+	protected String marketNo;
+	protected String memberId;
+	protected String marketResident;
+	protected String marketTelephone;
+	protected String marketAddress;
+	protected String marketAddress2;
+	protected int marketEnabled;
+	protected int flag;
 	
 	@Override
 	public String toString() {
-		return "Market [marketNo=" + marketNo + ", marketMemberId=" + marketMemberId + ", marketResident=" + marketResident
+		return "Market [marketNo=" + marketNo + ", memberId=" + memberId + ", marketResident=" + marketResident
 				+ ", marketTelephone=" + marketTelephone + ", marketAddress=" + marketAddress + ", marketAddress2="
 				+ marketAddress2 + ", marketEnabled=" + marketEnabled + ", flag=" + flag + "]";
 	}
