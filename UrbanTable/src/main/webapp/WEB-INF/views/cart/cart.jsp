@@ -13,11 +13,28 @@
 	$(()=>{
 		getList();
 		totalPrice();
+		listCount();
 		deliveryCost("n");
 		totalPayment();
 		
 		$("#order").on("click", ()=>{
-			location.href = "${pageContext.request.contextPath}/cart/order.do";
+			var cartArr = [];
+			var cartInfo = {};
+			for(var i = 1; i <= ${fn:length(list)}; i++){
+				var root = $("#item" + i);
+				if(root.find("input:checkbox[name='list']").is(":checked") == true){
+					cartInfo.memberId = "jsi124";
+					cartInfo.payPrice = parseInt($("#totalPayment").text());
+					cartInfo.payFlag = 0;
+					cartInfo.deliverType = $("input:radio[name='delivery']:checked").val();
+					cartInfo.foodNo = root.find($("input:hidden[name='foodNo']")).val();
+					cartInfo.payDetailAmount = root.find($("input:text[name='amount']")).val();
+					cartArr.push(cartInfo);
+				}
+			}
+			console.log(cartArr);
+			console.log(cartInfo);
+			//location.href = "${pageContext.request.contextPath}/pay/order.do";
 		});
 		
 	});
@@ -70,8 +87,16 @@
 			if(checkedAll == true)
 				$("input:checkbox[name='listAll']").prop("checked", true);
 		}
+		listCount();
 		totalPrice();
 		totalPayment();
+	}
+	
+	function listCount(){
+		var total = ${fn:length(list)};
+		var selected = $("input:checkbox[name='list']:checked").length;
+		var text = "전체선택 (" + selected + "/" + total + ")";
+		$("label[for='checkAll']").text(text);
 	}
 	
 	function checkAll(e){
@@ -84,6 +109,7 @@
 				$("input:checkbox[name='listAll']").prop("checked", false);
 			}) 	
 		}
+		listCount();
 		totalPrice();
 		totalPayment();
 	}
@@ -166,7 +192,7 @@
             <tr id="head">
                 <th>
                 	<input type="checkbox" name="listAll" id="checkAll" checked="true" onclick="checkAll(this);"/>
-                	<label for="checkAll">전체선택(${fn:length(list)}개 품목)</label>
+                	<label for="checkAll"></label>
                 </th>
                 <th>
                 	상품정보
@@ -177,38 +203,22 @@
                 <th>
                 	금액
                 </th>
-            </tr>
-<%--             <c:forEach items="${list}" var="l">
-	            <tr>
-	                <td>
-	                	
-					</td>
-	                <td>
-	                	
-	                </td>
-	                <td>
-	                	
-	                </td>
-	                <td>
-	                	
-	                </td>
-	            </tr>
-            </c:forEach>
- --%>       <tr id="tail">
+           </tr>
+    	   <tr id="tail">
             	<td>
             		<input type="checkbox" name="listAll" id="checkAll" checked="true" onclick="checkAll(this);"/>
-                	<label for="checkAll">전체선택(3/3)</label>
+                	<label for="checkAll"></label>
             	</td>	
             	<td>
             		<button type="button" class="btn btn-outline-secondary">선택삭제</button>
             		<button type="button" class="btn btn-outline-secondary">전체삭제</button>
             	</td>	
             	<td colspan="2">
-            		<input type="radio" name="dilivery" id="dawn" value="d" onclick="deliveryCost(this.value)"/>
+            		<input type="radio" name="delivery" id="dawn" value="d" onclick="deliveryCost(this.value)"/>
             		<label for="dawn">샛별배송</label>
-            		<input type="radio" name="dilivery" id="nomal" value="n" onclick="deliveryCost(this.value)" checked/>
+            		<input type="radio" name="delivery" id="nomal" value="n" onclick="deliveryCost(this.value)" checked/>
             		<label for="nomal">일반배송</label>
-            		<input type="radio" name="dilivery" id="regular" value="r" onclick="deliveryCost(this.value)"/>
+            		<input type="radio" name="delivery" id="regular" value="r" onclick="deliveryCost(this.value)"/>
             		<label for="regular">정기배송</label>
             	</td>	
             </tr>
@@ -216,19 +226,19 @@
         <table class="tbl tbl_view">
             <tr>
                 <th>총 상품금액</th>
-                <td id="priceSum">행 내용</td>
+                <td id="priceSum"></td>
             </tr>
             <tr>
                 <th>할인금액</th>
-                <td id="discount">행 내용</td>
+                <td id="discount"></td>
             </tr>
             <tr>
                 <th>배송비</th>
-                <td id="deliveryCost">행 내용</td>
+                <td id="deliveryCost"></td>
             </tr>
             <tr>
                 <th>총 결제금액</th>
-                <td id="totalPayment">행 내용</td>
+                <td id="totalPayment"></td>
             </tr>
         </table>
         <hr />
