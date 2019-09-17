@@ -112,7 +112,7 @@ input, select {
 	vertical-align:middle;
 }
 
-input[type=text] {
+input[type=text], input[type=password] {
 	padding-left: 15px;
 }
 

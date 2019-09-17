@@ -20,12 +20,13 @@
     <header id="header">
         <div id="util_wrap">
             <ul>
-                <li><a href="" class="dp_block point">회원가입</a></li>
                 <c:if test="${empty memberLoggedIn }">                
                 	<li><a href="#" class="dp_block login-btn">로그인</a></li>
+                	<li><a href="${pageContext.request.contextPath }/member/register" class="dp_block point">회원가입</a></li>
                 </c:if>
                 <c:if test="${not empty memberLoggedIn }">
                 	<li><a href="${pageContext.request.contextPath }/member/memberLogout.do" class="dp_block">로그아웃</a></li>
+                	<li><a href="" class="dp_block">내 정보보기</a></li>
                 </c:if>
                 <li class="cs_center">
                     <a href="" class="dp_block">고객센터</a>

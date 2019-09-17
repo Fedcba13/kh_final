@@ -8,7 +8,8 @@
 		select *
 		from member
 		where
-		member_id = #{memberId}
+			member_id = #{memberId}
+			and member_enabled = 1 
 	</select>
 	
 	<select id="phoneDuplicate" resultType="member">
@@ -37,7 +38,11 @@
 	
 	<insert id="insertMember">
 		insert into member(member_id, member_password, member_name, member_address, member_address2, member_phone)
-		 values(#{memberID}, #{memberPassword}, #{memberName}, #{memberAddress}, #{memberAddress2}, #{memberPhone})
+		 values(#{memberId}, #{memberPassword}, #{memberName}, #{memberAddress}, #{memberAddress2}, #{memberPhone})
 	</insert>
+	
+	<select id="selectListMember" resultType="member">
+		select * from member
+	</select>
 
 </mapper>

@@ -1,6 +1,7 @@
 package com.kh.urbantable.member.model.dao;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,10 @@ public class MemberDAOImpl implements MemberDAO {
 	public int insertMember(Member member) {
 		return sqlSession.insert("member.insertMember", member);
 	}
-	
-	
+
+	@Override
+	public List<Member> selectListMember() {
+		return sqlSession.selectList("member.selectListMember");
+	}
 
 }

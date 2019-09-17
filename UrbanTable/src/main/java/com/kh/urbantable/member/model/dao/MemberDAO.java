@@ -1,6 +1,7 @@
 package com.kh.urbantable.member.model.dao;
 
 import java.util.HashMap;
+import java.util.List;
 
 import com.kh.urbantable.member.model.vo.Member;
 
@@ -17,5 +18,7 @@ public interface MemberDAO {
 	int checkMessage(HashMap<String, String> param);
 
 	int insertMember(Member member);
+
+	List<Member> selectListMember();
 
 }
