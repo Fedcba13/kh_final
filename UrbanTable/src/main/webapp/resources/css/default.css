@@ -433,3 +433,84 @@ input[type=text] {
 .tbl_view tr td {
     padding: 10px 15px;
 }
+
+
+/* 로그인 모달 */
+.login-modal {
+	display: none; /* Hidden by default */
+	position: fixed; /* Stay in place */
+	z-index: 10; /* Sit on top */
+	left: 0;
+	top: 0;
+	width: 100%; /* Full width */
+	height: 100%; /* Full height */
+	overflow: auto; /* Enable scroll if needed */
+	background-color: rgb(0, 0, 0); /* Fallback color */
+	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+	padding-top: 60px;
+}
+.login-modal .modal-content{
+	width: 500px;
+	background-color: #fefefe;
+	border: 1px solid #888;
+	margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+}
+
+.login-modal .container{
+	padding: 16px;
+	overflow: hidden;
+}
+
+
+/* Full-width input fields */
+.login-modal input[type=text], .login-modal input[type=password] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* 닫기버튼 */
+.login-modal .close {
+  position: absolute;
+  right: 25px;
+  top: 0;
+  color: #000;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.login-modal .animate {
+  -webkit-animation: animatezoom 0.6s;
+  animation: animatezoom 0.6s
+}
+
+/* 로그인 버튼 */
+.login-modal button.login {
+  width: 100%;
+  margin: 10px 0px;
+}
+
+.login-modal .cancelbtn {
+  width: auto;
+  padding: 0px 18px;
+  background-color: #f44336;
+  float: left;
+}
+
+.login-modal span.psw {
+  float: right;
+  padding-top: 16px;
+}
+
+.login-modal input[type=checkbox]{
+	height:20px;
+	vertical-align:text-top;
+}
+
+.login-modal input[type=checkbox]+label{
+	height:20px;
+	vertical-align:-1px;
+}

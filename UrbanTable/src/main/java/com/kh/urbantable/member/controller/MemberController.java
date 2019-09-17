@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.kh.urbantable.member.model.service.MemberService;
 import com.kh.urbantable.member.model.vo.Member;
@@ -47,13 +48,6 @@ public class MemberController {
 	public String memberRegister() {
 
 		return "member/memberRegister";
-	}
-
-	// 임시 -> memberLogin.jsp 로 이동용, 삭제할 예정
-	@RequestMapping("/asdf")
-	public String memberLogin() {
-
-		return "member/memberLogin";
 	}
 
 	@PostMapping("/memberLogin.do")
@@ -191,6 +185,16 @@ public class MemberController {
 		logger.debug(member.toString());
 		
 		int result = memberService.insertMember(member);
+		
+		return "redirect:/";
+	}
+	
+	@RequestMapping("/memberLogout.do")
+	public String memberLogout(SessionStatus sessionStatus) {
+		logger.debug("로그아웃 요청");
+		if(!sessionStatus.isComplete()) {
+			sessionStatus.setComplete();
+		}
 		
 		return "redirect:/";
 	}

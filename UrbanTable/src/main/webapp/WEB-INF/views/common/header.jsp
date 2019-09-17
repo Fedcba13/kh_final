@@ -14,14 +14,19 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/resources/css/slick-theme.css"/>
     <script type="text/javascript" src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/slick.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/common.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/common.js" charset="UTF-8"></script>
 </head>
 <body>
     <header id="header">
         <div id="util_wrap">
             <ul>
                 <li><a href="" class="dp_block point">회원가입</a></li>
-                <li><a href="" class="dp_block">로그인</a></li>
+                <c:if test="${empty memberLoggedIn }">                
+                	<li><a href="#" class="dp_block login-btn">로그인</a></li>
+                </c:if>
+                <c:if test="${not empty memberLoggedIn }">
+                	<li><a href="${pageContext.request.contextPath }/member/memberLogout.do" class="dp_block">로그아웃</a></li>
+                </c:if>
                 <li class="cs_center">
                     <a href="" class="dp_block">고객센터</a>
                     <ul>
@@ -91,4 +96,21 @@
             </div>
         </div>
     </header>
+	<div class="login-modal txt_center">
+		<form class="modal-content animate">
+			<div class="container txt_center">
+				<label for="uname"><b>Username</b></label>
+				<input type="text" placeholder="Enter Username" name="memberId" required>
+				<label for="psw"><b>Password</b></label>
+				<input type="password" placeholder="Enter Password" name="password" required>
+				<button type="button" class="btn login">Login</button>
+				<input type="checkbox" checked="checked" name="remember" id="saveID">
+				<label for="saveID">Remember me</label>
+			</div>
+			<div class="container txt_center" style="background-color:#f4f4f0">
+				<button type="button" class="btn cancelbtn">Cancel</button>
+				<span class="psw">Forgot <a href="#">password?</a></span>
+		    </div>
+		</form>
+	</div>
     <div id="container">
