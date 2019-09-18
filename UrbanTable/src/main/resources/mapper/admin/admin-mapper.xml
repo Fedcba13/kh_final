@@ -8,6 +8,8 @@
 		select mar.*, mem.*
 		from market mar join member mem 
 		on mar.member_id = mem.member_id
+		where mem.member_enabled = 1
+		order by market_no desc
 	</select>
 	
 	<resultMap type="com.kh.urbantable.admin.model.vo.MarketMember" id="marketMember">
@@ -19,6 +21,7 @@
 		<result column="market_address2" property="marketAddress2"/>
 		<result column="market_enabled" property="marketEnabled"/>
 		<result column="flag" property="flag"/>	
+		<result column="market_name" property="marketName"/>
 		<association javaType="com.kh.urbantable.member.model.vo.Member" property="member">
 			<id column="member_id" property="memberId"/>
 		    <result column="member_password" property="memberPassword"/>
@@ -33,4 +36,15 @@
 	    </association>
 	</resultMap>
 
+	<update id="updateMarket">
+		update market 
+		set flag = 1, market_name = #{marketName}
+		where member_id = #{memberId} and market_enabled = 1
+	</update>
+
+	<update id="updateMember">
+		update member
+		set member_check = 3
+		where member_id = #{memberId}
+	</update>
 </mapper>

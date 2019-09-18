@@ -1,5 +1,6 @@
 package com.kh.urbantable.admin.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -8,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kh.urbantable.admin.model.service.MarketService;
 import com.kh.urbantable.admin.model.vo.MarketMember;
+import com.kh.urbantable.marketOwner.model.vo.Market;
 
 @Controller
 @RequestMapping("/admin")
@@ -29,6 +32,25 @@ public class MarketController {
 		logger.debug("list={}", list);
 		model.addAttribute("list", list);
 		
+		
+		return "admin/foundation";
+	}
+	
+	@RequestMapping("/updateMarket.do")
+	public String updateMarket(Market market, @RequestParam String marketName, Model model) {
+		
+		int result = marketService.updateMarket(market);
+		
+		logger.debug("Market={}", market);
+		
+		List<MarketMember> list = new ArrayList<MarketMember>();
+		if(result > 0) {
+			list = marketService.selectMarketList();
+		}
+		
+		logger.debug("Market={}", list);
+		
+		model.addAttribute("list", list);
 		
 		return "admin/foundation";
 	}

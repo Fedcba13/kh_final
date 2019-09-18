@@ -9,4 +9,10 @@ public interface MarketDAO {
 
 	List<MarketMember> selectList();
 
+	int updateMarket(Market memberId);
+
+	int updateMember(Market memberId);
+
+
+
 }
