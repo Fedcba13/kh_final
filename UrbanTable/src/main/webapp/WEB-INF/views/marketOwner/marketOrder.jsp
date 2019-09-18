@@ -10,7 +10,7 @@
 	<article class="subPage inner">
 	    <h3 class="sub_tit">주문 내역</h3>
 	    <div class="orderSearch_wrap">
-	    	<form action="" name="orderSearchFrm1" method="get">
+	    	<form action="" name="orderSearchFrm1" method="get" class="searchFrm">
     			<select name="orderSearchType" id="orderSearchType" class="dp_ib">
 	    			<option value="orderNo">주문 번호</option>
 	    			<option value="orderID">주문자 ID</option>

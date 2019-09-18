@@ -3,6 +3,7 @@ package com.kh.urbantable.marketOwner.model.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.urbantable.admin.model.vo.MarketMember;
 import com.kh.urbantable.marketOwner.model.dao.MarketOwnerDAO;
 import com.kh.urbantable.marketOwner.model.vo.Market;
 
@@ -15,6 +16,21 @@ public class MarketOwnerServiceImpl implements MarketOwnerService {
 	@Override
 	public int insertMarketFounded(Market market) {
 		return marketOwnerDAO.insertMarketFounded(market);
+	}
+
+	@Override
+	public MarketMember selectByMemberId(String memberId) {
+		return marketOwnerDAO.selectByMemberId(memberId);
+	}
+
+	@Override
+	public int updateMarketFounded(Market market) {
+		return marketOwnerDAO.updateMarketFounded(market);
+	}
+
+	@Override
+	public int cancelFounded(String marketNo) {
+		return marketOwnerDAO.cancelFounded(marketNo);
 	}
 	
 }

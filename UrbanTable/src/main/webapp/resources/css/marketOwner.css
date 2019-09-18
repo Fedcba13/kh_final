@@ -24,13 +24,9 @@
 	width: 350px;
 }
 
-.tit_wrap h3 {
-	float:left;
-}
-
-.tit_wrap p {
-	float:right;
-	font-size: 15px;
+.info {
+	padding-bottom:3px;
+	font-size:15px;
 }
 
 #marketOrder table .btn,
@@ -39,13 +35,13 @@ form[name=orderSearchFrm2] input[type=submit] {
 	border-radius:3px;
 }
 
-form[name=orderSearchFrm1] {
+.searchFrm {
 	position:relative;
 	width:330px;
 	margin-bottom:10px;
 }
 
-form[name=orderSearchFrm1] input[type=submit] {
+.searchFrm input[type=submit] {
 	position: absolute;
     right: 0;
     top: 0;
@@ -82,4 +78,9 @@ form[name=orderSearchFrm2] > div > div {
 
 .mapAddress img {
 	vertical-align:text-top;
+}
+
+.validate {
+	font-size:14px;
+	padding-left:8px;
 }
