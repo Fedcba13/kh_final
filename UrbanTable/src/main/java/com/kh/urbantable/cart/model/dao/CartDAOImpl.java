@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.urbantable.cart.model.vo.Cart;
+import com.kh.urbantable.marketOwner.model.vo.Market;
 
 @Repository
 public class CartDAOImpl implements CartDAO{
@@ -27,6 +28,11 @@ public class CartDAOImpl implements CartDAO{
 	@Override
 	public Map<String, String> getFoodInfo(String foodNo) {
 		return sqlSession.selectOne("cart.getFoodInfo", foodNo); 
+	}
+
+	@Override
+	public List<Market> getMarketList() {
+		return sqlSession.selectList("cart.getMarketList");
 	}
 
 }

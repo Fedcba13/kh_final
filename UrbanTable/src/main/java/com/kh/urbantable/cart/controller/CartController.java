@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.google.gson.Gson;
 import com.kh.urbantable.cart.model.service.CartService;
 import com.kh.urbantable.cart.model.vo.Cart;
+import com.kh.urbantable.marketOwner.model.vo.Market;
 
 @Controller
 @RequestMapping("/cart")
@@ -50,6 +51,16 @@ public class CartController {
 		Gson gson = new Gson();
 		
 		return gson.toJson(map);
+	}
+	
+	@RequestMapping("/searchMarket.do")
+	public String searchMarket(Model model) {
+		
+		List<Market> list = cartService.getMarketList();
+		logger.debug("marketList={}", list);
+		model.addAttribute("marketList", list);
+		
+		return "map/map";
 	}
 
 }
