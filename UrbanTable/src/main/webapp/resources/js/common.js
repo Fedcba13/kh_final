@@ -42,7 +42,7 @@ $(document).ready(function(){
 		}
 		
 		$.ajax({
-			url: "member/memberLogin.do",
+			url: contextPath+"/member/memberLogin.do",
 			data: param,
 			type: "POST",
 			success: (data)=>{
