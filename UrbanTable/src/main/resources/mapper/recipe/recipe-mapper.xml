@@ -5,6 +5,7 @@
 <mapper namespace="recipe">
 	<select id="selectRecipeList" resultMap="recipeMap">
 		select * from recipe
+		order by recipe_date desc
 	</select>
 	<resultMap type="recipe" id="recipeMap">
 		<result column="recipe_no" property="recipeNo" />
@@ -13,5 +14,40 @@
 		<result column="recipe_readcount" property="recipeReadcount" />
 		<result column="recipe_date" property="recipeDate" />
 		<result column="recipe_enabled" property="recipeEnabled" />
+	</resultMap>
+	
+	<select id="selectOneRecipe" resultMap="recipeCollectionMap">
+		select A.*, B.*
+		from recipe A left join recipe_sequence B
+		on A.recipe_no = B.recipe_no
+		where A.recipe_no = #{recipeNo}
+	</select>
+	
+	<resultMap type="recipevo" id="recipeCollectionMap">
+		<result column="recipe_no" property="recipeNo" />
+		<result column="member_id" property="memberId" />
+		<result column="recipe_title" property="recipeTitle" />
+		<result column="recipe_readcount" property="recipeReadcount" />
+		<result column="recipe_date" property="recipeDate" />
+		<result column="recipe_enabled" property="recipeEnabled" />
+		<collection property="recipeSequenceList" ofType="recipeSequence">
+			<result column="RECIPE_SEQUENCE_NO" property="recipeSequenceNo" />
+			<result column="RECIPE_NO" property="recipeNo" />
+			<result column="RECIPE_ORDER" property="recipeOrder" />
+			<result column="RECIPE_CONTENT" property="recipeContent" />
+			<result column="RECIPE_PIC" property="recipePic" />
+		</collection>
+	</resultMap>
+	
+	<select id="selectOneMaterial" resultMap="materialMap">
+		select * from recipe_ingredient
+		where recipe_no = #{recipeNo}
+	</select>
+	
+	<resultMap type="material" id="materialMap">
+		<result column="recip_ingre_no" property="recipeIngreNo" />
+		<result column="recipe_no" property="recipeNo" />
+		<result column="food_section_no" property="foodSectionNo" />
+		<result column="food_no" property="foodNo" />
 	</resultMap>
 </mapper>
