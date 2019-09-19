@@ -18,6 +18,7 @@
 <section>
 	<form action="${pageContext.request.contextPath }/market/cancelFounded.do" name="cancelFoundedFrm" method="post">
 		<input type="hidden" name="marketNo" value="${founded.marketNo}" />
+		<input type="hidden" name="memberId" value="${founded.memberId}" />
 	</form>
 	<article class="subPage inner">
 	    <h3 class="sub_tit">창업 신청 내역</h3>

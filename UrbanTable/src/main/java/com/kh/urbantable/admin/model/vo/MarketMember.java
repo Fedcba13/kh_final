@@ -34,7 +34,7 @@ public class MarketMember extends Market {
 	public String toString() {
 		return "Market [marketNo=" + marketNo + ", memberId=" + memberId + ", marketResident=" + marketResident
 				+ ", marketTelephone=" + marketTelephone + ", marketAddress=" + marketAddress + ", marketAddress2="
-				+ marketAddress2 + ", marketEnabled=" + marketEnabled + ", flag=" + flag + ", memberName="+member.getMemberName()+"]";
+				+ marketAddress2 + ", marketEnabled=" + marketEnabled + ", flag=" + flag + ", marketName="+marketName+"memberName="+member.getMemberName()+"]";
 	}
 	
 	

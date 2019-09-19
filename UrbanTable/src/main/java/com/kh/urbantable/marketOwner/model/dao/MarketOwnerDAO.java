@@ -13,4 +13,12 @@ public interface MarketOwnerDAO {
 
 	int cancelFounded(String marketNo);
 
+	int updateMemberFounded(String memberId);
+
+	int updateMemberCancelFounded(String memberId);
+
+	int myMarketUpdate(Market market);
+
+	int myMarketOpen(String marketNo);
+
 }

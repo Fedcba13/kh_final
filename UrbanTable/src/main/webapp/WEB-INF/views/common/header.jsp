@@ -49,21 +49,28 @@
                         <li><a href="" class="dp_block">배너 등록</a></li>
                     </ul>
                 </li>
-                <li class="cs_center">
-                    <a href="" class="dp_block">점주</a>
-                    <ul>
-                        <li><a href="${pageContext.request.contextPath}/market/myMarket.do?memberId=${memberLoggedIn.memberId}" class="dp_block">내 지점 관리</a></li>
-                        <li><a href="${pageContext.request.contextPath}/market/marketOrder.do" class="dp_block">지점 주문 내역</a></li>
-                        <li><a href="" class="dp_block">배송 관리</a></li>
-                        <li><a href="" class="dp_block">지점 인기 상품</a></li>
-                        <li><a href="" class="dp_block">지점 매출 현황</a></li>
-                        <li><a href="" class="dp_block">발주 요청</a></li>
-                        <li><a href="" class="dp_block">재고 관리</a></li>
-                    </ul>
-                </li>
+                <c:if test="${memberLoggedIn.memberCheck eq 3 }">
+	                <li class="cs_center">
+	                    <a href="" class="dp_block">점주</a>
+	                    <ul>
+	                        <li><a href="${pageContext.request.contextPath}/market/myMarket.do?memberId=${memberLoggedIn.memberId}" class="dp_block">내 지점 관리</a></li>
+	                        <li><a href="${pageContext.request.contextPath}/market/marketOrder.do" class="dp_block">지점 주문 내역</a></li>
+	                        <li><a href="" class="dp_block">배송 관리</a></li>
+	                        <li><a href="" class="dp_block">지점 인기 상품</a></li>
+	                        <li><a href="" class="dp_block">지점 매출 현황</a></li>
+	                        <li><a href="" class="dp_block">발주 요청</a></li>
+	                        <li><a href="" class="dp_block">재고 관리</a></li>
+	                    </ul>
+	                </li>
+                </c:if>
                 <li><a href="${pageContext.request.contextPath}/market/marketList.do" class="dp_block">매장 검색</a></li>
                 <li><a href="" class="dp_block">배송지역 검색</a></li>
-                <li><a href="${pageContext.request.contextPath}/market/founded.do?memberId=${memberLoggedIn.memberId}" class="dp_block">창업 신청</a></li>
+                <c:if test="${memberLoggedIn.memberCheck eq 1 }">
+                	<li><a href="${pageContext.request.contextPath}/market/founded.do?memberId=${memberLoggedIn.memberId}" class="dp_block">창업 신청</a></li>
+                </c:if>
+                <c:if test="${memberLoggedIn.memberCheck eq 2 }">
+                	<li><a href="${pageContext.request.contextPath}/market/foundedEndView.do?memberId=${memberLoggedIn.memberId}" class="dp_block">창업 신청 내역</a></li>
+                </c:if>
             </ul>
         </div>
         <h1 id="logo" class="txt_center point"><a href="${pageContext.request.contextPath}" class="dp_ib">urban table</a></h1>
@@ -113,7 +120,7 @@
 				<label for="saveID">Remember me</label>
 			</div>
 			<div class="container txt_center" style="background-color:#f4f4f0">
-				<button type="button" class="btn cancelbtn">Cancel</button>
+				<button type="button" class="btn btn2 cancelbtn">Cancel</button>
 				<span class="psw">Forgot <a href="#">password?</a></span>
 		    </div>
 		</form>

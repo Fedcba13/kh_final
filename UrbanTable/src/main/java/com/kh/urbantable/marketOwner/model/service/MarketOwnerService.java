@@ -11,6 +11,10 @@ public interface MarketOwnerService {
 
 	int updateMarketFounded(Market market);
 
-	int cancelFounded(String marketNo);
+	int cancelFounded(String marketNo, String memberId);
+
+	int myMarketUpdate(Market market);
+
+	int myMarketOpen(String marketNo);
 
 }

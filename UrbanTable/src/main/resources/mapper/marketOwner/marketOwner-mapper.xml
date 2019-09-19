@@ -11,6 +11,12 @@
 		#{marketAddress}, #{marketAddress2}, 1, default, default)
 	</insert>
 	
+	<update id="updateMemberFounded">
+		update member
+		set member_check=2
+		where member_id=#{memberId}
+	</update>
+	
 	<select id="selectByMemberId" resultMap="marketAndMember">
 		select *
 		from market join member using (member_id)
@@ -25,6 +31,7 @@
 		<result column="market_address2" property="marketAddress2"/>
 		<result column="market_enabled" property="marketEnabled"/>
 		<result column="flag" property="flag"/>
+		<result column="market_name" property="marketName"/>
 		<association javaType="member" property="member">
 			<id column="member_id" property="memberId"/>
 		    <result column="member_password" property="memberPassword"/>
@@ -48,6 +55,24 @@
 	<update id="cancelFounded">
 		update market 
 		set market_enabled=0
+		where market_no=#{marketNo}
+	</update>
+	
+	<update id="updateMemberCancelFounded">
+		update member
+		set member_check=1
+		where member_id=#{memberId}
+	</update>
+	
+	<update id="myMarketUpdate">
+		update market
+		set market_telephone=#{marketTelephone}
+		where market_no=#{marketNo}
+	</update>
+	
+	<update id="myMarketOpen">
+		update market
+		set flag=2
 		where market_no=#{marketNo}
 	</update>
 	

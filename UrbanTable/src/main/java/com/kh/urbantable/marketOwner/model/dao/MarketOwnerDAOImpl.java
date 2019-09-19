@@ -33,4 +33,24 @@ public class MarketOwnerDAOImpl implements MarketOwnerDAO {
 		return sqlSession.update("marketOwner.cancelFounded", marketNo);
 	}
 
+	@Override
+	public int updateMemberFounded(String memberId) {
+		return sqlSession.update("marketOwner.updateMemberFounded", memberId);
+	}
+
+	@Override
+	public int updateMemberCancelFounded(String memberId) {
+		return sqlSession.update("marketOwner.updateMemberCancelFounded", memberId);
+	}
+
+	@Override
+	public int myMarketUpdate(Market market) {
+		return sqlSession.update("marketOwner.myMarketUpdate", market);
+	}
+
+	@Override
+	public int myMarketOpen(String marketNo) {
+		return sqlSession.update("marketOwner.myMarketOpen", marketNo);
+	}
+
 }
