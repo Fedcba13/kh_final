@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.kh.urbantable.cart.model.dao.CartDAO;
 import com.kh.urbantable.cart.model.vo.Cart;
+import com.kh.urbantable.marketOwner.model.vo.Market;
 
 @Service
 public class CartServiceImpl implements CartService {
@@ -27,6 +28,11 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public Map<String, String> getFoodInfo(String foodNo) {
 		return cartDAO.getFoodInfo(foodNo);
+	}
+
+	@Override
+	public List<Market> getMarketList() {
+		return cartDAO.getMarketList();
 	} 
 	
 

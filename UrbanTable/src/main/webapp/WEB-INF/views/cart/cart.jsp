@@ -17,6 +17,10 @@
 		deliveryCost("n");
 		totalPayment();
 		
+		$("#searchMarket").on("click", function(){
+			getClosestMarket();
+		});
+		
 		$("#order").on("click", ()=>{
 			var cartArr = [];
 			var cartInfo = {};
@@ -52,7 +56,6 @@
 				dataType: "json",
 				async: false,
 				success: function(data){
-					console.log(data);
 					foodInfo += "<tr id='item"+${vs.count}+"'>";
 					foodInfo += "<input type='hidden' name='price' value='"+ data.FOOD_MEMBER_PRICE +"'>";
 					foodInfo += "<input type='hidden' name='foodNo' value='"+ data.FOOD_NO +"'>";
@@ -181,6 +184,12 @@
 		var total = parseInt($("#priceSum").text()) + parseInt($("#deliveryCost").text());
 		$("#totalPayment").text(total + " 원");
 	}
+	
+	function getClosestMarket(){
+		var popup = window.open("${pageContext.request.contextPath}/cart/searchMarket.do","매장찾기", "width=750, height=550");
+		popup.focus();
+		popup.opener = self;
+	}
 
 </script>
 
@@ -222,6 +231,14 @@
             		<label for="regular">정기배송</label>
             	</td>	
             </tr>
+            <tr>
+            	<td>
+            		<input type="button" class="btn btn-outline-secondary" id="searchMarket" value="매장찾기"/>
+            	</td>
+            	<td colspan="3">
+            		<input type="text" id="market" size="80" readonly/>
+            	</td>
+            </tr>
         </table>
         <table class="tbl tbl_view">
             <tr>
@@ -243,7 +260,7 @@
         </table>
         <hr />
         <div class="btn">
-	        <button type="button" class="btn btn-primary" id="order"><h1>주문하기</h1></button>
+	        <button type="button" class="btn btn-primary" id="order"><h2>주문하기</h2></button>
         </div>
     </article>    
 </section>
