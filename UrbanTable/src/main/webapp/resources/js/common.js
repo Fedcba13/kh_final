@@ -11,6 +11,12 @@ $(document).ready(function(){
         $(this).removeClass("gnb_2depth_open");
     });
     
+    $("#util_wrap > ul > li.cs_center").hover(function(){
+    	$(this).children("ul").fadeIn("fast");
+    }, function(){
+    	$(this).children("ul").fadeOut("fast");
+    });
+    
     //로그인 모달
     
     var modal = $(".login-modal");

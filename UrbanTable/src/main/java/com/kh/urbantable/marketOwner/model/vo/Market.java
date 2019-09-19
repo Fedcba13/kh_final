@@ -28,7 +28,7 @@ public class Market {
 	public String toString() {
 		return "Market [marketNo=" + marketNo + ", memberId=" + memberId + ", marketName="+marketName+", marketResident=" + marketResident
 				+ ", marketTelephone=" + marketTelephone + ", marketAddress=" + marketAddress + ", marketAddress2="
-				+ marketAddress2 + ", marketEnabled=" + marketEnabled + ", flag=" + flag + "]";
+				+ marketAddress2 + ", marketEnabled=" + marketEnabled + ", flag=" + flag + ", marketName="+marketName+"]";
 	}
 	
 }

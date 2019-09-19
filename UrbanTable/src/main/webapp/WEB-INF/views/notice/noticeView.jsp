@@ -28,7 +28,7 @@ li input.btn{
 	    margin: 5px;
 }
 </style>
-<section class="sec_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
+<section> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 	    <h3 class="sub_tit">공지사항</h3>
 	   	<c:if test="${memberLoggedIn.memberCheck == 9 }">
@@ -58,14 +58,14 @@ li input.btn{
             	<td>${notice.noticeReadcount }</td>
             </tr>
             <tr>
-            	<td class="txt_left" colspan="3">
+            	<td class="txt_left sec_bg" colspan="4" style="padding:10px 30px; box-sizing:border-box;">
                	<pre style="font-family: 'NanumBarunGothic', sans-serif;">
                	${notice.noticeContent }
                	</pre>
             	</td>
             </tr>
         </table>
-
+		<div class="txt_right" style="margin-top:20px;"><a href="${pageContext.request.contextPath }/notice/noticeList.do" class="dp_block btn txt_center">목록</a></div>
     </article>
 </section>
 

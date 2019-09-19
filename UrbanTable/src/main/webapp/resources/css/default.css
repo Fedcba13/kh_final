@@ -117,6 +117,10 @@ input, select {
 	vertical-align:middle;
 }
 
+input:read-only {
+	background:#f4f4f0;
+}
+
 input[type=text], input[type=password] {
 	padding-left: 15px;
 }
@@ -226,15 +230,16 @@ input[type=text], input[type=password] {
     border: 1px solid #d8d8d8;
     background: #fff;
     box-sizing: border-box;
-    opacity: 0;
+    /* opacity: 0;
     transition: opacity .25s linear;
-    -webkit-transition: opacity .25s linear;
+    -webkit-transition: opacity .25s linear; */
+    display:none;
     z-index:9;
 }
-
+/*
 #util_wrap > ul > li.cs_center:hover ul {
     opacity: 1;
-}
+}*/
 
 #util_wrap ul ul li a {
     padding:0 0 5px 5px;
@@ -506,13 +511,13 @@ input[type=text], input[type=password] {
 .login-modal .cancelbtn {
   width: auto;
   padding: 0px 18px;
-  background-color: #f44336;
+  /* background-color: #f44336; */
   float: left;
 }
 
 .login-modal span.psw {
   float: right;
-  padding-top: 16px;
+  padding-top: 11px;
 }
 
 .login-modal input[type=checkbox]{

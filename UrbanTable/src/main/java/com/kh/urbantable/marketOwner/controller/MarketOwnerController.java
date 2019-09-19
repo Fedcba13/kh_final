@@ -1,5 +1,11 @@
 package com.kh.urbantable.marketOwner.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kh.urbantable.admin.model.vo.MarketMember;
 import com.kh.urbantable.marketOwner.model.service.MarketOwnerService;
 import com.kh.urbantable.marketOwner.model.vo.Market;
+import com.kh.urbantable.member.model.vo.Member;
 
 @Controller
 @RequestMapping("/market")
@@ -25,25 +32,13 @@ public class MarketOwnerController {
 	MarketOwnerService marketOwnerService;
 	
 	@RequestMapping("/founded.do")
-	public ModelAndView founded(@RequestParam(value="memberId") String memberId, ModelAndView mav) {
+	public String founded() {
 		logger.info("창업 신청 페이지 요청");
-		
-		//창업신청 했는지 여부 검사
-		MarketMember market = marketOwnerService.selectByMemberId(memberId);
-		logger.info("market@="+market);
-		
-		if(market!=null) {
-			mav.addObject("founded", market);
-			mav.setViewName("marketOwner/foundedEndView");
-		} else if (market==null) {
-			mav.setViewName("marketOwner/founded");
-		}
-		
-		return mav;
+		return "marketOwner/founded";
 	}
 	
 	@RequestMapping(value="/foundedEnd.do", method=RequestMethod.POST)
-	public String foundedEnd(Market market, Model model) {
+	public String foundedEnd(Market market, Model model, HttpServletRequest request) {
 		logger.info("창업 신청 insert 요청");
 		logger.info("market="+market);
 		
@@ -52,7 +47,25 @@ public class MarketOwnerController {
 		model.addAttribute("msg", result>0?"창업 신청이 완료되었습니다.":"창업 신청에 실패했습니다. 관리자에게 문의하세요.");
 		model.addAttribute("loc", "/");
 		
+		if(result>0) {
+			HttpSession session = request.getSession(true);
+			Member member = (Member)session.getAttribute("memberLoggedIn");
+			member.setMemberCheck(2);
+		}
+		
 		return "common/msg";
+	}
+	
+	@RequestMapping("/foundedEndView.do")
+	public String foundedEndView(@RequestParam(value="memberId") String memberId, Model model) {
+		logger.info("창업 신청 내역 페이지 요청");
+		
+		MarketMember market = marketOwnerService.selectByMemberId(memberId);
+		logger.info("marketMember@controller="+market);
+		
+		model.addAttribute("founded", market);
+		
+		return "marketOwner/foundedEndView";
 	}
 	
 	@RequestMapping("/updateFounded.do")
@@ -89,14 +102,21 @@ public class MarketOwnerController {
 	}
 	
 	@RequestMapping("/cancelFounded.do")
-	public String cancleFounded(@RequestParam String marketNo, Model model) {
+	public String cancleFounded(@RequestParam String marketNo, @RequestParam String memberId, 
+			Model model, HttpServletRequest request) {
 		logger.info("창업 신청 취소 요청");
 		logger.info("marketNo="+marketNo);
 		
-		int result = marketOwnerService.cancelFounded(marketNo);
+		int result = marketOwnerService.cancelFounded(marketNo, memberId);
 		
 		model.addAttribute("msg", result>0?"창업 신청이 취소되었습니다.":"창업 신청 취소에 실패했습니다. 관리자에게 문의하세요.");
 		model.addAttribute("loc", "/");
+		
+		if(result>0) {
+			HttpSession session = request.getSession(true);
+			Member member = (Member)session.getAttribute("memberLoggedIn");
+			member.setMemberCheck(1);
+		}
 		
 		return "common/msg";
 	}
@@ -117,6 +137,37 @@ public class MarketOwnerController {
 		model.addAttribute("market", market);
 		
 		return "marketOwner/myMarket";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/myMarketUpdate.do")
+	public Map<String, String> myMarketUpdate(@RequestParam(value="marketNo") String marketNo,
+			@RequestParam(value="marketTelephone") String marketTelephone) {
+		logger.info("내 지점 정보 수정 요청");
+		
+		Market market = new Market();
+		market.setMarketNo(marketNo);
+		market.setMarketTelephone(marketTelephone);
+		
+		int result = marketOwnerService.myMarketUpdate(market);
+		
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("marketTelephone", marketTelephone);
+		map.put("result", result>0?"지점 정보를 수정하였습니다.":"지점 정보 수정에 실패했습니다. 관리자에게 문의하세요");
+		
+		return map;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/myMarketOpen.do")
+	public Map<String, String> myMarketOpen(@RequestParam(value="marketNo") String marketNo){
+		logger.info("지점 오픈 요청");
+		
+		int result = marketOwnerService.myMarketOpen(marketNo);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("result", result>0?"지점을 오픈하였습니다.":"지점 오픈에 실패했습니다. 관리자에게 문의하세요");
+		
+		return map;
 	}
 	
 	@RequestMapping("/marketList.do")

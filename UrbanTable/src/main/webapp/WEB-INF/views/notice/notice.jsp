@@ -23,11 +23,11 @@ function writeNotice(){
 	    <table class="tbl txt_center"> <!--가운데 정렬 아니면 txt_center 빼셔도 됩니다.
 	                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->
             <tr>
-                <th width="30">구분</th>
-                <th width="160">제목</th>
-                <th width="50">작성자</th>
-                <th width="100">등록일자</th>
-                <th width="30">조회수</th>
+                <th width="100">구분</th>
+                <th width="524">제목</th>
+                <th width="120">작성자</th>
+                <th width="120">등록일자</th>
+                <th width="80">조회수</th>
             </tr>
             <c:forEach items="${list }" var="n">
             <tr>

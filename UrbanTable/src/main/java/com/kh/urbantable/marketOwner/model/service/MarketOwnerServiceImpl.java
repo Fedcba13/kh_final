@@ -17,7 +17,13 @@ public class MarketOwnerServiceImpl implements MarketOwnerService {
 
 	@Override
 	public int insertMarketFounded(Market market) {
-		return marketOwnerDAO.insertMarketFounded(market);
+		int result = marketOwnerDAO.insertMarketFounded(market);
+		if(result>0) {
+			result = marketOwnerDAO.updateMemberFounded(market.getMemberId());
+		} else {
+			result = 0;
+		}
+		return result;
 	}
 
 	@Override
@@ -31,8 +37,24 @@ public class MarketOwnerServiceImpl implements MarketOwnerService {
 	}
 
 	@Override
-	public int cancelFounded(String marketNo) {
-		return marketOwnerDAO.cancelFounded(marketNo);
+	public int cancelFounded(String marketNo, String memberId) {
+		int result = marketOwnerDAO.cancelFounded(marketNo);
+		if(result>0) {
+			result = marketOwnerDAO.updateMemberCancelFounded(memberId);
+		} else {
+			result = 0;
+		}
+		return result;
+	}
+
+	@Override
+	public int myMarketUpdate(Market market) {
+		return marketOwnerDAO.myMarketUpdate(market);
+	}
+
+	@Override
+	public int myMarketOpen(String marketNo) {
+		return marketOwnerDAO.myMarketOpen(marketNo);
 	}
 
 	@Override
