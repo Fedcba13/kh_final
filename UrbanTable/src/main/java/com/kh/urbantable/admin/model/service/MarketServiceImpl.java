@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.kh.urbantable.admin.model.dao.MarketDAO;
 import com.kh.urbantable.admin.model.vo.MarketMember;
+import com.kh.urbantable.marketOwner.model.vo.Market;
 
 
 @Service
@@ -21,5 +22,21 @@ public class MarketServiceImpl implements MarketService{
 
 		return marketDAO.selectList();
 	}
+
+
+	@Override
+	public int updateMarket(Market memberId) {
+		
+		int result = marketDAO.updateMarket(memberId);
+		
+		if(result > 0) {
+			result = marketDAO.updateMember(memberId);
+		}
+			
+		
+		return result;
+	}
+
+
 	
 }

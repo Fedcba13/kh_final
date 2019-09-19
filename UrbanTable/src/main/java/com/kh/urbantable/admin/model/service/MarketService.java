@@ -9,4 +9,8 @@ public interface MarketService {
 
 	List<MarketMember> selectMarketList();
 
+	int updateMarket(Market market);
+
+
+
 }
