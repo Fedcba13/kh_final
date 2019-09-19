@@ -11,6 +11,10 @@ public interface MarketService {
 
 	int updateMarket(Market market);
 
+	int refuseMarket(Market market);
+
+
+
 
 
 }

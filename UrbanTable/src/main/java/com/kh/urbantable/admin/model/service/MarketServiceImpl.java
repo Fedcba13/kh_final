@@ -25,17 +25,26 @@ public class MarketServiceImpl implements MarketService{
 
 
 	@Override
-	public int updateMarket(Market memberId) {
+	public int updateMarket(Market market) {
 		
-		int result = marketDAO.updateMarket(memberId);
+		int result = marketDAO.updateMarket(market);
 		
 		if(result > 0) {
-			result = marketDAO.updateMember(memberId);
+			result = marketDAO.updateMember(market);
 		}
 			
 		
 		return result;
 	}
+
+
+	@Override
+	public int refuseMarket(Market market) {
+
+		return marketDAO.refuseMarket(market);
+	}
+
+
 
 
 	

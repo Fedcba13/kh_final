@@ -8,8 +8,8 @@
 		select mar.*, mem.*
 		from market mar join member mem 
 		on mar.member_id = mem.member_id
-		where mem.member_enabled = 1
-		order by market_no desc
+		where mem.member_enabled = 1 and (mem.member_check=2 or mem.member_check=3)
+		order by market_no desc and 
 	</select>
 	
 	<resultMap type="com.kh.urbantable.admin.model.vo.MarketMember" id="marketMember">
@@ -38,13 +38,21 @@
 
 	<update id="updateMarket">
 		update market 
-		set flag = 1, market_name = #{marketName}
+		set flag = 1, market_name = #{marketName}, market_resident = #{marketResident}
 		where member_id = #{memberId} and market_enabled = 1
 	</update>
 
 	<update id="updateMember">
 		update member
 		set member_check = 3
-		where member_id = #{memberId}
+		where member_id = #{memberId} and member_enabled = 1
 	</update>
+	
+	<update id="refuseMarket">
+		update member
+		set member_check = 1
+		where member_id = #{memberId} and member_enabled = 1
+	</update>
+	
+
 </mapper>

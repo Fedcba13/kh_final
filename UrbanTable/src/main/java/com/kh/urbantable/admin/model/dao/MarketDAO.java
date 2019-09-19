@@ -9,9 +9,13 @@ public interface MarketDAO {
 
 	List<MarketMember> selectList();
 
-	int updateMarket(Market memberId);
+	int updateMarket(Market market);
 
-	int updateMember(Market memberId);
+	int updateMember(Market market);
+
+	int refuseMarket(Market market);
+
+
 
 
 
