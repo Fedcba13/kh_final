@@ -20,6 +20,12 @@
 			alias="market" />
 		<typeAlias type="com.kh.urbantable.admin.model.vo.MarketMember"
 			alias="marketMember" />
+			<typeAlias type="com.kh.urbantable.recipe.model.vo.RecipeVO"
+			alias="recipevo" />
+		<typeAlias type="com.kh.urbantable.recipe.model.vo.RecipeSequence"
+			alias="recipeSequence" />
+		<typeAlias type="com.kh.urbantable.recipe.model.vo.Material"
+			alias="material" />
 			
 	</typeAliases>
 </configuration>

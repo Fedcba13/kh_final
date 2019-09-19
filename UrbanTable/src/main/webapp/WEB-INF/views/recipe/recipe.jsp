@@ -5,7 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
-
+<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/recipe.css">
 <section class="sub_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 	    <h3 class="sub_tit">레시피</h3>
@@ -21,13 +21,16 @@
             	<c:forEach items="${list}" var="li">
 		            <tr>
 		                <td>${li.memberId }</td>
-		                <td>${li.recipeTitle }</td>
+		                <td class="recipe_link"><a href="${pageContext.request.contextPath}/recipe/recipeView.do?recipeNo=${li.recipeNo}">${li.recipeTitle }</a></td>
 		                <td>${li.recipeReadcount }</td>
 		                <td>${li.recipeDate }</td>
-		            </tr>            	
+		            </tr>
             	</c:forEach>
             </c:if>
         </table>
+        <div class="recipe_insert">
+        	<button class="btn" onclick="location.href='${pageContext.request.contextPath}/recipe/insert'">글쓰기</button>        
+        </div>
     </article>
 </section>
 
