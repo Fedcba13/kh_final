@@ -51,4 +51,9 @@
 		where market_no=#{marketNo}
 	</update>
 	
+	<select id="selectMarketList" resultType="market">
+		select * from market
+		where flag = #{flag}
+	</select>
+	
 </mapper>

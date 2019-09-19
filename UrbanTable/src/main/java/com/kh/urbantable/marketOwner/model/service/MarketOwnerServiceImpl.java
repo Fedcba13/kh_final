@@ -1,5 +1,7 @@
 package com.kh.urbantable.marketOwner.model.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,5 +34,11 @@ public class MarketOwnerServiceImpl implements MarketOwnerService {
 	public int cancelFounded(String marketNo) {
 		return marketOwnerDAO.cancelFounded(marketNo);
 	}
+
+	@Override
+	public List<Market> selectMarketList(int flag) {
+		return marketOwnerDAO.selectMarketList(flag);
+	}
+
 	
 }

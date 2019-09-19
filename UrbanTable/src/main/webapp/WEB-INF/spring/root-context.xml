@@ -2,22 +2,24 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
 	<!-- #7.1. myBatis(JDBC)설정 연결 설정하기 -->
 	<!-- 프로퍼티 파일에서 읽어옵니다. -->
-	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="location" value="/WEB-INF/configProperties/driver.properties"/>
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:configProperties/driver.properties"/>
         <property name="fileEncoding" value="UTF-8" />
     </bean>
 
 	<bean id="realDataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-		<property name="driverClassName" value="${driver}" />
-		<property name="url" value="${url}"/>
-		<property name="username" value="${username}"/>
-		<property name="password" value="${password}"/>
+		<property name="driverClassName" value="${db.driver}" />
+		<property name="url" value="${db.url}"/>
+		<property name="username" value="${db.username}"/>
+		<property name="password" value="${db.password}"/>
 	</bean>
 		
 	<!-- #11.1 log4jdbc-remix 관련 dataSource처리  -->
@@ -41,7 +43,7 @@
 		<!-- 앞으로 생성할 모든 mapper파일을 한번에 읽어오도록하자. -->
 		<!-- 여기서 classpath는 target/classes를 의미한다.-->
 		<!-- src/main/resources 디렉토리에서 작성된 파일들은 classpath로 이동함.-->
-		<property name="mapperLocations" value="classpath*:mapper/**/*.xml"/>
+		<property name="mapperLocations" value="classpath:mapper/**/*.xml"/>
 		
 		<!-- mybatis-config.xml파일 위치를 명시함. -->
 		<property name="configLocation" value="classpath:mybatis-config.xml"/>

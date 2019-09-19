@@ -47,7 +47,7 @@
 }
 
 /* input[type=text] 뒤에 버튼 사이즈 변경*/
-.member_register tr > td input[type="text"] + [type="button"]{
+.member_register tr > td input[type="text"] + [type="button"], #checkMsg{
 	width: 100px;
 	margin-right: 15px;
 }
@@ -65,6 +65,20 @@
 	padding-top: 10px;
 }
 
+div.auth{
+	display: inline-block;
+	position: relative;
+}
+
+span.auth{
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	padding-right: 30px;
+	height: 40px;
+    line-height: 40px;
+}
+
 </style>
 
 <script>
@@ -74,9 +88,9 @@ var timer = null;
 
 $(()=>{
 
-	$('.txt_guide').hide();
-	
-	$("input").on('focus', e => {
+    $('.txt_guide').hide();
+    
+    $("input").on('focus', e => {
 		$(e.target).siblings(".txt_guide").show();
 	});
 	
@@ -116,8 +130,6 @@ $(()=>{
 			data: param,
 			success: (data)=>{
 				alert(data.msg);
-				
-				
 			},
 			error: (xhr, txtStatus, err)=>{
 				console.log("ajax처리실패!", xhr, txtStatus, err);
@@ -184,10 +196,35 @@ function sample6_execDaumPostcode() {
 			
 			// 커서를 상세주소 필드로 이동한다.
 			$(".tbl_addr2 input").focus();
+			
+			$.ajax({
+				url: "${pageContext.request.contextPath}/member/nearMarket.do",
+				data : {address: $("[name=memberAddress]").val()},
+				success: (data)=>{
+					alert(data.msg);
+				},
+				error: (xhr, txtStatus, err)=>{
+					console.log("ajax처리실패!", xhr, txtStatus, err);
+				}
+			});
 		}
 	}).open({
 	    left: (window.screen.width/2) - (width/2),
 	    top: (window.screen.height/2) - (height/2)
+	});
+}
+
+//가까운 매장 거리 확인 후 배송 가능 리턴
+function nearMarket(){
+	$.ajax({
+		url: "${pageContext.request.contextPath}/member/nearMarket.do",
+		data: param,
+		success: (data)=>{
+			alert(data.msg);
+		},
+		error: (xhr, txtStatus, err)=>{
+			console.log("ajax처리실패!", xhr, txtStatus, err);
+		}
 	});
 }
 
@@ -241,7 +278,7 @@ function sample6_execDaumPostcode() {
 						<td><input type="text" name="memberPhone" maxlength="11" placeholder="'-'없이 숫자만 입력해주세요."><input type="button" class="btn" id="sendMsg" value="인증번호받기"></td>
 					</tr>
 					<tr>
-						<td><input type="text" name="auth_code" maxlength="6"><input type="button" class="btn" id="checkMsg" value="인증번호확인"></td>
+						<td><div class="auth"><input type="text" name="auth_code" maxlength="6"><span class="auth" id="time"></span></div><input type="button" class="btn" id="checkMsg" value="인증번호확인"></td>
 					</tr>
 					<tr class="tbl_addr">
 						<th>배송주소*</th>

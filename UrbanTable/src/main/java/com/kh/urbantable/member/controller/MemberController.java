@@ -21,6 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.kh.urbantable.common.util.Utils;
+import com.kh.urbantable.marketOwner.model.service.MarketOwnerService;
+import com.kh.urbantable.marketOwner.model.vo.Market;
 import com.kh.urbantable.member.model.service.MemberService;
 import com.kh.urbantable.member.model.vo.Member;
 import com.kh.urbantable.message.APIInit;
@@ -40,6 +43,9 @@ public class MemberController {
 
 	@Autowired
 	MemberService memberService;
+	
+	@Autowired
+	MarketOwnerService marketOwnerService;
 
 	@Autowired
 	BCryptPasswordEncoder passwordEncoder;
@@ -198,6 +204,43 @@ public class MemberController {
 		}
 		
 		return "redirect:/";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/nearMarket.do")
+	public HashMap<String, String> nearMarket(@RequestParam("address") String address) {
+		
+		HashMap<String, String> result = new HashMap<String, String>();
+		
+		HashMap<String, Double> map = Utils.getLocation(address);
+		
+		//현재 오픈된 매장만 가져옵니다.
+		List<Market> list = marketOwnerService.selectMarketList(2);
+		
+		double nearLenth = Double.MAX_VALUE;
+		result.put("msg", "배송 불가 지역");
+		
+		if(list == null || list.size() == 0) {
+			
+		}else {
+			for(int i = 0; i<list.size(); i++) {
+				HashMap<String, Double> difMap = Utils.getLocation(list.get(i).getMarketAddress());
+				
+				double distanceMile = Utils.distance(map, difMap, "kilometer");
+				
+				if(distanceMile < nearLenth) {
+					nearLenth = distanceMile;
+				}
+			}
+		}
+		
+		if(nearLenth < 10) {
+			result.put("msg","샛별 배송 가능 지역");
+		}else if(nearLenth<30) {
+			result.put("msg", "일반 배송 가능 지역");
+		}
+		
+		return result;
 	}
 	
 
