@@ -36,6 +36,7 @@ a {color: #333; text-decoration: none; line-height: 1.5;}
 a:hover, a:focus, a:active, input:focus, textarea:focus, select:focus {text-decoration: none; outline: none;} 
 *, html {box-sizing: border-box; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; } 
 *, *:before, *:after {box-sizing: border-box;-webkit-box-sizing: border-box; -moz-box-sizing: border-box;}
+button {font-family: 'NanumBarunGothic', sans-serif;}
 /*
 출처: https://webclub.tistory.com/370 [Web Club]
 */
@@ -93,6 +94,10 @@ a:hover, a:focus, a:active, input:focus, textarea:focus, select:focus {text-deco
     color: #374818 !important;
 }
 
+.point2 {
+	color:#9d8420;
+}
+
 .inner {
     width:944px;
     margin: auto;
@@ -131,6 +136,11 @@ input[type=text], input[type=password] {
 	cursor: pointer;
 	transition: all .25s linear;
 	-webkit-transition: all .25s linear;
+}
+
+.btn2 {
+	background:#fff;
+	color:#374818;
 }
 
 .btn_disabled {

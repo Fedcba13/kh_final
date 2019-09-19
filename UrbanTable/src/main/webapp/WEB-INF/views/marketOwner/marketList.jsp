@@ -9,6 +9,18 @@
 <section>
 	<article class="subPage inner">
 	    <h3 class="sub_tit">매장 리스트</h3>
+	    <div>
+	    	<form action="" name="marketSearchFrm" method="get" class="searchFrm">
+    			<select name="orderSearchType" id="orderSearchType" class="dp_ib">
+	    			<option value="orderNo">지점명</option>
+	    			<option value="orderID">주문자 ID</option>
+	    			<option value="orderPhone">주문자 연락처</option>
+	    		</select>
+	    		<input type="text" class="dp_ib" style="width:218px; padding-right:40px;" />
+	    		<input type="submit" value="검색" class="dp_ib txt_center" />
+	    	</form>
+	    </div>
+	    <p class="info txt_right"><span class="red">*</span>우리집과의 거리는 회원 정보에 기재된 주소로 계산됩니다.</p>
 	    <table class="tbl txt_center">
             <tr>
                 <th width="80">번호</th>

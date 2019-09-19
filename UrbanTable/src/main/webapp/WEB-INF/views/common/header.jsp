@@ -49,7 +49,7 @@
                 <li class="cs_center">
                     <a href="" class="dp_block">점주</a>
                     <ul>
-                        <li><a href="${pageContext.request.contextPath}/market/myMarket.do" class="dp_block">내 지점 관리</a></li>
+                        <li><a href="${pageContext.request.contextPath}/market/myMarket.do?memberId=${memberLoggedIn.memberId}" class="dp_block">내 지점 관리</a></li>
                         <li><a href="${pageContext.request.contextPath}/market/marketOrder.do" class="dp_block">지점 주문 내역</a></li>
                         <li><a href="" class="dp_block">배송 관리</a></li>
                         <li><a href="" class="dp_block">지점 인기 상품</a></li>
@@ -58,8 +58,9 @@
                         <li><a href="" class="dp_block">재고 관리</a></li>
                     </ul>
                 </li>
+                <li><a href="${pageContext.request.contextPath}/market/marketList.do" class="dp_block">매장 검색</a></li>
                 <li><a href="" class="dp_block">배송지역 검색</a></li>
-                <li><a href="${pageContext.request.contextPath}/market/founded.do" class="dp_block">창업 신청</a></li>
+                <li><a href="${pageContext.request.contextPath}/market/founded.do?memberId=${memberLoggedIn.memberId}" class="dp_block">창업 신청</a></li>
             </ul>
         </div>
         <h1 id="logo" class="txt_center point"><a href="${pageContext.request.contextPath}" class="dp_ib">urban table</a></h1>

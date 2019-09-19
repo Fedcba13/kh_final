@@ -5,39 +5,57 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
-
+<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/marketOwner.css">
+<script>
+	function cancelFounded(){
+		if(!confirm("정말 취소하시겠습니까?")){
+			return;
+		}
+		
+		$("form[name=cancelFoundedFrm]").submit();
+	}
+</script>
 <section>
+	<form action="${pageContext.request.contextPath }/market/cancelFounded.do" name="cancelFoundedFrm" method="post">
+		<input type="hidden" name="marketNo" value="${founded.marketNo}" />
+	</form>
 	<article class="subPage inner">
-	    <h3 class="sub_tit">창업 신청 상세보기</h3>
-	    <p class="txt_center">창업 신청이 다음과 같이 완료되었습니다.</p>
+	    <h3 class="sub_tit">창업 신청 내역</h3>
         <table class="tbl tbl_view">
             <tr>
-                <th><span class="red">*</span>신청 아이디</th>
-                <td><input type="text" name="marketMemberId" id="marketMemberId" value="로그인한 아이디" class="dp_block" required style="width:200px;" /></td>
+                <th>신청 아이디</th>
+                <td>${founded.memberId}</td>
             </tr>
             <tr>
-                <th><span class="red">*</span>신청자명</th>
-                <td><input type="text" name="marketMemberName" id="marketMemberName" value="로그인한 아이디의 이름" required class="dp_block" style="width:200px;" /></td>
+                <th>신청자명</th>
+                <td>${founded.member.memberName}</td>
             </tr>
             <tr>
-                <th><span class="red">*</span>주민번호</th>
-                <td><input type="text" name="marketResident" id="marketResident" class="dp_block" required style="width:200px;" /></td>
+                <th>연락처</th>
+                <td>${founded.marketTelephone}</td>
             </tr>
             <tr>
-                <th><span class="red">*</span>연락처</th>
-                <td><input type="text" name="marketTelephone" id="marketMemberPhone" value="로그인한 아이디의 전화번호" required class="dp_block" style="width:200px;" /></td>
+                <th>창업 희망 주소</th>
+                <td>${founded.marketAddress}, ${founded.marketAddress2}</td>
             </tr>
             <tr>
-                <th><span class="red">*</span>창업 희망 주소</th>
-                <td>
-                	<input type="text" id="sample6_postcode" placeholder="우편번호" class="mb10">
-					<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" required class="btn postBtn fw400 mb10"><br>
-					<input type="text" id="marketAddress" name="marketAddress" placeholder="주소" class="mb10" required><br>
-					<input type="text" id="marketAddress2" name="marketAddress2" placeholder="상세주소" required>
-					<input type="text" id="sample6_extraAddress" placeholder="참고항목">
-                </td>
+            	<th>진행 상황</th>
+            	<td>
+            		<c:if test="${0 eq founded.flag }">
+            			본사 검토 중
+            		</c:if>
+            		<c:if test="${1 eq founded.flag }">
+            			본사 승인·오픈 대기중
+            		</c:if>
+            	</td>
             </tr>
         </table>
+        <c:if test="${0 eq founded.flag }">
+        	<div class="founded_btn txt_center">
+        		<a href="${pageContext.request.contextPath}/market/updateFounded.do?memberId=${founded.memberId}" class="dp_block btn">창업 신청 정보 수정</a>
+        		<button class="dp_ib btn btn2" onclick="cancelFounded();">신청 취소</button>
+        	</div>
+        </c:if>
     </article>
 </section>
 
