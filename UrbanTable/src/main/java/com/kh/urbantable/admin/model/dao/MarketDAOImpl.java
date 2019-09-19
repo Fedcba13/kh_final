@@ -22,16 +22,24 @@ public class MarketDAOImpl implements MarketDAO{
 	}
 
 	@Override
-	public int updateMarket(Market memberId) {
+	public int updateMarket(Market market) {
 		
-		return sqlSession.update("admin.updateMarket", memberId);
+		return sqlSession.update("admin.updateMarket", market);
 	}
 
 	@Override
-	public int updateMember(Market memberId) {
+	public int updateMember(Market market) {
 
-		return sqlSession.update("admin.updateMember", memberId);
+		return sqlSession.update("admin.updateMember", market);
 	}
+
+	@Override
+	public int refuseMarket(Market market) {
+		
+		return sqlSession.update("admin.refuseMarket", market);
+	}
+
+
 
 
 	

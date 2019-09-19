@@ -6,58 +6,88 @@
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <script>
-function approval(memberId, no){
+	function approval(memberId, no) {
 
-	var bool = confirm("승인하시겠습니까");
-	var marketName = $(".marketName"+no).val();
-	console.log(marketName);
-	
-	if(!bool){
-		return false;
+		var bool = confirm("승인하시겠습니까");
+		var marketName = $("#marketName" + no).val();
+		var marketResident = $("#marketResident" + no).val();
+
+		if (!bool) {
+			return false;
+		}
+
+		location.href = "${pageContext.request.contextPath}/admin/updateMarket.do?memberId="
+				+ memberId
+				+ "&marketName="
+				+ marketName
+				+ "&marketResident="
+				+ marketResident;
+		return true;
 	}
-	
- 	location.href="${pageContext.request.contextPath}/admin/updateMarket.do?memberId="+memberId+"&marketName="+marketName; 
-	return true;
-}
+
+	function refuse(memberId) {
+		var bool = confirm("승인 거절하시겠습니까");
+
+		if (!bool) {
+			return false;
+		}
+
+		location.href = "${pageContext.request.contextPath}/admin/refuseMarket.do?memberId="
+				+ memberId;
+
+	}
+
 </script>
 <section class="sec_bg">
 	<article class="subPage inner">
+
 		<h3 class="sub_tit">창업 신청</h3>
+
 		<table class="tbl txt_center">
 			<tr>
 				<th>신청 아이디</th>
 				<th>점주명</th>
-				<th>지점명</th>
-				<th style="width:300x;">매장 주소</th>
-				<th style="width:300x;">매장 상세주소</th>
-				<th>매장 전화번호</th>
-				<th> </th>
+				<th style="width: 30px;">지점명</th>
+				<th>매장 등록번호</th>
+				<th style="width: 200px;">매장 주소</th>
+				<th>연락처</th>
+				<th></th>
 			</tr>
 			<c:forEach items="${list }" var="m" varStatus="vs">
-					
-			<tr>
-				<td>${m.memberId}</td>
-				<td>${m.member.memberName}</td>
-				<c:if test="${m.marketName != null }">
-				<td>${m.marketName }</td>
-				</c:if>
-				<c:if test="${m.marketName == null }">
-				<td><input type="text" id="marketName${vs.index }"/></td>
-				</c:if>
-				<td>${m.marketAddress}</td>
-				<td>${m.marketAddress2}</td>
-				<td>${m.marketTelephone}</td>
-				<td>
-				<c:if test="${m.flag == 0 }">				
-				<input type="button" value="승인" class="btn txt_center" style="width:70px;" onclick="approval('${m.memberId}', '${vs.index}') " />
-				</c:if>
-				</td>
-			</tr>
+				<tr>
+					<td>${m.memberId}</td>
+					<td style="width: 70px;">${m.member.memberName}</td>
+					<c:if test="${m.marketName != null}">
+						<td id="marketName${vs.index }">${m.marketName }</td>
+					</c:if>
+					<c:if test="${m.marketName == null}">
+						<td><input type="text" id="marketName${vs.index }"
+							style="width: 100px;" /></td>
+					</c:if>
+					<c:if test="${m.marketResident != null}">
+						<td style="width: 150px;" id="marketResident${vs.index }">${m.marketResident }</td>
+					</c:if>
+					<c:if test="${m.marketResident == null }">
+						<td><input type="text" id="marketResident${vs.index }"
+							style="width: 150px;" /></td>
+					</c:if>
+					<td>${m.marketAddress}<br /> ${m.marketAddress2}
+					</td>
+					<td>${m.marketTelephone}</td>
+					<c:if test="${m.flag == 0 or m.marketName == null or m.marketResident == null }">
+						<td class="app"><input type="button" value="승인" class="btn txt_center button" onclick="approval('${m.memberId}', '${vs.index}') " />
+							 <input	type="button" value="삭제" class="btn btn2 txt_center button"	onclick="refuse('${m.memberId}')" />
+						</td>
+					</c:if>
+					<c:if test="${m.flag == 1 }">
+						<td></td>
+					</c:if>
+				</tr>
 			</c:forEach>
 		</table>
 
-	
-	
+
+
 	</article>
 </section>
 

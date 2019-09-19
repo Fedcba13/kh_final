@@ -37,11 +37,11 @@ public class MarketController {
 	}
 	
 	@RequestMapping("/updateMarket.do")
-	public String updateMarket(Market market, @RequestParam String marketName, Model model) {
+	public String updateMarket(Market market, Model model) {
 		
 		int result = marketService.updateMarket(market);
 		
-		logger.debug("Market={}", market);
+//		logger.debug("Market={}", market, marketName);
 		
 		List<MarketMember> list = new ArrayList<MarketMember>();
 		if(result > 0) {
@@ -55,4 +55,23 @@ public class MarketController {
 		return "admin/foundation";
 	}
 	
+	@RequestMapping("/refuseMarket.do")
+	public String refuseMarket(Market market, Model model) {
+		
+		int result = marketService.refuseMarket(market);
+		
+		List<MarketMember> list = new ArrayList<MarketMember>();
+		
+		if(result > 0) {
+			list = marketService.selectMarketList();
+		}
+		
+		logger.debug("Market={}", list);
+		
+		model.addAttribute("list", list);
+		
+		return "admin/foundation";
+	}
+	
+
 }
