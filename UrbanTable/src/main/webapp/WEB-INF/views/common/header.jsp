@@ -12,6 +12,9 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/gh/moonspam/NanumBarunGothic@1.0/nanumbarungothicsubset.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/resources/css/slick.css"/>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/resources/css/slick-theme.css"/>
+    <script>
+    	var contextPath = "${pageContext.request.contextPath}";
+    </script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/slick.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/common.js" charset="UTF-8"></script>
