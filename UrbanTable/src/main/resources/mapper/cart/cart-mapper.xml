@@ -10,7 +10,7 @@
 		select * from food where food_no=#{foodNo}
 	</select>
 	<select id="getMarketList" resultType="market">
-		select * from market where market_enabled = 1
+		select * from market where flag = 2
 	</select>
 
 </mapper>

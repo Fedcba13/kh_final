@@ -6,6 +6,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/default.css">
 <script type="text/javascript" src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=818ea16fdaa1dea0776c4671d1142fc0&libraries=services,clusterer,drawing"></script>
 <meta charset="UTF-8">
@@ -47,7 +48,7 @@
 		}
 		
 		//매장위치 마커 생성
-		var createMarketOverlay = (result)=>{
+		var createMarketOverlay = (result, marketName)=>{
 			var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 			
 	        // 결과값으로 받은 위치를 마커로 표시합니다
@@ -60,7 +61,8 @@
 	        markers.push(coords);
 	        //console.log(JSON.parse(JSON.stringify(marker.getPosition())));
 	        //console.log(marker.getPosition());
-	        getDistance(coords, marker);
+	        console.log(marker.getPosition());
+	        var distance = getDistance(coords, marker, marketName);
 	        
 	        kakao.maps.event.addListener(marker, 'click', clickEvent(map, marker));
 	        function clickEvent(map, marker){
@@ -72,9 +74,8 @@
 	        	}
 	        	geocoder.coord2Address(marker.getPosition().getLng(), marker.getPosition().getLat(), callback);			        	
 	        	return function(){
-	        		if(confirm(clickedAddress + " 여기로 하시겠습니까?")){
-	        			opener.document.getElementById("market").value = clickedAddress;
-	        			window.close();
+	        		if(confirm(marketName + " 여기로 하시겠습니까?")){
+	        			deliverySelect(distance, clickedAddress);	        			
 	        		}
 	        	}	
 	        }	        
@@ -116,13 +117,14 @@
 			<c:forEach items="${marketList}" var="ml" varStatus="vs">			
 				try{
 					var result = await marketAddressSearch("${ml.marketAddress}");
-					createMarketOverlay(result);					
+					createMarketOverlay(result, "${ml.marketName}");					
 				} catch(e){
 					console.log(e);
 				}
 			</c:forEach>	
 			//console.log(JSON.parse(JSON.stringify(markers)));
 			console.log(JSON.parse(JSON.stringify(distances)))
+			map.setCenter(markers[0]);
 		})();		
 		
 		//console.log(JSON.parse(JSON.stringify(markers)));
@@ -132,7 +134,7 @@
 		//console.log(markers[0]);
 		//console.log(markers.length);		
 		
-		function getDistance(coords, marker){
+		function getDistance(coords, marker, marketName){
 			var polyline = new kakao.maps.Polyline({
 			    map: map,
 			    path: [
@@ -143,19 +145,21 @@
 			    strokeColor: '#FF00FF',
 			    strokeOpacity: 0.3
 			});
+			var distance = Math.round(polyline.getLength());
 			polyline.setMap(map);
-			distances.push(Math.round(polyline.getLength()));
-			distanceInfo(coords, Math.round(polyline.getLength()), marker);
+			distances.push(distance);
+			distanceInfo(coords, Math.round(distance), marker, marketName);
+			return distance;
 		}
 		
-		function distanceInfo(coords, distance, marker){
-			var contents = '<div class ="label"><span class="left"></span><span class="center">';
+		function distanceInfo(coords, distance, marker, marketName){
+			var contents = '<div class ="label"><span class="left"></span><span class="center">' + marketName + "(";
 			if(distance <= 1000){
 				contents += distance + "m";
 			} else {
-				contents += Math.round(distance/100)/10 + "Km";				
+				contents += (Math.round(distance/100))/10 + "Km";				
 			}			
-			contents += '</span><span class="right"></span></div>';
+			contents += ')</span><span class="right"></span></div>';
 			
 			var distanceInfo = new kakao.maps.InfoWindow({
 			    position: coords,
@@ -165,7 +169,52 @@
 			distanceInfo.open(map, marker);
 		}
 		
-	</script>	
+		function deliverySelect(distance, clickedAddress){
+			$("#selectDelWay").css("display", "block");
+			if(distance >= 5000){
+				$("option[value='d']").prop("disabled", true);
+			}
+			$("#submitMarket").on("click", ()=>{
+				opener.$("#market").val(clickedAddress);
+				var deliveryWay = $("#deliveryWay option:selected").val();
+				console.log(deliveryWay);
+				console.log(opener.$("#dawn").val());
+				if(deliveryWay == "d"){
+					opener.$("#dawn").prop("checked", true);
+					opener.deliveryCost(deliveryWay);
+				} else if(deliveryWay == "n") {
+					opener.$("#nomal").prop("checked", true);
+					opener.deliveryCost(deliveryWay);
+				} else {
+					opener.$("#regular").prop("checked", true);
+					opener.deliveryCost(deliveryWay);
+				}
+				window.close();
+			});
+		}		
+		
+		function closeModal(){
+			$("#selectDelWay").css("display", "none");
+		}
+		
+	</script>
+	<div class="login-modal txt_center" id="selectDelWay">
+		<form class="modal-content animate">
+			<div class="container txt_center">
+				<span>배송방식을 선택하세요(5km이상 샛별배송 불가)</span>
+				<select class="select" name="ways" id="deliveryWay">
+					<option value="d">샛별배송</option>
+					<option value="n" selected>일반배송</option>
+					<option value="r">정기배송</option>
+				</select>
+			</div>
+			<div class="container txt_center" style="background-color:#f4f4f0;">
+				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" onclick="closeModal();">취소</button>
+				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" id="submitMarket">매장선택</button>
+		    </div>
+		</form>
+	</div>
+	
 
 </body>
 </html>
