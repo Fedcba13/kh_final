@@ -45,6 +45,13 @@ public class MarketServiceImpl implements MarketService{
 	}
 
 
+	@Override
+	public List<MarketMember> selectListByChoise(int param) {
+
+		return marketDAO.selectListByChoise(param);
+	}
+
+
 
 
 	

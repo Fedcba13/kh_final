@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kh.urbantable.admin.model.service.MarketService;
 import com.kh.urbantable.admin.model.vo.MarketMember;
@@ -41,7 +42,7 @@ public class MarketController {
 		
 		int result = marketService.updateMarket(market);
 		
-//		logger.debug("Market={}", market, marketName);
+		logger.debug("Market={}", market);
 		
 		List<MarketMember> list = new ArrayList<MarketMember>();
 		if(result > 0) {
@@ -72,6 +73,14 @@ public class MarketController {
 		
 		return "admin/foundation";
 	}
-	
+
+	@RequestMapping("/selectListBychoise.do")
+	@ResponseBody
+	public List<MarketMember> selectListBychoise(@RequestParam("param") int param, Model model) {
+		
+		List<MarketMember> list = marketService.selectListByChoise(param);
+		
+		return list;
+	}
 
 }

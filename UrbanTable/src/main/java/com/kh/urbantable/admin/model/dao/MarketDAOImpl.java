@@ -39,6 +39,12 @@ public class MarketDAOImpl implements MarketDAO{
 		return sqlSession.update("admin.refuseMarket", market);
 	}
 
+	@Override
+	public List<MarketMember> selectListByChoise(int param) {
+
+		return sqlSession.selectList("admin.selectListByChoise", param);
+	}
+
 
 
 

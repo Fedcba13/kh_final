@@ -15,6 +15,8 @@ public interface MarketDAO {
 
 	int refuseMarket(Market market);
 
+	List<MarketMember> selectListByChoise(int param);
+
 
 
 

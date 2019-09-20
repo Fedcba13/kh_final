@@ -13,6 +13,8 @@ public interface MarketService {
 
 	int refuseMarket(Market market);
 
+	List<MarketMember> selectListByChoise(int param);
+
 
 
 
