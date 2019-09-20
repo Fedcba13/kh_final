@@ -79,6 +79,17 @@ span.auth{
     line-height: 40px;
 }
 
+.member_register .disabled{
+	border: 1px solid #dddfe1;
+    background-color: #fff;
+    color: #dddfe1;
+    cursor: default;
+}
+
+.member_register input[type="text"].disabled{
+	color: #555;
+}
+
 </style>
 
 <script>
@@ -87,6 +98,9 @@ var time = 180;
 var timer = null;
 
 $(()=>{
+	
+	disabled($("[name=auth_code]"));
+	disabled($("#checkMsg"));
 
     $('.txt_guide').hide();
     
@@ -94,7 +108,7 @@ $(()=>{
 		$(e.target).siblings(".txt_guide").show();
 	});
 	
-	$('[name=memberId]').on('keyup', function(){
+    $("[name=memberId]:eq(1)").on('keyup', function(){
 		var $target = $(this).parent().find('.txt_guide');
 	});
 	
@@ -110,8 +124,11 @@ $(()=>{
 				if(data.msg == '인증번호 발송 성공!'){
 					$("[name=memberPhone]").css
 					timer = setInterval(PrintTime, 1000);
+					use($("[name=auth_code]"));
+					use($("#checkMsg"));
+					disabled($("[name=memberPhone]"));
+					disabled($("#sendMsg"));
 				}
-				
 			},
 			error: (xhr, txtStatus, err)=>{
 				console.log("ajax처리실패!", xhr, txtStatus, err);
@@ -130,6 +147,14 @@ $(()=>{
 			data: param,
 			success: (data)=>{
 				alert(data.msg);
+				if(data.msg == '인증 성공'){
+					clearInterval(timer);
+					disabled($("[name=auth_code]"));
+					disabled($("#checkMsg"));
+					$("#time").html('인증 성공');
+					$('#time').removeClass('bad');
+					$("#time").addClass('good');
+				}
 			},
 			error: (xhr, txtStatus, err)=>{
 				console.log("ajax처리실패!", xhr, txtStatus, err);
@@ -137,19 +162,101 @@ $(()=>{
 		});
 	});
 	
+	//아이디 중복 검사
+	$("#checkId").click(()=>{
+		$.ajax({
+			url: "${pageContext.request.contextPath}/member/checkIdDuplicate.do",
+			data: {memberId : $("[name=memberId]:eq(1)").val()},
+			success: (data)=>{
+				if(data.isUsable == true){
+					$("[name=memberId]").siblings(".txt_guide").children('.txt_case2').removeClass('bad');
+					$("[name=memberId]").siblings(".txt_guide").children('.txt_case2').addClass('good');
+					alert('사용 가능합니다.');
+				}else{
+					alert('사용 불가능합니다.');
+				}
+			},
+			error: (xhr, txtStatus, err)=>{
+				console.log("ajax처리실패!", xhr, txtStatus, err);
+			}
+		});
+	})
+	
+	//아이디 유효성 검사
+	function memberId_case1(){
+		
+		$("[name=memberId]").siblings(".txt_guide").children('.txt_case1').removeClass('good');
+		$("[name=memberId]").siblings(".txt_guide").children('.txt_case1').addClass('bad');
+		
+		var rep1 = /^[a-z][a-z0-9]{5,11}$/;
+		var memberId = $("[name=memberId]:eq(1)").val();
+		
+		console.log(memberId);
+		console.log(rep1.test(memberId));
+		
+		if(rep1.test(memberId)){
+			$("[name=memberId]").siblings(".txt_guide").children('.txt_case1').addClass('good');
+			$("[name=memberId]").siblings(".txt_guide").children('.txt_case1').removeClass('bad');
+		}
+	}
+	
+	//아이디 유효성 검사
+	$("[name=memberId]").keyup(()=>{
+		memberId_case1();
+		$("[name=memberId]").siblings(".txt_guide").children('.txt_case2').removeClass('good');
+		$("[name=memberId]").siblings(".txt_guide").children('.txt_case2').addClass('bad');
+	});
+	
+	
 });
 
 function PrintTime() {
 	
 	time = time - 1;
+	
+	console.log(time);
+	
+	var min = parseInt(time / 60);
+	var sec = time - (min*60);
+	
+	if(min.length < 2){
+		min = "0" + min;
+	}
+	
+	if(sec.length <2){
+		sec = "0" + sec;
+	}
+	
+	console.log("min=" + min +", sec=" + sec);
+	
     
-    $("#time").html(time);
+    $("#time").html(min +":" + sec);
+    $('#time').removeClass('good');
+    $('#time').addClass('bad');
     
     if(time <= 0){
     	$("#time").html('시간 종료');
     	clearInterval(timer);
+    	
+    	disabled($("[name=auth_code]"));
+    	disabled($("#checkMsg"));
+		use($("[name=memberPhone]"));
+		use($("#sendMsg"));
     }
 
+}
+
+function disabled($input){
+	$input.attr('disabled', true);
+	$input.addClass('disabled');
+	
+}
+
+function use($input){
+	$input.attr('disabled', false);
+	$input.removeClass('disabled');
+	
+	console.log($input.attr('type'));
 }
 
 //카카오 주소찾기 api
@@ -243,7 +350,7 @@ function nearMarket(){
 					<tr>
 						<th>아이디*</th>
 						<td>
-							<input type="text" name="memberId" placeholder="예: UrbanTable"><input type="button" class="btn" value="중복확인">
+							<input type="text" name="memberId" placeholder="예: UrbanTable"><input type="button" id="checkId" class="btn" value="중복확인">
 							<p class="txt_guide">
 								<span class="txt txt_case1">6자 이상의 영문 혹은 영문과 숫자를 조합</span>
 								<span class="txt txt_case2">아이디 중복확인</span>

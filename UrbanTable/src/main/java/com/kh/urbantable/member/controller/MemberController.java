@@ -1,6 +1,7 @@
 package com.kh.urbantable.member.controller;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -241,6 +242,22 @@ public class MemberController {
 		}
 		
 		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/checkIdDuplicate.do")
+	public Map<String, Object> checkIdDuplicate(@RequestParam String memberId) {
+		
+		logger.debug("id 중복체크");
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		boolean isUsable = memberService.selectOneMember(memberId) == null;
+		
+		map.put("isUsable", isUsable);
+		
+		return map;
+		
 	}
 	
 
