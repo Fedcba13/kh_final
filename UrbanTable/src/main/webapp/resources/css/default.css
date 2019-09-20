@@ -1,4 +1,4 @@
-@charset "utf-8"; 
+@charset "utf-8";
 /* * @ 초기화용 CSS * ------------------------------- */ 
 html, body, div, p, span, strong, b, em, iframe, pre, 
 h1, h2, h3, h4, h5, h6, img, dl, dt, dd, fieldset, form, legend, 
@@ -48,6 +48,10 @@ button {font-family: 'NanumBarunGothic', sans-serif;}
 
 .fw600 {
     font-weight: 600;
+}
+
+.fw500 {
+    font-weight: 500;
 }
 
 .fw400 {
@@ -115,6 +119,11 @@ input, select {
 	border-radius: 5px;
 	color: #555;
 	vertical-align:middle;
+}
+
+select {
+	padding-left:10px;
+	box-sizing:border-box;
 }
 
 input:read-only {
@@ -278,6 +287,9 @@ input[type=text], input[type=password] {
 
 #gnb > li a {
     padding: 15px 38px;
+    font-size: 16px;
+    color: #333;
+    background:url('../images/bar.png') no-repeat left center;
     box-sizing: border-box;
 }
 
@@ -290,11 +302,6 @@ input[type=text], input[type=password] {
 #gnb > li a.gnb_menu1 {
     padding: 15px 38px 15px 32px;
     background: url('../images/menu.png') no-repeat left 18px;
-}
-
-#gnb > li a {
-    font-size: 16px;
-    color: #333;
 }
 
 #main_search form {

@@ -26,6 +26,9 @@
 			alias="recipeSequence" />
 		<typeAlias type="com.kh.urbantable.recipe.model.vo.Material"
 			alias="material" />
-			
+		<typeAlias type="com.kh.urbantable.marketOwner.model.vo.Event"
+			alias="event" />
+		<typeAlias type="com.kh.urbantable.marketOwner.model.vo.MarketEvent"
+			alias="marketWithEvent" />	
 	</typeAliases>
 </configuration>

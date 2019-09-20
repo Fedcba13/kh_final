@@ -6,12 +6,28 @@
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/marketOwner.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
 	$(()=>{
+		$(".marketHoliday").flatpickr({
+		  enableTime: false,
+		  dateFormat: "Y-m-d",
+		});
+		
 		$("#myMarketUpdate").on("click", function(){
+			var marketTime = $("#marketTime").val();
+			var exp = /^[0-9]{2}:[0-9]{2}~[0-9]{2}:[0-9]{2}$/;
+			if(marketTime.length < 1 || !exp.test(marketTime)){
+				alert("영업시간을 확인해주세요.");
+				return;
+			}
+			
 			var param = {
 				marketNo : "${market.marketNo}",
-				marketTelephone : $("#marketTelephone").val()
+				marketTelephone : $("#marketTelephone").val(),
+				marketHoliday: $("#marketHoliday1").val()+"~"+$("#marketHoliday2").val(),
+				marketTime: $("#marketTime").val()
 			};
 			
 			console.log(param);
@@ -23,6 +39,7 @@
 				type: "POST",
 				success: function(data){
 					alert(data.result);
+					location.reload();
 				},
 				error: function(xhr, txtStatus, err){
 					console.log("ajax 처리 실패", xhr, txtStatus, err);
@@ -80,7 +97,15 @@
             </tr>
             <tr>
             	<th>지점 휴일</th>
-            	<td></td>
+            	<td>
+            		<input type="text" name="marketHoliday1" id="marketHoliday1" class="marketHoliday" value="${market.marketHoliday.split('~')[0] }" class="dp_block" style="width:200px;" />
+            		~
+            		<input type="text" name="marketHoliday2" id="marketHoliday2" class="marketHoliday" value="${market.marketHoliday.split('~')[1] }" class="dp_block" style="width:200px;" />
+            	</td>
+            </tr>
+            <tr>
+            	<th>지점 영업시간</th>
+            	<td><input type="text" name="marketTime" id="marketTime" placeholder="ex) 10:00~23:00" value="${market.marketTime }" class="dp_block" style="width:200px;" /></td>
             </tr>
             <tr>
             	<th>사업자 등록번호</th>

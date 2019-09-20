@@ -17,8 +17,10 @@ public class MarketMember extends Market {
 	}
 
 	public MarketMember(String marketNo, String memberId, String marketResident, String marketTelephone,
-			String marketAddress, String marketAddress2, int marketEnabled, int flag, String marketName, Member member) {
-		super(marketNo, memberId, marketResident, marketTelephone, marketAddress, marketAddress2, marketEnabled, flag, marketName);
+			String marketAddress, String marketAddress2, int marketEnabled, int flag, 
+			String marketName, String marketHoliday, String marketTime, Member member) {
+		super(marketNo, memberId, marketResident, marketTelephone, marketAddress, marketAddress2, marketEnabled, 
+				flag, marketName, marketHoliday, marketTime);
 		this.member = member;
 	}
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
 import com.kh.urbantable.marketOwner.model.vo.Market;
+import com.kh.urbantable.marketOwner.model.vo.MarketEvent;
 
 public interface MarketOwnerDAO {
 
@@ -24,5 +25,7 @@ public interface MarketOwnerDAO {
 	int myMarketUpdate(Market market);
 
 	int myMarketOpen(String marketNo);
+
+	List<MarketEvent> selectMarketWithEvent();
 
 }

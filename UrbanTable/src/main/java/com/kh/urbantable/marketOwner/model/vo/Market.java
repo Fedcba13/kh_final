@@ -23,12 +23,14 @@ public class Market {
 	protected int marketEnabled;
 	protected int flag;
 	protected String marketName;
+	protected String marketHoliday;
+	protected String marketTime;
 	
 	@Override
 	public String toString() {
 		return "Market [marketNo=" + marketNo + ", memberId=" + memberId + ", marketName="+marketName+", marketResident=" + marketResident
 				+ ", marketTelephone=" + marketTelephone + ", marketAddress=" + marketAddress + ", marketAddress2="
-				+ marketAddress2 + ", marketEnabled=" + marketEnabled + ", flag=" + flag + ", marketName="+marketName+"]";
+				+ marketAddress2 + ", marketEnabled=" + marketEnabled + ", flag=" + flag + ", marketName="+marketName+", marketHoliday="+marketHoliday+", marketTime="+marketTime+"]";
 	}
 	
 }
