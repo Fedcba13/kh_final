@@ -1,6 +1,7 @@
 package com.kh.urbantable.marketOwner.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kh.urbantable.admin.model.vo.MarketMember;
 import com.kh.urbantable.marketOwner.model.service.MarketOwnerService;
 import com.kh.urbantable.marketOwner.model.vo.Market;
+import com.kh.urbantable.marketOwner.model.vo.MarketEvent;
 import com.kh.urbantable.member.model.vo.Member;
 
 @Controller
@@ -142,12 +144,16 @@ public class MarketOwnerController {
 	@ResponseBody
 	@RequestMapping("/myMarketUpdate.do")
 	public Map<String, String> myMarketUpdate(@RequestParam(value="marketNo") String marketNo,
-			@RequestParam(value="marketTelephone") String marketTelephone) {
+			@RequestParam(value="marketTelephone") String marketTelephone,
+			@RequestParam(value="marketHoliday") String marketHoliday,
+			@RequestParam(value="marketTime") String marketTime) {
 		logger.info("내 지점 정보 수정 요청");
 		
 		Market market = new Market();
 		market.setMarketNo(marketNo);
 		market.setMarketTelephone(marketTelephone);
+		market.setMarketHoliday(marketHoliday);
+		market.setMarketTime(marketTime);
 		
 		int result = marketOwnerService.myMarketUpdate(market);
 		
@@ -171,8 +177,10 @@ public class MarketOwnerController {
 	}
 	
 	@RequestMapping("/marketList.do")
-	public String marketList() {
+	public String marketList(Model model) {
 		logger.info("매장 리스트 페이지 요청");
+		List<MarketEvent> marketList = marketOwnerService.selectMarketWithEvent();
+		model.addAttribute("marketList", marketList);
 		return "marketOwner/marketList";
 	}
 	

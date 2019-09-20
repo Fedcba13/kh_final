@@ -63,7 +63,7 @@
 	                    </ul>
 	                </li>
                 </c:if>
-                <li><a href="${pageContext.request.contextPath}/market/marketList.do" class="dp_block">매장 검색</a></li>
+                <li><a href="${pageContext.request.contextPath}/market/marketList.do" class="dp_block">매장 찾기</a></li>
                 <li><a href="" class="dp_block">배송지역 검색</a></li>
                 <c:if test="${memberLoggedIn.memberCheck eq 1 }">
                 	<li><a href="${pageContext.request.contextPath}/market/founded.do?memberId=${memberLoggedIn.memberId}" class="dp_block">창업 신청</a></li>

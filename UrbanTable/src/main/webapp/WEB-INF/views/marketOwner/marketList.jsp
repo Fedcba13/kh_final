@@ -6,38 +6,77 @@
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/marketOwner.css">
+<script>
+	$(()=>{
+		$(".marketResult > div").hide();
+		$(".marketResult > div:first").show();
+		$(".marketListTab li").on("click", function(){
+			$(".marketListTab li").removeClass("ac_tab");
+			$(this).addClass("ac_tab");
+			var ac_tab = $(this).data("target");
+			$(".marketResult > div").fadeOut("fast");
+			$(".marketResult > div#"+ac_tab).fadeIn("fast");
+		});
+	});
+	
+	function showMarket(marketNo){
+		alert(marketNo);
+	}
+</script>
+<section id="marketListPage" class="sec_bg">
+	<article class="subPage inner">
+		<h3 class="sub_tit txt_center fw400">지점 · 오픈 예정 매장 · 휴점일 안내</h3>
+		<div class="txt_center">
+			<ul class="marketListTab dp_ib clearfix">
+				<li data-target="marketListFlag1" class="ac_tab">지점 찾기</li>
+				<li data-target="marketListFlag2">오픈 예정 매장 찾기</li>
+				<li data-target="marketListHoliday">휴점일 알아보기</li>
+			</ul>
+		</div>
+		<form action="" name="marketListSearchFrm" method="get" class="searchFrm">
+    		<input type="text" class="dp_ib" placeholder="검색어를 입력하세요." style="width:415px; padding-right:40px;" />
+    		<input type="submit" value="검색" class="dp_ib txt_center" />
+    	</form>
+	</article>
+</section>
 <section>
 	<article class="subPage inner">
-	    <h3 class="sub_tit">매장 리스트</h3>
-	    <div>
-	    	<form action="" name="marketSearchFrm" method="get" class="searchFrm">
-    			<select name="orderSearchType" id="orderSearchType" class="dp_ib">
-	    			<option value="orderNo">지점명</option>
-	    			<option value="orderID">주문자 ID</option>
-	    			<option value="orderPhone">주문자 연락처</option>
-	    		</select>
-	    		<input type="text" class="dp_ib" style="width:218px; padding-right:40px;" />
-	    		<input type="submit" value="검색" class="dp_ib txt_center" />
-	    	</form>
-	    </div>
-	    <p class="info txt_right"><span class="red">*</span>우리집과의 거리는 회원 정보에 기재된 주소로 계산됩니다.</p>
-	    <table class="tbl txt_center">
-            <tr>
-                <th width="80">번호</th>
-                <th width="185">지점명</th>
-                <th>지점 주소</th>
-                <th width="185">전화번호</th>
-                <th width="180">우리집과의 거리</th>
-            </tr>
-            <tr>
-                <td>컬럼 내용</td>
-                <td>컬럼 내용</td>
-                <td class="mapAddress">컬럼 내용&nbsp;&nbsp;<img src="${pageContext.request.contextPath}/resources/images/location.png" alt="" /></td>
-                <td>컬럼 내용</td>
-                <td>컬럼 내용</td>
-            </tr>
-        </table>
-    </article>
+		<div class="marketSort_wrap">
+			<ul class="marketSortByCity">
+				<li rel="all" class="cur">전체</li>
+				<li rel="seoul">서울</li>
+				<li rel="incheon">인천</li>
+				<li rel="gyeonggi">경기</li>
+			</ul>
+			<select name="marketSortByOption" id="marketSortByOption" class="dp_block">
+				<option value="all">정렬 방식 선택</option>
+				<option value="distance">거리순</option>
+				<option value="alphabet">가나다순</option>
+				<option value="alphabetdesc">가나다 역순</option>
+			</select>
+		</div>
+		<div class="marketResult">
+			<div id="marketListFlag1">
+				<ul class="marketResultList clearfix">
+				<c:forEach var="marketList" items="${marketList }" varStatus="vs">
+					<c:if test="${marketList.flag eq 2 }">
+						<li><a href="javascript:showMarket('${marketList.marketNo }');" class="dp_block">${marketList.marketName}</a></li>
+					</c:if>
+				</c:forEach>
+				</ul>
+			</div>
+			<div id="marketListFlag2">
+				<ul class="marketResultList clearfix">
+				<c:forEach var="marketList" items="${marketList }" varStatus="vs">
+					<c:if test="${marketList.flag eq 1 }">
+						<li><a href="javascript:showMarket('${marketList.marketNo }');" class="dp_block">${marketList.marketName}</a></li>
+					</c:if>
+				</c:forEach>
+				</ul>
+			</div>
+			<div id="marketListHoliday"></div>
+		</div>
+	</article>
 </section>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

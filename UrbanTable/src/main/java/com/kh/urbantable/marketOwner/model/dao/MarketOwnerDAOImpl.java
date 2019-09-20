@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
 import com.kh.urbantable.marketOwner.model.vo.Market;
+import com.kh.urbantable.marketOwner.model.vo.MarketEvent;
 
 @Repository
 public class MarketOwnerDAOImpl implements MarketOwnerDAO {
@@ -57,6 +58,11 @@ public class MarketOwnerDAOImpl implements MarketOwnerDAO {
 	@Override
 	public int myMarketOpen(String marketNo) {
 		return sqlSession.update("marketOwner.myMarketOpen", marketNo);
+	}
+
+	@Override
+	public List<MarketEvent> selectMarketWithEvent() {
+		return sqlSession.selectList("marketOwner.selectMarketWithEvent");
 	}
 
 }

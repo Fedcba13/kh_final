@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.kh.urbantable.admin.model.vo.MarketMember;
 import com.kh.urbantable.marketOwner.model.dao.MarketOwnerDAO;
 import com.kh.urbantable.marketOwner.model.vo.Market;
+import com.kh.urbantable.marketOwner.model.vo.MarketEvent;
 
 @Service
 public class MarketOwnerServiceImpl implements MarketOwnerService {
@@ -60,6 +61,11 @@ public class MarketOwnerServiceImpl implements MarketOwnerService {
 	@Override
 	public List<Market> selectMarketList(int flag) {
 		return marketOwnerDAO.selectMarketList(flag);
+	}
+
+	@Override
+	public List<MarketEvent> selectMarketWithEvent() {
+		return marketOwnerDAO.selectMarketWithEvent();
 	}
 
 	

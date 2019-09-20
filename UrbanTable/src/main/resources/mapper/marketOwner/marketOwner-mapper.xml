@@ -8,7 +8,7 @@
 		insert into market
 		values('mar'||LPAD(seq_market_no.nextval, 5, '0'), 
 		#{memberId}, default, #{marketTelephone}, 
-		#{marketAddress}, #{marketAddress2}, 1, default, default)
+		#{marketAddress}, #{marketAddress2}, 1, default, default, default, default)
 	</insert>
 	
 	<update id="updateMemberFounded">
@@ -32,6 +32,8 @@
 		<result column="market_enabled" property="marketEnabled"/>
 		<result column="flag" property="flag"/>
 		<result column="market_name" property="marketName"/>
+		<result column="market_holiday" property="marketHoliday"/>
+		<result column="market_time" property="marketTime"/>
 		<association javaType="member" property="member">
 			<id column="member_id" property="memberId"/>
 		    <result column="member_password" property="memberPassword"/>
@@ -71,7 +73,7 @@
 	
 	<update id="myMarketUpdate">
 		update market
-		set market_telephone=#{marketTelephone}
+		set market_telephone=#{marketTelephone}, market_holiday=#{marketHoliday}, market_time=#{marketTime}
 		where market_no=#{marketNo}
 	</update>
 	
@@ -80,5 +82,34 @@
 		set flag=2
 		where market_no=#{marketNo}
 	</update>
+	
+	<select id="selectMarketWithEvent" resultMap="marketWithEvent">
+		select *
+		from market left join event on market_no=event_market
+	</select>
+	<resultMap type="marketWithEvent" id="marketWithEvent">
+		<id column="member_id" property="memberId"/>
+		<result column="market_no" property="marketNo"/>
+		<result column="market_resident" property="marketResident"/>
+		<result column="market_telephone" property="marketTelephone"/>
+		<result column="market_address" property="marketAddress"/>
+		<result column="market_address2" property="marketAddress2"/>
+		<result column="market_enabled" property="marketEnabled"/>
+		<result column="flag" property="flag"/>
+		<result column="market_name" property="marketName"/>
+		<result column="market_holiday" property="marketHoliday"/>
+		<result column="market_time" property="marketTime"/>
+		<collection property="eventList" ofType="event">
+			<id column="event_id" property="eventId"/>
+			<result column="event_title" property="eventTitle" />
+			<result column="event_content" property="eventContent" />
+			<result column="event_company" property="eventCompany" />
+			<result column="event_market" property="eventMarket" />
+			<result column="event_category" property="eventCategory" />
+			<result column="event_date_start" property="eventDateStart" />
+			<result column="event_date_end" property="eventDateEnd" />
+			<result column="event_enabled" property="eventEnabled" />
+		</collection>
+	</resultMap>
 	
 </mapper>
