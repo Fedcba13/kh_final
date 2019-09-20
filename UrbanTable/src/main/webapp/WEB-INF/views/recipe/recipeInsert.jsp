@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/recipe.css">
 <script>
 var index = 2;
+var material_i = 1;
 $(()=> {
 	
 	$("#food_division").change(function() {
@@ -112,7 +113,7 @@ $(()=> {
 		var tab = "";
 		
 		html += "<div id='recipe_content_div" + index + "'>";
-		html += "<textarea name='recipe_content' id='recipe_content' cols='100' rows='10'></textarea> <br /><br />";
+		html += "<textarea name='recipe_content' id='recipe_content' cols='100' rows='5' style='border: 1px solid #e9e9e9; border-radius: 5px; color: #555; resize: none;'></textarea> <br /><br />";
 		html += "<input type='text' style='width:560px;' disabled /> <button class='btn'>사진 가져오기</button> <br /><br />";
 		html += "</div>";
 		
@@ -123,6 +124,7 @@ $(()=> {
 		$("#recipe_content_div").append(html);
 		$(".tab").append(tab);
 		$("#tab_remove").val(index);
+		$("#tab_remove").css("display", "");
 		
 		for(var i=1; i<=$(".tab>li").length; i++) {
 			$("#recipe_content_div" + i).css("display", "none");
@@ -131,10 +133,8 @@ $(()=> {
 		$("#recipe_content_div" + index).css("display", "");
 		$(".btn_content").css("background", "#374818");
 		$(".btn_content").css("color", "#fff");
-		$(".btn_content[value='"+ index +"']").css("background", "#fff");
-		$(".btn_content[value='"+ index +"']").css("color", "#374818");
-		$("#tab_remove").css("background", "#374818");
-		$("#tab_remove").css("color", "#fff");
+		$("ul>li>button[value='"+ index +"']").css("background", "#fff");
+		$("ul>li>button[value='"+ index +"']").css("color", "#374818");
 		
 		index ++;
 		
@@ -144,16 +144,56 @@ $(()=> {
 	tabEvent();
 	
 	$("#tab_remove").on("click", function() {
-		$("#recipe_content_div" + this.value).remove();
-		$(".btn_content[value='"+ this.value +"']").remove();
+		var i = this.value;
+		$("#recipe_content_div" + i).remove();
+		$("ul>li>button[value='"+ i +"']").remove();
 		$(".btn_content:last").trigger("click");
 		
-		for(var i=1; i<=$(".btn_content").length; i++) {
-			$(".btn_content[value='" + i + "']").html(i);
-			//$(".btn_content[value='" + i + "']").val(i);
+		if(i-1 != 1) {			
+			$("#tab_remove").css("display", "");
 		}
 		
-		//index --;
+		index --;
+	});
+	
+	$(".btn_material").on("click", function() {
+		if($("#food_division").val() == "") {
+			alert("대분류를 선택하세요");
+			return false;
+		}
+		
+		if($("#food_section").val() == "") {
+			alert("소분류를 선택하세요");
+			return false;
+		}
+		
+		var html = "";
+		var section = $("#food_section").val();
+		
+		html += "<li class='mate_li' value='" + material_i + "'>" + $("#food_division").val() + ">" + section + "</li>"
+		html += "<button type='button' class='mate_li_delete' value='" + material_i + "'>x</button>";
+		
+		$("#material_list").append(html);
+		
+		$(".mate_li_delete").on("click", function() {
+			$(".mate_li[value='" + this.value + "']").remove();
+			this.remove();
+		});
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/recipe/materialInsert",
+			data: {section: section},
+			dataType: "json",
+			type: "GET",
+			success: (data)=> {
+				console.log(data);
+			},
+			error: (xhr, txtStatus, err)=> {
+				console.log("ajax 처리실패!", xhr, txtStatus, err);
+			}
+		});
+		
+		material_i++;
 	});
 });
 
@@ -166,17 +206,21 @@ function tabEvent() {
 		$(".btn_content").css("background", "#374818");
 		$(".btn_content").css("color", "#fff");
 		
+		if(this.value == index-1) {
+			$("#tab_remove").css("display", "");
+		} else {
+			$("#tab_remove").css("display", "none");
+		}
+		
 		$("#recipe_content_div" + this.value).css("display", "");
-		$(".btn_content[value='"+ this.value +"']").css("background", "#fff");
-		$(".btn_content[value='"+ this.value +"']").css("color", "#374818");
-		$("#tab_remove").css("background", "#374818");
-		$("#tab_remove").css("color", "#fff");
+		$("ul>li>button[value='"+ this.value +"']").css("background", "#fff");
+		$("ul>li>button[value='"+ this.value +"']").css("color", "#374818");
 		
 		$("#tab_remove").val(this.value);
 	});
 }
 </script>
-<section class="sec_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
+<section class=""> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 	    <h3 class="sub_tit">레시피 만들기</h3>
 	    <form action="">
@@ -215,6 +259,9 @@ function tabEvent() {
 	                	<select name="food_section" id="food_section">
 	                		<option value="">--소분류--</option>
 	                	</select>
+	                	<button type="button" class="btn btn_material">추가</button>
+	                	<br />
+	                	<ol id="material_list"></ol>
 	                </td>
 	            </tr>
 	            <tr>
@@ -224,15 +271,14 @@ function tabEvent() {
 	                		<ul class="tab">
 			                	<li><button type="button" class="btn btn_content" value="1">1</button></li>
 	                		</ul>
-		                	<br /><br /><br />
 		                	<div id="recipe_content_div1">
-			                	<textarea name="recipe_content" id="recipe_content" cols="100" rows="10"></textarea> <br /><br />
-			                	<input type="text" style="width:560px;" disabled /> <button class="btn">사진 가져오기</button> <br /><br />
+			                	<textarea name="recipe_content" id="recipe_content" cols="100" rows="5" style="border: 1px solid #e9e9e9; border-radius: 5px; color: #555; resize: none;"></textarea> <br /><br />
+			                	<input type="text" style="width:560px;" disabled /> <button class="btn" type="button">사진 가져오기</button> <br /><br />
 		                	</div>	                	
 	                	</div>
 	                	<div class="btn_add">
-		                	<button type="button" class="btn btn_content_ar" id="tab_add">+</button>		                	
-		                	<button type="button" class="btn btn_content_ar" id="tab_remove">-</button>		                	
+		                	<button type="button" class="btn btn_content_ar" id="tab_add">+</button>
+		                	<button type="button" class="btn btn_content_ar" id="tab_remove" style="display:none;">-</button>		                	
 	                	</div>
 	                </td>
 	            </tr>
