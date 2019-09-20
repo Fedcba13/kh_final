@@ -56,7 +56,7 @@
 					foodInfo += "<tr id='item"+${vs.count}+"'>";
 					foodInfo += "<input type='hidden' name='price' value='"+ data.FOOD_MEMBER_PRICE +"'>";
 					foodInfo += "<input type='hidden' name='foodNo' value='"+ data.FOOD_NO +"'>";
-					foodInfo += "<td><input type='checkbox' name='list' checked='true' onclick='checkManage(this)'/>&nbsp;&nbsp;";
+					foodInfo += "<td><input type='checkbox' name='list' id='check"+${vs.count}+"' checked='true' onclick='checkManage(this)'/>&nbsp;&nbsp;&nbsp;";
 					foodInfo += "<img src='"+data.FOOD_IMG+"' width='92px' height='130px'/></td>";
 					foodInfo += "<td>[" + data.FOOD_COMPANY + "] " + data.FOOD_NAME + "</td>";
 					foodInfo += "<td> <input type='button' value='-' onclick='del(this);'>&nbsp;<input type='text' name='amount' value='" + ${l.cartAmount} + "' size='5' style='text-align:center;' onchange='change(this);'>&nbsp;<input type='button' value='+' onclick='add(this);'></td>";
@@ -197,7 +197,7 @@
 	                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->
             <tr id="head">
                 <th>
-                	<input type="checkbox" name="listAll" id="checkAll" checked="true" onclick="checkAll(this);"/>
+                	<input type="checkbox" name="listAll" id="checkAll" checked="true" onclick="checkAll(this);"/>                
                 	<label for="checkAll"></label>
                 </th>
                 <th>
@@ -220,11 +220,11 @@
             		<button type="button" class="btn">전체삭제</button>
             	</td>	
             	<td colspan="2">
-            		<input type="radio" name="delivery" id="dawn" value="d" onclick="deliveryCost(this.value)"/>
+            		<input type="radio" name="delivery" id="dawn" value="d" onchange="deliveryCost(this.value)"/>
             		<label for="dawn">샛별배송</label>
-            		<input type="radio" name="delivery" id="nomal" value="n" onclick="deliveryCost(this.value)" checked/>
+            		<input type="radio" name="delivery" id="nomal" value="n" onchange="deliveryCost(this.value)" checked/>
             		<label for="nomal">일반배송</label>
-            		<input type="radio" name="delivery" id="regular" value="r" onclick="deliveryCost(this.value)"/>
+            		<input type="radio" name="delivery" id="regular" value="r" onchange="deliveryCost(this.value)"/>
             		<label for="regular">정기배송</label>
             	</td>	
             </tr>
