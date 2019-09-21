@@ -85,7 +85,9 @@
 	
 	<select id="selectMarketWithEvent" resultMap="marketWithEvent">
 		select *
-		from market left join event on market_no=event_market
+		from market M left join event E on M.market_no=E.event_market
+		where M.market_enabled=1
+		order by M.market_no desc
 	</select>
 	<resultMap type="marketWithEvent" id="marketWithEvent">
 		<id column="member_id" property="memberId"/>

@@ -20,7 +20,15 @@
 	});
 	
 	function showMarket(marketNo){
-		alert(marketNo);
+		<c:forEach var="m" items="${marketList }">
+			if("${m.marketNo}" == marketNo){
+				$(".marketInfo h4").text("${m.marketName}");
+				$("#marketTime .mInfo").text("${m.marketTime}");
+				$("#marketHoliday .mInfo").text("${m.marketHoliday}");
+				$("#marketTel .mInfo").text("${m.marketTelephone}");
+				$("#marketEvent .mInfo").text("${m.eventList}");
+			}
+		</c:forEach>
 	}
 </script>
 <section id="marketListPage" class="sec_bg">
@@ -56,25 +64,74 @@
 			</select>
 		</div>
 		<div class="marketResult">
-			<div id="marketListFlag1">
+			<div id="marketListFlag1" class="sec_bg">
 				<ul class="marketResultList clearfix">
 				<c:forEach var="marketList" items="${marketList }" varStatus="vs">
 					<c:if test="${marketList.flag eq 2 }">
-						<li><a href="javascript:showMarket('${marketList.marketNo }');" class="dp_block">${marketList.marketName}</a></li>
+						<li>
+							<a href="javascript:showMarket('${marketList.marketNo }');" class="dp_ib">
+								${marketList.marketName}
+							</a>
+							<span class="dp_ib marketInfoDetail">영업중</span>
+						</li>
 					</c:if>
 				</c:forEach>
 				</ul>
 			</div>
-			<div id="marketListFlag2">
+			<div id="marketListFlag2" class="sec_bg">
 				<ul class="marketResultList clearfix">
 				<c:forEach var="marketList" items="${marketList }" varStatus="vs">
 					<c:if test="${marketList.flag eq 1 }">
-						<li><a href="javascript:showMarket('${marketList.marketNo }');" class="dp_block">${marketList.marketName}</a></li>
+						<li>
+							<a href="javascript:showMarket('${marketList.marketNo }');" class="dp_ib">
+								${marketList.marketName}
+							</a>
+							<span class="dp_ib marketInfoDetail">오픈 예정</span>
+						</li>
 					</c:if>
 				</c:forEach>
 				</ul>
 			</div>
-			<div id="marketListHoliday"></div>
+			<div id="marketListHoliday" class="sec_bg"></div>
+		</div>
+		<div class="marketInfo">
+			<h4 class="point"></h4>
+			<p>
+				<span class="dp_ib marketInfoDetail">영업중</span>
+				<span class="dp_ib marketInfoDetail">이벤트</span>
+			</p>
+			<ul class="txt_center clearfix">
+				<li>
+					<p id="marketTime">
+						<img src="${pageContext.request.contextPath }/resources/images/clock.png" alt="" class="dp_ib" />
+						<span class="dp_block">쇼핑시간</span>
+						<span class="mInfo"></span>
+					</p>
+				</li>
+				<li>
+					<p id="marketHoliday">
+						<img src="${pageContext.request.contextPath }/resources/images/calendar.png" height="55" alt="" class="dp_ib" style="margin-top:3px" />
+						<span class="dp_block" style="padding:26px 0 5px;">휴점일</span>
+						<span class="mInfo red"></span>
+					</p>
+				</li>
+				<li>
+					<p id="marketTel">
+						<img src="${pageContext.request.contextPath }/resources/images/call.png" height="55" alt="" class="dp_ib" style="margin-top:3px" />
+						<span class="dp_block" style="padding:26px 0 5px;">고객센터</span>
+						<span class="mInfo"></span>
+					</p>
+				</li>
+				<li>
+					<p id="marketEvent">
+						<img src="${pageContext.request.contextPath }/resources/images/discount.png" alt="" class="dp_ib" />
+						<span class="dp_block">이벤트</span>
+						<span class="mInfo"></span>
+					</p>
+				</li>
+			</ul>
+			<h5 class="fw400">오시는 길</h5>
+			<div id="marketInfo_map"></div>
 		</div>
 	</article>
 </section>

@@ -126,7 +126,7 @@ form[name=orderSearchFrm2] > div > div {
 	position:absolute;
 	width: 100%;
 	height: 300px;
-	padding:30px;
+	padding:40px;
 	overflow-y:scroll;
 	border:1px solid #374818;
 	box-sizing:border-box;
@@ -197,12 +197,77 @@ form[name=orderSearchFrm2] > div > div {
 
 .marketResultList li {
 	float:left;
+	width: 50%;
+	margin-top:30px;
+}
+
+.marketResultList li:first-child,
+.marketResultList li:nth-child(2) {
+	margin-top: 0;
 }
 
 .marketResultList li a {
+	padding-right:20px;
 	color:#666;
+	vertical-align:bottom;
+}
+
+.marketInfoDetail {
+	padding:3px 5px;
+	color: #666;
+    font-size: 13px;
+    margin-right: 5px;
+    border: 1px solid #666;
+    box-sizing:border-box;
+    line-height:17px;
 }
 
 .marketResultList li a:hover {
 	text-decoration:underline;
+}
+
+.marketInfo {
+	padding-top:60px;
+}
+
+.marketInfo h4 {
+	font-size:30px;
+	line-height:34px;
+	padding-bottom:7px;
+}
+
+.marketInfo > p {
+	padding-bottom:30px;
+	border-bottom:2px solid #374818;
+	box-sizing:border-box;
+}
+
+.marketInfo span.marketInfoDetail {
+	font-size:11px;
+	line-height:15px;
+}
+
+.marketInfo ul {
+	margin-bottom:40px;
+	padding:50px 0 45px;
+	border-bottom:1px solid #e9e9e9;
+	box-sizing:border-box;
+}
+
+.marketInfo ul li {
+	float:left;
+	width:236px;
+}
+
+.marketInfo ul li p {
+	color:#222;
+}
+
+.marketInfo ul li span.dp_block {
+	padding: 20px 0 5px;
+    color: #666;
+}
+
+.marketInfo h5 {
+	font-size:20px;
 }
