@@ -191,9 +191,6 @@ $(()=>{
 		var rep1 = /^[a-z][a-z0-9]{5,11}$/;
 		var memberId = $("[name=memberId]:eq(1)").val();
 		
-		console.log(memberId);
-		console.log(rep1.test(memberId));
-		
 		if(rep1.test(memberId)){
 			$("[name=memberId]").siblings(".txt_guide").children('.txt_case1').addClass('good');
 			$("[name=memberId]").siblings(".txt_guide").children('.txt_case1').removeClass('bad');
@@ -207,14 +204,112 @@ $(()=>{
 		$("[name=memberId]").siblings(".txt_guide").children('.txt_case2').addClass('bad');
 	});
 	
+	//비밀번호 유효성 검사
+	function password_case1(){
+		
+		$("[name=memberPassword]").siblings(".txt_guide").children('.txt_case1').removeClass('good');
+		$("[name=memberPassword]").siblings(".txt_guide").children('.txt_case1').addClass('bad');
+		
+		var password = $("[name=memberPassword]").val();
+		var rep = /^[a-zA-Z0-9!@#$*-]{10,}$/;
+		
+		if(rep.test(password)){
+			$("[name=memberPassword]").siblings(".txt_guide").children('.txt_case1').addClass('good');
+			$("[name=memberPassword]").siblings(".txt_guide").children('.txt_case1').removeClass('bad');
+		}
+		
+	}
+	
+	function password_case2(){
+		$("[name=memberPassword]").siblings(".txt_guide").children('.txt_case2').removeClass('good');
+		$("[name=memberPassword]").siblings(".txt_guide").children('.txt_case2').addClass('bad');
+		
+		var password = $("[name=memberPassword]").val();
+		var rep1 = /^[a-zA-Z]*$/;
+		var rep2 = /^[0-9]*$/;
+		var rep3 = /^[!@#$*-]*$/;
+		
+		if(!(rep1.test(password) || rep2.test(password) || rep3.test(password))){
+			$("[name=memberPassword]").siblings(".txt_guide").children('.txt_case2').addClass('good');
+			$("[name=memberPassword]").siblings(".txt_guide").children('.txt_case2').removeClass('bad');
+		}
+		
+	}
+	
+	$("[name=memberPassword]").keyup(()=>{
+		password_case1();
+		password_case2();
+		rePassword_case1();
+	})
+	
+	//비밀번호 확인 유효성 검사
+	function rePassword_case1(){
+		
+		$("[name=password2]").siblings(".txt_guide").children('.txt_case1').removeClass('good');
+		$("[name=password2]").siblings(".txt_guide").children('.txt_case1').addClass('bad');
+		
+		var password = $("[name=memberPassword]").val();
+		var rePassword = $("[name=password2]").val();
+		
+		if(password == rePassword && password != ''){
+			$("[name=password2]").siblings(".txt_guide").children('.txt_case1').addClass('good');
+			$("[name=password2]").siblings(".txt_guide").children('.txt_case1').removeClass('bad');
+		}
+		
+	}
+	
+	$("[name=password2]").keyup(()=>{
+		rePassword_case1();
+	});
+	
+	$("#register_btn").click(()=>{
+		
+		var $case = $(".txt_guide").children('.txt');
+		
+		//아이디, 비밀번호, 비밀번호확인
+		for(var i=0; i<$case.length; i++){
+			if(!$($case[i]).hasClass('good')){
+				alert($($case[i]).text());
+				$($case[i]).parent().siblings('input:not(.btn)').focus();
+				return;
+			}
+		}
+		
+		//이름
+		if($("[name=memberName]").val() == ''){
+			$("[name=memberName]").focus();
+			alert('이름을 입력해주세요.');
+			return;
+		} 
+		
+		//휴대폰
+		if($("[name=memberPhone]").val() == ''){
+			$("[name=memberPhone]").focus();
+			alert('핸드폰 번호를 입력해주세요.');
+			return;
+		}
+		
+		if(!$("#time").hasClass('good') || $("#time").html() != '인증 성공'){
+			alert('핸드폰 인증을 진행해주세요.');
+			return;
+		}
+		
+		//주소
+		if($("[name=memberAddress]").length == 0 || $("[name=memberAddress]").val() == ''){
+			alert('주소를 입력해주세요.');
+			return;
+		}
+		
+		
+	});
+	
 	
 });
 
+// 비밀번호 인증 제한시간.
 function PrintTime() {
 	
 	time = time - 1;
-	
-	console.log(time);
 	
 	var min = parseInt(time / 60);
 	var sec = time - (min*60);
@@ -226,8 +321,6 @@ function PrintTime() {
 	if(sec.length <2){
 		sec = "0" + sec;
 	}
-	
-	console.log("min=" + min +", sec=" + sec);
 	
     
     $("#time").html(min +":" + sec);
@@ -352,8 +445,8 @@ function nearMarket(){
 						<td>
 							<input type="text" name="memberId" placeholder="예: UrbanTable"><input type="button" id="checkId" class="btn" value="중복확인">
 							<p class="txt_guide">
-								<span class="txt txt_case1">6자 이상의 영문 혹은 영문과 숫자를 조합</span>
-								<span class="txt txt_case2">아이디 중복확인</span>
+								<span class="txt txt_case1">6자 이상의 영문 혹은 영문과 숫자를 조합해주세요.</span>
+								<span class="txt txt_case2">아이디 중복확인해주세요.</span>
 							</p>
 						</td>
 						<td></td>
@@ -362,8 +455,8 @@ function nearMarket(){
 						<th>비밀번호</th>
 						<td><input type="password" placeholder="비밀번호를 입력해주세요." maxlength="16" name="memberPassword">
 							<p class="txt_guide" style="display: block;">
-								<span class="txt txt_case1">10자 이상 입력</span>
-								<span class="txt txt_case2">영문/숫자/특수문자(!@#$*-_)만 허용하며, 2개 이상 조합</span>
+								<span class="txt txt_case1">10자 이상 입력해주세요.</span>
+								<span class="txt txt_case2">영문/숫자/특수문자(!@#$*-)만 허용하며, 2개 이상 조합해 주세요.</span>
 							</p>
 						</td>
 					</tr>
@@ -392,7 +485,7 @@ function nearMarket(){
 						<td><input type="button" value="주소 검색" class="btn" onclick="sample6_execDaumPostcode()"></td>
 					</tr>
 				</table>
-			<input type="submit" class="btn" value="회원가입">
+			<input type="button" class="btn" value="회원가입" id="register_btn">
 			</form>
 		</div>
 	</article>
