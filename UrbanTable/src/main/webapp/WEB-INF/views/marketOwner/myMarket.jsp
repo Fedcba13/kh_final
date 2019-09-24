@@ -12,7 +12,7 @@
 	$(()=>{
 		$(".marketHoliday").flatpickr({
 		  enableTime: false,
-		  dateFormat: "Y-m-d",
+		  dateFormat: "Y.m.d",
 		});
 		
 		$("#myMarketUpdate").on("click", function(){

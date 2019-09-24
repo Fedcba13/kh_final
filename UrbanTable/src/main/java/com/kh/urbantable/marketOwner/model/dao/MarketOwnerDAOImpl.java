@@ -1,12 +1,14 @@
 package com.kh.urbantable.marketOwner.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
+import com.kh.urbantable.marketOwner.model.vo.Event;
 import com.kh.urbantable.marketOwner.model.vo.Market;
 import com.kh.urbantable.marketOwner.model.vo.MarketEvent;
 
@@ -37,8 +39,8 @@ public class MarketOwnerDAOImpl implements MarketOwnerDAO {
 	}
 
 	@Override
-	public List<Market> selectMarketList(int flag) {
-		return sqlSession.selectList("marketOwner.selectMarketList", flag);
+	public List<Market> selectMarketList(Map<String, Object> param) {
+		return sqlSession.selectList("marketOwner.selectMarketList", param);
 	}
 	
 	public int updateMemberFounded(String memberId) {
@@ -61,8 +63,23 @@ public class MarketOwnerDAOImpl implements MarketOwnerDAO {
 	}
 
 	@Override
-	public List<MarketEvent> selectMarketWithEvent() {
-		return sqlSession.selectList("marketOwner.selectMarketWithEvent");
+	public List<MarketEvent> selectMarketWithEvent(Map<String, Object> param) {
+		return sqlSession.selectList("marketOwner.selectMarketWithEvent", param);
+	}
+
+	@Override
+	public List<Event> selectEventList(Map<String, Object> param) {
+		return sqlSession.selectList("marketOwner.selectEventList", param);
+	}
+
+	@Override
+	public List<Market> searchMarketList(Map<String, Object> param) {
+		return sqlSession.selectList("marketOwner.searchMarketList", param);
+	}
+
+	@Override
+	public List<Event> searchEventList(String marketNo) {
+		return sqlSession.selectList("marketOwner.selectEventList", marketNo);
 	}
 
 }

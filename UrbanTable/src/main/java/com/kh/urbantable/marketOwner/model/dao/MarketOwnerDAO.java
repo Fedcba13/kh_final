@@ -1,8 +1,10 @@
 package com.kh.urbantable.marketOwner.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
+import com.kh.urbantable.marketOwner.model.vo.Event;
 import com.kh.urbantable.marketOwner.model.vo.Market;
 import com.kh.urbantable.marketOwner.model.vo.MarketEvent;
 
@@ -16,7 +18,7 @@ public interface MarketOwnerDAO {
 
 	int cancelFounded(String marketNo);
 
-	List<Market> selectMarketList(int flag);
+	List<Market> selectMarketList(Map<String, Object> param);
 	
 	int updateMemberFounded(String memberId);
 
@@ -26,6 +28,12 @@ public interface MarketOwnerDAO {
 
 	int myMarketOpen(String marketNo);
 
-	List<MarketEvent> selectMarketWithEvent();
+	List<MarketEvent> selectMarketWithEvent(Map<String, Object> param);
+
+	List<Event> selectEventList(Map<String, Object> param);
+
+	List<Market> searchMarketList(Map<String, Object> param);
+
+	List<Event> searchEventList(String marketNo);
 
 }

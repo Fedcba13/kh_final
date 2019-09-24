@@ -62,7 +62,16 @@
 	
 	<select id="selectMarketList" resultType="market">
 		select * from market
-		where flag = #{flag}
+		<trim prefix="where" suffixOverrides="and">
+			market_enabled=1
+			<if test="flag!=null and flag!=''">
+			and flag=#{flag}
+			</if>
+			<if test="marketNo!=null and marketNo!=''">
+			and market_no=#{marketNo}
+			</if>
+		</trim>
+		order by market_no desc
 	</select>
 
 	<update id="updateMemberCancelFounded">
@@ -83,35 +92,21 @@
 		where market_no=#{marketNo}
 	</update>
 	
-	<select id="selectMarketWithEvent" resultMap="marketWithEvent">
-		select *
-		from market M left join event E on M.market_no=E.event_market
-		where M.market_enabled=1
-		order by M.market_no desc
+	<select id="selectEventList" resultType="event">
+		select * from event
+		<trim prefix="where" suffixOverrides="or">
+			event_enabled=1
+			and market_no is null
+			<if test="marketNo!=null and marketNo!=''">
+			or market_no=#{marketNo}
+			</if>
+		</trim>
 	</select>
-	<resultMap type="marketWithEvent" id="marketWithEvent">
-		<id column="member_id" property="memberId"/>
-		<result column="market_no" property="marketNo"/>
-		<result column="market_resident" property="marketResident"/>
-		<result column="market_telephone" property="marketTelephone"/>
-		<result column="market_address" property="marketAddress"/>
-		<result column="market_address2" property="marketAddress2"/>
-		<result column="market_enabled" property="marketEnabled"/>
-		<result column="flag" property="flag"/>
-		<result column="market_name" property="marketName"/>
-		<result column="market_holiday" property="marketHoliday"/>
-		<result column="market_time" property="marketTime"/>
-		<collection property="eventList" ofType="event">
-			<id column="event_id" property="eventId"/>
-			<result column="event_title" property="eventTitle" />
-			<result column="event_content" property="eventContent" />
-			<result column="event_company" property="eventCompany" />
-			<result column="event_market" property="eventMarket" />
-			<result column="event_category" property="eventCategory" />
-			<result column="event_date_start" property="eventDateStart" />
-			<result column="event_date_end" property="eventDateEnd" />
-			<result column="event_enabled" property="eventEnabled" />
-		</collection>
-	</resultMap>
+	
+	<select id="searchMarketList" resultType="market">
+		select * from market
+		where market_enabled=1 and flag=#{flag} and market_address like '%'||#{marketAddress}||'%'
+		order by market_no desc
+	</select>
 	
 </mapper>

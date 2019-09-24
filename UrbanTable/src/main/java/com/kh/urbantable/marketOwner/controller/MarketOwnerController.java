@@ -1,5 +1,6 @@
 package com.kh.urbantable.marketOwner.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,8 +21,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
 import com.kh.urbantable.marketOwner.model.service.MarketOwnerService;
+import com.kh.urbantable.marketOwner.model.vo.Event;
 import com.kh.urbantable.marketOwner.model.vo.Market;
-import com.kh.urbantable.marketOwner.model.vo.MarketEvent;
 import com.kh.urbantable.member.model.vo.Member;
 
 @Controller
@@ -179,9 +180,56 @@ public class MarketOwnerController {
 	@RequestMapping("/marketList.do")
 	public String marketList(Model model) {
 		logger.info("매장 리스트 페이지 요청");
-		List<MarketEvent> marketList = marketOwnerService.selectMarketWithEvent();
-		model.addAttribute("marketList", marketList);
+		//List<MarketEvent> marketList = marketOwnerService.selectMarketWithEvent();
+		//model.addAttribute("marketList", marketList);
 		return "marketOwner/marketList";
 	}
+	
+	@ResponseBody
+	@RequestMapping("/selectMarketList.do")
+	public Map<String, Object> selectMarketList(@RequestParam(value="flag") int flag,
+			@RequestParam(value="marketNo") String marketNo){
+		
+		logger.info("매장 리스트 타입={}, 매장 번호={}",flag, marketNo);
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("flag", flag);
+		param.put("marketNo", marketNo);
+		logger.info("param="+param);
+		
+		List<Market> marketList = marketOwnerService.selectMarketList(param);
+		List<Event> eventList = marketOwnerService.selectEventList(param);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("marketList", marketList);
+		result.put("eventList", eventList);
+		
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/searchMarket.do") 
+	public Map<String, Object> searchMarket(@RequestParam(value="flag") int flag,
+			@RequestParam(value="marketAddress") String marketAddress){
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("flag", flag);
+		param.put("marketAddress", marketAddress);
+		logger.info("param="+param);
+		
+		List<Market> marketList = marketOwnerService.searchMarketList(param);
+		List<Event> eventList = new ArrayList<Event>();
+		
+		if(!marketList.isEmpty()) {
+			for(Market m : marketList) {
+				eventList.addAll(marketOwnerService.searchEventList(m.getMarketNo()));
+			}
+		}
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("marketList", marketList); 
+		result.put("eventList", eventList);
+		return result;
+	}
+	 
 	
 }

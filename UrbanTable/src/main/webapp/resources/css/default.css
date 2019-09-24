@@ -339,7 +339,7 @@ input[type=text], input[type=password] {
     position: absolute;
     top: 54px;
     width: 412px;
-    z-index: 9;
+    z-index: 99;
     display: none;
 }
 
