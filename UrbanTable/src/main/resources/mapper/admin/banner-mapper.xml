@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="banner">
+
+	<insert id="insertBanner">
+		insert into banner values(
+		'ban' || lpad(banner_seq_id.nextval, 5, '0'), 1, #{bannerStartDate}, #{bannerEndDate}, #{bannerTitle},
+		#{bannerContent}, #{bannerURL}, #{bannerFileRenamed}, #{bannerFileOriginal})
+	</insert>
+	
+	<select id="selectAllList" resultType="banner">
+		select * from banner where banner_enabled = 1 order by banner_end_date desc
+	</select>
+	
+	<update id="updateBanner" >
+		update banner set 
+			banner_start_date = #{bannerStartDate},
+			banner_end_date = #{bannerEndDate},
+			banner_title = #{bannerTitle},
+			banner_content = #{bannerContent},
+			banner_url = #{bannerURL},
+			banner_file_renamed = #{bannerFileRenamed},
+			banner_file_original = #{bannerFileOriginal}
+			
+		where banner_id = #{bannerId}
+	
+	</update>
+	
+	<update id="deleteBanner">
+		update banner set banner_enabled = 0
+		where banner_id = #{bannerId}
+	</update>
+	
+	<select id="mainBannerList" resultType="banner">
+		select * from banner where banner_enabled = 1 order by banner_end_date desc
+	</select>
+</mapper>

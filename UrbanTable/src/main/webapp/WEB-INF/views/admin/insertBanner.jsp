@@ -6,46 +6,75 @@
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <script>
-function validate(){
-	var content = $("#noticeContent").trim().val();
+
+$(()=>{
 	
-	if(content.length == 0){
-		alert("내용을 입력하세요");
-		return false;
-	}
+	document.getElementById("bannerStart").valueAsDate = new Date();
 	
-	return true;	
-}
+	$("#bannerEnd").change(()=>{
+		
+		var start = $("#bannerStart").val();
+		var end = $("#bannerEnd").val();
+		
+		if(start > end){
+			alert("종료일자가 시작일자보다 빠릅니다.");
+		} 
+		
+	});
+
+});
 
 </script>
+<style>
+input#bannerStart, input#bannerEnd{
+	height: 25px;
+}
+input#banerFile, input#bannerTitle, input#bannerURL, #bannerContent{
+	width: 750px;
+}
+input[type="date"],
+input[type="date"]::-webkit-inner-spin-button {
+
+-webkit-appearance: none;
+}
+</style>
 <section class="sec_bg">
 	<!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
-		<h3 class="sub_tit">공지사항 작성</h3>
-		<form name="noticeFrm" action="${pageContext.request.contextPath}/notice/insertNoticeEnd.do" method="post" onsubmit="return validate();">
+		<h3 class="sub_tit">배너 작성</h3>
+		<form action="${pageContext.request.contextPath}/banner/insertBannerEnd.do" method="post" enctype="multipart/form-data" />
 			<table class="tbl tbl_view">
 				<tr>
-					<th>구분 </th>
+					<th>공고기간 </th>
 					<td>
-					<select name="noticeCategory" style="height: 25px;">
-                		<option value="" disabled selected>공지 선택</option>
-                		<option value="배송공지">배송공지</option>
-                		<option value="가격공지">가격공지</option>
-                		<option value="기타공지">기타공지</option>
-                	</select>
+						<input type="date" name="bannerStartDate" id="bannerStart" />
+						~
+						<input type="date" name="bannerEndDate" id="bannerEnd" />
 					</td>
 				</tr>
 				<tr>
 					<th>제목</th>
 					<td>
-					<input type="text" name="noticeTitle" id="noticeTitle" style="width:750px;" />
+					<input type="text" name="bannerTitle" id="bannerTitle" />
+					</td>
+				</tr>
+				<tr>
+					<th>파일</th>
+					<td>
+					<input type="file" name="bannerFile1" id="bannerFile" />
+					</td>
+				</tr>
+				<tr>
+					<th>url</th>
+					<td>
+					<input type="text" name="bannerURL" id="bannerURL" />
 					</td>
 				</tr>
 				<tr>
 					<th>내용</th>
 					<td>
-					<textarea name="noticeContent" id="noticeContent" cols="30" rows="10" 
-					style="resize: none; width: 750px; height: 358px;"></textarea>
+					<textarea name="bannerContent" id="bannerContent" cols="30" rows="10" 
+					style="resize: none; height: 358px;"></textarea>
 					</td>
 				</tr>
 			</table>
