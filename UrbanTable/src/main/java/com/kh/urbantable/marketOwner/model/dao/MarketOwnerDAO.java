@@ -34,6 +34,4 @@ public interface MarketOwnerDAO {
 
 	List<Market> searchMarketList(Map<String, Object> param);
 
-	List<Event> searchEventList(String marketNo);
-
 }

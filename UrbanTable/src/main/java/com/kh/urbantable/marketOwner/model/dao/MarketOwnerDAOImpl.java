@@ -77,9 +77,4 @@ public class MarketOwnerDAOImpl implements MarketOwnerDAO {
 		return sqlSession.selectList("marketOwner.searchMarketList", param);
 	}
 
-	@Override
-	public List<Event> searchEventList(String marketNo) {
-		return sqlSession.selectList("marketOwner.selectEventList", marketNo);
-	}
-
 }

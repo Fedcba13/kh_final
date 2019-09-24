@@ -11,9 +11,9 @@
 		<h3 class="sub_tit txt_center fw400">지점 · 오픈 예정 매장 · 휴점일 안내</h3>
 		<div class="txt_center">
 			<ul class="marketListTab dp_ib clearfix">
-				<li onclick="selectList(2, null);" class="ac_tab" rel="2">지점 찾기</li>
-				<li onclick="selectList(1, null);" rel="1">오픈 예정 매장 찾기</li>
-				<li onclick="selectHoliday(2, null);" rel="2">휴점일 알아보기</li>
+				<li onclick="selectList(2, null, null);" class="ac_tab" rel="2">지점 찾기</li>
+				<li onclick="selectList(1, null, null);" rel="1">오픈 예정 매장 찾기</li>
+				<li onclick="selectHoliday(2, null, null);" rel="3">휴점일 알아보기</li>
 			</ul>
 		</div>
 		<div class="searchFrm">
@@ -78,17 +78,21 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=fad2db7104eed0a4e507665e420c86cf&libraries=services"></script>
 <script>
 	$(()=>{
-		selectList(2, null);
+		selectList(2, null, null);
 		
 		$(".marketListTab li").click(function(){
 			$(".marketListTab li").removeClass("ac_tab");
 			$(this).addClass("ac_tab");
 		});
 		
+		$(".searchFrm input[name=marketAddress").keyup(function(){
+			if(event.keyCode == '13'){
+				searchFrmSubmit();
+			}
+		});
+		
 		$(".searchFrm input[type=submit]").click(function(){
-			var marketAddress = $("div.searchFrm input[name=marketAddress]").val();
-			var flag = $(".marketListTab li.ac_tab").attr("rel");
-			searchMarket(flag, marketAddress);
+			searchFrmSubmit();
 		});
 		
 		$(".marketSortByCity li").click(function(){
@@ -103,10 +107,24 @@
 		});
 	});
 	
-	function selectList(flag, marketNo){
+	function searchFrmSubmit(){
+		var marketAddress = $("div.searchFrm input[name=marketAddress]").val();
+		var flag = $(".marketListTab li.ac_tab").attr("rel");
+		if(flag==3){
+			selectHoliday(2, null, marketAddress);
+		} else {
+			searchMarket(flag, marketAddress);
+		}
+	}
+	
+	function selectList(flag, marketNo, marketAddress){
+		$(".searchFrm input[name=marketAddress]").val("");
+		$(".marketSortByCity li").removeClass("cur");
+		$(".marketSortByCity li:first-child").addClass("cur");
 		var param = {
 			flag : flag,
-			marketNo : marketNo
+			marketNo : marketNo,
+			marketAddress : marketAddress
 		}
 		
 		$.ajax({
@@ -115,24 +133,30 @@
 			type: "get",
 			dataType:"json",
 			success: function(data){
-				console.log(data);
 				var marketList = data.marketList;
 				var eventList = data.eventList;
 				var html = "<ul class='marketResultList clearfix'>";
-				for(var i in marketList){
-					html += "<li><a href='javascript:showMarket(\""+marketList[i].flag+"\", \""+marketList[i].marketNo+"\");' class='dp_ib'>";
-					html += marketList[i].marketName+"</a>";
-					html += "<span class='marketInfoDetail'>";
-					if(marketList[i].flag==2){
-						html += "영업중";
-					} else if(marketList[i].flag==1){
-						html += "오픈 예정";
+				if(marketList.length>0){
+					for(var i in marketList){
+						html += "<li><a href='javascript:showMarket(\""+marketList[i].flag+"\", \""+marketList[i].marketNo+"\", null);' class='dp_ib'>";
+						html += marketList[i].marketName+"</a>";
+						html += "<span class='marketInfoDetail'>";
+						if(marketList[i].flag==2){
+							html += "영업중";
+						} else if(marketList[i].flag==1){
+							html += "오픈 예정";
+						}
+						html += "</span>";
+						for(var j in eventList){if(eventList[j].marketNo == null) {
+								html += "<span class='marketInfoDetail marketEvent'>전체 이벤트</span>";
+							} else if(eventList[j].marketNo == marketList[i].marketNo){
+								html += "<span class='marketInfoDetail marketEvent2'>지점 이벤트</span>";
+							} 
+						}
+						html += "</li>";
 					}
-					html += "</span>";
-					if(eventList.length>0){
-						html += "<span class='marketInfoDetail marketEvent'>이벤트</span>";
-					}
-					html += "</li>";
+				} else {
+					html += "<li class='noResult txt_center'>조회 결과가 없습니다.</li>";
 				}
 				html += "</ul>";
 				$(".marketResult").html(html);
@@ -143,7 +167,7 @@
 		});
 	}
 	
-	function showMarket(flag, marketNo){
+	function showMarket(flag, marketNo, marketAddress){
 		if($(".marketInfo").css("display") == "none"){
 			$(".marketInfo").show();
 		}
@@ -151,7 +175,8 @@
 		
 		var param = {
 			flag : flag,
-			marketNo : marketNo
+			marketNo : marketNo,
+			marketAddress : marketAddress
 		}
 		
 		$.ajax({
@@ -160,7 +185,6 @@
 			type: "get",
 			dataType:"json",
 			success: function(data){
-				console.log(data);
 				var marketList = data.marketList;
 				var status = "";
 				for(var i in marketList){
@@ -200,10 +224,14 @@
 		});
 	}
 	
-	function selectHoliday(flag, marketNo){
+	function selectHoliday(flag, marketNo, marketAddress){
+		$(".searchFrm input[name=marketAddress]").val("");
+		$(".marketSortByCity li").removeClass("cur");
+		$(".marketSortByCity li:first-child").addClass("cur");
 		var param = {
 			flag : flag,
-			marketNo : marketNo
+			marketNo : marketNo,
+			marketAddress :  marketAddress
 		}
 		
 		$.ajax({
@@ -212,7 +240,6 @@
 			type: "get",
 			dataType:"json",
 			success: function(data){
-				console.log(data);
 				var marketList = data.marketList;
 				var html = "<table class='w100 txt_center'><tr><th>지점명</th><th>휴점일</th><th>전화번호</th></tr>";
 				for(var i in marketList){
@@ -223,7 +250,7 @@
 						holiday = "없음";
 					}
 					html += "<tr>";
-					html += "<td><a href='javascript:showMarket(\""+marketList[i].flag+"\", \""+marketList[i].marketNo+"\");' class='dp_ib'>"+marketList[i].marketName+"</a></td>";
+					html += "<td><a href='javascript:showMarket(\""+marketList[i].flag+"\", \""+marketList[i].marketNo+"\", null);' class='dp_ib'>"+marketList[i].marketName+"</a></td>";
 					html += "<td>"+holiday+"</td>";
 					html += "<td>"+marketList[i].marketTelephone+"</td>";
 					html += "</tr>";
@@ -243,28 +270,37 @@
 			marketAddress: marketAddress
 		}
 		
-		console.log(param);
-		
 		$.ajax({
 			url: "${pageContext.request.contextPath }/market/searchMarket.do",
 			type: "get",
 			data: param,
 			dataType:"json",
 			success: function(data){
-				console.log(data);
 				var marketList = data.marketList;
+				var eventList = data.eventList;
 				var html = "<ul class='marketResultList clearfix'>";
-				for(var i in marketList){
-					html += "<li><a href='javascript:showMarket(\""+marketList[i].flag+"\", \""+marketList[i].marketNo+"\");' class='dp_ib'>";
-					html += marketList[i].marketName+"</a>";
-					html += "<span class='marketInfoDetail'>";
-					if(marketList[i].flag==2){
-						html += "영업중";
-					} else if(marketList[i].flag==1){
-						html += "오픈 예정";
+				if(marketList.length>0) {
+					for(var i in marketList){
+						html += "<li><a href='javascript:showMarket(\""+marketList[i].flag+"\", \""+marketList[i].marketNo+"\", null);' class='dp_ib'>";
+						html += marketList[i].marketName+"</a>";
+						html += "<span class='marketInfoDetail'>";
+						if(marketList[i].flag==2){
+							html += "영업중";
+						} else if(marketList[i].flag==1){
+							html += "오픈 예정";
+						}
+						html += "</span>";
+						for(var j in eventList){
+							if(eventList[j].marketNo == null) {
+								html += "<span class='marketInfoDetail marketEvent'>전체 이벤트</span>";
+							} else if(eventList[j].marketNo == marketList[i].marketNo){
+								html += "<span class='marketInfoDetail marketEvent2'>지점 이벤트</span>";
+							} 
+						}
+						html += "</li>";
 					}
-					html += "</span>";
-					html += "</li>";
+				} else {
+					html += "<li class='noResult txt_center'>조회 결과가 없습니다.</li>";
 				}
 				html += "</ul>";
 				$(".marketResult").html(html);

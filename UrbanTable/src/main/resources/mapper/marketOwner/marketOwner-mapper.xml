@@ -70,6 +70,9 @@
 			<if test="marketNo!=null and marketNo!=''">
 			and market_no=#{marketNo}
 			</if>
+			<if test="marketAddress!=null and marketAddress!=''">
+			and market_address like '%'||#{marketAddress}||'%'
+			</if>
 		</trim>
 		order by market_no desc
 	</select>
@@ -96,8 +99,8 @@
 		select * from event
 		<trim prefix="where" suffixOverrides="or">
 			event_enabled=1
-			and market_no is null
 			<if test="marketNo!=null and marketNo!=''">
+			and market_no is null
 			or market_no=#{marketNo}
 			</if>
 		</trim>

@@ -28,8 +28,6 @@ public interface MarketOwnerService {
 
 	List<Event> selectEventList(Map<String, Object> param);
 
-	List<Market> searchMarketList(Map<String, Object> param);
-
-	List<Event> searchEventList(String marketNo);
+	Map<String, Object> searchMarketList(Map<String, Object> param);
 
 }

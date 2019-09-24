@@ -194,6 +194,12 @@ form[name=orderSearchFrm2] > div > div {
 	margin-top:30px;
 }
 
+.marketResultList li.noResult {
+	float:none;
+	width:100%;
+	line-height:220px;
+}
+
 .marketResultList li:first-child,
 .marketResultList li:nth-child(2) {
 	margin-top: 0;
@@ -216,6 +222,11 @@ form[name=orderSearchFrm2] > div > div {
 }
 
 .marketEvent {
+	border: 1px solid #374818;
+	color: #374818;
+}
+
+.marketEvent2 {
 	border: 1px solid #9d8420;
 	color: #9d8420;
 }

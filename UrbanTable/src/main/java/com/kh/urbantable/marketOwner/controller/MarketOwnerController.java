@@ -188,12 +188,14 @@ public class MarketOwnerController {
 	@ResponseBody
 	@RequestMapping("/selectMarketList.do")
 	public Map<String, Object> selectMarketList(@RequestParam(value="flag") int flag,
-			@RequestParam(value="marketNo") String marketNo){
+			@RequestParam(value="marketNo") String marketNo,
+			@RequestParam(value="marketAddress") String marketAddress){
 		
 		logger.info("매장 리스트 타입={}, 매장 번호={}",flag, marketNo);
 		Map<String, Object> param = new HashMap<String, Object>();
 		param.put("flag", flag);
 		param.put("marketNo", marketNo);
+		param.put("marketAddress", marketAddress);
 		logger.info("param="+param);
 		
 		List<Market> marketList = marketOwnerService.selectMarketList(param);
@@ -216,19 +218,8 @@ public class MarketOwnerController {
 		param.put("marketAddress", marketAddress);
 		logger.info("param="+param);
 		
-		List<Market> marketList = marketOwnerService.searchMarketList(param);
-		List<Event> eventList = new ArrayList<Event>();
-		
-		if(!marketList.isEmpty()) {
-			for(Market m : marketList) {
-				eventList.addAll(marketOwnerService.searchEventList(m.getMarketNo()));
-			}
-		}
-		
-		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("marketList", marketList); 
-		result.put("eventList", eventList);
-		return result;
+		Map<String, Object> searchList = marketOwnerService.searchMarketList(param);
+		return searchList;
 	}
 	 
 	
