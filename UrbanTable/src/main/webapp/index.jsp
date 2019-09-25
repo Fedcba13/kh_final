@@ -8,9 +8,10 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/main.js"></script>
 <script>
-/* $(()=>{
+   $(()=>{
+
+	 var html = "";
 	
-	String html = "";
 	$.ajax({
 		url: "${pageContext.request.contextPath}/banner/mainBannerList.do",
 		dataType: "json",
@@ -18,26 +19,35 @@
 		success: (data)=> {
 			console.log(data);
 			for(var i in data){
-				
-			html += "<div class='main_banner_con'style='background-image:\"${pageContext.request.contextPath}/resources/images/banner/"+data[i].bannerFileRenamed+"\";'>";
-			html += "<a href='${pageContext.request.contextPath}/"+data[i].bannerURL + "' class='dp_block'>";
+			html = "";
+			html += "<div class='main_banner_con'>";
+			html += "<a href='${pageContext.request.contextPath}/"+data[i].bannerURL + "' style='background-image:URL(${pageContext.request.contextPath}/resources/images/banner/"+data[i].bannerFileRenamed+");'class='aTag'>";
 			html += "</a></div>";
 			
 			console.log(html);
+			$(".main_banner").append(html); 
 			}
-			$(".main_banner").html(html); 
 		},
 		error: (xhr, txtStatus, err)=> {
 			console.log("ajax 처리실패!", xhr, txtStatus, err);
 		}
 	});
-}); */
+});   
 </script>
+<style>
+.main_banner_con a.aTag{
+	background-size:cover; 
+	background-position:center center;
+	width: 100%; 
+	height: 370px; 
+	display:inline-block;
+}
+</style>
 <section id="banner">
-    <article class="inner">
+    <article>
         <div class="main_banner clearfix">
-        	<div class="main_banner_con"><a href="">banner1</a></div>
-        	<div class="main_banner_con"><a href="">banner2</a></div>
+            <!--  <div class="main_banner_con"><a href="">banner1</a></div> -->
+<!--              <div class="main_banner_con"><a href="">banner2</a></div> -->
         </div>
     </article>
 </section>
