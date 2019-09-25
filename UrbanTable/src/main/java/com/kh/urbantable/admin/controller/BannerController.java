@@ -3,6 +3,8 @@ package com.kh.urbantable.admin.controller;
 import java.io.File;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +48,7 @@ public class BannerController {
 	
 	@RequestMapping(value = "/insertBannerEnd.do", method = RequestMethod.POST)
 	public String insertEndBanner(Banner banner, @RequestParam("bannerFile1") MultipartFile bannerFile,
-			MultipartHttpServletRequest request) {
+			HttpServletRequest request) {
 		logger.info("banner1={}", banner);
 		logger.info("upFile={}", bannerFile);
 		
@@ -86,7 +88,7 @@ public class BannerController {
 	
 	@RequestMapping("/updateBanner.do")
 	public String updateBanner(Banner banner, @RequestParam("bannerFile1") MultipartFile bannerFile,
-			MultipartHttpServletRequest request, Model model) {
+			HttpServletRequest request, Model model) {
 		
 		logger.info("banner={}", banner);
 		
@@ -106,7 +108,7 @@ public class BannerController {
 			  
 			  try {
 				  
-				  bannerFile.transferTo(new File(saveDirectory + "/" + renamed));
+				  bannerFile.transferTo(new File(saveDirectory, "/" + renamed));
 				  
 			  } catch(Exception e) {
 				  e.printStackTrace(); 

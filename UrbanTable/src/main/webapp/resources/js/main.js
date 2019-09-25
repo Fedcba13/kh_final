@@ -1,12 +1,17 @@
 $(document).ready(function(){
-    $('.main_banner').slick({
-        autoplay:true,
-        infinite: true,
-        speed: 700,
-        autoplaySpeed: 3000,
-        slidesToShow: 1,
-        arrows:false
-    });
+	
+	setTimeout(function() {
+		$('.main_banner').slick({
+	        autoplay:true,
+	        infinite: true,
+	        speed: 700,
+	        autoplaySpeed: 3000,
+	        slidesToShow: 1,
+	        arrows:false
+	    });
+	}, 200);
+
+	
     
     $(".recom_conts > div").hide();
     $(".recom_conts > div:first").show();

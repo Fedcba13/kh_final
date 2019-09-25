@@ -39,6 +39,7 @@
                         <li><a href="" class="dp_block">상품 제안</a></li>
                     </ul>
                 </li>
+                
                 <li class="cs_center">
                     <a href="" class="dp_block">관리자</a>
                     <ul>
@@ -47,6 +48,7 @@
                         <li><a href="" class="dp_block">발주 리스트</a></li>
                         <li><a href="" class="dp_block">식자재 등록</a></li>
                         <li><a href="${pageContext.request.contextPath}/banner/bannerList.do" class="dp_block">배너 등록</a></li>
+                        <li><a href="${pageContext.request.contextPath}/event/eventList.do" class="dp_block">이벤트 등록</a></li>
                     </ul>
                 </li>
                 <c:if test="${memberLoggedIn.memberCheck eq 3 }">

@@ -5,7 +5,7 @@
 <mapper namespace="notice">
 	
 	<select id="noticeList" resultType="notice">
-		select * from notice where notice_enabled = 1
+		select * from notice where notice_enabled = 1 and notice_category not in ('FAQ')
 	</select>
 	
 	<select id="selectOne" resultType="notice">
