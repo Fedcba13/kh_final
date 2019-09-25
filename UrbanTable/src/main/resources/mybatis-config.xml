@@ -40,5 +40,7 @@
 			alias="foodSection" />
 		<typeAlias type="com.kh.urbantable.food.model.vo.FoodWithFoodSection"
 			alias="foodWithFoodSection" />
+		<typeAlias type="com.kh.urbantable.payment.model.vo.PayDetail"
+			alias="paydetail" />
 	</typeAliases>
 </configuration>

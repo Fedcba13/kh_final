@@ -54,10 +54,11 @@ public class CartController {
 	}
 	
 	@RequestMapping("/searchMarket.do")
-	public String searchMarket(Model model) {
+	public String searchMarket(@RequestParam(value="addr", defaultValue="", required=false) String userAddress, Model model) {
 		
 		List<Market> list = cartService.getMarketList();
 		logger.debug("marketList={}", list);
+		model.addAttribute("userAddress", userAddress);
 		model.addAttribute("marketList", list);
 		
 		return "map/map";

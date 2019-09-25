@@ -19,23 +19,30 @@
 		
 		$("#order").on("click", ()=>{
 			var cartArr = [];
-			var cartInfo = {};
+			if($("#market").val() == ""){
+				alert("배송할 매장을 선택하세요!")
+				return;
+			}
 			for(var i = 1; i <= ${fn:length(list)}; i++){
 				var root = $("#item" + i);
 				if(root.find("input:checkbox[name='list']").is(":checked") == true){
+					var cartInfo = {};
 					cartInfo.memberId = "jsi124";
 					cartInfo.payPrice = parseInt($("#totalPayment").text());
 					cartInfo.payFlag = 0;
 					cartInfo.deliverType = $("input:radio[name='delivery']:checked").val();
 					cartInfo.foodNo = root.find($("input:hidden[name='foodNo']")).val();
 					cartInfo.payDetailAmount = root.find($("input:text[name='amount']")).val();
-					cartInfo.market = $("#market").val();
+					var marketAddress = $("#market").val().substring(0, $("#market").val().indexOf("(")-1);
+					cartInfo.market = marketAddress;
 					cartArr.push(cartInfo);
 				}
 			}
+			var cartJson = JSON.stringify(cartArr);
 			console.log(cartArr);
-			console.log(cartInfo);
-			//location.href = "${pageContext.request.contextPath}/pay/order.do";
+			console.log(cartJson);
+			$("input[name='cartInfo']").val(cartJson)				
+			$("#doOrder").submit();
 		});
 		
 	});
@@ -256,9 +263,12 @@
             </tr>
         </table>
         <hr />
-        <div class="btn">
-	        <button type="button" class="btn" id="order"><h2>주문하기</h2></button>
-        </div>
+        <form action="${pageContext.request.contextPath}/pay/order.do" method="post" id="doOrder">
+        	<input type="hidden" name="cartInfo" />        	
+	        <div class="btn">
+		        <button type="button" class="btn" id="order"><h2>주문하기</h2></button>
+		    </div>        
+        </form>
     </article>    
 </section>
 

@@ -1,11 +1,16 @@
 package com.kh.urbantable.payment.model.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.urbantable.payment.model.dao.PayDAO;
+import com.kh.urbantable.payment.model.vo.Pay;
+import com.kh.urbantable.payment.model.vo.PayDetail;
 
 @Service
 public class PayServiceImple implements PayService {
@@ -14,5 +19,30 @@ public class PayServiceImple implements PayService {
 	PayDAO payDAO;
 	
 	Logger logger = LoggerFactory.getLogger(getClass());
+
+	@Override
+	public int insertPay(Pay pay) {
+		return payDAO.insertPay(pay);
+	}
+
+	@Override
+	public String getMarketNo(String address) {
+		return payDAO.getMarketNo(address);
+	}
+
+	@Override
+	public String getPayNo(String memberId) {
+		return payDAO.getPayNo(memberId);
+	}
+
+	@Override
+	public int insertPayDetail(PayDetail payDetail) {
+		return payDAO.insertPayDetail(payDetail);
+	}
+
+	@Override
+	public List<Pay> getPayDetail() {
+		return payDAO.getPayDetail();
+	}
 
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="pay">
+	<insert id="insertPay">
+		insert into pay values('pseq' || lpad(seq_pay_no.nextval, 5, '0'),
+								#{memberId},
+								sysdate,
+								${payPrice},
+								0,
+								default,
+								#{deliverType},
+								#{marketNo})
+	</insert>
+	
+	<select id="getMarketNo" resultType="string">
+		select market_no from market where market_address like '%'||#{address}||'%' and flag=2
+	</select>
+	
+	<select id="getPayNo" resultType="string">
+		select pay_no from pay where member_id=#{memberId} and pay_flag=0
+	</select>
+	
+	<insert id="insertPayDetail">
+		insert into pay_detail values('pdsq' || lpad(seq_pdt_no.nextval, 5, '0'),
+									  #{payNo},
+									  #{foodNo},
+									  #{payDetailAmount})
+	</insert>
+	
+	<select id="getPayDetail" resultType="paydetail">
+		select * from pay_detail
+	</select>
+
+</mapper>
