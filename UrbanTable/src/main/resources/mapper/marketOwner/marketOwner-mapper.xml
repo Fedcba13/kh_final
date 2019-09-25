@@ -112,4 +112,35 @@
 		order by market_no desc
 	</select>
 	
+	<select id="eventCompanySearch" resultType="string">
+		select distinct food_company
+		from food
+		where food_company like '%'||#{srchCompany}||'%'
+	</select>
+	
+	<select id="eventSearchCategory" resultType="string">
+		select distinct S.food_section_name
+		from food F left join food_section S on F.food_section_no=S.food_section_no
+		where F.food_company like '%'||#{srchCompany}||'%'
+		and S.food_section_name like '%'||#{eventCategory}||'%'
+	</select>
+	
+	
+	<resultMap type="foodWithFoodSection" id="foodWithFoodSection">
+		<id column="food_no" property="foodNo"/>
+		<result column="food_name" property="foodName"/>
+		<result column="food_section_no" property="foodSectionNo"/>
+		<result column="food_company" property="foodCompany"/>
+		<result column="food_market_price" property="foodMarketPrice"/>
+		<result column="food_member_price" property="foodMemberPrice"/>
+		<result column="food_enabled" property="foodEnabled"/>
+		<result column="food_img" property="foodImg"/>
+		<collection property="foodSectionList" ofType="foodSection">
+			<id column="food_section_no" property="foodSectionNo"/>
+			<result column="food_division_no" property="foodDivisionNo"/>
+			<result column="food_section_name" property="foodSectionName"/>
+			<result column="food_section_upper" property="foodSectionUpper"/>
+		</collection>
+	</resultMap>
+	
 </mapper>

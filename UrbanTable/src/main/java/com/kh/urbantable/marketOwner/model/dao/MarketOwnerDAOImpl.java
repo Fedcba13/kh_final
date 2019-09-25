@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
+import com.kh.urbantable.food.model.vo.FoodWithFoodSection;
 import com.kh.urbantable.marketOwner.model.vo.Event;
 import com.kh.urbantable.marketOwner.model.vo.Market;
 import com.kh.urbantable.marketOwner.model.vo.MarketEvent;
@@ -75,6 +76,16 @@ public class MarketOwnerDAOImpl implements MarketOwnerDAO {
 	@Override
 	public List<Market> searchMarketList(Map<String, Object> param) {
 		return sqlSession.selectList("marketOwner.searchMarketList", param);
+	}
+
+	@Override
+	public List<String> eventCompanySearch(String srchCompany) {
+		return sqlSession.selectList("marketOwner.eventCompanySearch", srchCompany);
+	}
+
+	@Override
+	public List<FoodWithFoodSection> eventSearchCategory(Map<String, String> param) {
+		return sqlSession.selectList("marketOwner.eventSearchCategory", param);
 	}
 
 }

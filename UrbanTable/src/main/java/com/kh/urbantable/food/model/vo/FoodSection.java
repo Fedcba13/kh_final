@@ -1,5 +1,4 @@
 package com.kh.urbantable.food.model.vo;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

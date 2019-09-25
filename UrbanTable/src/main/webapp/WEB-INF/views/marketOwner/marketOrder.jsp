@@ -16,7 +16,7 @@
 	    			<option value="orderID">주문자 ID</option>
 	    			<option value="orderPhone">주문자 연락처</option>
 	    		</select>
-	    		<input type="text" class="dp_ib" style="width:218px; padding-right:40px;" />
+	    		<input type="text" class="dp_ib" style="width:209px; padding-right:40px;" />
 	    		<input type="submit" value="검색" class="dp_ib txt_center" />
 	    	</form>
 	    	<form action="" name="orderSearchFrm2" method="get" class="sec_bg">

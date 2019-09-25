@@ -32,13 +32,13 @@
 			alias="event" />
 		<typeAlias type="com.kh.urbantable.marketOwner.model.vo.MarketEvent"
 			alias="marketWithEvent" />	
-			
-					<!-- 김기현(food) 작업영역 -->
 		<typeAlias type="com.kh.urbantable.food.model.vo.Food"
-			alias="food" />	
-		<typeAlias type="com.kh.urbantable.food.model.vo.FoodSection"
-			alias="foodSection" />	
+			alias="food" />
 		<typeAlias type="com.kh.urbantable.food.model.vo.FoodDivision"
-			alias="foodDivision" />	
+			alias="foodDivision" />
+		<typeAlias type="com.kh.urbantable.food.model.vo.FoodSection"
+			alias="foodSection" />
+		<typeAlias type="com.kh.urbantable.food.model.vo.FoodWithFoodSection"
+			alias="foodWithFoodSection" />
 	</typeAliases>
 </configuration>

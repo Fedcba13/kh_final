@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
+import com.kh.urbantable.food.model.vo.FoodWithFoodSection;
 import com.kh.urbantable.marketOwner.model.vo.Event;
 import com.kh.urbantable.marketOwner.model.vo.Market;
 import com.kh.urbantable.marketOwner.model.vo.MarketEvent;
@@ -29,5 +30,9 @@ public interface MarketOwnerService {
 	List<Event> selectEventList(Map<String, Object> param);
 
 	Map<String, Object> searchMarketList(Map<String, Object> param);
+
+	List<String> eventCompanySearch(String srchCompany);
+
+	List<FoodWithFoodSection> eventSearchCategory(Map<String, String> param);
 
 }

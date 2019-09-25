@@ -12,6 +12,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class FoodDivision {
-	private String foodDivisionNo;
-	private String foodDivisionName;
+   private String foodDivisionNo;
+   private String foodDivisionName;
 }

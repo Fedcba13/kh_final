@@ -38,6 +38,7 @@
                     <a href="" class="dp_block">고객센터</a>
                     <ul>
                         <li><a href="${pageContext.request.contextPath }/notice/noticeList.do" class="dp_block">공지사항</a></li>
+                        <li><a href="" class="dp_block">이벤트</a></li>
                         <li><a href="" class="dp_block">자주하는 질문</a></li>
                         <li><a href="" class="dp_block">상품 제안</a></li>
                     </ul>
@@ -58,6 +59,7 @@
 	                    <ul>
 	                        <li><a href="${pageContext.request.contextPath}/market/myMarket.do?memberId=${memberLoggedIn.memberId}" class="dp_block">내 지점 관리</a></li>
 	                        <li><a href="${pageContext.request.contextPath}/market/marketOrder.do" class="dp_block">지점 주문 내역</a></li>
+	                        <li><a href="${pageContext.request.contextPath}/market/event.do?memberId=${memberLoggedIn.memberId}" class="dp_block">이벤트 관리</a></li>
 	                        <li><a href="" class="dp_block">배송 관리</a></li>
 	                        <li><a href="" class="dp_block">지점 인기 상품</a></li>
 	                        <li><a href="" class="dp_block">지점 매출 현황</a></li>

@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
+import com.kh.urbantable.food.model.vo.FoodWithFoodSection;
 import com.kh.urbantable.marketOwner.model.dao.MarketOwnerDAO;
 import com.kh.urbantable.marketOwner.model.vo.Event;
 import com.kh.urbantable.marketOwner.model.vo.Market;
@@ -99,6 +100,16 @@ public class MarketOwnerServiceImpl implements MarketOwnerService {
 		result.put("eventList", eventList); 
 		
 		return result;
+	}
+
+	@Override
+	public List<String> eventCompanySearch(String srchCompany) {
+		return marketOwnerDAO.eventCompanySearch(srchCompany);
+	}
+
+	@Override
+	public List<FoodWithFoodSection> eventSearchCategory(Map<String, String> param) {
+		return marketOwnerDAO.eventSearchCategory(param);
 	}
 
 	

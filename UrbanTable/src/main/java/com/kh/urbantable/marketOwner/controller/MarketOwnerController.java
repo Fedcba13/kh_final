@@ -1,6 +1,5 @@
 package com.kh.urbantable.marketOwner.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
+import com.kh.urbantable.food.model.vo.FoodWithFoodSection;
 import com.kh.urbantable.marketOwner.model.service.MarketOwnerService;
 import com.kh.urbantable.marketOwner.model.vo.Event;
 import com.kh.urbantable.marketOwner.model.vo.Market;
@@ -221,6 +221,42 @@ public class MarketOwnerController {
 		Map<String, Object> searchList = marketOwnerService.searchMarketList(param);
 		return searchList;
 	}
-	 
+	
+	@RequestMapping("/event.do")
+	public String marketEvent() {
+		return "marketOwner/eventList";
+	}
+	
+	@RequestMapping("/marketEventEnroll.do")
+	public String marketEventEnroll(@RequestParam(value="memberId") String memberId, Model model) {
+		model.addAttribute("memberId", memberId);
+		return "marketOwner/marketEventEnroll";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/eventCompanySearch.do")
+	public List<String> eventCompanySearch(@RequestParam(value="srchCompany") String srchCompany){
+		List<String> foodCompanyList = marketOwnerService.eventCompanySearch(srchCompany);
+		return foodCompanyList;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/eventSearchCategory.do")
+	public List<FoodWithFoodSection> eventSearchCategory(@RequestParam(value="srchCompany") String srchCompany,
+			@RequestParam(value="eventCategory") String eventCategory){
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("srchCompany", srchCompany);
+		param.put("eventCategory", eventCategory);
+		
+		List<FoodWithFoodSection> result = marketOwnerService.eventSearchCategory(param);
+		
+		return result;
+	}
+	
+	@RequestMapping(value="/marketEventEnrollEnd.do", method=RequestMethod.POST)
+	public String marketEventEnrollEnd() {
+		//logger.info("event");
+		return "marketOwner/marketEventEnroll";
+	}
 	
 }
