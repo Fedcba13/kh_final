@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -122,28 +123,7 @@ public class MemberController {
 			}
 
 			Message message = new Message(phone, "01040418769", "[" + auth + "] UrbanTable 인증번호를 입력해주세요.");
-			Call<MessageModel> api = APIInit.getAPI().sendMessage(APIInit.getHeaders(), message);
-	        api.enqueue(new Callback<MessageModel>() {
-	        	@Override
-	            public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
-	                // 성공 시 200이 출력됩니다.
-	                if (response.isSuccessful()) {
-	                	logger.debug("성공");
-	                } else {
-	                	logger.debug("실패");
-	                    try {
-	                        System.out.println(response.errorBody().string());
-	                    } catch (IOException e) {
-	                        e.printStackTrace();
-	                    }
-	                }
-	            }
-
-	            @Override
-	            public void onFailure(Call<MessageModel> call, Throwable throwable) {
-	                throwable.printStackTrace();
-	            }
-	        });
+			Utils.sendMessage(message);
 			
 			// 이전에 보낸것들 삭제
 			logger.debug("코드 DB에 추가");
@@ -159,7 +139,6 @@ public class MemberController {
 			} else {
 				map.put("msg", "다시 시도해주세요.");
 			}
-
 		}
 
 		// 중복된 번호가 있을 경우
@@ -261,6 +240,20 @@ public class MemberController {
 		
 		return map;
 		
+	}
+	
+	@RequestMapping("/memberAddress")
+	public void memberAddress(@RequestParam String memberId,
+							  Model model) {
+		logger.debug(memberId);
+		List<Map<String, String>> list = memberService.selectAddress(memberId);
+		model.addAttribute("addressList",list);
+	}
+	
+	@RequestMapping("/memberFind/{type}")
+	public String memberFind(@PathVariable String type, Model model) {
+		model.addAttribute("type", type);
+		return "member/memberFind";
 	}
 
 }

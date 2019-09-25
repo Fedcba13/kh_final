@@ -114,8 +114,13 @@ $(()=>{
 	
 	//sendMSg => 인증번호 받기
 	$("#sendMsg").click(()=>{
-		time = 180;
 		var phone = $("[name=memberPhone]").val();
+		if(phone.length < 8){
+			alert('핸드폰 번호를 입력하세요,');
+			$("[name=memberPhone]").focus();
+			return;
+		}
+		time = 180;
 		$.ajax({
 			url: "${pageContext.request.contextPath}/member/sendMessage.do",
 			data: {phone: phone},
@@ -262,6 +267,7 @@ $(()=>{
 		rePassword_case1();
 	});
 	
+	//회원가입 버튼
 	$("#register_btn").click(()=>{
 		
 		var $case = $(".txt_guide").children('.txt');
@@ -300,6 +306,10 @@ $(()=>{
 			return;
 		}
 		
+		//disabled 는 값 전송이 안되므로 disabled 속성 제거
+		use($("[name=memberPhone]"));
+		
+		$("#form_register").submit();
 		
 	});
 	
@@ -433,12 +443,9 @@ function nearMarket(){
 <section> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 		<h3 class="sub_tit txt_center">회원가입</h3>
-		<c:if test="${not empty phone }">
-			<span id="time"></span>
-		</c:if>
 		<div class='register_form'>
 			<p class="register_require">*필수입력사항</p>
-			<form action="${pageContext.request.contextPath}/member/register.do" method="post">
+			<form action="${pageContext.request.contextPath}/member/register.do" method="post" id="form_register">
 				<table class="tbl tbl_view member_register">
 					<tr>
 						<th>아이디*</th>
@@ -485,7 +492,7 @@ function nearMarket(){
 						<td><input type="button" value="주소 검색" class="btn" onclick="sample6_execDaumPostcode()"></td>
 					</tr>
 				</table>
-			<input type="button" class="btn" value="회원가입" id="register_btn">
+				<input type="button" class="btn" value="회원가입" id="register_btn">
 			</form>
 		</div>
 	</article>

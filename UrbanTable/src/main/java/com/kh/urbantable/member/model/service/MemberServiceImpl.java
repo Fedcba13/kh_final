@@ -2,6 +2,7 @@ package com.kh.urbantable.member.model.service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,6 +59,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<Member> selectListMember() {
 		return memberDAO.selectListMember();
+	}
+
+	@Override
+	public List<Map<String, String>> selectAddress(String memberId) {
+		return memberDAO.selectAddress(memberId);
 	}
 
 }

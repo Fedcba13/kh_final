@@ -2,6 +2,7 @@ package com.kh.urbantable.member.model.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.kh.urbantable.member.model.vo.Member;
 
@@ -20,5 +21,7 @@ public interface MemberDAO {
 	int insertMember(Member member);
 
 	List<Member> selectListMember();
+
+	List<Map<String, String>> selectAddress(String memberId);
 
 }
