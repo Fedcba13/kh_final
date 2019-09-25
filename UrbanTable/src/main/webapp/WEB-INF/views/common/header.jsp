@@ -111,17 +111,25 @@
 	<div class="login-modal txt_center">
 		<form class="modal-content animate">
 			<div class="container txt_center">
-				<label for="uname"><b>Username</b></label>
-				<input type="text" placeholder="Enter Username" name="memberId" required>
-				<label for="psw"><b>Password</b></label>
-				<input type="password" placeholder="Enter Password" name="password" required>
-				<button type="button" class="btn login">Login</button>
-				<input type="checkbox" checked="checked" name="remember" id="saveID">
-				<label for="saveID">Remember me</label>
+				<label for="uname"><b>아이디</b></label>
+				<input type="text" placeholder="아이디를 입력해주세요" name="memberId" required>
+				<label for="psw"><b>비밀번호</b></label>
+				<input type="password" placeholder="비밀번호를 입력해주세요" name="password" required>
+				<button type="button" class="btn login">로그인</button>
+				<div>
+					<div class="chk_option">
+						<input type="checkbox" checked="checked" name="remember" id="saveID">
+						<label for="saveID">아이디저장</label>
+					</div>
+					<div class="chk_option">
+						<input type="checkbox" checked="checked" name="autoLogin" id="autoLogin">
+						<label for="autoLogin">자동로그인</label>
+					</div>
+				</div>
 			</div>
 			<div class="container txt_center" style="background-color:#f4f4f0">
-				<button type="button" class="btn btn2 cancelbtn">Cancel</button>
-				<span class="psw">Forgot <a href="#">password?</a></span>
+				<button type="button" class="btn btn2 cancelbtn">취소</button>
+				<span class="find"><a href="#">아이디찾기</a> / <a href="#">비밀번호찾기</a></span>
 		    </div>
 		</form>
 	</div>

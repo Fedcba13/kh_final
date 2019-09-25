@@ -522,7 +522,7 @@ input[type=text], input[type=password] {
   float: left;
 }
 
-.login-modal span.psw {
+.login-modal span.find {
   float: right;
   padding-top: 11px;
 }
@@ -535,4 +535,9 @@ input[type=text], input[type=password] {
 .login-modal input[type=checkbox]+label{
 	height:20px;
 	vertical-align:-1px;
+}
+
+.login-modal .chk_option{
+	display: inline-block;
+    width: 45%;
 }

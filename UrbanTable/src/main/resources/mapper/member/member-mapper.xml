@@ -44,5 +44,14 @@
 	<select id="selectListMember" resultType="member">
 		select * from member
 	</select>
+	
+	<select id="selectAddress" resultType="map">
+		 select member_id, member_address, address.member_address2, address_name, 0 as flag from address where member_id = #{memberId}
+        union
+        select member_id, member_address, member_address2, null, 1 from member where member_id = #{memberId}
+        order by flag desc
+	</select>
+	
+	
 
 </mapper>

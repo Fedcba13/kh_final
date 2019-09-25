@@ -1,6 +1,7 @@
 package com.kh.urbantable.common.util;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -10,6 +11,14 @@ import javax.net.ssl.HttpsURLConnection;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.kh.urbantable.message.APIInit;
+import com.kh.urbantable.message.vo.Message;
+import com.kh.urbantable.message.vo.MessageModel;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Utils {
 	
@@ -87,6 +96,32 @@ public class Utils {
     // This function converts radians to decimal degrees
     private static double rad2deg(double rad) {
         return (rad * 180 / Math.PI);
+    }
+    
+    // 메세지 보내기 
+    public static void sendMessage(Message message) {
+    	Call<MessageModel> api = APIInit.getAPI().sendMessage(APIInit.getHeaders(), message);
+        api.enqueue(new Callback<MessageModel>() {
+        	@Override
+            public void onResponse(Call<MessageModel> call, Response<MessageModel> response) {
+                // 성공 시 200이 출력됩니다.
+                if (response.isSuccessful()) {
+                	
+                } else {
+                	
+                    try {
+                        System.out.println(response.errorBody().string());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MessageModel> call, Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        });
     }
 
 
