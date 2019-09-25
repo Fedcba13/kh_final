@@ -1,18 +1,27 @@
 package com.kh.urbantable.marketOwner.model.service;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
 import com.kh.urbantable.marketOwner.model.dao.MarketOwnerDAO;
+import com.kh.urbantable.marketOwner.model.vo.Event;
 import com.kh.urbantable.marketOwner.model.vo.Market;
 import com.kh.urbantable.marketOwner.model.vo.MarketEvent;
 
 @Service
 public class MarketOwnerServiceImpl implements MarketOwnerService {
-
+	
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	
 	@Autowired
 	MarketOwnerDAO marketOwnerDAO;
 
@@ -59,13 +68,37 @@ public class MarketOwnerServiceImpl implements MarketOwnerService {
 	}
 
 	@Override
-	public List<Market> selectMarketList(int flag) {
-		return marketOwnerDAO.selectMarketList(flag);
+	public List<Market> selectMarketList(Map<String, Object> param) {
+		return marketOwnerDAO.selectMarketList(param);
 	}
 
 	@Override
-	public List<MarketEvent> selectMarketWithEvent() {
-		return marketOwnerDAO.selectMarketWithEvent();
+	public List<MarketEvent> selectMarketWithEvent(Map<String, Object> param) {
+		return marketOwnerDAO.selectMarketWithEvent(param);
+	}
+
+	@Override
+	public List<Event> selectEventList(Map<String, Object> param) {
+		return marketOwnerDAO.selectEventList(param);
+	}
+
+	@Override
+	public Map<String, Object> searchMarketList(Map<String, Object> param) {
+		List<Market> marketList = marketOwnerDAO.searchMarketList(param);
+		Set<Event> eventList = new HashSet<Event>();
+		
+		if(!marketList.isEmpty()) {
+			for(Market m : marketList) {
+				param.put("marketNo", m.getMarketNo());
+				eventList.addAll(marketOwnerDAO.selectEventList(param));
+			}
+		}
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("marketList", marketList); 
+		result.put("eventList", eventList); 
+		
+		return result;
 	}
 
 	

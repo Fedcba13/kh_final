@@ -8,7 +8,7 @@ $(document).ready(function(){
     $(".gnb_menu > li").hover(function(){
         $(this).addClass("gnb_2depth_open");
     }, function(){
-        $(this).removeClass("gnb_2depth_open");
+    	$(this).removeClass("gnb_2depth_open");
     });
     
     $("#util_wrap > ul > li.cs_center").hover(function(){
