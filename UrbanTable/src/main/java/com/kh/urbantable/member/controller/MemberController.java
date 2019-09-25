@@ -215,9 +215,12 @@ public class MemberController {
 		
 		HashMap<String, Double> map = Utils.getLocation(address);
 		
-		//현재 오픈된 매장만 가져옵니다.
-		List<Market> list = marketOwnerService.selectMarketList(2);
-		
+		HashMap<String, Object> param = new HashMap<String, Object>();
+        param.put("flag", 2);
+        
+        //현재 오픈된 매장만 가져옵니다.
+        List<Market> list = marketOwnerService.selectMarketList(param);
+        
 		double nearLenth = Double.MAX_VALUE;
 		result.put("msg", "배송 불가 지역");
 		
