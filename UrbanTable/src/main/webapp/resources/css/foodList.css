@@ -1,0 +1,7 @@
+@charset "UTF-8";
+
+#foodList_Cat li {
+	display: inline; /* 세로나열을 가로나열로 변경 */
+	border-left: 1px solid #999; /* 각 메뉴의 왼쪽에 "|" 표시(분류 표시) */
+	padding: 0 10px; /* 각 메뉴 간격 */
+}

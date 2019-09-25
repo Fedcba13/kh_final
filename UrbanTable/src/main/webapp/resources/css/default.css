@@ -393,6 +393,8 @@ input[type=text], input[type=password] {
 
 #gnb_menu_wrap .gnb_menu .gnb_2depth_open .sub_menu {
     opacity: 1;
+    /* 김기현 header 관련 수정부분 z-index 추가 */
+    z-index: 1;
 }
 
 /*footer*/

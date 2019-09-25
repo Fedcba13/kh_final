@@ -1,3 +1,6 @@
+<%@page import="com.kh.urbantable.food.model.vo.FoodSection"%>
+<%@page import="com.kh.urbantable.food.model.service.FoodServiceImpl"%>
+<%@page import="com.kh.urbantable.food.model.vo.FoodDivision"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -91,19 +94,28 @@
                 </div>
                 <a href="${pageContext.request.contextPath}/cart/cartList.do?memberId=jsi124" class="go_cart dp_block"><img src="${pageContext.request.contextPath }/resources/images/cart.png" alt="장바구니"></a>
             </div>
+        	<!-- FOOD 카테고리 가져오기 by 김기현 -->
             <div id="gnb_menu_wrap">
-                <ul class="gnb_menu"> <!--밑에 메뉴는 예시이고 관리자가 메뉴 관리를 통해 관리하게 해주세요.-->
-                    <li>
-                        <a href="" class="dp_block">채소</a>
-                        <ul class="sub_menu">
-                            <li><a href="" class="dp_block">기본채소</a></li>
-                            <li><a href="" class="dp_block">쌈·샐러드·간편채소</a></li>
-                            <li><a href="" class="dp_block">브로콜리·특수채소</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="" class="dp_block">과일·견과·쌀</a></li>
-                    <li><a href="" class="dp_block">수산·해산·건어물</a></li>
-                    <li><a href="" class="dp_block">정육·계란</a></li>
+                <ul class="gnb_menu">
+					<%
+						for (FoodDivision foodDivision : new FoodServiceImpl().foodDivisionList) {
+					%>
+					<li><a href="${pageContext.request.contextPath }/food/selectFoodByDiv.do?foodDivisionNo=<%=foodDivision.getFoodDivisionNo() %>&foodDivisionName=<%=foodDivision.getFoodDivisionName() %>" class="dp_block"><%=foodDivision.getFoodDivisionName()%></a>
+						<ul class="sub_menu">
+							<%
+								for (FoodSection foodSection : new FoodServiceImpl().foodSectionList) {
+										if (foodDivision.getFoodDivisionNo().equals(foodSection.getFoodDivisionNo())) {
+							%>
+							<li><a href="${pageContext.request.contextPath }/food/selectFoodByUpper.do?foodDivisionNo=<%=foodSection.getFoodDivisionNo()%>&foodSectionUpper=<%=foodSection.getFoodSectionUpper() %>" class="dp_block"><%=foodSection.getFoodSectionUpper() %></a></li>
+
+							<%
+								}
+									}
+							%>
+						</ul></li>
+					<%
+						}
+					%>
                 </ul>
             </div>
         </div>
