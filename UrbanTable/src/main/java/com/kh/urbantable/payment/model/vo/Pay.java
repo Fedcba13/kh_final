@@ -7,7 +7,7 @@ public class Pay {
 	private String payNo;
 	private String memberId;
 	private Date payDate;
-	private int price;
+	private int payPrice;
 	private int payFlag;
 	private int payEnabled;
 	private String deliverType;
@@ -17,12 +17,12 @@ public class Pay {
 		
 	}
 
-	public Pay(String payNo, String memberId, Date payDate, int price, int payFlag, int payEnabled, String deliverType,
+	public Pay(String payNo, String memberId, Date payDate, int payPrice, int payFlag, int payEnabled, String deliverType,
 			String marketNo) {
 		this.payNo = payNo;
 		this.memberId = memberId;
 		this.payDate = payDate;
-		this.price = price;
+		this.payPrice = payPrice;
 		this.payFlag = payFlag;
 		this.payEnabled = payEnabled;
 		this.deliverType = deliverType;
@@ -53,12 +53,12 @@ public class Pay {
 		this.payDate = payDate;
 	}
 
-	public int getPrice() {
-		return price;
+	public int getPayPrice() {
+		return payPrice;
 	}
 
-	public void setPrice(int price) {
-		this.price = price;
+	public void setPayPrice(int payPrice) {
+		this.payPrice = payPrice;
 	}
 
 	public int getPayFlag() {
@@ -95,7 +95,7 @@ public class Pay {
 
 	@Override
 	public String toString() {
-		return "Pay [payNo=" + payNo + ", memberId=" + memberId + ", payDate=" + payDate + ", price=" + price
+		return "Pay [payNo=" + payNo + ", memberId=" + memberId + ", payDate=" + payDate + ", price=" + payPrice
 				+ ", payFlag=" + payFlag + ", payEnabled=" + payEnabled + ", deliverType=" + deliverType + ", marketNo="
 				+ marketNo + "]";
 	}

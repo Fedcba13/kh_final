@@ -11,6 +11,10 @@
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=818ea16fdaa1dea0776c4671d1142fc0&libraries=services,clusterer,drawing"></script>
 <meta charset="UTF-8">
 <title>매장찾기</title>
+<style>
+.customoverlay {position:relative;bottom:85px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:center;background-color:white;}
+.customoverlay .title {display:block;text-align:center;background:#fff;margin-right:35px;padding:10px 15px;font-size:14px;font-weight:bold;}
+</style>
 </head>
 <body>
 	<div id="map" style="width:800px;height:600px;"></div>
@@ -69,7 +73,7 @@
 	        	var clickedAddress
 	        	var callback = function(result, status){
 	        		if (status === kakao.maps.services.Status.OK) {
-	        	        clickedAddress = result[0].address.address_name;
+	        	        clickedAddress = result[0].road_address.address_name +  " (" + marketName + ")";
 	        	    }
 	        	}
 	        	geocoder.coord2Address(marker.getPosition().getLng(), marker.getPosition().getLat(), callback);			        	
@@ -109,7 +113,11 @@
 		};
 		(async ()=>{			
 			try{
-				var result = await userAddressSearch("경기도 안산시 단원구 원선1로 61");
+				console.log(opener.location.pathname);
+				var curLocation;
+				<c:if test="${empty userAddress}">curLocation = "경기도 안산시 단원구 원선1로 61"</c:if>
+				<c:if test="${!empty userAddress}">curLocation = "${userAddress}"</c:if>
+				var result = await userAddressSearch(curLocation);
 				createUserOverlay(result);				
 			} catch(e){
 				console.log(e);
@@ -153,20 +161,22 @@
 		}
 		
 		function distanceInfo(coords, distance, marker, marketName){
-			var contents = '<div class ="label"><span class="left"></span><span class="center">' + marketName + "(";
+			var contents = '<div class ="customoverlay"><span class="center">' + marketName + "(";
 			if(distance <= 1000){
 				contents += distance + "m";
 			} else {
 				contents += (Math.round(distance/100))/10 + "Km";				
 			}			
-			contents += ')</span><span class="right"></span></div>';
-			
-			var distanceInfo = new kakao.maps.InfoWindow({
+			contents += ')</span></span></div>';
+				
+			var distanceInfo = new kakao.maps.CustomOverlay({
+				map: map,
 			    position: coords,
-			    content: contents 
+			    content: contents,
+			    yAnchor: -0.5
 			});
 			// 커스텀 오버레이를 지도에 표시합니다
-			distanceInfo.open(map, marker);
+			//distanceInfo.open(map, marker);
 		}
 		
 		function deliverySelect(distance, clickedAddress){
@@ -175,21 +185,40 @@
 				$("option[value='d']").prop("disabled", true);
 			}
 			$("#submitMarket").on("click", ()=>{
-				opener.$("#market").val(clickedAddress);
-				var deliveryWay = $("#deliveryWay option:selected").val();
-				console.log(deliveryWay);
-				console.log(opener.$("#dawn").val());
-				if(deliveryWay == "d"){
-					opener.$("#dawn").prop("checked", true);
-					opener.deliveryCost(deliveryWay);
-				} else if(deliveryWay == "n") {
-					opener.$("#nomal").prop("checked", true);
-					opener.deliveryCost(deliveryWay);
-				} else {
-					opener.$("#regular").prop("checked", true);
-					opener.deliveryCost(deliveryWay);
+				if(opener.location.pathname == "/urbantable/cart/cartList.do"){
+					opener.$("#market").val(clickedAddress);
+					var deliveryWay = $("#deliveryWay option:selected").val();
+					//console.log(deliveryWay);
+					//console.log(opener.$("#dawn").val());
+					if(deliveryWay == "d"){
+						opener.$("#dawn").prop("checked", true);
+						opener.deliveryCost(deliveryWay);
+					} else if(deliveryWay == "n") {
+						opener.$("#nomal").prop("checked", true);
+						opener.deliveryCost(deliveryWay);
+					} else {
+						opener.$("#regular").prop("checked", true);
+						opener.deliveryCost(deliveryWay);
+					}					
+					window.close();
+				} else if(opener.location.pathname == "/urbantable/pay/order.do"){
+					opener.$("#marketAddressField").val(clickedAddress);
+					var deliveryWay = $("#deliveryWay option:selected").val();
+					if(deliveryWay == "d"){
+						opener.$("#deliveryType").val("샛별배송 (5000원+)");
+						opener.$("#deliverType").val("d")
+						opener.$("#totalPaymentCost").val(parseInt(opener.$("#totalPrice").val()) + 5000 + " 원")
+					} else if(deliveryWay == "n") {
+						opener.$("#deliveryType").val("일반배송 (2500원+)");
+						opener.$("#deliverType").val("n")
+						opener.$("#totalPaymentCost").val(parseInt(opener.$("#totalPrice").val()) + 2500 + " 원")
+					} else {
+						opener.$("#deliveryType").val("정기배송 (30000원+)");
+						opener.$("#deliverType").val("r")
+						opener.$("#totalPaymentCost").val(parseInt(opener.$("#totalPrice").val()) + 30000 + " 원")
+					}					
+					window.close();
 				}
-				window.close();
 			});
 		}		
 		

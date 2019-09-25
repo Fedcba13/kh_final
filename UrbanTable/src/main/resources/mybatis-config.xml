@@ -26,6 +26,8 @@
 			alias="recipeSequence" />
 		<typeAlias type="com.kh.urbantable.recipe.model.vo.Material"
 			alias="material" />
+		<typeAlias type="com.kh.urbantable.payment.model.vo.PayDetail"
+			alias="paydetail" />
 			
 	</typeAliases>
 </configuration>
