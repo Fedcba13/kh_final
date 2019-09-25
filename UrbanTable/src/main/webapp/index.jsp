@@ -7,19 +7,37 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/main.css">
 <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/main.js"></script>
+<script>
+/* $(()=>{
+	
+	String html = "";
+	$.ajax({
+		url: "${pageContext.request.contextPath}/banner/mainBannerList.do",
+		dataType: "json",
+		type: "POST",
+		success: (data)=> {
+			console.log(data);
+			for(var i in data){
+				
+			html += "<div class='main_banner_con'style='background-image:\"${pageContext.request.contextPath}/resources/images/banner/"+data[i].bannerFileRenamed+"\";'>";
+			html += "<a href='${pageContext.request.contextPath}/"+data[i].bannerURL + "' class='dp_block'>";
+			html += "</a></div>";
+			
+			console.log(html);
+			}
+			$(".main_banner").html(html); 
+		},
+		error: (xhr, txtStatus, err)=> {
+			console.log("ajax 처리실패!", xhr, txtStatus, err);
+		}
+	});
+}); */
+</script>
 <section id="banner">
     <article class="inner">
         <div class="main_banner clearfix">
-            <div class="main_banner_con"> <!--배너이미지는 배경으로 넣는걸 추천합니다.-->
-                <a href="" class="dp_block">
-                    	배너111
-                </a>
-            </div>
-            <div class="main_banner_con">
-                <a href="" class="dp_block">
-                   	 배너222 
-                </a>
-            </div>
+        	<div class="main_banner_con"><a href="">banner1</a></div>
+        	<div class="main_banner_con"><a href="">banner2</a></div>
         </div>
     </article>
 </section>

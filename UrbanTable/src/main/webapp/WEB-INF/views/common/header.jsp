@@ -46,7 +46,7 @@
                         <li><a href="${pageContext.request.contextPath}/market/marketList.do" class="dp_block">매장 리스트</a></li>
                         <li><a href="" class="dp_block">발주 리스트</a></li>
                         <li><a href="" class="dp_block">식자재 등록</a></li>
-                        <li><a href="" class="dp_block">배너 등록</a></li>
+                        <li><a href="${pageContext.request.contextPath}/banner/bannerList.do" class="dp_block">배너 등록</a></li>
                     </ul>
                 </li>
                 <c:if test="${memberLoggedIn.memberCheck eq 3 }">
