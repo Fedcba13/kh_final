@@ -84,8 +84,13 @@ public class MarketOwnerDAOImpl implements MarketOwnerDAO {
 	}
 
 	@Override
-	public List<FoodWithFoodSection> eventSearchCategory(Map<String, String> param) {
+	public List<Map<String, String>> eventSearchCategory(Map<String, String> param) {
 		return sqlSession.selectList("marketOwner.eventSearchCategory", param);
+	}
+
+	@Override
+	public String selectMarketNoByMemberId(String memberId) {
+		return sqlSession.selectOne("marketOwner.selectMarketNoByMemberId", memberId);
 	}
 
 }

@@ -38,6 +38,8 @@ public interface MarketOwnerDAO {
 
 	List<String> eventCompanySearch(String srchCompany);
 
-	List<FoodWithFoodSection> eventSearchCategory(Map<String, String> param);
+	List<Map<String, String>> eventSearchCategory(Map<String, String> param);
+
+	String selectMarketNoByMemberId(String memberId);
 
 }

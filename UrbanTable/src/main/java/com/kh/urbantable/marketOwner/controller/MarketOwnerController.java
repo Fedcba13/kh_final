@@ -1,5 +1,6 @@
 package com.kh.urbantable.marketOwner.controller;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +21,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
-import com.kh.urbantable.food.model.vo.FoodWithFoodSection;
 import com.kh.urbantable.marketOwner.model.service.MarketOwnerService;
 import com.kh.urbantable.marketOwner.model.vo.Event;
 import com.kh.urbantable.marketOwner.model.vo.Market;
@@ -127,6 +128,7 @@ public class MarketOwnerController {
 	@RequestMapping("/marketOrder.do")
 	public String marketOrder() {
 		logger.info("지점 주문내역 페이지 요청");
+		
 		return "marketOwner/marketOrder";
 	}
 	
@@ -229,7 +231,8 @@ public class MarketOwnerController {
 	
 	@RequestMapping("/marketEventEnroll.do")
 	public String marketEventEnroll(@RequestParam(value="memberId") String memberId, Model model) {
-		model.addAttribute("memberId", memberId);
+		String marketNo = marketOwnerService.selectMarketNoByMemberId(memberId);
+		model.addAttribute("eventMarketNo", marketNo);
 		return "marketOwner/marketEventEnroll";
 	}
 	
@@ -242,20 +245,20 @@ public class MarketOwnerController {
 	
 	@ResponseBody
 	@RequestMapping("/eventSearchCategory.do")
-	public List<FoodWithFoodSection> eventSearchCategory(@RequestParam(value="srchCompany") String srchCompany,
+	public List<Map<String, String>> eventSearchCategory(@RequestParam(value="srchCompany") String srchCompany,
 			@RequestParam(value="eventCategory") String eventCategory){
 		Map<String, String> param = new HashMap<String, String>();
 		param.put("srchCompany", srchCompany);
 		param.put("eventCategory", eventCategory);
 		
-		List<FoodWithFoodSection> result = marketOwnerService.eventSearchCategory(param);
+		List<Map<String, String>> result = marketOwnerService.eventSearchCategory(param);
 		
 		return result;
 	}
 	
-	@RequestMapping(value="/marketEventEnrollEnd.do", method=RequestMethod.POST)
-	public String marketEventEnrollEnd() {
-		//logger.info("event");
+	@PostMapping("/marketEventEnrollEnd.do")
+	public String marketEventEnrollEnd(Event event) {
+		logger.info("event={}",event);
 		return "marketOwner/marketEventEnroll";
 	}
 	

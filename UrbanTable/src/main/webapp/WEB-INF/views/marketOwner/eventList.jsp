@@ -9,7 +9,7 @@
 <section>
 	<article class="subPage inner">
 	    <h3 class="sub_tit">지점 이벤트 관리</h3>
-	    <a href="${pageContext.request.contextPath }/market/marketEventEnroll.do" class="btn txt_center dp_block">
+	    <a href="${pageContext.request.contextPath }/market/marketEventEnroll.do?memberId=${memberLoggedIn.memberId}" class="btn txt_center dp_block">
 	    	이벤트 등록
 	    </a>
     </article>

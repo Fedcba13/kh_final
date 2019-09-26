@@ -108,8 +108,13 @@ public class MarketOwnerServiceImpl implements MarketOwnerService {
 	}
 
 	@Override
-	public List<FoodWithFoodSection> eventSearchCategory(Map<String, String> param) {
+	public List<Map<String, String>> eventSearchCategory(Map<String, String> param) {
 		return marketOwnerDAO.eventSearchCategory(param);
+	}
+
+	@Override
+	public String selectMarketNoByMemberId(String memberId) {
+		return marketOwnerDAO.selectMarketNoByMemberId(memberId);
 	}
 
 	
