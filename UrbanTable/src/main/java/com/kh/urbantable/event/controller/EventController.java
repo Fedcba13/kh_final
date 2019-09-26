@@ -1,5 +1,8 @@
 package com.kh.urbantable.event.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -29,14 +32,22 @@ public class EventController {
 	}
 	
 	@RequestMapping("/insertCoupon.do")
-	public String eventList(Member memberLoggedIn, Model model, HttpSession session, Coupon coupon) {
+	public String insertCoupun1(Member memberLoggedIn, Model model, HttpSession session, Coupon coupon) {
 		
 		memberLoggedIn = (Member) session.getAttribute("memberLoggedIn");
 		
-		logger.info("memberLoggedIn={}", memberLoggedIn);
-		logger.info("coupon={}", coupon.getCouponDiscount());
+		Map<String, String> event = new HashMap();
+		event.put("memberId", memberLoggedIn.getMemberId());
+		event.put("couponDiscount", coupon.getCouponDiscount());
 		
-		return "/event/event_main";
+		int result = eventService.insertCoupon1(event);
+		
+		String msg = "";
+		String loc = "";
+		model.addAttribute("msg", result>0?"쿠폰발급이 완료되었습니다":"관리자에게 문의하세요");
+		model.addAttribute("loc", "/event/event_main");
+		
+		return "/common/msg";
 	}
 	
 }

@@ -48,7 +48,7 @@
 				data:{param:param},
 				success: (data)=>{
 						console.log(data);
-  					var html = "<table class='tbl'>";
+  					var html = "<table class='tbl txt_center'>";
 	                html+="<tr><th>아이디</th><th>점주명</th><th>지점명</th><th style='width: 150px;'>등록번호</th><th style='width: 200px;'>매장주소</th><th>연락처</th><th> </th></tr>"; 
 	                for(var i in data){
 	                	
@@ -93,7 +93,7 @@ input.button{
 	width:70px;
 }
 </style>
-<section class="sec_bg">
+<sections>
 	<article class="subPage inner">
 
 		<h3 class="sub_tit">창업 신청</h3>
@@ -113,7 +113,7 @@ input.button{
 			<tr>
 				<th>신청 아이디</th>
 				<th>점주명</th>
-				<th style="width: 30px;">지점명</th>
+				<th >지점명</th>
 				<th>매장 등록번호</th>
 				<th style="width: 200px;">매장 주소</th>
 				<th>연락처</th>
