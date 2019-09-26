@@ -1,5 +1,7 @@
 package com.kh.urbantable.payment.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -74,15 +76,45 @@ public class PayController {
 	
 	@ResponseBody
 	@RequestMapping(value="/payDetail.do", method=RequestMethod.POST)
-	public List<Pay> insertPayDetail(PayDetail payDetail){
+	public List<Pay> insertPayDetail(@RequestParam(value="marketNo") String marketNo, PayDetail payDetail){
 		logger.debug("payDetail={}", payDetail);
+		logger.debug("marketNo={}", marketNo);
 		List<Pay> list = null;
 		int result = payService.insertPayDetail(payDetail);
 		if(result > 0) {
 			list = payService.getPayDetail();
+			Map<String, Object> map = new HashMap<>();
+			map.put("marketNo", marketNo);
+			map.put("foodNo", payDetail.getFoodNo());
+			map.put("amount", payDetail.getPayDetailAmount());
+			payService.updateStock(map);
 		}
 		
 		return list;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/delDetail.do", method=RequestMethod.POST)
+	public int deletePayDetail(@RequestParam(value="marketNo") String marketNo, PayDetail payDetail) {
+		int result = payService.deletePayDetail(payDetail);
+		if(result > 0) {
+			Map<String, Object> map = new HashMap<>();
+			map.put("marketNo", marketNo);
+			map.put("foodNo", payDetail.getFoodNo());
+			map.put("amount", payDetail.getPayDetailAmount());
+			payService.rollbackStock(map);
+		}
+		
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/delPay.do", method=RequestMethod.POST)
+	public int deletePayInfo(Pay pay) {
+		logger.debug("deleteDetail={}", pay);
+		int result = payService.deletePayInfo(pay);
+		
+		return result;
 	}
 
 }

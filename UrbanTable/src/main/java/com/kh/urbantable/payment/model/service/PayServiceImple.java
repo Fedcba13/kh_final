@@ -45,4 +45,24 @@ public class PayServiceImple implements PayService {
 		return payDAO.getPayDetail();
 	}
 
+	@Override
+	public void updateStock(Map<String, Object> map) {
+		payDAO.updateStock(map);		
+	}
+
+	@Override
+	public int deletePayDetail(PayDetail payDetail) {
+		return payDAO.deletePayDetail(payDetail);
+	}
+
+	@Override
+	public void rollbackStock(Map<String, Object> map) {
+		payDAO.rollbackStock(map);	
+	}
+
+	@Override
+	public int deletePayInfo(Pay pay) {
+		return payDAO.deletePayInfo(pay);
+	}
+
 }

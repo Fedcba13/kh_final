@@ -13,6 +13,10 @@ public interface CartDAO {
 	Map<String, String> getFoodInfo(String foodNo);
 
 	List<Market> getMarketList();
+
+	int getProductStock(Map<String, String> map);
+
+	int getExist(Map<String, String> map);
 	
 
 }

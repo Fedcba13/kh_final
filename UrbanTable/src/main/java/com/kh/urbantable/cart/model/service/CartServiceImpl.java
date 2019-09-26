@@ -33,6 +33,16 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public List<Market> getMarketList() {
 		return cartDAO.getMarketList();
+	}
+
+	@Override
+	public int getProductStock(Map<String, String> map) {
+		return cartDAO.getProductStock(map);
+	}
+
+	@Override
+	public int getExist(Map<String, String> map) {
+		return cartDAO.getExist(map);
 	} 
 	
 
