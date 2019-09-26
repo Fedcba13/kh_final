@@ -126,14 +126,14 @@ $(()=>{
 					} else {
 						var html = "";
 						for(var i in data){
-							html += "<li rel='"+data[i].NO+"'><span>"+data[i].NAME+"</span></li>";
+							html += "<li rel='"+data[i].NO+"'>"+data[i].NAME+"</li>";
 						}
 						$("#autoComplete2").html(html).fadeIn(200);
 					}
 					
 					$("#autoComplete2 li").click((e)=>{
 						$("#eventCategory1").val($(e.target).text());
-						$("#eventCategory").val($("#autoComplete2 li").attr("rel"));
+						$("#eventCategory").val($(e.target).attr("rel"));
 						$("#autoComplete2").hide().children().remove();
 					});
 				},
@@ -158,12 +158,12 @@ $(()=>{
 	            </tr>
 	            <tr>
 	                <th>이벤트 내용<span class="red">*</span></th>
-	                <td><textarea class="form-control" id="eventContent" name="eventContent" rows="80"></textarea></td>
+	                <td><textarea class="form-control" id="eventContent" name="eventContent"></textarea></td>
 	            </tr>
 	            <tr>
 	                <th>이벤트 대상 업체</th>
 	                <td style="position:relative;">
-	                	<input type="text" name="eventCompany" id="eventCompany" autocomplete="off"  />
+	                	<input type="text" name="eventCompany" id="eventCompany" autocomplete="off" style="width:200px;"  />
 	                	<ul id="autoComplete" class="autoComplete"></ul>
 	                </td>
 	            </tr>

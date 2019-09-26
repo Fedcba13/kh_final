@@ -352,3 +352,10 @@ form[name=orderSearchFrm2] > div > div {
     overflow:hidden;
     overflow-y:scroll;
 }
+
+#eventContent {
+	width:100%;
+	height:300px;
+	overflow:hidden;
+    overflow-y:scroll;
+}

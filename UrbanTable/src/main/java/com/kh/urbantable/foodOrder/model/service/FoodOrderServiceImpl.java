@@ -14,5 +14,10 @@ public class FoodOrderServiceImpl implements FoodOrderService {
 	
 	@Autowired
 	FoodOrderDAO foodOrderDAO;
+
+	@Override
+	public String selectMarketNoByMemberId(String memberId) {
+		return foodOrderDAO.selectMarketNoByMemberId(memberId);
+	}
 	
 }

@@ -9,5 +9,10 @@ public class FoodOrderDAOImpl implements FoodOrderDAO {
 
 	@Autowired
 	SqlSessionTemplate sqlSession;
+
+	@Override
+	public String selectMarketNoByMemberId(String memberId) {
+		return sqlSession.selectOne("marketOwner.selectMarketNoByMemberId", memberId);
+	}
 	
 }
