@@ -23,22 +23,22 @@ public class MemberDAOImpl implements MemberDAO {
 	}
 
 	@Override
-	public Member phoneDuplicate(String phone) {
-		return sqlSession.selectOne("member.phoneDuplicate", phone);
+	public Member phoneDuplicate(HashMap<String, Object> param) {
+		return sqlSession.selectOne("member.phoneDuplicate", param);
 	}
 
 	@Override
-	public int insertPhoneAuth(HashMap<String, String> param) {
+	public int insertPhoneAuth(HashMap<String, Object> param) {
 		return sqlSession.insert("member.insertPhoneAuth", param);
 	}
 
 	@Override
-	public void deletePhoneAuth(HashMap<String, String> param) {
+	public void deletePhoneAuth(HashMap<String, Object> param) {
 		sqlSession.delete("member.deletePhoneAuth", param);
 	}
 
 	@Override
-	public int checkMessage(HashMap<String, String> param) {
+	public int checkMessage(HashMap<String, Object> param) {
 		return sqlSession.selectOne("member.checkMessage", param);
 	}
 

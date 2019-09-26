@@ -96,6 +96,7 @@ span.auth{
 
 var time = 180;
 var timer = null;
+var flag = 1;
 
 $(()=>{
 	
@@ -121,18 +122,23 @@ $(()=>{
 			return;
 		}
 		time = 180;
+		var param = {
+				phone : phone,
+				flag : flag
+		}
 		$.ajax({
 			url: "${pageContext.request.contextPath}/member/sendMessage.do",
-			data: {phone: phone},
+			data: param,
 			success: (data)=>{
 				alert(data.msg);
 				if(data.msg == '인증번호 발송 성공!'){
-					$("[name=memberPhone]").css
+					console.log(1);
 					timer = setInterval(PrintTime, 1000);
 					use($("[name=auth_code]"));
 					use($("#checkMsg"));
 					disabled($("[name=memberPhone]"));
 					disabled($("#sendMsg"));
+					console.log(2);
 				}
 			},
 			error: (xhr, txtStatus, err)=>{
@@ -145,7 +151,8 @@ $(()=>{
 	$("#checkMsg").click(()=>{
 		var param = {
 			phone : $("[name=memberPhone]").val(),
-			authCode: $("[name=auth_code]").val()
+			authCode: $("[name=auth_code]").val(),
+			flag : flag
 		}
 		$.ajax({
 			url: "${pageContext.request.contextPath}/member/checkMessage.do",
@@ -307,7 +314,6 @@ $(()=>{
 		}
 		
 		//disabled 는 값 전송이 안되므로 disabled 속성 제거
-		use($("[name=memberPhone]"));
 		
 		$("#form_register").submit();
 		
@@ -350,16 +356,14 @@ function PrintTime() {
 }
 
 function disabled($input){
-	$input.attr('disabled', true);
+	$input.attr('readonly', true);
 	$input.addClass('disabled');
 	
 }
 
 function use($input){
-	$input.attr('disabled', false);
+	$input.attr('readonly', false);
 	$input.removeClass('disabled');
-	
-	console.log($input.attr('type'));
 }
 
 //카카오 주소찾기 api
@@ -450,7 +454,7 @@ function nearMarket(){
 					<tr>
 						<th>아이디*</th>
 						<td>
-							<input type="text" name="memberId" placeholder="예: UrbanTable"><input type="button" id="checkId" class="btn" value="중복확인">
+							<input type="text" name="memberId" placeholder="예: UrbanTable"><input type="button" id="checkId" class="btn btn3" value="중복확인">
 							<p class="txt_guide">
 								<span class="txt txt_case1">6자 이상의 영문 혹은 영문과 숫자를 조합해주세요.</span>
 								<span class="txt txt_case2">아이디 중복확인해주세요.</span>
@@ -482,17 +486,19 @@ function nearMarket(){
 					</tr>
 					<tr>
 						<th rowspan="2">휴대폰*</th>
-						<td><input type="text" name="memberPhone" maxlength="11" placeholder="'-'없이 숫자만 입력해주세요."><input type="button" class="btn" id="sendMsg" value="인증번호받기"></td>
+						<td><input type="text" name="memberPhone" maxlength="11" placeholder="'-'없이 숫자만 입력해주세요."><input type="button" class="btn btn3" id="sendMsg" value="인증번호받기"></td>
 					</tr>
 					<tr>
-						<td><div class="auth"><input type="text" name="auth_code" maxlength="6"><span class="auth" id="time"></span></div><input type="button" class="btn" id="checkMsg" value="인증번호확인"></td>
+						<td><div class="auth"><input type="text" name="auth_code" maxlength="6"><span class="auth" id="time"></span></div><input type="button" class="btn btn3" id="checkMsg" value="인증번호확인"></td>
 					</tr>
 					<tr class="tbl_addr">
 						<th>배송주소*</th>
-						<td><input type="button" value="주소 검색" class="btn" onclick="sample6_execDaumPostcode()"></td>
+						<td><input type="button" value="주소 검색" class="btn btn3" onclick="sample6_execDaumPostcode()"></td>
 					</tr>
 				</table>
+				<p style="text-align: center; margin-top: 30px;">
 				<input type="button" class="btn" value="회원가입" id="register_btn">
+				</p>
 			</form>
 		</div>
 	</article>

@@ -145,7 +145,7 @@
 			</div>
 			<div class="container txt_center" style="background-color:#f4f4f0">
 				<button type="button" class="btn btn2 cancelbtn">취소</button>
-				<span class="find"><a href="#">아이디찾기</a> / <a href="#">비밀번호찾기</a></span>
+				<span class="find"><a href="${pageContext.request.contextPath }/member/memberFind/id">아이디찾기</a> / <a href="${pageContext.request.contextPath }/member/memberFind/pw">비밀번호찾기</a></span>
 		    </div>
 		</form>
 	</div>

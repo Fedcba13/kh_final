@@ -100,18 +100,34 @@ public class MemberController {
 
 	@RequestMapping("/sendMessage.do")
 	@ResponseBody
-	public synchronized HashMap<String, String> sendMessage(@RequestParam("phone") String phone, HttpServletRequest request) {
+	public synchronized HashMap<String, String> sendMessage(
+			@RequestParam("phone") String phone, 
+			@RequestParam(value="flag", defaultValue="1") int flag, 
+			@RequestParam(value="name", defaultValue="") String name,
+			@RequestParam(value="id", defaultValue="") String id,
+			HttpServletRequest request) {
 
 		// 리턴할 map
 		HashMap<String, String> map = new HashMap<String, String>();
 
 		// 세션 객체 생성
 		HttpSession session = request.getSession(true);
+		
+		HashMap<String, Object> param = new HashMap<String, Object>();
+		param.put("phone", phone);
+		param.put("name", name);
+		param.put("id", id);
 
-		logger.debug("phone={}", phone);
-
-		boolean isUsable = memberService.phoneDuplicate(phone) == null;
-
+		boolean isUsable = false;
+		
+		if(flag == 1) {
+			logger.debug("회원가입");
+			isUsable = memberService.phoneDuplicate(param) == null;
+		}else if(flag == 2 || flag == 3) {
+			logger.debug("ID찾기 / PW찾기");
+			isUsable = memberService.phoneDuplicate(param) != null;
+		}
+		
 		if (isUsable) {
 
 			int rnd = (int) (Math.random() * 1000000);
@@ -120,17 +136,22 @@ public class MemberController {
 
 			while (auth.length() != 6) {
 				auth = "0" + auth;
-			}
+			}			
 
 			Message message = new Message(phone, "01040418769", "[" + auth + "] UrbanTable 인증번호를 입력해주세요.");
 			Utils.sendMessage(message);
 			
 			// 이전에 보낸것들 삭제
 			logger.debug("코드 DB에 추가");
-			HashMap<String, String> param = new HashMap<String, String>();
-			param.put("phone", phone);
-			param.put("authCode", auth);
-			int result = memberService.insertPhoneAuth(param);
+			
+			HashMap<String, Object> insertParam = new HashMap<String, Object>();
+			insertParam.put("phone", phone);
+			insertParam.put("authCode", auth);
+			insertParam.put("flag", flag);
+			
+			logger.debug("{}", insertParam);
+			
+			int result = memberService.insertPhoneAuth(insertParam);
 	        
 			if (result > 0) {
 				map.put("msg", "인증번호 발송 성공!");
@@ -140,10 +161,13 @@ public class MemberController {
 				map.put("msg", "다시 시도해주세요.");
 			}
 		}
-
 		// 중복된 번호가 있을 경우
 		else {
-			map.put("msg", "이미 가입된 번호가 있습니다.");
+			if(flag == 2 || flag == 3) {
+				map.put("msg", "가입된 번호가 없습니다.");
+			}else {
+				map.put("msg", "이미 가입된 번호가 있습니다.");
+			}
 		}
 
 		return map;
@@ -152,12 +176,14 @@ public class MemberController {
 	@RequestMapping("/checkMessage.do")
 	@ResponseBody
 	public HashMap<String, String> checkMessage(@RequestParam("phone") String phone,
-												@RequestParam("authCode") String authCode) {
+												@RequestParam("authCode") String authCode,
+												@RequestParam("flag") int flag) {
 		HashMap<String, String> result = new HashMap<String, String>();
 
-		HashMap<String, String> param = new HashMap<String, String>();
+		HashMap<String, Object> param = new HashMap<String, Object>();
 		param.put("phone", phone);
 		param.put("authCode", authCode);
+		param.put("flag", flag);
 
 		result.put("msg", memberService.checkMessage(param) > 0 ? "인증 성공" : "인증 실패");
 

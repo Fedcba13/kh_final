@@ -10,11 +10,11 @@ public interface MemberService {
 
 	Member selectOneMember(String memberId);
 
-	Member phoneDuplicate(String phone);
+	Member phoneDuplicate(HashMap<String, Object> param);
 
-	int insertPhoneAuth(HashMap<String, String> param);
+	int insertPhoneAuth(HashMap<String, Object> param);
 
-	int checkMessage(HashMap<String, String> param);
+	int checkMessage(HashMap<String, Object> param);
 
 	int insertMember(Member member);
 

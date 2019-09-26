@@ -17,11 +17,17 @@
 			from member
 		where
 			member_phone = #{phone}
+		<if test = 'name != null and name != ""'>
+			and member_name = #{name}
+		</if>
+		<if test = 'id != null and id != ""'>
+			and member_id = #{id}
+		</if>
 	</select>
 	
 	<insert id="insertPhoneAuth">
 		insert into authPhone
-		values(#{phone}, #{authCode})
+		values(#{phone}, #{authCode}, #{flag})
 	</insert>
 	
 	<delete id="deletePhoneAuth">
@@ -34,6 +40,7 @@
 		from authPhone
 		where phone = #{phone}
 		and authcode = #{authCode}
+		and flag = #{flag}
 	</select>
 	
 	<insert id="insertMember">
