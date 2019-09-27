@@ -29,8 +29,8 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 
 	@Override
-	public Material selectOneMaterial(String recipeNo) {
-		return recipeDAO.selectOneMaterial(recipeNo);
+	public List<Material> selectMaterial(String recipeNo) {
+		return recipeDAO.selectMaterial(recipeNo);
 	}
 
 	@Override

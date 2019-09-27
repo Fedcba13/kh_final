@@ -29,8 +29,8 @@ public class RecipeDAOImpl implements RecipeDAO {
 	}
 
 	@Override
-	public Material selectOneMaterial(String recipeNo) {
-		return sqlSession.selectOne("recipe.selectOneMaterial", recipeNo);
+	public List<Material> selectMaterial(String recipeNo) {
+		return sqlSession.selectList("recipe.selectMaterial", recipeNo);
 	}
 
 	@Override

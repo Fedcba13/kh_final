@@ -15,7 +15,7 @@ public interface RecipeService {
 
 	RecipeVO selectOneRecipe(String recipeNo);
 
-	Material selectOneMaterial(String recipeNo);
+	List<Material> selectMaterial(String recipeNo);
 
 	int insertRecipe(RecipeVO recipeVo);
 

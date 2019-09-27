@@ -54,7 +54,8 @@ public class RecipeController {
 	public String recipeView(@RequestParam String recipeNo, Model model) {
 		
 		model.addAttribute("recipe", recipeService.selectOneRecipe(recipeNo));
-		model.addAttribute("material", recipeService.selectOneMaterial(recipeNo));
+		List<Material> materialList = recipeService.selectMaterial(recipeNo);
+		model.addAttribute("material", materialList);
 		return "recipe/recipeView";
 	}
 	

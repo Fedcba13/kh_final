@@ -40,7 +40,7 @@
 		</collection>
 	</resultMap>
 	
-	<select id="selectOneMaterial" resultMap="materialMap">
+	<select id="selectMaterial" resultMap="materialMap">
 		select * from recipe_ingredient
 		where recipe_no = #{recipeNo}
 	</select>
