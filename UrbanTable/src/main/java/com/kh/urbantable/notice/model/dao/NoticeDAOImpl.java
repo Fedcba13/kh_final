@@ -1,6 +1,7 @@
 package com.kh.urbantable.notice.model.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,12 @@ public class NoticeDAOImpl implements NoticeDAO{
 	public int deleteNotice(String noticeNo) {
 		
 		return sqlSession.update("notice.deleteNotice", noticeNo);
+	}
+
+	@Override
+	public Map<String, String> selectPreNext(String noticeNo) {
+
+		return sqlSession.selectOne("notice.selectPreNext", noticeNo);
 	}
 
 	

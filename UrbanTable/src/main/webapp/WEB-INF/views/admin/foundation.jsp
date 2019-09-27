@@ -152,9 +152,8 @@ input.button{
 			</c:forEach>
 		</table>
 		</div>
-
-
-
+		<div class="pageBar txt_center" style="margin:20px 0 0;">페이징할 것</div>
+ 
 	</article>
 </section>
 
