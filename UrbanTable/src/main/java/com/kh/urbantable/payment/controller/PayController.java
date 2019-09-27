@@ -1,6 +1,5 @@
 package com.kh.urbantable.payment.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +17,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kh.urbantable.payment.model.service.PayService;
 import com.kh.urbantable.payment.model.vo.Pay;
 import com.kh.urbantable.payment.model.vo.PayDetail;
+import com.kh.urbantable.payment.model.vo.Payment_;
+import com.siot.IamportRestHttpClientJava.IamportClient;
+import com.siot.IamportRestHttpClientJava.response.IamportResponse;
+import com.siot.IamportRestHttpClientJava.response.Payment;
 
 @Controller
 @RequestMapping("/pay")
@@ -98,7 +101,7 @@ public class PayController {
 	public int deletePayDetail(@RequestParam(value="marketNo") String marketNo, PayDetail payDetail) {
 		int result = payService.deletePayDetail(payDetail);
 		if(result > 0) {
-			Map<String, Object> map = new HashMap<>();
+			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("marketNo", marketNo);
 			map.put("foodNo", payDetail.getFoodNo());
 			map.put("amount", payDetail.getPayDetailAmount());
@@ -115,6 +118,36 @@ public class PayController {
 		int result = payService.deletePayInfo(pay);
 		
 		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/updatePay.do", method=RequestMethod.POST)
+	public int updatePayInfo(Pay pay) {
+		logger.debug("pay={}", pay);
+		int result = payService.updatePayInfo(pay);
+		
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/getPayInfo.do", method=RequestMethod.POST)
+	public IamportResponse<Payment> getPayInfo(@RequestParam(value="imp_uid") String impUid) throws Exception {
+		String apiKey = "7903224613824328";
+		String apiSecret = "utPGLpItmOQA5kegG7tavI27G89WTILnbA4X0NrmBhWHCbXiirtOavVQE5NxOzV0aZXaNpxpGt6iF4BX";
+		IamportClient client = new IamportClient(apiKey, apiSecret);
+		
+		IamportResponse<Payment> paymentInfo = client.paymentByImpUid(impUid);
+		logger.debug("payInfo={}", paymentInfo);
+		
+		return paymentInfo;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/insertPayment.do", method=RequestMethod.POST)
+	public int insertPayment(Payment_ payment) {
+		int result = payService.insertPayment(payment);
+		
+		return 0;
 	}
 
 }
