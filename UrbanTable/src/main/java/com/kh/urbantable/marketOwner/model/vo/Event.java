@@ -20,7 +20,7 @@ public class Event {
 	private String eventContent;
 	private String eventCompany;
 	private String marketNo;
-	private int eventCategory;
+	private String eventCategory;
 	private Date eventDateStart;
 	private Date eventDateEnd;
 	private int eventEnabled;

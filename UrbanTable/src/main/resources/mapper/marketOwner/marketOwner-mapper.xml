@@ -118,8 +118,8 @@
 		where food_company like '%'||#{srchCompany}||'%'
 	</select>
 	
-	<select id="eventSearchCategory" resultType="string">
-		select distinct S.food_section_name
+	<select id="eventSearchCategory" resultType="map">
+		select distinct S.food_section_name name, F.food_section_no no
 		from food F left join food_section S on F.food_section_no=S.food_section_no
 		where F.food_company like '%'||#{srchCompany}||'%'
 		and S.food_section_name like '%'||#{eventCategory}||'%'
@@ -142,5 +142,10 @@
 			<result column="food_section_upper" property="foodSectionUpper"/>
 		</collection>
 	</resultMap>
+	
+	<select id="selectMarketNoByMemberId" resultType="string">
+		select market_no from market 
+		where member_id=#{memberId} and market_enabled=1
+	</select>
 	
 </mapper>

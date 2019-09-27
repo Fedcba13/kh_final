@@ -64,6 +64,9 @@
 		<interceptor>
 			<mapping path="/market/founded.do" />
 			<mapping path="/market/myMarket.do" />
+			<mapping path="/market/event.do" />
+			<mapping path="/market/marketEventEnroll.do" />
+			<mapping path="/market/marketEventEnrollEnd.do" />
 			<beans:bean id="LoginInterceptor" class="com.kh.urbantable.common.interceptor.LoginInterceptor" />
 		</interceptor>
 	</interceptors>

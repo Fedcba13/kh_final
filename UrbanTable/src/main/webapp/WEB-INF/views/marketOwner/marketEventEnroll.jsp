@@ -8,20 +8,23 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/marketOwner.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-<script src="https://cdn.ckeditor.com/ckeditor5/12.4.0/classic/ckeditor.js"></script>
 <script>
 $(()=>{
 	$(".eventDate").flatpickr({
 	  enableTime: false,
-	  dateFormat: "Y.m.d",
+	  dateFormat: "Y-m-d",
 	});
 	
-	ClassicEditor.create(document.querySelector('#eventContent'));
+	$(".submitBtn").click(function(){
+		var f = document.getElementById("eventEnrollEnd");
+		f.action = "${pageContext.request.contextPath }/market/marketEventEnrollEnd.do";
+		f.method = "post";
+		f.submit();
+	});
 	
-	var $sel = $(".sel");
-	var $li = $("#autoComplete li");
-	
-	$("#srchCompany").keyup(function(e){
+	$("#eventCompany").keyup(function(e){
+		var $sel = $(".sel");
+		var $li = $("#autoComplete li");
 		if(e.key=="ArrowDown"){
 			if($sel.length==0){
 				$li.eq(0).addClass("sel");
@@ -39,6 +42,7 @@ $(()=>{
 				$sel.removeClass("sel").prev().addClass("sel");
 			}
 		} else if(e.key == "Enter"){
+			event.preventDefault();
 			$(e.target).val($sel.text());
 			$("#autoComplete").hide().children().remove();
 		} else {
@@ -63,7 +67,7 @@ $(()=>{
 					}
 					
 					$("#autoComplete li").click((e)=>{
-						$("#srchCompany").val($(e.target).text());
+						$("#eventCompany").val($(e.target).text());
 						$("#autoComplete").hide().children().remove();
 					});
 				},
@@ -75,7 +79,9 @@ $(()=>{
 		}
 	});
 	
-	$("#eventCategory").keyup(function(e){
+	$("#eventCategory1").keyup(function(e){
+		var $sel = $(".sel");
+		var $li = $("#autoComplete2 li");
 		if(e.key=="ArrowDown"){
 			if($sel.length==0){
 				$li.eq(0).addClass("sel");
@@ -93,10 +99,11 @@ $(()=>{
 				$sel.removeClass("sel").prev().addClass("sel");
 			}
 		} else if(e.key == "Enter"){
+			event.preventDefault();
 			$(e.target).val($sel.text());
 			$("#autoComplete2").hide().children().remove();
 		} else {
-			var srchCompany = $("#srchCompany").val();
+			var srchCompany = $("#eventCompany").val();
 			var eventCategory = $(e.target).val();
 			if(eventCategory.trim().length==0){ //사용자 입력값이 없는 경우
 				return;
@@ -107,26 +114,26 @@ $(()=>{
 				eventCategory: eventCategory
 			}
 			
-			console.log(param);
-			
 			$.ajax({
 				url: "${pageContext.request.contextPath}/market/eventSearchCategory.do",
 				type: "get",
 				dataType: "json",
 				data: param,
 				success: function(data){
+					console.log(data);
 					if(data.length==0){
 						$("#autoComplete2").hide();	
 					} else {
 						var html = "";
 						for(var i in data){
-							html += "<li><span>"+data[i]+"</span></li>";
+							html += "<li rel='"+data[i].NO+"'>"+data[i].NAME+"</li>";
 						}
 						$("#autoComplete2").html(html).fadeIn(200);
 					}
 					
 					$("#autoComplete2 li").click((e)=>{
-						$("#eventCategory").val($(e.target).text());
+						$("#eventCategory1").val($(e.target).text());
+						$("#eventCategory").val($(e.target).attr("rel"));
 						$("#autoComplete2").hide().children().remove();
 					});
 				},
@@ -143,41 +150,45 @@ $(()=>{
 	<article class="subPage inner">
 	    <h3 class="sub_tit">이벤트 등록</h3>
 	    <p class="info txt_right"><span class="red">*</span>은 필수 항목입니다.</p>
-	    <form action="${pageContext.request.contextPath }/market/marketEventEnrollEnd.do" method="post" name="eventEnrollEnd">
-	    	<input type="hidden" name="marketNo" value="" />
+	    <form id="eventEnrollEnd" name="eventEnrollEnd">
 	        <table class="tbl tbl_view">
 	            <tr>
 	                <th>이벤트 제목<span class="red">*</span></th>
 	                <td><input type="text" name="eventTitle" id="eventTitle" required class="dp_block" style="width:415px;" /></td>
 	            </tr>
 	            <tr>
-	                <th>이벤트 날짜<span class="red">*</span></th>
-	                <td>
-	                	<input type="text" name="eventDateStart" required id="eventDateStart" class="dp_ib eventDate" style="width:200px;" />
-            			~
-            			<input type="text" name="eventDateEnd" id="eventDateEnd" class="dp_ib eventDate" style="width:200px;" />
-	                </td>
+	                <th>이벤트 내용<span class="red">*</span></th>
+	                <td><textarea class="form-control" id="eventContent" name="eventContent"></textarea></td>
 	            </tr>
 	            <tr>
 	                <th>이벤트 대상 업체</th>
 	                <td style="position:relative;">
-	                	<input type="text" name="srchCompany" id="srchCompany" />
+	                	<input type="text" name="eventCompany" id="eventCompany" autocomplete="off" style="width:200px;"  />
 	                	<ul id="autoComplete" class="autoComplete"></ul>
 	                </td>
+	            </tr>
+	            <tr style="display:none;">
+	            	<th>이벤트 대상 매장</th>
+	            	<td><input type="text" name="marketNo" value="${eventMarketNo }" /></td>
 	            </tr>
 	            <tr>
 	                <th>이벤트 대상 분류</th>
 	                <td style="position:relative;">
-	                	<input type="text" name="eventCategory" id="eventCategory" class="dp_ib" style="width:200px;" />
+	                	<input type="hidden" name="eventCategory" id="eventCategory"/>
+	                	<input type="text" name="eventCategory1" id="eventCategory1" class="dp_ib" style="width:200px;" autocomplete="off"  />
 	                	<ul id="autoComplete2" class="autoComplete"></ul>
 	                </td>
 	            </tr>
 	            <tr>
-	                <th>이벤트 내용<span class="red">*</span></th>
-	                <td><textarea class="form-control" id="eventContent" name="eventContent" rows="80"></textarea></td>
+	                <th>이벤트 날짜<span class="red">*</span></th>
+	                <td>
+	                	<input type="date" name="eventDateStart" required id="eventDateStart" class="dp_ib eventDate" style="width:200px;" />
+            			~
+            			<input type="date" name="eventDateEnd" id="eventDateEnd" class="dp_ib eventDate" style="width:200px;" />
+	                </td>
 	            </tr>
 	        </table>
-	        <div class="txt_center mt30"><input type="submit" value="등록" class="btn" /></div>
+	        <div class="txt_center mt30"><input type="button" value="등록" class="btn submitBtn" /></div>
         </form>
     </article>
 </section>
