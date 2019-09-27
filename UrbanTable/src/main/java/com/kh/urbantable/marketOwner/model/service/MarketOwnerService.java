@@ -11,6 +11,9 @@ import com.kh.urbantable.marketOwner.model.vo.MarketEvent;
 
 public interface MarketOwnerService {
 
+	//페이지당 게시물 수
+	int NUM_PER_PAGE = 10;
+	
 	int insertMarketFounded(Market market);
 
 	MarketMember selectByMemberId(String memberId);
@@ -36,5 +39,9 @@ public interface MarketOwnerService {
 	List<Map<String, String>> eventSearchCategory(Map<String, String> param);
 
 	String selectMarketNoByMemberId(String memberId);
+
+	List<Map<String, String>> selectFoodStockList(int cPage, String marketNo);
+
+	int selectTotalContents(String marketNo);
 
 }

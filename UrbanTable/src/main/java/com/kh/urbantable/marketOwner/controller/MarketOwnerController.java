@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.google.gson.Gson;
 import com.kh.urbantable.admin.model.vo.MarketMember;
 import com.kh.urbantable.marketOwner.model.service.MarketOwnerService;
 import com.kh.urbantable.marketOwner.model.vo.Event;
@@ -259,6 +260,65 @@ public class MarketOwnerController {
 	public String marketEventEnrollEnd(Event event) {
 		logger.info("event={}",event);
 		return "marketOwner/marketEventEnroll";
+	}
+	
+	@RequestMapping("/marketStock.do")
+	public String marketStock(@RequestParam(value="cPage", defaultValue="1") int cPage,
+			Model model) {
+		model.addAttribute("cPage", cPage);
+		return "marketOwner/marketStock";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/marketStockPage.do")
+	public Map<String, Object> marketStockPage(@RequestParam(value="cPage", defaultValue="1", required=false) int cPage,
+			@RequestParam String memberId, HttpServletRequest request){
+		
+		String marketNo = marketOwnerService.selectMarketNoByMemberId(memberId);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		List<Map<String, String>> foodStockList = marketOwnerService.selectFoodStockList(cPage, marketNo);
+		int totalContents = marketOwnerService.selectTotalContents(marketNo);
+		int totalPage = (int)Math.ceil((double)totalContents/marketOwnerService.NUM_PER_PAGE);
+		
+		final int pageBarSize = 10;
+		String pageBar = "";
+		
+		int pageStart = ((cPage-1)/pageBarSize)*pageBarSize+1;
+		int pageEnd = pageStart+pageBarSize-1;
+		
+		int pageNo = pageStart;
+		
+		//이전
+		if(pageNo==1) { //첫번째 페이지일 경우
+			pageBar += "<span>이전</span>";
+		} else {
+			pageBar += "<a href='"+request.getContextPath()+"/market/marketStock.do?memberId="+memberId+"&cPage="+(pageNo-1)+"'>이전</a>";
+		}
+		
+		//page
+		while(pageNo<=pageEnd && pageNo<=totalPage) {
+			if(pageNo==cPage) {
+				pageBar+="<span class='cPage'>"+pageNo+"</span>";
+			} else {
+				pageBar+="<a href='"+request.getContextPath()+"/market/marketStock.do?memberId="+memberId+"&cPage="+pageNo+"'>"+pageNo+"</a>";
+			}
+			pageNo++;
+		}
+		
+		//다음
+		if(pageNo>totalPage) {
+			pageBar += "<span>다음</span>";
+		} else {
+			pageBar += "<a href='"+request.getContextPath()+"/market/marketStock.do?memberId="+memberId+"&cPage="+pageNo+"'>다음</a>";
+		}
+		
+		result.put("marketNo", marketNo);
+		result.put("pageBar", pageBar);
+		result.put("foodStockList", foodStockList);
+		
+		return result;
 	}
 	
 }
