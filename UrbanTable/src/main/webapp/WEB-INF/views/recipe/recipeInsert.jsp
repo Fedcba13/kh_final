@@ -112,9 +112,12 @@ $(()=> {
 		var html = "";
 		var tab = "";
 		
+		//name="recipeSequenceList[0].recipeContent"
+		
 		html += "<div id='recipe_content_div" + index + "'>";
-		html += "<textarea name='recipe_content' id='recipe_content' cols='100' rows='5' style='border: 1px solid #e9e9e9; border-radius: 5px; color: #555; resize: none;'></textarea> <br /><br />";
-		html += "<input type='text' style='width:560px;' disabled /> <button class='btn'>사진 가져오기</button> <br /><br />";
+		html += "<input type='hidden' name='recipeSequenceList[" + (index-1) + "].recipeOrder' id='recipeOrder" + index + "' value='" + index + "' />";
+		html += "<textarea name='recipeSequenceList[" + (index-1) + "].recipeContent' class='recipe_content' id='recipe_content" + index + "' cols='100' rows='5' placeholder='레시피 내용&#13;&#10;ex)중약불로 달군 팬에 올리브유를 두르고 앞뒤로 노릇하게 구워주세요.' style='border: 1px solid #e9e9e9; border-radius: 5px; color: #555; resize: none;'></textarea> <br /><br />";
+		html += "<input type='text' class='upload_name' id='upload_name" + index + "' disabled /><input type='file' name='recipePic' id='upload_file" + index + "' style='display:none;' /> <button class='btn btn_upload' id='btn_upload" + index + "' type='button'>사진 가져오기</button> <br /><br />";
 		html += "</div>";
 		
 		tab += "<li><button type='button' class='btn btn_content' value='"+ index +"'>"+ index +"</button></li>";
@@ -139,6 +142,7 @@ $(()=> {
 		index ++;
 		
 		tabEvent();
+		pic_Event();
 	});
 	
 	tabEvent();
@@ -180,13 +184,16 @@ $(()=> {
 			this.remove();
 		});
 		
+		var materialSet = $("#materialSet").val();
+		
 		$.ajax({
-			url: "${pageContext.request.contextPath}/recipe/materialInsert",
-			data: {section: section},
+			url: "${pageContext.request.contextPath}/recipe/materialInsert/" + section,
+			data: {materialSet: materialSet},
 			dataType: "json",
 			type: "GET",
-			success: (data)=> {
+			success: (data)=>{
 				console.log(data);
+				$("#materialSet").val(data);
 			},
 			error: (xhr, txtStatus, err)=> {
 				console.log("ajax 처리실패!", xhr, txtStatus, err);
@@ -194,6 +201,18 @@ $(()=> {
 		});
 		
 		material_i++;
+	});
+	
+	pic_Event();
+	
+	$(".btn_insert").on("click", function() {
+		for(var i=1; i<=index; i++) {
+			if($("#recipe_content" + i).val().includes("바보") || $("#recipe_content" + i).val().includes("멍청이")
+					|| $("#recipe_title").val().includes("바보") || $("#recipe_title").val().includes("멍청이")) {
+				alert("금지어가 포함되어 있습니다!");
+				return false;
+			}			
+		}
 	});
 });
 
@@ -219,16 +238,39 @@ function tabEvent() {
 		$("#tab_remove").val(this.value);
 	});
 }
+
+function pic_Event() {
+var pic_index = $("#tab_remove").val();
+
+	$("#btn_upload" + pic_index).click(function(e) {
+		e.preventDefault();
+		$("#upload_file" + pic_index).click();
+		var ext = $("#upload_file" + pic_index).val().split(".").pop().toLowerCase();
+		if(ext.length > 0) {
+			if($.inArray(ext, ["gif", "png", "jpg", "jpeg"]) == -1) {
+				alert("gif, png, jpg 파일만 업로드 할 수 있습니다.");
+				return false;
+			}
+		}
+		$("#upload_file" + pic_index).val().toLowerCase();
+	});
+	
+	$("#upload_file" + pic_index).change(function() {
+		var name = this.value.split("\\");
+		
+		$("#upload_name" + pic_index).val(name[name.length-1]);
+	});
+}
 </script>
 <section class=""> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 	    <h3 class="sub_tit">레시피 만들기</h3>
-	    <form action="">
+	    <form action="${pageContext.request.contextPath}/recipe/recipeInsertEnd.do" method="post" enctype="multipart/form-data">
 		    <table class="tbl tbl_view recipe_insert_tbl"> <!--가운데 정렬 아니면 txt_center 빼셔도 됩니다.
 		                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->
 	            <tr>
 	                <th style="width:200px">제목</th>
-	                <td><input type="text" style="width:720px;" /></td>
+	                <td><input type="text" id="recipe_title" name="recipeTitle" style="width:720px;" /></td>
 	            </tr>
 	            <tr>
 	            	<th>재료</th>
@@ -272,17 +314,27 @@ function tabEvent() {
 			                	<li><button type="button" class="btn btn_content" value="1">1</button></li>
 	                		</ul>
 		                	<div id="recipe_content_div1">
-			                	<textarea name="recipe_content" id="recipe_content" cols="100" rows="5" style="border: 1px solid #e9e9e9; border-radius: 5px; color: #555; resize: none;"></textarea> <br /><br />
-			                	<input type="text" style="width:560px;" disabled /> <button class="btn" type="button">사진 가져오기</button> <br /><br />
+		                		<input type="hidden" name="recipeSequenceList[0].recipeOrder" id="recipeOrder1" value="1" />
+			                	<textarea name="recipeSequenceList[0].recipeContent" id="recipe_content1" class="recipe_content" cols="100" rows="5" placeholder="레시피 내용&#13;&#10;ex)중약불로 달군 팬에 올리브유를 두르고 앞뒤로 노릇하게 구워주세요." style="border: 1px solid #e9e9e9; border-radius: 5px; color: #555; resize: none;"></textarea> <br /><br />
+			                	<input type="text" class="upload_name" id="upload_name1" disabled /><input type="file" name="recipePic" id="upload_file1" style="display:none;" /> <button class="btn btn_upload" id="btn_upload1" type="button">사진 가져오기</button> <br /><br />
 		                	</div>	                	
-	                	</div>
+	                	</div><br />
+	                	<p>
+	                		*레시피 순서에 따라 하나씩 넣어주세요<br />
+	                		*욕설이 들어간 게시글은 삭제 될 수 있습니다
+	                	</p>
 	                	<div class="btn_add">
 		                	<button type="button" class="btn btn_content_ar" id="tab_add">+</button>
-		                	<button type="button" class="btn btn_content_ar" id="tab_remove" style="display:none;">-</button>		                	
+		                	<button type="button" class="btn btn_content_ar" id="tab_remove" value="1" style="display:none;">-</button>		                	
 	                	</div>
 	                </td>
 	            </tr>
 	        </table>
+	        <input type="hidden" id="materialSet" name="materialSet" />
+	        <input type="hidden" name="memberId" value="${memberLoggedIn.memberId}" />
+	        <div class="btn_submit">
+	        	<input type="submit" class="btn btn_insert" value="글 등록하기" />	        
+	        </div>
         </form>
     </article>
 </section>
