@@ -59,6 +59,31 @@
         order by flag desc
 	</select>
 	
+	<!-- 자동로그인 구현 부분 -->
+	<!-- 자동로그인 등록 -->
+	<insert id="insertAutoLogin">
+		insert into member_auto_login
+		values(#{cookieKey}, #{memberId}, sysdate)
+	</insert>
 	
+	<!-- 자동로그인 조회 -->
+	<select id="selectAutoLogin" resultType="memberAutoLogin">
+		select * from member_auto_login
+		where cookie_key = #{cookieKey}
+		and last_date + 7 > sysdate
+	</select>
+	
+	<!-- 자동로그인 마지막 접속일 수정 -->
+	<update id="updateAutoLogin">
+		update member_auto_login
+		set last_date = sysdate
+		where cookie_key = #{cookieKey}
+	</update>
+	
+	<!-- 자동로그인 삭제 -->
+	<delete id="deleteAutoLogin">
+		delete from member_auto_login
+		where cookie_key = #{cookieKey}
+	</delete>
 
 </mapper>

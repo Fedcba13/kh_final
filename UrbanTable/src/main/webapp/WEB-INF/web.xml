@@ -3,11 +3,6 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee https://java.sun.com/xml/ns/javaee/web-app_3_1.xsd">
 
-	<!-- #1. welcome-File 추가 -->
-	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
-	</welcome-file-list>
-
 	<!-- #2. applicationContext(root-context)관련 설정  -->
 	<!-- The definition of the Root Spring Container shared by all Servlets and Filters -->
 	<context-param>

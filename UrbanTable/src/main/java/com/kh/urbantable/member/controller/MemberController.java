@@ -1,12 +1,13 @@
 package com.kh.urbantable.member.controller;
 
-import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -22,19 +23,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.kh.urbantable.common.util.Utils;
 import com.kh.urbantable.marketOwner.model.service.MarketOwnerService;
 import com.kh.urbantable.marketOwner.model.vo.Market;
 import com.kh.urbantable.member.model.service.MemberService;
 import com.kh.urbantable.member.model.vo.Member;
-import com.kh.urbantable.message.APIInit;
+import com.kh.urbantable.member.model.vo.MemberAutoLogin;
 import com.kh.urbantable.message.vo.Message;
-import com.kh.urbantable.message.vo.MessageModel;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 @Controller
 @RequestMapping("/member")
@@ -61,10 +59,16 @@ public class MemberController {
 
 	@PostMapping("/memberLogin.do")
 	@ResponseBody
-	public Map<String, String> memberLogin(@RequestParam String memberId, @RequestParam String password, Model model) {
+	public Map<String, String> memberLogin(
+				@RequestParam String memberId,
+				@RequestParam String password,
+				Model model,
+				HttpServletResponse response,
+				HttpServletRequest request,
+				@RequestParam(value="autoLogin", defaultValue="false") String autoLogin,
+				@RequestParam(value="saveId", defaultValue="saveId") String saveId) {
 
 		logger.debug("로그인 요청");
-		System.out.println("a");
 		passwordEncoder.encode(password);
 
 		// 업무로직 : 회원정보 가져오기
@@ -85,6 +89,27 @@ public class MemberController {
 
 				// memberLoggedIn 세션 속성에 지정
 				model.addAttribute("memberLoggedIn", member);
+				
+				if(autoLogin.equals("true")) {
+					logger.debug("로그인 유지");
+					
+					//쿠키 생성
+					MemberAutoLogin memberAutoLogin = new MemberAutoLogin();
+					String cookieKey = Utils.getKey(100);
+					
+					// client 정보
+					memberAutoLogin.setMemberId(memberId);
+					memberAutoLogin.setCookieKey(cookieKey);
+					memberService.insertAutoLogin(memberAutoLogin);
+					
+					Cookie autoLoginCookie = new Cookie("autoLoginCookie", cookieKey);
+					autoLoginCookie.setPath("/");
+					autoLoginCookie.setMaxAge(60*60*24*7);
+					
+					//쿠키 저장
+					response.addCookie(autoLoginCookie);
+				}
+				
 			}
 			// 비밀번호가 틀린 경우
 			else {
@@ -186,6 +211,10 @@ public class MemberController {
 		param.put("flag", flag);
 
 		result.put("msg", memberService.checkMessage(param) > 0 ? "인증 성공" : "인증 실패");
+		
+		if(flag == 2 || flag == 3) {
+			memberService.phoneDuplicate(param);
+		}
 
 		return result;
 	}
@@ -203,11 +232,21 @@ public class MemberController {
 	}
 	
 	@RequestMapping("/memberLogout.do")
-	public String memberLogout(SessionStatus sessionStatus) {
+	public String memberLogout(SessionStatus sessionStatus, HttpServletRequest request) {
 		logger.debug("로그아웃 요청");
+		
+		//세션 제거
 		if(!sessionStatus.isComplete()) {
 			sessionStatus.setComplete();
 		}
+		
+		//쿠키 제거
+	    String cookieKey = Utils.getCookies(request, "autoLoginCookie");
+	    if(cookieKey != null) {
+	      MemberAutoLogin memberAutoLogin = new MemberAutoLogin();
+	      memberAutoLogin.setCookieKey(cookieKey);
+	      memberService.removeAutoLogin(memberAutoLogin);
+	    }
 		
 		return "redirect:/";
 	}
@@ -281,5 +320,5 @@ public class MemberController {
 		model.addAttribute("type", type);
 		return "member/memberFind";
 	}
-
+	
 }

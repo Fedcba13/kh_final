@@ -44,8 +44,12 @@ $(document).ready(function(){
 	$(".login-modal .login").click(()=>{
 		var param = {
 				memberId : $("input[type=text][name=memberId]").val(),
-				password : $("input[type=password][name=password]").val()
+				password : $("input[type=password][name=password]").val(),
+				saveId : $("input[name=saveId]").prop('checked'),
+				autoLogin : $("input[name=autoLogin]").prop('checked')
 		}
+		
+		console.log(param);
 		
 		$.ajax({
 			url: contextPath+"/member/memberLogin.do",

@@ -6,8 +6,11 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Random;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,6 +27,7 @@ public class Utils {
 	
 	private static String KAKAO_API = "7d4c5930335ffbc5656a72e6dceeff50";
 	
+	//주소로 좌표찾기
 	public static HashMap<String, Double> getLocation(String address){
 		
 		HashMap<String, Double> map = new HashMap<String, Double>();
@@ -68,7 +72,7 @@ public class Utils {
 		return map;
 	}
 	
-	//좌표 차이
+	//좌표 거리 차이
 	public static double distance(HashMap<String, Double> loc1, HashMap<String, Double> loc2, String unit) {
         
         double theta = loc1.get("x") - loc2.get("x");
@@ -123,6 +127,36 @@ public class Utils {
             }
         });
     }
+    
+    //랜덤키 생성
+    public static String getKey(int size) {
+      Random ran = new Random();
+      StringBuffer sb = new StringBuffer();
+      int num = 0;
+      do {
+        num = ran.nextInt(75) + 48;
+        if ((num >= 48 && num <= 57) || (num >= 65 && num <= 90) || (num >= 97 && num <= 122)) {
+          sb.append((char) num);
+        } else {
+          continue;
+        }
+      } while (sb.length() < size);
+      return sb.toString();
+    }
+    
+    //쿠키값 가져오기
+    public static String getCookies(HttpServletRequest request, String cookieName) {
+        String value = null;
+        Cookie[] cookies = request.getCookies();
+        if(cookies == null) return value;
+        for (Cookie cookie : cookies) {
+          if (cookie.getName().equals(cookieName)) {
+            value = cookie.getValue();
+            break;
+          }
+        }
+        return value;
+      }
 
 
 }

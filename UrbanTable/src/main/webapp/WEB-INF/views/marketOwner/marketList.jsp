@@ -340,7 +340,7 @@
 				// 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
 				map.setCenter(coords);
 				
-				$("#searchMap").attr("href", "https://map.kakao.com/link/to/"+marketName+","+coords.Ha+","+coords.Ga);
+				$("#searchMap").attr("href", "https://map.kakao.com/link/to/UrbanTable "+marketName+","+coords.Ha+","+coords.Ga);
 			}
 		});
 	}

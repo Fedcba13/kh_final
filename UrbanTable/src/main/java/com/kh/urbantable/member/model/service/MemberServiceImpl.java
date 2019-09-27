@@ -6,10 +6,10 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.urbantable.member.model.dao.MemberDAO;
 import com.kh.urbantable.member.model.vo.Member;
+import com.kh.urbantable.member.model.vo.MemberAutoLogin;
 
 @Service
 public class MemberServiceImpl implements MemberService {
@@ -64,6 +64,38 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public List<Map<String, String>> selectAddress(String memberId) {
 		return memberDAO.selectAddress(memberId);
+	}
+	
+	//자동로그인
+	@Override
+	public Member autoLogin(MemberAutoLogin memberAutoLogin) {
+		// cookie key 조회
+		MemberAutoLogin cookieAutoLogin = memberDAO.selectAutoLogin(memberAutoLogin);
+		Member member = null;
+		if(cookieAutoLogin != null) {
+			// 사용자 조회
+			member = memberDAO.selectOneMember(cookieAutoLogin.getMemberId());
+			// 자동로그인 마지막 접속일 수정
+			if(member != null) {
+				memberDAO.updateAutoLogin(memberAutoLogin);
+				// 자동로그인 key 삭제
+			}else {
+				memberDAO.deleteAutoLogin(memberAutoLogin);
+			}
+		}
+		return member;
+	}
+	
+	//자동로그인 등록
+	@Override
+	public void insertAutoLogin(MemberAutoLogin memberAutoLogin) {
+		memberDAO.insertAutoLogin(memberAutoLogin);
+	}
+
+	//자동로그인 정보 삭제
+	@Override
+	public void removeAutoLogin(MemberAutoLogin memberAutoLogin) {
+		memberDAO.insertAutoLogin(memberAutoLogin);
 	}
 
 }

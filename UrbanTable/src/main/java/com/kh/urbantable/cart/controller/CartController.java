@@ -71,7 +71,7 @@ public class CartController {
 		boolean isEnough = false;
 		String address = marketAddress.substring(marketAddress.indexOf(" ")+1);
 		String marketNo = payService.getMarketNo(address);
-		Map<String, String> map = new HashMap<>();
+		Map<String, String> map = new HashMap<String, String>();
 		map.put("marketNo", marketNo);
 		map.put("foodNo", foodNo);
 		int isExist = cartService.getExist(map);

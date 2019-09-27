@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.urbantable.member.model.service.MemberService;
 import com.kh.urbantable.member.model.vo.Member;
+import com.kh.urbantable.member.model.vo.MemberAutoLogin;
 
 @Repository
 public class MemberDAOImpl implements MemberDAO {
@@ -55,6 +56,26 @@ public class MemberDAOImpl implements MemberDAO {
 	@Override
 	public List<Map<String, String>> selectAddress(String memberId) {
 		return sqlSession.selectList("member.selectAddress", memberId);
+	}
+
+	@Override
+	public MemberAutoLogin selectAutoLogin(MemberAutoLogin memberAutoLogin) {
+		return sqlSession.selectOne("member.selectAutoLogin", memberAutoLogin);
+	}
+
+	@Override
+	public void insertAutoLogin(MemberAutoLogin memberAutoLogin) {
+		sqlSession.insert("member.insertAutoLogin", memberAutoLogin);
+	}
+
+	@Override
+	public void updateAutoLogin(MemberAutoLogin memberAutoLogin) {
+		sqlSession.update("member.updateAutoLogin", memberAutoLogin);
+	}
+
+	@Override
+	public void deleteAutoLogin(MemberAutoLogin memberAutoLogin) {
+		sqlSession.delete("member.deleteAutoLogin", memberAutoLogin);
 	}
 	
 

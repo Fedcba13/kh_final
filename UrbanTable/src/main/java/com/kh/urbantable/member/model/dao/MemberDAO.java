@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.kh.urbantable.member.model.vo.Member;
+import com.kh.urbantable.member.model.vo.MemberAutoLogin;
 
 public interface MemberDAO {
 
@@ -23,5 +24,14 @@ public interface MemberDAO {
 	List<Member> selectListMember();
 
 	List<Map<String, String>> selectAddress(String memberId);
+
+	MemberAutoLogin selectAutoLogin(MemberAutoLogin memberAutoLogin);
+
+	void insertAutoLogin(MemberAutoLogin memberAutoLogin);
+	
+	void updateAutoLogin(MemberAutoLogin memberAutoLogin);
+
+	void deleteAutoLogin(MemberAutoLogin memberAutoLogin);
+
 
 }
