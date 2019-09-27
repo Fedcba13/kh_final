@@ -25,7 +25,7 @@
 			    pay_method : $("input:radio[name='paymentWay']:checked").val(),
 			    merchant_uid : 'merchant_' + new Date().getTime(),
 			    name : '주문명:결제테스트',
-			    amount : cartInfoArr[0].payPrice,			    
+			    amount : 100,//cartInfoArr[0].payPrice,			    
 			    buyer_name : "개똥이",
 			    buyer_tel : '010-1234-5678',
 			    buyer_addr : '서울특별시 강남구 삼성동',
@@ -37,9 +37,12 @@
 			        msg += '상점 거래ID : ' + rsp.merchant_uid;
 			        msg += '결제 금액 : ' + rsp.paid_amount;
 			        msg += '카드 승인번호 : ' + rsp.apply_num;
+			        updatePayInfo();
 			    } else {
 			        var msg = '결제에 실패하였습니다.';
 			        msg += '에러내용 : ' + rsp.error_msg;
+			        deletePayDetail();
+			        deletePayInfo();
 			    }
 			    alert(msg);
 			});
@@ -116,7 +119,7 @@
 			$("#totalPrice").val((cartInfoArr[0].payPrice - 30000) + " 원");
 		}
 		//$("#orderInfo td").eq(0).append(cartInfoArr[0].payPrice + " 원");
-		$("#userAddressField").val("경기도 안산시 단원구 원선1로 61");
+		$("#userAddressField").val("${memberLoggedIn.memberAddress}");
 		$("#marketAddressField").val(cartInfoArr[0].market);
 		getMarketNo();
 		if(cartInfoArr[0].deliverType == "d"){
@@ -137,7 +140,7 @@
 	
 	function createPayInfo(){
 		var payInfo ={
-				memberId: "jsi124",
+				memberId: "${memberLoggedIn.memberId}",
 				payPrice: parseInt($("#totalPaymentCost").val()),
 				payFlag: 0,
 				deliverType: $("#deliverType").val(),
@@ -151,11 +154,13 @@
 			async: false,
 			success: function(data){
 				//console.log(data);
+				$("#payNo").val(data);
 				for(var i=0; i < cartInfoArr.length; i++){
 					var param = {};
 					param.payNo = data;
 					param.foodNo = cartInfoArr[i].foodNo;
 					param.payDetailAmount = cartInfoArr[i].payDetailAmount;
+					param.marketNo = $("#marketNo").val();
 					$.ajax({
 						url: "${pageContext.request.contextPath}/pay/payDetail.do",
 						type: "post",
@@ -195,9 +200,51 @@
 		});
 	}
 	
-	function paySystem(){
+	function deletePayDetail(){
+		for(var i=0; i < cartInfoArr.length; i++){
+			var param = {};
+			param.payNo = $("#payNo").val();
+			param.foodNo = cartInfoArr[i].foodNo;
+			param.payDetailAmount = cartInfoArr[i].payDetailAmount;
+			param.marketNo = $("#marketNo").val();
+			$.ajax({
+				url: "${pageContext.request.contextPath}/pay/delDetail.do",
+				type: "post",
+				data: param,
+				async: false,
+				success: function(data){
+					console.log(data);
+				},
+				error: function(xhr, txtStatus, err){
+					console.log("ajax처리실패!", xhr, txtStatus, err);
+				}
+			})
+		}
+	}
+	
+	function deletePayInfo(){
+		var param = {
+			payNo: $("#payNo").val(),
+			memberId: "${memberLoggedIn.memberId}",
+			payFlag: 0
+		}
+		$.ajax({
+			url: "${pageContext.request.contextPath}/pay/delPay.do",
+			type: "post",
+			data: param,
+			success: function(data){
+				console.log(data);
+			},
+			error: function(xhr, txtStatus, err){
+				console.log("ajax처리실패!", xhr, txtStatus, err);
+			}
+		})
+	}
+	
+	function updatePayInfo(){
 		
 	}
+	
 </script>
 
 <section class="sec_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
@@ -282,6 +329,7 @@
                 </td>
             </tr>
         </table>
+        <input type="hidden" id="payNo" />
         <input type="button" class="btn" value="결제하기" id="pay-btn"/>
     </article>
 </section>

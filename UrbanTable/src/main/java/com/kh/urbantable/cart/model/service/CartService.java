@@ -14,4 +14,8 @@ public interface CartService {
 
 	List<Market> getMarketList();
 
+	int getProductStock(Map<String, String> map);
+
+	int getExist(Map<String, String> map);
+
 }

@@ -35,4 +35,14 @@ public class CartDAOImpl implements CartDAO{
 		return sqlSession.selectList("cart.getMarketList");
 	}
 
+	@Override
+	public int getProductStock(Map<String, String> map) {
+		return sqlSession.selectOne("cart.getProductStock", map);
+	}
+
+	@Override
+	public int getExist(Map<String, String> map) {
+		return sqlSession.selectOne("cart.getExist", map);
+	}
+
 }

@@ -12,5 +12,11 @@
 	<select id="getMarketList" resultType="market">
 		select * from market where flag = 2
 	</select>
+	<select id="getProductStock" resultType="int">
+		select stock_amount from stock where market_no = #{marketNo} and food_no = #{foodNo}
+	</select>
+	<select id="getExist" resultType="int">
+		select count(*) from stock where market_no = #{marketNo} and food_no = #{foodNo}
+	</select>
 
 </mapper>

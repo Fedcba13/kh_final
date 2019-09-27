@@ -46,4 +46,23 @@ public class PayDAOImple implements PayDAO {
 		return sqlSession.selectList("pay.getPayDetail");
 	}
 
+	@Override
+	public void updateStock(Map<String, Object> map) {
+		sqlSession.update("pay.updateStock", map);		
+	}
+
+	@Override
+	public int deletePayDetail(PayDetail payDetail) {
+		return sqlSession.delete("pay.deletePayDetail", payDetail);
+	}
+
+	@Override
+	public void rollbackStock(Map<String, Object> map) {
+		sqlSession.update("pay.rollbackStock", map);		
+	}
+
+	@Override
+	public int deletePayInfo(Pay pay) {
+		return sqlSession.delete("pay.deletePayInfo", pay);
+	}
 }

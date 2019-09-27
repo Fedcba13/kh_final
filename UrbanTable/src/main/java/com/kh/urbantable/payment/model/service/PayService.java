@@ -18,4 +18,12 @@ public interface PayService {
 
 	List<Pay> getPayDetail();
 
+	void updateStock(Map<String, Object> map);
+
+	int deletePayDetail(PayDetail payDetail);
+
+	void rollbackStock(Map<String, Object> map);
+
+	int deletePayInfo(Pay pay);
+
 }

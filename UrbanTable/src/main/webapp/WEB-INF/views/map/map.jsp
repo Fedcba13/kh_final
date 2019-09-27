@@ -115,7 +115,7 @@
 			try{
 				console.log(opener.location.pathname);
 				var curLocation;
-				<c:if test="${empty userAddress}">curLocation = "경기도 안산시 단원구 원선1로 61"</c:if>
+				<c:if test="${empty userAddress}">curLocation = "${memberLoggedIn.memberAddress}"</c:if>
 				<c:if test="${!empty userAddress}">curLocation = "${userAddress}"</c:if>
 				var result = await userAddressSearch(curLocation);
 				createUserOverlay(result);				

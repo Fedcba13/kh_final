@@ -1,5 +1,6 @@
 package com.kh.urbantable.cart.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import com.google.gson.Gson;
 import com.kh.urbantable.cart.model.service.CartService;
 import com.kh.urbantable.cart.model.vo.Cart;
 import com.kh.urbantable.marketOwner.model.vo.Market;
+import com.kh.urbantable.payment.model.service.PayService;
 
 @Controller
 @RequestMapping("/cart")
@@ -27,9 +29,17 @@ public class CartController {
 	@Autowired
 	CartService cartService;
 	
+	@Autowired
+	PayService payService;
+	
 	@RequestMapping("/cartList.do")
 	public String cartList(@RequestParam String memberId, 
 						   Model model) {
+		if("".equals(memberId)) {
+			model.addAttribute("msg", "로그인후 이용하세요");
+			model.addAttribute("loc", "/");
+			return "common/msg";
+		}
 		
 		logger.debug("memberId={}", memberId);
 		
@@ -51,6 +61,28 @@ public class CartController {
 		Gson gson = new Gson();
 		
 		return gson.toJson(map);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/checkstock.do", method=RequestMethod.POST)
+	public boolean checkStock(@RequestParam(value="foodNo") String foodNo,
+							  @RequestParam(value="payDetailAmount") int payDetailAmount,
+							  @RequestParam(value="market") String marketAddress) {
+		boolean isEnough = false;
+		String address = marketAddress.substring(marketAddress.indexOf(" ")+1);
+		String marketNo = payService.getMarketNo(address);
+		Map<String, String> map = new HashMap<>();
+		map.put("marketNo", marketNo);
+		map.put("foodNo", foodNo);
+		int isExist = cartService.getExist(map);
+		if(isExist > 0) {
+			int stock = cartService.getProductStock(map);
+			if(stock >= payDetailAmount) {
+				isEnough = true;
+			}			
+		}
+		
+		return isEnough;
 	}
 	
 	@RequestMapping("/searchMarket.do")

@@ -19,15 +19,19 @@
 		
 		$("#order").on("click", ()=>{
 			var cartArr = [];
+			var selectedCount = 0;
+			var count = 0;
+			var lackedProduct = new Array();
 			if($("#market").val() == ""){
 				alert("배송할 매장을 선택하세요!")
 				return;
 			}
 			for(var i = 1; i <= ${fn:length(list)}; i++){
-				var root = $("#item" + i);
+				var root = $("#item" + i);				
 				if(root.find("input:checkbox[name='list']").is(":checked") == true){
+					selectedCount++;
 					var cartInfo = {};
-					cartInfo.memberId = "jsi124";
+					cartInfo.memberId = "${memberLoggedIn}";
 					cartInfo.payPrice = parseInt($("#totalPayment").text());
 					cartInfo.payFlag = 0;
 					cartInfo.deliverType = $("input:radio[name='delivery']:checked").val();
@@ -35,14 +39,42 @@
 					cartInfo.payDetailAmount = root.find($("input:text[name='amount']")).val();
 					var marketAddress = $("#market").val().substring(0, $("#market").val().indexOf("(")-1);
 					cartInfo.market = marketAddress;
-					cartArr.push(cartInfo);
-				}
+					$.ajax({
+						url: "${pageContext.request.contextPath}/cart/checkstock.do",
+						type: "post",
+						data: cartInfo,
+						async: false,
+						success: function(data){
+							console.log(data);							
+							if(data){
+								count++;							
+							} else {
+								lackedProduct.push(root.find($("td[name='foodName']")).text());
+							}
+						},
+						error: function(xhr, txtStatus, err){
+							console.log("ajax처리실패!", xhr, txtStatus, err);
+						}
+					});
+					cartArr.push(cartInfo);					
+				}				
 			}
 			var cartJson = JSON.stringify(cartArr);
 			console.log(cartArr);
 			console.log(cartJson);
-			$("input[name='cartInfo']").val(cartJson)				
-			$("#doOrder").submit();
+			console.log(count);
+			console.log(selectedCount);			
+			console.log(lackedProduct);
+			$("input[name='cartInfo']").val(cartJson)
+			if(count == selectedCount){
+				$("#doOrder").submit();				
+			} else {
+				var str = "";
+				for(var i=0; i < lackedProduct.length; i++){
+					str += lackedProduct[i] + "\n";
+				}
+				alert("선택된 매장에 재고가 부족합니다. 매장을 변경하거나 상품을 변경해주세요\n" + str);				
+			}
 		});
 		
 	});
@@ -65,7 +97,7 @@
 					foodInfo += "<input type='hidden' name='foodNo' value='"+ data.FOOD_NO +"'>";
 					foodInfo += "<td><input type='checkbox' name='list' id='check"+${vs.count}+"' checked='true' onclick='checkManage(this)'/>&nbsp;&nbsp;&nbsp;";
 					foodInfo += "<img src='"+data.FOOD_IMG+"' width='92px' height='130px'/></td>";
-					foodInfo += "<td>[" + data.FOOD_COMPANY + "] " + data.FOOD_NAME + "</td>";
+					foodInfo += "<td name='foodName'>[" + data.FOOD_COMPANY + "] " + data.FOOD_NAME + "</td>";
 					foodInfo += "<td> <input type='button' value='-' onclick='del(this);'>&nbsp;<input type='text' name='amount' value='" + ${l.cartAmount} + "' size='5' style='text-align:center;' onchange='change(this);'>&nbsp;<input type='button' value='+' onclick='add(this);'></td>";
 					foodInfo += "<td><input type='text' name='totalPrice' value='" + data.FOOD_MEMBER_PRICE * ${l.cartAmount} + "' size='11' style='text-align:center;' readonly></td>";
 					foodInfo += "</tr>";
