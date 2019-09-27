@@ -117,5 +117,15 @@ public class MarketOwnerServiceImpl implements MarketOwnerService {
 		return marketOwnerDAO.selectMarketNoByMemberId(memberId);
 	}
 
+	@Override
+	public List<Map<String, String>> selectFoodStockList(int cPage, String marketNo) {
+		return marketOwnerDAO.selectFoodStockList(cPage, marketNo);
+	}
+
+	@Override
+	public int selectTotalContents(String marketNo) {
+		return marketOwnerDAO.selectTotalContents(marketNo);
+	}
+
 	
 }

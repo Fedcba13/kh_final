@@ -42,4 +42,8 @@ public interface MarketOwnerDAO {
 
 	String selectMarketNoByMemberId(String memberId);
 
+	List<Map<String, String>> selectFoodStockList(int cPage, String marketNo);
+
+	int selectTotalContents(String marketNo);
+
 }

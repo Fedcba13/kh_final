@@ -3,12 +3,13 @@ package com.kh.urbantable.marketOwner.model.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
-import com.kh.urbantable.food.model.vo.FoodWithFoodSection;
+import com.kh.urbantable.marketOwner.model.service.MarketOwnerService;
 import com.kh.urbantable.marketOwner.model.vo.Event;
 import com.kh.urbantable.marketOwner.model.vo.Market;
 import com.kh.urbantable.marketOwner.model.vo.MarketEvent;
@@ -91,6 +92,21 @@ public class MarketOwnerDAOImpl implements MarketOwnerDAO {
 	@Override
 	public String selectMarketNoByMemberId(String memberId) {
 		return sqlSession.selectOne("marketOwner.selectMarketNoByMemberId", memberId);
+	}
+
+	@Override
+	public List<Map<String, String>> selectFoodStockList(int cPage, String marketNo) {
+		//offset : 건너뛸 페이지. 
+		//limit
+		int offset = (cPage-1)*MarketOwnerService.NUM_PER_PAGE;
+		int limit = MarketOwnerService.NUM_PER_PAGE;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return sqlSession.selectList("marketOwner.selectFoodStockList", marketNo, rowBounds);
+	}
+
+	@Override
+	public int selectTotalContents(String marketNo) {
+		return sqlSession.selectOne("marketOwner.selectTotalContents", marketNo);
 	}
 
 }

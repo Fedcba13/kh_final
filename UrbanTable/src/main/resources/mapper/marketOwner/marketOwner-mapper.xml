@@ -148,4 +148,17 @@
 		where member_id=#{memberId} and market_enabled=1
 	</select>
 	
+	<select id="selectFoodStockList" resultType="map">
+		select *
+		from food F left join stock S using(food_no)
+		where market_no=#{marketNo}
+		order by food_no desc
+	</select>
+	
+	<select id="selectTotalContents" resultType="_int">
+		select count(*)
+		from food F left join stock S using(food_no)
+		where market_no=#{marketNo}
+	</select>
+	
 </mapper>
