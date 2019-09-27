@@ -45,7 +45,7 @@ public class EventController {
 		String msg = "";
 		String loc = "";
 		model.addAttribute("msg", result>0?"쿠폰발급이 완료되었습니다":"관리자에게 문의하세요");
-		model.addAttribute("loc", "/event/event_main");
+		model.addAttribute("loc", "/event/eventList.do");
 		
 		return "/common/msg";
 	}

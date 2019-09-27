@@ -24,13 +24,14 @@ public class Notice {
 	private String noticeCategory;
 	private int noticeEnabled;
 	private Date noticeDateModified;
+	private String noticeFile;
 
 	@Override
 	public String toString() {
 		return "Notice [noticeNo=" + noticeNo + ", noticeTitle=" + noticeTitle + ", noticeWriter=" + noticeWriter
 				+ ", noticeContent=" + noticeContent + ", noticeDate=" + noticeDate + ", noticeReadcount="
 				+ noticeReadcount + ", noticeCategory=" + noticeCategory + ", noticeEnabled=" + noticeEnabled
-				+ ", noticeDateModified=" + noticeDateModified + "]";
+				+ ", noticeDateModified=" + noticeDateModified + ", noticeFile=" + noticeFile + "]";
 	}
 
 }

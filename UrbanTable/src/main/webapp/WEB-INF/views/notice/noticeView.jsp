@@ -60,12 +60,31 @@ li input.btn{
             <tr>
             	<td class="txt_left sec_bg" colspan="4" style="padding:10px 30px; box-sizing:border-box;">
                	<pre style="font-family: 'NanumBarunGothic', sans-serif;">
-               	${notice.noticeContent }
+               	<c:if test="${notice.noticeFile != null }">
+               		<img src="${pageContext.request.contextPath }/resources/images/notice/${notice.noticeFile}" alt="" />
+               	</c:if> ${notice.noticeContent }
                	</pre>
             	</td>
             </tr>
         </table>
-		<div class="txt_right" style="margin-top:20px;"><a href="${pageContext.request.contextPath }/notice/noticeList.do" class="dp_block btn txt_center">목록</a></div>
+		<div class="txt_right" style="margin:20px 20px;"><a href="${pageContext.request.contextPath }/notice/noticeList.do" class="dp_block btn txt_center">목록</a></div>
+        <table class="tbl" style="border-bottom: 2px solid #374818;">
+        	<tr>
+        	<th class="txt_left" style="border-right: 1px solid #e9e9e9; width:90px;padding:10px;"><img src="${pageContext.request.contextPath }/resources/images/up-arrow.png" alt="다음글" style="padding-right:5px;"/>다음글</th>
+        	<td style="padding:10px 30px ;">
+        	<c:if test="${preNext.NEXT_NO != null }"><a href="${pageContext.request.contextPath }/notice/noticeView.do?noticeNo=${preNext.NEXT_NO}">${preNext.NEXT_TITLE }</a></c:if>
+        	<c:if test="${preNext.NEXT_NO eq null }">${preNext.NEXT_TITLE }</c:if>
+        	
+        	</td>
+        	</tr>
+        	<tr>
+        	<th class="txt_left" style="border-right: 1px solid #e9e9e9; width:90px; padding:10px;"><img src="${pageContext.request.contextPath }/resources/images/down-arrow.png" alt="이전글" style="padding-right:5px;"/>이전글</th>
+        	<td class="txt_left" style="padding:10px 30px ;">
+        	<c:if test="${preNext.PRE_NO != null }"> <a href="${pageContext.request.contextPath }/notice/noticeView.do?noticeNo=${preNext.PRE_NO}">${preNext.PRE_TITLE }</a> </c:if>
+			<c:if test="${preNext.PRE_NO eq null }"> ${preNext.PRE_TITLE } </c:if>        	
+        	</td>
+			</tr>
+        </table>
     </article>
 </section>
 

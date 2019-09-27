@@ -3,41 +3,67 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="notice">
-	
+
 	<select id="noticeList" resultType="notice">
-		select * from notice where notice_enabled = 1 and notice_category not in ('FAQ')
+		select *
+		from notice
+		where notice_enabled = 1 and notice_category not in ('FAQ')
+		order by
+		notice_date desc
 	</select>
-	
+
 	<select id="selectOne" resultType="notice">
-		select * from notice where notice_no = #{noticeNo}
+		select * from notice where
+		notice_no = #{noticeNo}
 	</select>
-	
+
 	<update id="readcount">
-		update notice set notice_readcount = notice_readcount + 1 where notice_no = #{noticeNo}
+		update notice set notice_readcount = notice_readcount
+		+ 1 where notice_no = #{noticeNo}
 	</update>
-	
-	<insert id="insertNotice" >
-		insert into notice (notice_no, notice_title, notice_writer, notice_content, notice_category)
+
+	<insert id="insertNotice">
+		insert into notice (notice_no,
+		notice_title,
+		notice_writer, notice_content, notice_category, notice_file)
 		values(
-			'nseq' || lpad(notiseq_seq.nextval, 5, '0'),
-			#{noticeTitle},
-			'Urban Table',
-			#{noticeContent},
-			#{noticeCategory}
+		'nseq' || lpad(notiseq_seq.nextval, 5, '0'),
+		#{noticeTitle},
+		#{noticeWriter},
+		#{noticeContent},
+		#{noticeCategory},
+		#{noticeFile}
 		)
 	</insert>
-	
+
 	<update id="updateNotice">
-		update notice 
-		set notice_title = #{noticeTitle}, 
-		notice_content = #{noticeContent}, 
-		notice_category = #{noticeCategory}, 
+		update notice
+		set notice_title = #{noticeTitle},
+		notice_content = #{noticeContent},
+		notice_category = #{noticeCategory},
 		notice_date_modified = sysdate
-		where notice_no = #{noticeNo} 
+		where notice_no = #{noticeNo}
 	</update>
-	
+
 	<update id="deleteNotice">
-		update notice set notice_enabled = 0 where notice_no = #{noticeNo}
+		update notice set notice_enabled = 0 where notice_no
+		= #{noticeNo}
 	</update>
-	
+
+	<select id="selectPreNext" resultType="map">
+		select A.*
+		from (
+			select
+				LEAD(notice_no, 1) OVER (ORDER BY notice_date DESC) AS PRE_NO,
+				LEAD(notice_title, 1, '이전글이 없습니다') OVER (ORDER BY notice_date desc) AS PRE_TITLE,
+				notice_no, notice_title, notice_date,
+				LAG(notice_no, 1) OVER (ORDER BY notice_date DESC) AS NEXT_NO,
+				LAG(notice_title, 1, '다음글이 없습니다') OVER (ORDER BY notice_date desc) AS NEXT_TITLE
+			from notice
+			where notice_enabled = 1 and (notice_category not in 'FAQ')
+			order by notice_date desc
+		) A
+		where notice_no = #{noticeNo}
+	</select>
+
 </mapper>

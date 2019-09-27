@@ -1,6 +1,7 @@
 package com.kh.urbantable.notice.model.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,5 +53,11 @@ public class NoticeServiceImpl implements NoticeService{
 	public int deleteNotice(String noticeNo) {
 		
 		return noticeDAO.deleteNotice(noticeNo);
+	}
+
+	@Override
+	public Map<String, String> selectPreNext(String noticeNo) {
+
+		return noticeDAO.selectPreNext(noticeNo);
 	}
 }

@@ -22,7 +22,7 @@ function validate(){
 	<!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 		<h3 class="sub_tit">공지사항 작성</h3>
-		<form name="noticeFrm" action="${pageContext.request.contextPath}/notice/insertNoticeEnd.do" method="post" onsubmit="return validate();">
+		<form name="noticeFrm" action="${pageContext.request.contextPath}/notice/insertNoticeEnd.do" method="post" onsubmit="return validate();" enctype="multipart/form-data">
 			<table class="tbl tbl_view">
 				<tr>
 					<th>구분 </th>
@@ -34,16 +34,19 @@ function validate(){
                 		<option value="기타공지">기타공지</option>
                 	</select>
 					</td>
+					<td>
+						<input type="file" name="noticeFile1"/>
+					</td>
 				</tr>
 				<tr>
 					<th>제목</th>
-					<td>
+					<td colspan="2">
 					<input type="text" name="noticeTitle" id="noticeTitle" style="width:750px;" />
 					</td>
 				</tr>
 				<tr>
 					<th>내용</th>
-					<td>
+					<td colspan="2">
 					<textarea name="noticeContent" id="noticeContent" cols="30" rows="10" 
 					style="resize: none; width: 750px; height: 358px;"></textarea>
 					</td>
