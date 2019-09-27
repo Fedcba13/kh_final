@@ -35,7 +35,8 @@
 			<result column="RECIPE_NO" property="recipeNo" />
 			<result column="RECIPE_ORDER" property="recipeOrder" />
 			<result column="RECIPE_CONTENT" property="recipeContent" />
-			<result column="RECIPE_PIC" property="recipePic" />
+			<result column="ORIGINAL_RECIPE_PIC" property="originalRecipePic" />
+			<result column="RENAMED_RECIPE_PIC" property="renamedRecipePic" />
 		</collection>
 	</resultMap>
 	
@@ -50,4 +51,51 @@
 		<result column="food_section_no" property="foodSectionNo" />
 		<result column="food_no" property="foodNo" />
 	</resultMap>
+	
+	<insert id="insertRecipe">
+		insert into recipe(recipe_no, member_id, recipe_title, recipe_readcount, recipe_date, recipe_enabled)
+		values('rec' || lpad(rec_seq.nextval, 4, '0'), #{memberId}, #{recipeTitle}, default, default, default)
+	</insert>
+	
+	<select id="selectRecipeNo" resultType="string">
+		select recipe_no from (select * from recipe order by recipe_date desc)
+		where rownum = 1
+	</select>
+	
+	<insert id="insertRecipeSequence" parameterType="java.util.List">
+		<foreach collection="list" item="rs" separator=" " open="INSERT ALL" close="select * from dual">
+			into recipe_sequence
+			(recipe_sequence_no, recipe_no, recipe_order, recipe_content, original_recipe_pic, renamed_recipe_pic)
+			values (
+			'rseq' || lpad(get_sequence_id(), 5, '0'),
+			#{rs.recipeNo},
+			#{rs.recipeOrder},
+			#{rs.recipeContent},
+			#{rs.originalRecipePic},
+			#{rs.renamedRecipePic}
+			)
+		</foreach>
+	</insert>
+	
+	<select id="selectFoodSectionNo" resultType="string">
+		select food_section_no from food_section
+		where food_section_name = #{material}
+	</select>
+	
+	<insert id="insertRecipeIngredient">
+		<foreach collection="list" item="m" separator=" " open="INSERT ALL" close="select * from dual">
+			into recipe_ingredient
+			(recip_ingre_no, recipe_no, food_section_no, food_no)
+			values (
+			'ing' || lpad(get_ingre_id(), 5, '0'),
+			#{m.recipeNo},
+			#{m.foodSectionNo},
+			#{m.foodNo}
+			)
+		</foreach>
+	</insert>
+	
+	<select id="selectFoodNo" resultType="string">
+		select food_no from food where food_section_no = #{foodSectionNo}
+	</select>
 </mapper>

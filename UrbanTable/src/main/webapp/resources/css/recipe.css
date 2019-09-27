@@ -92,3 +92,12 @@
     margin-left: -22px;
     position: absolute;
 }
+
+.upload_name {
+	width:560px;
+}
+
+.btn_submit {
+	margin-top: 10px;
+	text-align: center;
+}

@@ -18,5 +18,6 @@ public class RecipeSequence {
 	private String recipeNo;
 	private int recipeOrder;
 	private String recipeContent;
-	private String recipePic;
+	private String originalRecipePic;
+	private String renamedRecipePic;
 }
