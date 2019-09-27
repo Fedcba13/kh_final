@@ -13,40 +13,42 @@ img.eventImg{
 </style>
 
 <script>
-function insertCoupon1(){
-	
-	location.href="; 
-}
+
 
 </script>
 <section class="sec_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 	    <h3 class="sub_tit">이벤트</h3>
 	    <div class="event_list_wrapper">
-	    	<ul id="event-list" style="position: relative; ">
+	    	<ul id="event-list" style="position: relative; ">  		
 	    		<li class="event_item" style="">
-	    			<a href="${pageContext.request.contextPath }/banner/insertBanner.do">
-	    				<img src="${pageContext.request.contextPath }/resources/images/banner/test.GIF" alt="" class="eventImg"/>
+	    			<a href='${pageContext.request.contextPath}/event/insertCoupon.do?couponDiscount=10&couponEndDate=newDate()+s7'>
+	    				<img src="${pageContext.request.contextPath }/resources/images/banner/20190926_154703374_893.jpg" alt="" class="eventImg"/>
 	    			</a>
 	    		</li>	    		
 	    		<li class="event_item" style="">
 	    			<a href='${pageContext.request.contextPath}/event/insertCoupon.do?couponDiscount=10'>
-	    				<img src="${pageContext.request.contextPath }/resources/images/banner/test.GIF" alt="" class="eventImg"/>
+	    				<img src="${pageContext.request.contextPath }/resources/images/banner/20190926_154703374_893.jpg" alt="" class="eventImg"/>
 	    			</a>
 	    		</li>	    		
 	    		<li class="event_item" style="">
-	    			<a href="${pageContext.request.contextPath }/banner/insertBanner.do">
-	    				<img src="${pageContext.request.contextPath }/resources/images/banner/test.GIF" alt="" class="eventImg"/>
+	    			<a href='${pageContext.request.contextPath}/event/insertCoupon.do?couponDiscount=10'>
+	    				<img src="${pageContext.request.contextPath }/resources/images/banner/20190926_154703374_893.jpg" alt="" class="eventImg"/>
 	    			</a>
 	    		</li>	    		
 	    		<li class="event_item" style="">
-	    			<a href="${pageContext.request.contextPath }/banner/insertBanner.do">
-	    				<img src="${pageContext.request.contextPath }/resources/images/banner/test.GIF" alt="" class="eventImg"/>
+	    			<a href='${pageContext.request.contextPath}/event/insertCoupon.do?couponDiscount=10'>
+	    				<img src="${pageContext.request.contextPath }/resources/images/banner/20190926_154703374_893.jpg" alt="" class="eventImg"/>
 	    			</a>
 	    		</li>	    		
 	    		<li class="event_item" style="">
-	    			<a href="${pageContext.request.contextPath }/banner/insertBanner.do">
-	    				<img src="${pageContext.request.contextPath }/resources/images/banner/test.GIF" alt="" class="eventImg"/>
+	    			<a href='${pageContext.request.contextPath}/event/insertCoupon.do?couponDiscount=10'>
+	    				<img src="${pageContext.request.contextPath }/resources/images/banner/20190926_154703374_893.jpg" alt="" class="eventImg"/>
+	    			</a>
+	    		</li>	    		
+	    		<li class="event_item" style="">
+	    			<a href='${pageContext.request.contextPath}/event/insertCoupon.do?couponDiscount=10'>
+	    				<img src="${pageContext.request.contextPath }/resources/images/banner/20190926_154703374_893.jpg" alt="" class="eventImg"/>
 	    			</a>
 	    		</li>	    		
 	    	</ul>

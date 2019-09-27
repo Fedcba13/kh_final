@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="event">
+
+	<insert id="insertCoupon1">
+		insert into coupon values(
+			'coup' || lpad(coupon_seq.nextval, 5, '0'),
+			#{memberId},
+			#{couponDiscount},
+			sysdate,
+			sysdate + 7,
+			1, 
+			5000
+		)
+	</insert>
+</mapper>
