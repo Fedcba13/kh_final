@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.urbantable.payment.model.vo.Pay;
 import com.kh.urbantable.payment.model.vo.PayDetail;
+import com.kh.urbantable.payment.model.vo.Payment_;
 
 @Repository
 public class PayDAOImple implements PayDAO {
@@ -64,5 +65,15 @@ public class PayDAOImple implements PayDAO {
 	@Override
 	public int deletePayInfo(Pay pay) {
 		return sqlSession.delete("pay.deletePayInfo", pay);
+	}
+
+	@Override
+	public int updatePayInfo(Pay pay) {
+		return sqlSession.update("pay.updatePayInfo", pay);
+	}
+
+	@Override
+	public int insertPayment(Payment_ payment) {
+		return sqlSession.insert("pay.insertPayment", payment);
 	}
 }

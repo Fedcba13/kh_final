@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.kh.urbantable.payment.model.vo.Pay;
 import com.kh.urbantable.payment.model.vo.PayDetail;
+import com.kh.urbantable.payment.model.vo.Payment_;
 
 public interface PayService {
 
@@ -25,5 +26,9 @@ public interface PayService {
 	void rollbackStock(Map<String, Object> map);
 
 	int deletePayInfo(Pay pay);
+
+	int updatePayInfo(Pay pay);
+
+	int insertPayment(Payment_ payment);
 
 }

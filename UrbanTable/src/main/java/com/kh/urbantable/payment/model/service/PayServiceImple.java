@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.kh.urbantable.payment.model.dao.PayDAO;
 import com.kh.urbantable.payment.model.vo.Pay;
 import com.kh.urbantable.payment.model.vo.PayDetail;
+import com.kh.urbantable.payment.model.vo.Payment_;
 
 @Service
 public class PayServiceImple implements PayService {
@@ -63,6 +64,16 @@ public class PayServiceImple implements PayService {
 	@Override
 	public int deletePayInfo(Pay pay) {
 		return payDAO.deletePayInfo(pay);
+	}
+
+	@Override
+	public int updatePayInfo(Pay pay) {
+		return payDAO.updatePayInfo(pay);
+	}
+
+	@Override
+	public int insertPayment(Payment_ payment) {
+		return payDAO.insertPayment(payment);
 	}
 
 }

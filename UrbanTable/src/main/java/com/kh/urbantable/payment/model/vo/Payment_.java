@@ -1,6 +1,6 @@
 package com.kh.urbantable.payment.model.vo;
 
-public class Payment {
+public class Payment_ {
 	
 	private String paymentNo;
 	private String memberId;
@@ -9,11 +9,11 @@ public class Payment {
 	private String bank;
 	private String account;
 	
-	public Payment() {
+	public Payment_() {
 		
 	}
 
-	public Payment(String paymentNo, String memberId, String paymentWay, String card, String bank, String account) {
+	public Payment_(String paymentNo, String memberId, String paymentWay, String card, String bank, String account) {
 		super();
 		this.paymentNo = paymentNo;
 		this.memberId = memberId;

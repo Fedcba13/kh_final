@@ -23,21 +23,55 @@
 			IMP.request_pay({
 			    pg : 'danal',
 			    pay_method : $("input:radio[name='paymentWay']:checked").val(),
-			    merchant_uid : 'merchant_' + new Date().getTime(),
+			    merchant_uid : $("#payNo").val(),
 			    name : '주문명:결제테스트',
 			    amount : 100,//cartInfoArr[0].payPrice,			    
-			    buyer_name : "개똥이",
-			    buyer_tel : '010-1234-5678',
-			    buyer_addr : '서울특별시 강남구 삼성동',
+			    buyer_name : "${memberLoggedIn.memberName}",
+			    buyer_tel : '${memberLoggedIn.memberPhone}',
+			    buyer_addr : '${memberLoggedIn.memberAddress}',
 			    m_redirect_url : 'https://www.yourdomain.com/payments/complete'
 			}, function(rsp) {
-			    if ( rsp.success ) {
-			        var msg = '결제가 완료되었습니다.';
-			        msg += '고유ID : ' + rsp.imp_uid;
-			        msg += '상점 거래ID : ' + rsp.merchant_uid;
-			        msg += '결제 금액 : ' + rsp.paid_amount;
-			        msg += '카드 승인번호 : ' + rsp.apply_num;
-			        updatePayInfo();
+			    if ( rsp.success ) {	//결제 성공시
+			        updatePayInfo();		//pay테이블의 flag를 0->1 로 update	        
+			        $.ajax({			//결제정보를 받아오는 ajax를 작성
+			        	url: "${pageContext.request.contextPath}/pay/getPayInfo.do",
+			        	type: "post",
+			        	data: {
+			        		imp_uid: rsp.imp_uid
+			        	},
+			        	dataType: "json",
+			        	success: function(data){
+			        		console.log(data);
+			        		$.ajax({
+			        			url: "${pageContext.request.contextPath}/pay/insertPayment.do",
+			        			type: "POST",
+			        			data: {
+			        				memberId: "${memberLoggedIn.memberId}",
+			        				paymentWay: data.response.payMethod,
+			        				card: data.response.cardName,
+			        				bank: data.response.vbankName,
+			        				account: data.response.vbankNum
+			        			},
+			        			success: function(data){
+			        				if(data==1){
+			        					alert("paymentTable에 삽입성공");
+			        				}
+			        			}, 
+			        			error: function(xhr, txtStatus, err){
+									console.log("ajax처리실패!", xhr, txtStatus, err);
+								}
+			        		})
+					        var msg = '결제가 완료되었습니다.\n';
+					        msg += '고유ID : ' + rsp.imp_uid + "\n";
+					        msg += '결제ID : ' + rsp.merchant_uid + "\n";
+					        msg += '결제 금액 : ' + rsp.paid_amount + "\n";
+					        msg += '카드 승인번호 : ' + rsp.apply_num;
+							alert(msg);
+						},
+						error: function(xhr, txtStatus, err){
+							console.log("ajax처리실패!", xhr, txtStatus, err);
+						}			        	
+			        })
 			    } else {
 			        var msg = '결제에 실패하였습니다.';
 			        msg += '에러내용 : ' + rsp.error_msg;
@@ -242,7 +276,22 @@
 	}
 	
 	function updatePayInfo(){
-		
+		var param = {
+				payNo: $("#payNo").val(),
+				memberId: "${memberLoggedIn.memberId}",
+				payFlag: 1
+		}
+		$.ajax({
+			url: "${pageContext.request.contextPath}/pay/updatePay.do",
+			type: "post",
+			data: param,
+			success: function(data){
+				console.log(data);
+			},
+			error: function(xhr, txtStatus, err){
+				console.log("ajax처리실패!", xhr, txtStatus, err);
+			}
+		})
 	}
 	
 </script>
