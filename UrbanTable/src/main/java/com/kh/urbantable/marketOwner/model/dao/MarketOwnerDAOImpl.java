@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
+import com.kh.urbantable.cart.model.vo.Cart;
+import com.kh.urbantable.food.model.vo.FoodDivision;
 import com.kh.urbantable.marketOwner.model.service.MarketOwnerService;
 import com.kh.urbantable.marketOwner.model.vo.Event;
 import com.kh.urbantable.marketOwner.model.vo.Market;
@@ -95,18 +97,56 @@ public class MarketOwnerDAOImpl implements MarketOwnerDAO {
 	}
 
 	@Override
-	public List<Map<String, String>> selectFoodStockList(int cPage, String marketNo) {
+	public List<Map<String, String>> selectFoodStockList(int cPage, Map<String, String> param) {
 		//offset : 건너뛸 페이지. 
 		//limit
 		int offset = (cPage-1)*MarketOwnerService.NUM_PER_PAGE;
 		int limit = MarketOwnerService.NUM_PER_PAGE;
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		return sqlSession.selectList("marketOwner.selectFoodStockList", marketNo, rowBounds);
+		return sqlSession.selectList("marketOwner.selectFoodStockList", param, rowBounds);
 	}
 
 	@Override
-	public int selectTotalContents(String marketNo) {
-		return sqlSession.selectOne("marketOwner.selectTotalContents", marketNo);
+	public int selectTotalContents(Map<String, String> param) {
+		return sqlSession.selectOne("marketOwner.selectTotalContents", param);
+	}
+
+	@Override
+	public List<FoodDivision> selectFoodDivision() {
+		return sqlSession.selectList("marketOwner.selectFoodDivision");
+	}
+
+	@Override
+	public int insertMarketOrderCart(Map<String, Object> param) {
+		return sqlSession.insert("marketOwner.insertMarketOrderCart", param);
+	}
+
+	@Override
+	public List<Cart> checkMarketCart(Map<String, Object> param) {
+		return sqlSession.selectList("marketOwner.checkMarketCart", param);
+	}
+
+	@Override
+	public int updateMarketOrderCart(Map<String, Object> param) {
+		return sqlSession.update("marketOwner.updateMarketOrderCart", param);
+	}
+
+	@Override
+	public List<Map<String, String>> selectMarketCartList(int cPage, Map<String, String> param) {
+		int offset = (cPage-1)*MarketOwnerService.NUM_PER_PAGE;
+		int limit = MarketOwnerService.NUM_PER_PAGE;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return sqlSession.selectList("marketOwner.selectMarketCartList", param, rowBounds);
+	}
+
+	@Override
+	public int selectCartTotalContents(Map<String, String> param) {
+		return sqlSession.selectOne("marketOwner.selectCartTotalContents", param);
+	}
+
+	@Override
+	public int delMarketOrderCart(Map<String, String> param) {
+		return sqlSession.delete("marketOwner.delMarketOrderCart", param);
 	}
 
 }

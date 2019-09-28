@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
+import com.kh.urbantable.cart.model.vo.Cart;
+import com.kh.urbantable.food.model.vo.FoodDivision;
 import com.kh.urbantable.food.model.vo.FoodWithFoodSection;
 import com.kh.urbantable.marketOwner.model.dao.MarketOwnerDAO;
 import com.kh.urbantable.marketOwner.model.vo.Event;
@@ -118,13 +120,56 @@ public class MarketOwnerServiceImpl implements MarketOwnerService {
 	}
 
 	@Override
-	public List<Map<String, String>> selectFoodStockList(int cPage, String marketNo) {
-		return marketOwnerDAO.selectFoodStockList(cPage, marketNo);
+	public List<Map<String, String>> selectFoodStockList(int cPage, Map<String, String> param) {
+		return marketOwnerDAO.selectFoodStockList(cPage, param);
 	}
 
 	@Override
-	public int selectTotalContents(String marketNo) {
-		return marketOwnerDAO.selectTotalContents(marketNo);
+	public int selectTotalContents(Map<String, String> param) {
+		return marketOwnerDAO.selectTotalContents(param);
+	}
+
+	@Override
+	public List<FoodDivision> selectFoodDivision() {
+		return marketOwnerDAO.selectFoodDivision();
+	}
+	
+	@Override
+	public List<Cart> checkMarketCart(Map<String, Object> param) {
+		return marketOwnerDAO.checkMarketCart(param);
+	}
+	
+	@Override
+	public int insertMarketOrderCart(Map<String, Object> param) {
+		List<Cart> checkMarketCart = marketOwnerDAO.checkMarketCart(param);
+		int result = -1;
+		if(checkMarketCart.isEmpty()) {
+			result = marketOwnerDAO.insertMarketOrderCart(param);
+		} else if(!checkMarketCart.isEmpty()) {
+			result = 0;
+		}
+		
+		return result;
+	}
+
+	@Override
+	public int updateMarketOrderCart(Map<String, Object> param) {
+		return marketOwnerDAO.updateMarketOrderCart(param);
+	}
+
+	@Override
+	public List<Map<String, String>> selectMarketCartList(int cPage, Map<String, String> param) {
+		return marketOwnerDAO.selectMarketCartList(cPage, param);
+	}
+
+	@Override
+	public int selectCartTotalContents(Map<String, String> param) {
+		return marketOwnerDAO.selectCartTotalContents(param);
+	}
+
+	@Override
+	public int delMarketOrderCart(Map<String, String> param) {
+		return marketOwnerDAO.delMarketOrderCart(param);
 	}
 
 	

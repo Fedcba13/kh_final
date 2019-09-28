@@ -19,8 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.gson.Gson;
 import com.kh.urbantable.admin.model.vo.MarketMember;
+import com.kh.urbantable.cart.model.vo.Cart;
+import com.kh.urbantable.food.model.vo.FoodDivision;
 import com.kh.urbantable.marketOwner.model.service.MarketOwnerService;
 import com.kh.urbantable.marketOwner.model.vo.Event;
 import com.kh.urbantable.marketOwner.model.vo.Market;
@@ -264,22 +265,42 @@ public class MarketOwnerController {
 	
 	@RequestMapping("/marketStock.do")
 	public String marketStock(@RequestParam(value="cPage", defaultValue="1") int cPage,
+			@RequestParam(value="foodDivision", defaultValue="") String foodDivision,
+			@RequestParam(value="foodOrderSearchType", defaultValue="") String foodOrderSearchType,
+			@RequestParam(value="foodOrderSearchKeyword", defaultValue="") String foodOrderSearchKeyword,
+			@RequestParam String memberId,
 			Model model) {
+		List<FoodDivision> foodDivisionList = marketOwnerService.selectFoodDivision();
+		String marketNo = marketOwnerService.selectMarketNoByMemberId(memberId);
+		model.addAttribute("foodDivisionList", foodDivisionList);
 		model.addAttribute("cPage", cPage);
+		model.addAttribute("foodDivision", foodDivision);
+		model.addAttribute("foodOrderSearchType", foodOrderSearchType);
+		model.addAttribute("foodOrderSearchKeyword", foodOrderSearchKeyword);
+		model.addAttribute("marketNo", marketNo);
 		return "marketOwner/marketStock";
 	}
 	
 	@ResponseBody
 	@RequestMapping("/marketStockPage.do")
 	public Map<String, Object> marketStockPage(@RequestParam(value="cPage", defaultValue="1", required=false) int cPage,
-			@RequestParam String memberId, HttpServletRequest request){
+			@RequestParam String memberId,
+			@RequestParam String foodDivision,
+			@RequestParam String foodOrderSearchType, 
+			@RequestParam String foodOrderSearchKeyword, HttpServletRequest request){
 		
 		String marketNo = marketOwnerService.selectMarketNoByMemberId(memberId);
 		
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("marketNo", marketNo);
+		param.put("foodDivision", foodDivision);
+		param.put("foodOrderSearchType", foodOrderSearchType);
+		param.put("foodOrderSearchKeyword", foodOrderSearchKeyword);
+		
 		Map<String, Object> result = new HashMap<String, Object>();
 		
-		List<Map<String, String>> foodStockList = marketOwnerService.selectFoodStockList(cPage, marketNo);
-		int totalContents = marketOwnerService.selectTotalContents(marketNo);
+		List<Map<String, String>> foodStockList = marketOwnerService.selectFoodStockList(cPage, param);
+		int totalContents = marketOwnerService.selectTotalContents(param);
 		int totalPage = (int)Math.ceil((double)totalContents/marketOwnerService.NUM_PER_PAGE);
 		
 		final int pageBarSize = 10;
@@ -292,9 +313,9 @@ public class MarketOwnerController {
 		
 		//이전
 		if(pageNo==1) { //첫번째 페이지일 경우
-			pageBar += "<span>이전</span>";
+			//pageBar += "<span><</span>";
 		} else {
-			pageBar += "<a href='"+request.getContextPath()+"/market/marketStock.do?memberId="+memberId+"&cPage="+(pageNo-1)+"'>이전</a>";
+			pageBar += "<a href='#' rel='"+(pageNo-1)+"'><</a>";
 		}
 		
 		//page
@@ -302,16 +323,16 @@ public class MarketOwnerController {
 			if(pageNo==cPage) {
 				pageBar+="<span class='cPage'>"+pageNo+"</span>";
 			} else {
-				pageBar+="<a href='"+request.getContextPath()+"/market/marketStock.do?memberId="+memberId+"&cPage="+pageNo+"'>"+pageNo+"</a>";
+				pageBar+="<a href='#' rel='"+pageNo+"'>"+pageNo+"</a>";
 			}
 			pageNo++;
 		}
 		
 		//다음
 		if(pageNo>totalPage) {
-			pageBar += "<span>다음</span>";
+			//pageBar += "<span>></span>";
 		} else {
-			pageBar += "<a href='"+request.getContextPath()+"/market/marketStock.do?memberId="+memberId+"&cPage="+pageNo+"'>다음</a>";
+			pageBar += "<a href='#' rel='"+pageNo+"'>></a>";
 		}
 		
 		result.put("marketNo", marketNo);
@@ -321,4 +342,109 @@ public class MarketOwnerController {
 		return result;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="/marketOrderCart.do", method=RequestMethod.POST)
+	public Map<String, Object> marketOrderCart(@RequestParam String memberId,
+				@RequestParam String foodNo, @RequestParam int marketOrderDetailAmount, 
+				@RequestParam int status){
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("memberId", memberId);
+		param.put("foodNo", foodNo);
+		param.put("marketOrderDetailAmount", marketOrderDetailAmount);
+		
+		String msg = "";
+		int checkMarketCart = 0;
+		
+		logger.info("status={}",status);
+		
+		if(status == 0) {
+			checkMarketCart = marketOwnerService.insertMarketOrderCart(param);
+			if(checkMarketCart>0) {
+				msg = "발주 요청 항목에 추가하였습니다.";
+			} else if(checkMarketCart==0) {
+				msg = "이미 추가된 발주 항목입니다.";
+			} else {
+				msg = "발주 요청 항목에 추가에 실패하였습니다. 관리자에게 문의하세요.";
+			}
+		} else if(status==1) {
+			checkMarketCart = marketOwnerService.updateMarketOrderCart(param);
+			if(checkMarketCart>0) {
+				msg = "발주 요청 수량을 변경했습니다.";
+			} else {
+				msg = "발주 요청 항목에 추가에 실패하였습니다. 관리자에게 문의하세요.";
+			}
+		}
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("msg", msg);
+		result.put("checkMarketCart", checkMarketCart);
+		
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/marketCartPage.do")
+	public Map<String, Object> marketCartPage(@RequestParam(value="cPage", defaultValue="1", required=false) int cPage,
+			@RequestParam String memberId, HttpServletRequest request){
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("memberId", memberId);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		List<Map<String, String>> marketCartList = marketOwnerService.selectMarketCartList(cPage, param);
+		int totalContents = marketOwnerService.selectCartTotalContents(param);
+		int totalPage = (int)Math.ceil((double)totalContents/marketOwnerService.NUM_PER_PAGE);
+		
+		final int pageBarSize = 10;
+		String pageBar = "";
+		
+		int pageStart = ((cPage-1)/pageBarSize)*pageBarSize+1;
+		int pageEnd = pageStart+pageBarSize-1;
+		
+		int pageNo = pageStart;
+		
+		//이전
+		if(pageNo==1) { //첫번째 페이지일 경우
+			//pageBar += "<span><</span>";
+		} else {
+			pageBar += "<a href='#' rel='"+(pageNo-1)+"'><</a>";
+		}
+		
+		//page
+		while(pageNo<=pageEnd && pageNo<=totalPage) {
+			if(pageNo==cPage) {
+				pageBar+="<span class='cPage'>"+pageNo+"</span>";
+			} else {
+				pageBar+="<a href='#' rel='"+pageNo+"'>"+pageNo+"</a>";
+			}
+			pageNo++;
+		}
+		
+		//다음
+		if(pageNo>totalPage) {
+			//pageBar += "<span>></span>";
+		} else {
+			pageBar += "<a href='#' rel='"+pageNo+"'>></a>";
+		}
+		
+		result.put("pageBar", pageBar);
+		result.put("marketCartList", marketCartList);
+		
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/delMarketOrderCart.do", method=RequestMethod.POST)
+	public Map<String, Object> delMarketOrderCart(@RequestParam String memberId,
+			@RequestParam String foodNo){
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("memberId", memberId);
+		param.put("foodNo", foodNo);
+		
+		int delCart = marketOwnerService.delMarketOrderCart(param);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("msg", delCart>0?"발주 요청 품목에서 삭제했습니다.":"발푸 요청 품목 삭제에 실패했습니다. 관리자에게 문의하세요.");
+		return result;
+	}
 }
