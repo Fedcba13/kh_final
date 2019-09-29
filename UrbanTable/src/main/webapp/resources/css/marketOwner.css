@@ -457,3 +457,7 @@ form[name=orderSearchFrm2] > div > div {
 .orderReqWrap input {
 	float:right;
 }
+
+#foodOrderRequest .tbl a:hover {
+	text-decoration:underline;
+}

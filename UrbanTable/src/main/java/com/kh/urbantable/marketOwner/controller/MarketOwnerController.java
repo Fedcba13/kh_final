@@ -272,12 +272,14 @@ public class MarketOwnerController {
 			Model model) {
 		List<FoodDivision> foodDivisionList = marketOwnerService.selectFoodDivision();
 		String marketNo = marketOwnerService.selectMarketNoByMemberId(memberId);
+		
 		model.addAttribute("foodDivisionList", foodDivisionList);
 		model.addAttribute("cPage", cPage);
 		model.addAttribute("foodDivision", foodDivision);
 		model.addAttribute("foodOrderSearchType", foodOrderSearchType);
 		model.addAttribute("foodOrderSearchKeyword", foodOrderSearchKeyword);
 		model.addAttribute("marketNo", marketNo);
+		model.addAttribute("memberId", memberId);
 		return "marketOwner/marketStock";
 	}
 	
@@ -392,6 +394,10 @@ public class MarketOwnerController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		
 		List<Map<String, String>> marketCartList = marketOwnerService.selectMarketCartList(cPage, param);
+		int cartTotal = 0;
+		if(!marketCartList.isEmpty()) {
+			cartTotal = marketOwnerService.selectCartTotal(memberId);
+		}
 		int totalContents = marketOwnerService.selectCartTotalContents(param);
 		int totalPage = (int)Math.ceil((double)totalContents/marketOwnerService.NUM_PER_PAGE);
 		
@@ -429,6 +435,7 @@ public class MarketOwnerController {
 		
 		result.put("pageBar", pageBar);
 		result.put("marketCartList", marketCartList);
+		result.put("cartTotal", cartTotal);
 		
 		return result;
 	}

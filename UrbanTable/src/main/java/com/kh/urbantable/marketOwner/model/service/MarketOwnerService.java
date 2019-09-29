@@ -60,4 +60,6 @@ public interface MarketOwnerService {
 
 	int delMarketOrderCart(Map<String, String> param);
 
+	int selectCartTotal(String memberId);
+
 }

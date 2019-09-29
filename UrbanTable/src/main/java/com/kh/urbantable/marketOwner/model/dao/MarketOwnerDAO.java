@@ -62,4 +62,6 @@ public interface MarketOwnerDAO {
 
 	int delMarketOrderCart(Map<String, String> param);
 
+	int selectCartTotal(String memberId);
+
 }

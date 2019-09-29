@@ -233,4 +233,10 @@
 		where member_id=#{memberId} and flag=2 and food_no=#{foodNo}
 	</delete>
 	
+	<select id="selectCartTotal" resultType="_int">
+		select sum(C.cart_amount*F.food_market_price)
+		from cart C left join food F on C.food_no=F.food_no
+		where C.member_id=#{memberId} and C.flag=2
+	</select>
+	
 </mapper>

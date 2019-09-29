@@ -172,5 +172,10 @@ public class MarketOwnerServiceImpl implements MarketOwnerService {
 		return marketOwnerDAO.delMarketOrderCart(param);
 	}
 
+	@Override
+	public int selectCartTotal(String memberId) {
+		return marketOwnerDAO.selectCartTotal(memberId);
+	}
+
 	
 }

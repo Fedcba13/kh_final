@@ -9,7 +9,6 @@ public class MarketOrderDetail {
 	private String marketOrderNo;
 	private String foodNo;
 	private int marketOrderDetailAmount;
-	private int marketOrderDetailFlag;
 	private String foodCompany;
 	
 }

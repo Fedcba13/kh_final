@@ -149,4 +149,9 @@ public class MarketOwnerDAOImpl implements MarketOwnerDAO {
 		return sqlSession.delete("marketOwner.delMarketOrderCart", param);
 	}
 
+	@Override
+	public int selectCartTotal(String memberId) {
+		return sqlSession.selectOne("marketOwner.selectCartTotal", memberId);
+	}
+
 }

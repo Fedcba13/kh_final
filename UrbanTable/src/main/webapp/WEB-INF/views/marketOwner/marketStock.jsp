@@ -7,7 +7,6 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/marketOwner.css">
 <script>
-var orderList=[];
 var orderTotal=0;
 $(()=>{
 	
@@ -63,7 +62,6 @@ $(()=>{
 		$(".list_wrap > div").hide();
 		$(".list_wrap > div#"+ac_tab).fadeIn("fast");
 	});
-	
 	
 	$(document).on('click', "#stockList .pageBar a", function(e){
 		e.preventDefault();
@@ -260,14 +258,17 @@ function printCartData(data){
 			html += "<td>"+comma(mc[i].FOOD_MARKET_PRICE*mc[i].CART_AMOUNT)+"원</td>";
 			html += "<td><input type='button' value='-' class='btn delBtn' style='width:40px;' /></td>";
 			html += "</tr>";
-			orderTotal+=mc[i].FOOD_MARKET_PRICE*mc[i].CART_AMOUNT;
-			orderList.push(JSON.stringify(mc[i]));
 		}
+		orderTotal = data.cartTotal;
+		var reqWrap = "<div class='orderReqWrap txt_center clearfix'>";
+		reqWrap += "<p class='orderTotal'>총 <span class='dp_ib red fw600' style='padding:0 5px 0 10px;'>"+comma(orderTotal)+"</span>원</p>";
+		reqWrap += "<input type='button' value='발주 요청' class='btn' onclick='orderToAdmin();' />";
+		reqWrap += "</div>";
+		$("#orderList #orderTotal").html(reqWrap);
 	} else {
-		html += "<tr><td colspan='5'>조회된 데이터가 없습니다.</td></tr>";
+		html += "<tr><td colspan='6'>조회된 데이터가 없습니다.</td></tr>";
 	}
 	html += "</tbody>";
-	$("#orderList .orderTotal").html("총 <span class='dp_ib red fw600' style='padding:0 5px 0 10px;'>"+comma(orderTotal)+"</span>원");
 	$("#orderList .tbl").html(html);
 	$("#orderList .pageBar").html(data.pageBar);
 }
@@ -302,17 +303,13 @@ function amountUpdate(param){
 
 function orderToAdmin(){
 	var param = {
+		memberId: "${memberId}",
 		marketNo:"${marketNo}",
-		orderTotal: orderTotal,
-		orderList: orderList
+		orderTotal: orderTotal
 	}; 
-	
-	console.log(orderList);
-	console.log(typeof(orderList[0])); //string
 	
 	$.ajax({
 		url: "${pageContext.request.contextPath}/foodOrder/marketFoodOrder.do",
-		traditional: true,
 		data: param,
 		type: "post",
 		dataType: "json",
@@ -320,7 +317,7 @@ function orderToAdmin(){
 			var popup = "<div class='marketOrderPopup'>";
 			popup += "<p>"+data.msg+"</p>";
 			popup += "<div class='marketOrderBtn txt_center'>";
-			popup += "<input type='button' value='확인' class='cancelBtn dp_ib btn' />";
+			popup += "<input type='button' value='확인' class='dp_ib btn' onclick='goRequestList();' />";
 			popup += "</div></div>";
 			$(".popupWrap").html(popup).show();
 		},
@@ -328,6 +325,10 @@ function orderToAdmin(){
 			console.log("ajax 처리 실패", xhr, txtStatus, err);
 		}
 	});
+}
+
+function goRequestList(){
+	location.href="${pageContext.request.contextPath}/foodOrder/foodOrderRequest.do?memberId=${memberId}";
 }
 </script>
 <section>
@@ -360,10 +361,7 @@ function orderToAdmin(){
 	    		<h3 class="sub_tit">발주 요청 예정 품목</h3>
 	    		<table class="tbl txt_center"></table>
 	    		<div class="pageBar"></div>
-	    		<div class="orderReqWrap txt_center clearfix">
-	    			<p class="orderTotal"></p>
-	    			<input type="button" value="발주 요청" class="btn" onclick="orderToAdmin();" />
-	    		</div>
+	    		<div id="orderTotal"></div>
 	    	</div>
 	    </div>
 	    <div class="popupWrap"></div>

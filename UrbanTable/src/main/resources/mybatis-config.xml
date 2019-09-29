@@ -50,5 +50,7 @@
 			alias="marketOrderDetail" />
 		<typeAlias type="com.kh.urbantable.member.model.vo.MemberAutoLogin"
 			alias="memberAutoLogin"/>
+		<typeAlias type="com.kh.urbantable.foodOrder.model.vo.MarketCart"
+			alias="marketCart"/>
 	</typeAliases>
 </configuration>
