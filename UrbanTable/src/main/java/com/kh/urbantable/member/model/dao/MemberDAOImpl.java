@@ -77,6 +77,5 @@ public class MemberDAOImpl implements MemberDAO {
 	public void deleteAutoLogin(MemberAutoLogin memberAutoLogin) {
 		sqlSession.delete("member.deleteAutoLogin", memberAutoLogin);
 	}
-	
 
 }

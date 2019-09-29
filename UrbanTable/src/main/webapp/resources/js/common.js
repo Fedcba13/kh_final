@@ -20,6 +20,7 @@ $(document).ready(function(){
     //로그인 모달
     
     var modal = $(".login-modal");
+    $(".login-modal [name=autoLogin]").prop("disabled", true);
     
     //로그인 버튼 클릭시
     $(".login-btn").click(()=>{
@@ -40,6 +41,12 @@ $(document).ready(function(){
 	    }
 	});
 	
+	//ID 저장 체크시 자동로그인 활성화
+	$(".login-modal [name=saveId]").change(()=>{
+		$(".login-modal [name=autoLogin]").prop("checked", false);
+		$(".login-modal [name=autoLogin]").prop("disabled", !$(".login-modal [name=saveId]").prop("checked"));
+	});
+	
 	//로그인 ajax
 	$(".login-modal .login").click(()=>{
 		var param = {
@@ -48,8 +55,6 @@ $(document).ready(function(){
 				saveId : $("input[name=saveId]").prop('checked'),
 				autoLogin : $("input[name=autoLogin]").prop('checked')
 		}
-		
-		console.log(param);
 		
 		$.ajax({
 			url: contextPath+"/member/memberLogin.do",
@@ -73,5 +78,14 @@ $(document).ready(function(){
 			}
 		});
 	});
+	
+	//아이디 저장
+	var saveIdCookie = document.cookie.match('(^|;) ?saveIdCookie=([^;]*)(;|$)');
+	saveIdCookie = saveIdCookie? saveIdCookie[2]:""
+	if(saveIdCookie != null && saveIdCookie != ""){
+		$(".login-modal [name=memberId]").val(saveIdCookie);
+		$(".login-modal input[type=checkbox][name=saveId]").prop("checked", true);
+		$(".login-modal [name=autoLogin]").prop("disabled", !$(".login-modal [name=saveId]").prop("checked"));
+	}
 
 });

@@ -95,7 +95,7 @@ public class MemberServiceImpl implements MemberService {
 	//자동로그인 정보 삭제
 	@Override
 	public void removeAutoLogin(MemberAutoLogin memberAutoLogin) {
-		memberDAO.insertAutoLogin(memberAutoLogin);
+		memberDAO.deleteAutoLogin(memberAutoLogin);
 	}
 
 }

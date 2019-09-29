@@ -136,11 +136,11 @@
 				<button type="button" class="btn login">로그인</button>
 				<div>
 					<div class="chk_option">
-						<input type="checkbox" checked="checked" name="saveId" id="saveId">
+						<input type="checkbox" name="saveId" id="saveId">
 						<label for="saveId">아이디저장</label>
 					</div>
 					<div class="chk_option">
-						<input type="checkbox" checked="checked" name="autoLogin" id="autoLogin">
+						<input type="checkbox" name="autoLogin" id="autoLogin">
 						<label for="autoLogin">자동로그인</label>
 					</div>
 				</div>
