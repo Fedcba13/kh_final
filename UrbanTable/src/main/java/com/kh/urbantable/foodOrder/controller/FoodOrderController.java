@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,18 +37,23 @@ public class FoodOrderController {
 	
 	@ResponseBody
 	@RequestMapping(value="/marketFoodOrder.do", method=RequestMethod.POST)
-	public Map<String, String> marketFoodOrder(@RequestBody List<Map<String, Object>> orderList){
-		logger.info("orderList="+orderList);
+	public Map<String, String> marketFoodOrder(
+			@RequestParam(value="marketNo") String marketNo, 
+			@RequestParam(value="orderTotal") int orderTotal,
+			@RequestParam(value="orderList") List<String> orderList){
 		
-		if(!orderList.isEmpty()) {
-			for(Map<String, Object> order : orderList) {
-				//MarketOrder marketOrder = new MarketOrder();
-				logger.info((String) order.get("MARKET_NO"));
-			}
-		}
+		logger.info("orderList="+orderList);
+		logger.info("marketNo="+marketNo);
+		logger.info("orderTotal="+orderTotal);
+		
+		MarketOrder marketOrder = new MarketOrder();
+		marketOrder.setMarketNo(marketNo);
+		marketOrder.setMarketOrderPrice(orderTotal);
+		
+		int moResult = foodOrderService.insertMarketOrder(marketOrder, orderList);
 		
 		Map<String, String> result = new HashMap<String, String>();
-		
+		result.put("msg", moResult>0?"발주 요청이 완료되었습니다.":"발주 요청에 실패하였습니다. 관리자에게 문의하세요.");
 		return result;
 	}
 }

@@ -216,10 +216,9 @@
 	</update>
 	
 	<select id="selectMarketCartList" resultType="map">
-		select C.*, F.food_name, F.food_market_price, F.food_company, M.market_no
+		select C.*, F.food_name, F.food_market_price, F.food_company
 		from cart C left join food F on C.food_no=F.food_no
-		left join market M on M.member_id=C.member_id
-		where C.member_id=#{memberId} and C.flag=2 and M.market_enabled=1 and M.flag=2
+		where C.member_id=#{memberId} and C.flag=2
 	</select>
 	
 	<select id="selectCartTotalContents" resultType="_int">

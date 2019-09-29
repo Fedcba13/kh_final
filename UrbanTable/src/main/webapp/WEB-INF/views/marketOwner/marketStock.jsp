@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/marketOwner.css">
 <script>
 var orderList=[];
+var orderTotal=0;
 $(()=>{
 	
 	var cPage = '${cPage}';
@@ -226,7 +227,7 @@ function printData(data){
 			html += "<td rel='foodNo'>"+fs[i].FOOD_NO+"</td>";
 			html += "<td rel='foodName'>"+fs[i].FOOD_NAME+"</td>";
 			html += "<td rel='foodStockAmount'>"+fs[i].STOCK_AMOUNT+"</td>";
-			html += "<td rel='foodMarketPrice'>"+fs[i].FOOD_MARKET_PRICE+"</td>";
+			html += "<td rel='foodMarketPrice'>"+comma(fs[i].FOOD_MARKET_PRICE)+"원</td>";
 			html += "<td rel='marketOrderAmount'><input type='number' name='marketOrderDetailAmount' style='width:70px;' /></td>";
 			html += "<td><input type='button' value='+' class='btn orderBtn' style='width:40px;' /></td>";
 			html += "</tr>";
@@ -241,7 +242,6 @@ function printData(data){
 
 function printCartData(data){
 	var mc = data.marketCartList;
-	var orderTotal=0;
 	var html = "<thead><tr class='sec_bg'>";
 	html += "<th width='110'>상품코드</th>";
 	html += "<th width='474'>상품명</th>";
@@ -257,11 +257,11 @@ function printCartData(data){
 			html += "<td>"+mc[i].FOOD_NAME+"</td>";
 			html += "<td>"+mc[i].FOOD_MARKET_PRICE+"</td>";
 			html += "<td>"+mc[i].CART_AMOUNT+"</td>";
-			html += "<td>"+mc[i].FOOD_MARKET_PRICE*mc[i].CART_AMOUNT+"원</td>";
+			html += "<td>"+comma(mc[i].FOOD_MARKET_PRICE*mc[i].CART_AMOUNT)+"원</td>";
 			html += "<td><input type='button' value='-' class='btn delBtn' style='width:40px;' /></td>";
 			html += "</tr>";
 			orderTotal+=mc[i].FOOD_MARKET_PRICE*mc[i].CART_AMOUNT;
-			orderList.push(mc[i]);
+			orderList.push(JSON.stringify(mc[i]));
 		}
 	} else {
 		html += "<tr><td colspan='5'>조회된 데이터가 없습니다.</td></tr>";
@@ -270,10 +270,6 @@ function printCartData(data){
 	$("#orderList .orderTotal").html("총 <span class='dp_ib red fw600' style='padding:0 5px 0 10px;'>"+comma(orderTotal)+"</span>원");
 	$("#orderList .tbl").html(html);
 	$("#orderList .pageBar").html(data.pageBar);
-	
-	//var btn = "<input type='button' value='발주 요청' class='btn' onclick='orderToAdmin("+JSON.stringify(mc)+");' />";
-	//$("#orderList .orderReqWrap").append(btn);
-	//orderList=JSON.stringify(mc);
 }
 
 function comma(str) {
@@ -305,20 +301,28 @@ function amountUpdate(param){
 }
 
 function orderToAdmin(){
-	/* var param = {
+	var param = {
 		marketNo:"${marketNo}",
+		orderTotal: orderTotal,
 		orderList: orderList
 	}; 
-	console.log(JSON.stringify(param));*/
+	
+	console.log(orderList);
+	console.log(typeof(orderList[0])); //string
 	
 	$.ajax({
 		url: "${pageContext.request.contextPath}/foodOrder/marketFoodOrder.do",
-		data: JSON.stringify(orderList),
-		contentType: 'application/json; charset=utf-8',
+		traditional: true,
+		data: param,
 		type: "post",
 		dataType: "json",
 		success: function(data){
-			console.log(data);
+			var popup = "<div class='marketOrderPopup'>";
+			popup += "<p>"+data.msg+"</p>";
+			popup += "<div class='marketOrderBtn txt_center'>";
+			popup += "<input type='button' value='확인' class='cancelBtn dp_ib btn' />";
+			popup += "</div></div>";
+			$(".popupWrap").html(popup).show();
 		},
 		error: function(xhr, txtStatus, err){
 			console.log("ajax 처리 실패", xhr, txtStatus, err);
