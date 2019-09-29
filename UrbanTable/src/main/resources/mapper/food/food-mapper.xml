@@ -39,16 +39,25 @@
         					left join food f on s.food_section_no = f.food_section_no
 		where (S.food_section_no like #{foodCatNo}) OR (D.FOOD_DIVISION_NO like #{foodCatNo}) 
 	</select> -->
-	<select id="selectFoodByDiv" resultType="food">
-		select F.FOOD_NO, F.FOOD_NAME, F.FOOD_SECTION_NO, F.FOOD_COMPANY, F.FOOD_MARKET_PRICE, F.FOOD_MEMBER_PRICE, F.FOOD_ENABLED, F.FOOD_IMG
+	<select id="selectFoodByDiv" resultType="FoodWithStockInMarket">
+		<!-- select F.FOOD_NO, F.FOOD_NAME, F.FOOD_SECTION_NO, F.FOOD_COMPANY, F.FOOD_MARKET_PRICE, F.FOOD_MEMBER_PRICE, F.FOOD_ENABLED, F.FOOD_IMG
 		from food_division d left join food_section s on d.food_division_no = s.food_division_no
         					left join food f on s.food_section_no = f.food_section_no
+		where D.FOOD_DIVISION_NO like #{foodDivisionNo} -->
+		select *
+		from food_division d left join food_section s on d.food_division_no = s.food_division_no
+        					left join food f on s.food_section_no = f.food_section_no
+                           	LEFT JOIN STOCK S ON F.FOOD_NO = S.FOOD_NO
+                    		LEFT JOIN MARKET M ON S.MARKET_NO = M.MARKET_NO
 		where D.FOOD_DIVISION_NO like #{foodDivisionNo}
+		
 	</select>
-	<select id="selectFoodByUpper" parameterType="map" resultType="food">
-		select F.FOOD_NO, F.FOOD_NAME, F.FOOD_SECTION_NO, F.FOOD_COMPANY, F.FOOD_MARKET_PRICE, F.FOOD_MEMBER_PRICE, F.FOOD_ENABLED, F.FOOD_IMG
+	<select id="selectFoodByUpper" parameterType="map" resultType="FoodWithStockInMarket">
+		select *
 		from food_division d left join food_section s on d.food_division_no = s.food_division_no
         					left join food f on s.food_section_no = f.food_section_no
+                           	LEFT JOIN STOCK S ON F.FOOD_NO = S.FOOD_NO
+                    		LEFT JOIN MARKET M ON S.MARKET_NO = M.MARKET_NO
 		where (D.FOOD_DIVISION_NO like #{foodDivisionNo}) AND (S.FOOD_SECTION_UPPER LIKE #{foodSectionUpper})
 	</select>
 	<select id="selectSubSectionList" resultType="foodSection">

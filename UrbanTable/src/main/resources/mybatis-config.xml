@@ -16,39 +16,53 @@
 			alias="notice" />
 		<typeAlias type="com.kh.urbantable.member.model.vo.Member"
 			alias="member" />
-		<typeAlias type="com.kh.urbantable.cart.model.vo.Cart" alias="cart" />
-		<typeAlias type="com.kh.urbantable.marketOwner.model.vo.Market" alias="market" />
+		<typeAlias type="com.kh.urbantable.cart.model.vo.Cart"
+			alias="cart" />
+		<typeAlias
+			type="com.kh.urbantable.marketOwner.model.vo.Market" alias="market" />
 		<typeAlias type="com.kh.urbantable.recipe.model.vo.Recipe"
 			alias="recipe" />
-		<typeAlias type="com.kh.urbantable.marketOwner.model.vo.Market"
-			alias="market" />
-		<typeAlias type="com.kh.urbantable.admin.model.vo.MarketMember"
+		<typeAlias
+			type="com.kh.urbantable.marketOwner.model.vo.Market" alias="market" />
+		<typeAlias
+			type="com.kh.urbantable.admin.model.vo.MarketMember"
 			alias="marketMember" />
-			<typeAlias type="com.kh.urbantable.recipe.model.vo.RecipeVO"
+		<typeAlias type="com.kh.urbantable.recipe.model.vo.RecipeVO"
 			alias="recipevo" />
-		<typeAlias type="com.kh.urbantable.recipe.model.vo.RecipeSequence"
+		<typeAlias
+			type="com.kh.urbantable.recipe.model.vo.RecipeSequence"
 			alias="recipeSequence" />
 		<typeAlias type="com.kh.urbantable.recipe.model.vo.Material"
 			alias="material" />
-		<typeAlias type="com.kh.urbantable.marketOwner.model.vo.Event"
-			alias="event" />
-		<typeAlias type="com.kh.urbantable.marketOwner.model.vo.MarketEvent"
-			alias="marketWithEvent" />	
+		<typeAlias
+			type="com.kh.urbantable.marketOwner.model.vo.Event" alias="event" />
+		<typeAlias
+			type="com.kh.urbantable.marketOwner.model.vo.MarketEvent"
+			alias="marketWithEvent" />
 		<typeAlias type="com.kh.urbantable.food.model.vo.Food"
 			alias="food" />
-		<typeAlias type="com.kh.urbantable.food.model.vo.FoodDivision"
+		<typeAlias
+			type="com.kh.urbantable.food.model.vo.FoodDivision"
 			alias="foodDivision" />
-		<typeAlias type="com.kh.urbantable.food.model.vo.FoodSection"
+		<typeAlias
+			type="com.kh.urbantable.food.model.vo.FoodSection"
 			alias="foodSection" />
-		<typeAlias type="com.kh.urbantable.food.model.vo.FoodWithFoodSection"
+		<typeAlias
+			type="com.kh.urbantable.food.model.vo.FoodWithFoodSection"
 			alias="foodWithFoodSection" />
-		<typeAlias type="com.kh.urbantable.payment.model.vo.PayDetail"
-			alias="paydetail" />
-		<typeAlias type="com.kh.urbantable.foodOrder.model.vo.MarketOrder"
+		<typeAlias
+			type="com.kh.urbantable.food.model.vo.FoodWithStockInMarket"
+			alias="FoodWithStockInMarket" />
+		<typeAlias
+			type="com.kh.urbantable.payment.model.vo.PayDetail" alias="paydetail" />
+		<typeAlias
+			type="com.kh.urbantable.foodOrder.model.vo.MarketOrder"
 			alias="marketOrder" />
-		<typeAlias type="com.kh.urbantable.foodOrder.model.vo.MarketOrderDetail"
+		<typeAlias
+			type="com.kh.urbantable.foodOrder.model.vo.MarketOrderDetail"
 			alias="marketOrderDetail" />
-		<typeAlias type="com.kh.urbantable.member.model.vo.MemberAutoLogin"
-			alias="memberAutoLogin"/>
+		<typeAlias
+			type="com.kh.urbantable.member.model.vo.MemberAutoLogin"
+			alias="memberAutoLogin" />
 	</typeAliases>
 </configuration>

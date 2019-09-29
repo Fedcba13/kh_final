@@ -31,6 +31,7 @@
 	    <h3 class="sub_tit">서브페이지 제목</h3>
        <ul class="main_prd_list clearfix">
         <c:forEach items="${foodList }" var="f">
+        	<c:if test="${f.marketEnabled eq 1 }">
             <li>
                 <a href="" class="dp_block">
                     <div class="prd_img_area">
@@ -41,9 +42,27 @@
                         <h4>${f.foodName }</h4>
                         <p class="prd_price fw600">할인가</p>
                         <p class="prd_price2">${f.foodMarketPrice }</p>
+                        <p class="prd_price2">${f.marketName }</p>
                     </div>
                 </a>
             </li>
+            </c:if>
+            
+            <c:if test="${ f.marketEnabled ne 1 }">
+            <li>
+                <a href="" class="dp_block">
+                    <div class="prd_img_area">
+                        <p class="fw600 txt_center"><span>SALE</span><br>20%</p>
+                        <img src="${f.foodImg }" alt="상품 사진">
+                    </div>
+                    <div class="prd_info_area">
+                        <h4>상품 준비중</h4>
+                        <p class="prd_price2">${f.foodMarketPrice }</p>
+                    </div>
+                </a>
+            </li>
+            
+            </c:if>
         </c:forEach>
         </ul>
     </article>

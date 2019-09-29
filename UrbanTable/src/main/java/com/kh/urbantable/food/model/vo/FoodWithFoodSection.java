@@ -2,8 +2,6 @@ package com.kh.urbantable.food.model.vo;
 
 import java.util.List;
 
-import com.kh.urbantable.marketOwner.model.vo.Event;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
