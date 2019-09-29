@@ -33,5 +33,4 @@ public interface MemberDAO {
 
 	void deleteAutoLogin(MemberAutoLogin memberAutoLogin);
 
-
 }
