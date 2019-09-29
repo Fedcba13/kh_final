@@ -148,17 +148,95 @@
 		where member_id=#{memberId} and market_enabled=1
 	</select>
 	
+	<!-- 
 	<select id="selectFoodStockList" resultType="map">
 		select *
 		from food F left join stock S using(food_no)
 		where market_no=#{marketNo}
 		order by food_no desc
 	</select>
+	 -->
+	
+	<select id="selectFoodStockList" resultType="map">
+		select *
+		from food F left join stock S on F.food_no=S.food_no
+		left join food_section D on F.food_section_no=D.food_section_no
+		<trim prefix="where" suffixOverrides="and">
+			S.market_no=#{marketNo}
+			<if test="foodDivision!=null and foodDivision!=''">
+			and food_division_no=#{foodDivision}
+			</if>
+			<if test="foodOrderSearchType=='food_name'">
+			and F.food_name like '%'||#{foodOrderSearchKeyword}||'%'
+			</if>
+			<if test="foodOrderSearchType=='food_no'">
+			and F.food_no like '%'||#{foodOrderSearchKeyword}||'%'
+			</if>
+		</trim>
+		order by F.food_no desc
+	</select>
 	
 	<select id="selectTotalContents" resultType="_int">
 		select count(*)
-		from food F left join stock S using(food_no)
-		where market_no=#{marketNo}
+		from food F left join stock S on F.food_no=S.food_no
+		left join food_section D on F.food_section_no=D.food_section_no
+		<trim prefix="where" suffixOverrides="and">
+			S.market_no=#{marketNo}
+			<if test="foodDivision!=null and foodDivision!=''">
+			and food_division_no=#{foodDivision}
+			</if>
+			<if test="foodOrderSearchType=='food_name'">
+			and F.food_name like '%'||#{foodOrderSearchKeyword}||'%'
+			</if>
+			<if test="foodOrderSearchType=='food_no'">
+			and F.food_no like '%'||#{foodOrderSearchKeyword}||'%'
+			</if>
+		</trim>
+		order by F.food_no desc
+	</select>
+	
+	<select id="selectFoodDivision" resultType="foodDivision">
+		select * from food_division
+	</select>
+	
+	<insert id="insertMarketOrderCart">
+		insert into cart
+		values (#{memberId}, #{foodNo}, #{marketOrderDetailAmount}, 2)
+	</insert>
+	
+	<select id="checkMarketCart" resultType="cart">
+		select * from cart
+		where member_id=#{memberId} and food_no=#{foodNo} and flag=2
+	</select>
+	
+	<update id="updateMarketOrderCart">
+		update cart
+		set cart_amount=#{marketOrderDetailAmount}
+		where member_id=#{memberId} and food_no=#{foodNo} and flag=2
+	</update>
+	
+	<select id="selectMarketCartList" resultType="map">
+		select C.*, F.food_name, F.food_market_price, F.food_company
+		from cart C left join food F on C.food_no=F.food_no
+		where C.member_id=#{memberId} and C.flag=2
+	</select>
+	
+	<select id="selectCartTotalContents" resultType="_int">
+		select count(*) 
+		from cart
+		where member_id=#{memberId} and flag=2
+		order by food_no desc
+	</select>
+	
+	<delete id="delMarketOrderCart">
+		delete from cart
+		where member_id=#{memberId} and flag=2 and food_no=#{foodNo}
+	</delete>
+	
+	<select id="selectCartTotal" resultType="_int">
+		select sum(C.cart_amount*F.food_market_price)
+		from cart C left join food F on C.food_no=F.food_no
+		where C.member_id=#{memberId} and C.flag=2
 	</select>
 	
 </mapper>

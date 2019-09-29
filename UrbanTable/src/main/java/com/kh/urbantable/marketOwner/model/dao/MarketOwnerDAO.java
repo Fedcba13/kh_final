@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
+import com.kh.urbantable.cart.model.vo.Cart;
+import com.kh.urbantable.food.model.vo.FoodDivision;
 import com.kh.urbantable.food.model.vo.FoodWithFoodSection;
 import com.kh.urbantable.marketOwner.model.vo.Event;
 import com.kh.urbantable.marketOwner.model.vo.Market;
@@ -42,8 +44,24 @@ public interface MarketOwnerDAO {
 
 	String selectMarketNoByMemberId(String memberId);
 
-	List<Map<String, String>> selectFoodStockList(int cPage, String marketNo);
+	List<Map<String, String>> selectFoodStockList(int cPage, Map<String, String> param);
 
-	int selectTotalContents(String marketNo);
+	int selectTotalContents(Map<String, String> param);
+
+	List<FoodDivision> selectFoodDivision();
+
+	int insertMarketOrderCart(Map<String, Object> param);
+
+	List<Cart> checkMarketCart(Map<String, Object> param);
+
+	int updateMarketOrderCart(Map<String, Object> param);
+
+	List<Map<String, String>> selectMarketCartList(int cPage, Map<String, String> param);
+
+	int selectCartTotalContents(Map<String, String> param);
+
+	int delMarketOrderCart(Map<String, String> param);
+
+	int selectCartTotal(String memberId);
 
 }

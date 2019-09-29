@@ -7,14 +7,20 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/marketOwner.css">
 <script>
+var orderTotal=0;
 $(()=>{
 	
 	var cPage = '${cPage}';
+	var foodDivision = '${foodDivision}';
+	var foodOrderSearchType = '${foodOrderSearchType}';
+	var foodOrderSearchKeyword = '${foodOrderSearchKeyword}';
 	var param = {
-		memberId: "${memberId}",
-		cPage: cPage
+		memberId: "${memberLoggedIn.memberId}",
+		cPage: cPage,
+		foodDivision: foodDivision,
+		foodOrderSearchType: foodOrderSearchType,
+		foodOrderSearchKeyword: foodOrderSearchKeyword
 	}
-	console.log(param);
 		
 	$.ajax({
 		url: "${pageContext.request.contextPath}/market/marketStockPage.do",
@@ -22,7 +28,25 @@ $(()=>{
 		data: param,
 		dataType:"json",
 		success: function(data){
-			console.log(data);
+			printData(data);
+		},
+		error: function(xhr, txtStatus, err){
+			console.log("ajax 처리 실패", xhr, txtStatus, err);
+		}
+	});
+	
+	var cartParam = {
+		memberId: "${memberLoggedIn.memberId}",
+		cPage: cPage
+	}
+	
+	$.ajax({
+		url: "${pageContext.request.contextPath}/market/marketCartPage.do",
+		type: "get",
+		data: param,
+		dataType:"json",
+		success: function(data){
+			printCartData(data);
 		},
 		error: function(xhr, txtStatus, err){
 			console.log("ajax 처리 실패", xhr, txtStatus, err);
@@ -39,11 +63,39 @@ $(()=>{
 		$(".list_wrap > div#"+ac_tab).fadeIn("fast");
 	});
 	
-	$(".pageBar a").click(function(e){
+	$(document).on('click', "#stockList .pageBar a", function(e){
 		e.preventDefault();
 		var param = {
-			memberId: "${memberId}",
-			cPage: $(e.target).text()
+			memberId: "${memberLoggedIn.memberId}",
+			cPage: $(e.target).attr("rel"),
+			foodDivision: $("#foodDivision option:selected").val(),
+			foodOrderSearchType: $("#foodOrderSearchType option:selected").val(),
+			foodOrderSearchKeyword: $("#foodOrderSearchKeyword").val()
+		}
+		
+		console.log(param);
+			
+		$.ajax({
+			url: "${pageContext.request.contextPath}/market/marketStockPage.do",
+			type: "get",
+			data: param,
+			dataType:"json",
+			success: function(data){
+				printData(data);
+			},
+			error: function(xhr, txtStatus, err){
+				console.log("ajax 처리 실패", xhr, txtStatus, err);
+			}
+		});
+	});
+	
+	$("#stockList .searchFrm input[type=button]").click(function(){
+		var param = {
+			memberId: "${memberLoggedIn.memberId}",
+			cPage: cPage,
+			foodDivision: $("#foodDivision option:selected").val(),
+			foodOrderSearchType: $("#foodOrderSearchType option:selected").val(),
+			foodOrderSearchKeyword: $("#foodOrderSearchKeyword").val()
 		}
 		
 		console.log(param);
@@ -54,7 +106,7 @@ $(()=>{
 			data: param,
 			dataType:"json",
 			success: function(data){
-				console.log(data);
+				printData(data);
 			},
 			error: function(xhr, txtStatus, err){
 				console.log("ajax 처리 실패", xhr, txtStatus, err);
@@ -62,18 +114,222 @@ $(()=>{
 		});
 	});
 	
-	$(".orderBtn").click(function(){
+	$(document).on("click", ".orderBtn", function(){
 		var clickedRow = $(this).parent().parent();
 		var param = {
+			memberId : "${memberLoggedIn.memberId}",
 			foodNo: clickedRow.children("td[rel=foodNo]").text(),
-			foodName: clickedRow.children("td[rel=foodName]").text(),
-			foodMarketPrice: clickedRow.children("td[rel=foodMarketPrice]").text(),
-			marketOrderDetailAmount: clickedRow.children("td[rel=marketOrderAmount]").children("input[name=marketOrderDetailAmount]").val()
+			marketOrderDetailAmount: clickedRow.children("td[rel=marketOrderAmount]").children("input[name=marketOrderDetailAmount]").val(),
+			status: 0
 		}
 		
 		console.log(param);
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/market/marketOrderCart.do",
+			type: "post",
+			data: param,
+			dataType: "json",
+			success: function(data){
+				var popup = "<div class='marketOrderPopup'>";
+				popup += "<p>"+data.msg+"</p>";
+				if(data.checkMarketCart==0){
+					popup += "<p>발주 수량을 <span class='red'>"+param.marketOrderDetailAmount+"개</span>로 변경하시겠습니까?</p>";
+				}
+				popup += "<div class='marketOrderBtn txt_center'>";
+				if(data.checkMarketCart==0){
+					popup += "<input type='button' value='변경' onclick='amountUpdate("+JSON.stringify(param)+")' class='dp_ib btn' />";
+					popup += "<input type='button' value='취소' class='cancelBtn dp_ib btn btn_disabled' />";
+				} else {
+					popup += "<input type='button' value='확인' class='cancelBtn dp_ib btn' />";
+				}
+				popup += "</div></div>";
+				$(".popupWrap").html(popup).show();
+				$("input[name=marketOrderDetailAmount]").val('');
+			},
+			error: function(xhr, txtStatus, err){
+				console.log("ajax 처리 실패", xhr, txtStatus, err);
+			}
+		});
+	});
+	
+	$(document).on("click", ".delBtn", function(){
+		var clickedRow = $(this).parent().parent();
+		var param = {
+			memberId : "${memberLoggedIn.memberId}",
+			foodNo: clickedRow.children("td[rel=foodNo]").text()
+		}
+		
+		console.log(param);
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/market/delMarketOrderCart.do",
+			type: "post",
+			data: param,
+			dataType: "json",
+			success: function(data){
+				var popup = "<div class='marketOrderPopup'>";
+				popup += "<p>"+data.msg+"</p>";
+				popup += "<div class='marketOrderBtn txt_center'>";
+				popup += "<input type='button' value='확인' class='cancelBtn dp_ib btn' />";
+				popup += "</div></div>";
+				$(".popupWrap").html(popup).show();
+			},
+			error: function(xhr, txtStatus, err){
+				console.log("ajax 처리 실패", xhr, txtStatus, err);
+			}
+		});
+	});
+	
+	$(document).on("click", ".marketOrderPopup .cancelBtn", function(){
+		$(".popupWrap").hide();
+		$(".popupWrap .marketOrderPopup").remove();
+		location.reload();
+	});
+	
+	$(document).on('click', "#orderList .pageBar a", function(e){
+		e.preventDefault();
+		var cartParam = {
+			memberId: "${memberLoggedIn.memberId}",
+			cPage: $(e.target).attr("rel")
+		}
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/market/marketCartPage.do",
+			type: "get",
+			data: cartParam,
+			dataType:"json",
+			success: function(data){
+				printCartData(data);
+			},
+			error: function(xhr, txtStatus, err){
+				console.log("ajax 처리 실패", xhr, txtStatus, err);
+			}
+		});
 	});
 });
+
+function printData(data){
+	var fs = data.foodStockList;
+	var html = "<tr class='sec_bg'>";
+	html += "<th width='110'>상품코드</th>";
+	html += "<th width='504'>상품명</th>";
+	html += "<th width='80'>재고 수량</th>";
+	html += "<th width='100'>발주 가격</th>";
+	html += "<th width='90'>발주 수량</th>";
+	html += "<th width='60'>발주</th>";
+	html += "</tr>";
+	if(fs.length>0){
+		for(var i in fs){
+			html += "<tr>";
+			html += "<td rel='foodNo'>"+fs[i].FOOD_NO+"</td>";
+			html += "<td rel='foodName'>"+fs[i].FOOD_NAME+"</td>";
+			html += "<td rel='foodStockAmount'>"+fs[i].STOCK_AMOUNT+"</td>";
+			html += "<td rel='foodMarketPrice'>"+comma(fs[i].FOOD_MARKET_PRICE)+"원</td>";
+			html += "<td rel='marketOrderAmount'><input type='number' name='marketOrderDetailAmount' style='width:70px;' /></td>";
+			html += "<td><input type='button' value='+' class='btn orderBtn' style='width:40px;' /></td>";
+			html += "</tr>";
+		}
+	} else {
+		html += "<tr><td colspan='6'>조회된 데이터가 없습니다.</td></tr>";
+	}
+	
+	$("#stockList .tbl").html(html);
+	$("#stockList .pageBar").html(data.pageBar);
+}
+
+function printCartData(data){
+	var mc = data.marketCartList;
+	var html = "<thead><tr class='sec_bg'>";
+	html += "<th width='110'>상품코드</th>";
+	html += "<th width='474'>상품명</th>";
+	html += "<th width='100'>발주 단품 가격</th>";
+	html += "<th width='90'>발주 수량</th>";
+	html += "<th width='110'>발주 가격</th>";
+	html += "<th width='60'>취소</th>";
+	html += "</tr></thead><tbody>";
+	if(mc.length>0){
+		for(var i in mc){
+			html += "<tr>";
+			html += "<td rel='foodNo'>"+mc[i].FOOD_NO+"</td>";
+			html += "<td>"+mc[i].FOOD_NAME+"</td>";
+			html += "<td>"+mc[i].FOOD_MARKET_PRICE+"</td>";
+			html += "<td>"+mc[i].CART_AMOUNT+"</td>";
+			html += "<td>"+comma(mc[i].FOOD_MARKET_PRICE*mc[i].CART_AMOUNT)+"원</td>";
+			html += "<td><input type='button' value='-' class='btn delBtn' style='width:40px;' /></td>";
+			html += "</tr>";
+		}
+		orderTotal = data.cartTotal;
+		var reqWrap = "<div class='orderReqWrap txt_center clearfix'>";
+		reqWrap += "<p class='orderTotal'>총 <span class='dp_ib red fw600' style='padding:0 5px 0 10px;'>"+comma(orderTotal)+"</span>원</p>";
+		reqWrap += "<input type='button' value='발주 요청' class='btn' onclick='orderToAdmin();' />";
+		reqWrap += "</div>";
+		$("#orderList #orderTotal").html(reqWrap);
+	} else {
+		html += "<tr><td colspan='6'>조회된 데이터가 없습니다.</td></tr>";
+	}
+	html += "</tbody>";
+	$("#orderList .tbl").html(html);
+	$("#orderList .pageBar").html(data.pageBar);
+}
+
+function comma(str) {
+    str = String(str);
+    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+}
+
+function amountUpdate(param){
+	param.status = 1;
+	console.log(param);
+	$.ajax({
+		url: "${pageContext.request.contextPath}/market/marketOrderCart.do",
+		type: "post",
+		data: param,
+		dataType: "json",
+		success: function(data){
+			var popup = "<div class='marketOrderPopup'>";
+			popup += "<p>"+data.msg+"</p>";
+			popup += "<div class='marketOrderBtn txt_center'>";
+			popup += "<input type='button' value='확인' class='cancelBtn dp_ib btn' />";
+			popup += "</div></div>";
+			$(".popupWrap").html(popup).show();
+			$("input[name=marketOrderDetailAmount]").val('');
+		},
+		error: function(xhr, txtStatus, err){
+			console.log("ajax 처리 실패", xhr, txtStatus, err);
+		}
+	});
+}
+
+function orderToAdmin(){
+	var param = {
+		memberId: "${memberId}",
+		marketNo:"${marketNo}",
+		orderTotal: orderTotal
+	}; 
+	
+	$.ajax({
+		url: "${pageContext.request.contextPath}/foodOrder/marketFoodOrder.do",
+		data: param,
+		type: "post",
+		dataType: "json",
+		success: function(data){
+			var popup = "<div class='marketOrderPopup'>";
+			popup += "<p>"+data.msg+"</p>";
+			popup += "<div class='marketOrderBtn txt_center'>";
+			popup += "<input type='button' value='확인' class='dp_ib btn' onclick='goRequestList();' />";
+			popup += "</div></div>";
+			$(".popupWrap").html(popup).show();
+		},
+		error: function(xhr, txtStatus, err){
+			console.log("ajax 처리 실패", xhr, txtStatus, err);
+		}
+	});
+}
+
+function goRequestList(){
+	location.href="${pageContext.request.contextPath}/foodOrder/foodOrderRequest.do?memberId=${memberId}";
+}
 </script>
 <section>
 	<article class="subPage inner asda">
@@ -84,40 +340,31 @@ $(()=>{
 	    <div class="list_wrap">
 	    	<div id="stockList">
 	    		<h3 class="sub_tit">상품 재고 관리</h3>
-	    		<table class="tbl txt_center">
-		            <tr class="sec_bg">
-		                <th width="110">상품코드</th>
-		                <th width="504">상품명</th>
-		                <th width="80">재고 수량</th>
-		                <th width="100">발주 가격</th>
-		                <th width="90">발주 수량</th>
-		                <th width="60">발주</th>
-		            </tr>
-		           <%--  <c:forEach items="${foodStockList }" var="fs">
-		            <tr>
-		            	<td rel="foodNo">${fs.FOOD_NO }</td>
-		            	<td rel="foodName">${fs.FOOD_NAME }</td>
-		            	<td rel="foodStockAmount">${fs.STOCK_AMOUNT }</td>
-		            	<td rel="foodMarketPrice">${fs.FOOD_MARKET_PRICE }</td>
-		            	<td rel="marketOrderAmount"><input type="number" name="marketOrderDetailAmount" id="marketOrderDetailAmount" style="width:70px;" /></td>
-		            	<td><input type="button" value="+" class="btn orderBtn" style="width:40px;" /></td>
-		            </tr>
-		            </c:forEach> --%>
-		        </table>
-		       <%-- <div class="pageBar">${pageBar }</div> --%>
+	    		<div class="searchFrm" style="width:450px;">
+	    			<select name="foodDivision" id="foodDivision" class="dp_ib" style="width:117px;">
+		    			<option value="">전체분류</option>
+		    			<c:forEach items="${foodDivisionList }" var="fd">
+		    			<option value="${fd.foodDivisionNo }">${fd.foodDivisionName }</option>
+		    			</c:forEach>
+		    		</select>
+	    			<select name="foodOrderSearchType" id="foodOrderSearchType" class="dp_ib" style="width:117px;">
+		    			<option value="food_name">상품명</option>
+		    			<option value="food_no">상품코드</option>
+		    		</select>
+		    		<input type="text" name="foodOrderSearchKeyword" id="foodOrderSearchKeyword" class="dp_ib" style="width:209px; padding-right:40px;" />
+		    		<input type="button" value="검색" class="dp_ib txt_center" />
+		    	</div>
+	    		<table class="tbl txt_center"></table>
+		        <div class="pageBar"></div>
 	    	</div>
 	    	<div id="orderList">
-	    		<h3 class="sub_tit">발주 요청</h3>
-	    		<table class="tbl txt_center">
-	    			<tr class="sec_bg">
-		                <th>상품코드</th>
-		                <th>상품명</th>
-		                <th>발주 가격</th>
-		                <th>발주 수량</th>
-		            </tr>
-	    		</table>
+	    		<h3 class="sub_tit">발주 요청 예정 품목</h3>
+	    		<table class="tbl txt_center"></table>
+	    		<div class="pageBar"></div>
+	    		<div id="orderTotal"></div>
 	    	</div>
 	    </div>
+	    <div class="popupWrap"></div>
     </article>
 </section>
 

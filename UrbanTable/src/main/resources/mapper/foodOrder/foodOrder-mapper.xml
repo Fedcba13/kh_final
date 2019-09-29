@@ -3,5 +3,53 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="foodOrder">
+	<insert id="insertMarketOrder">
+		insert into market_order
+		values('mreq'||LPAD(seq_market_order_no.nextval, 5, '0'), #{marketNo}, default, #{marketOrderPrice}, 0)
+	</insert>
 	
+	<insert id="insertMarketOrderDetail">
+		insert into market_order_detail
+		values('mdet'||LPAD(seq_market_order_detail_no.nextval, 5, '0'), 
+		'mreq'||LPAD(seq_market_order_no.currval, 5, '0'),
+		#{foodNo}, #{marketOrderDetailAmount}, #{foodCompany})
+	</insert>
+	
+	<delete id="deleteMarketCart">
+		delete from cart
+		where member_id=#{memberId} and flag=2 and food_no=#{foodNo}
+	</delete>
+	
+	<select id="selectMarketCartAllList" resultType="marketCart">
+		select C.*, F.food_name, F.food_market_price, F.food_company
+		from cart C left join food F on C.food_no=F.food_no
+		where C.member_id=#{memberId} and C.flag=2
+	</select>
+	
+	<select id="selectMarketOrderList" resultType="map">
+		select distinct market_order_no, market_no, market_order_price, 
+		to_char(market_order_date, 'YYYY-MM-DD') order_date, market_order_flag
+		from market_order
+		where market_no=#{memberId}
+		order by market_order_no desc
+	</select>
+	
+	<select id="selectMarketOrderTotal" resultType="_int">
+		select count(*) from market_order
+		where market_no=#{memberId}
+	</select>
+	
+	<select id="selectMarketOrderDetail" resultType="map">
+		select D.market_order_detail_no,  O.market_order_no, D.food_no, F.food_name, D.market_order_detail_amount, F.food_market_price, O.market_order_price, O.market_order_flag
+		from market_order_detail D left join market_order O on D.market_order_no= O.market_order_no
+		left join food F on D.food_no= F.food_no
+		where D.market_order_no=#{marketOrderNo}
+		order by D.market_order_detail_no desc
+	</select>
+	
+	<select id="selectMarketOrderDetailTotal" resultType="_int">
+		select count(*)
+		from market_order_detail
+		where market_order_no=#{marketOrderNo}
+	</select>
 </mapper>
