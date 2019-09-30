@@ -25,4 +25,14 @@ public interface FoodOrderService {
 
 	int selectMarketOrderDetailTotal(String marketOrderNo);
 
+	int selectMarketOrderFlag(String marketOrderNo);
+
+	int marketOrderUpdateAmount(Map<String, Object> param);
+
+	int marketOrderDeleteFood(String marketOrderDetailNo);
+
+	int marketOrderDeleteFoodAll(String marketOrderNo);
+
+	int selectMarketOrderPriceTotal(String marketOrderNo);
+
 }

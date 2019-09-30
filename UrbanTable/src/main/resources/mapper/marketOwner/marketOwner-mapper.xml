@@ -121,8 +121,7 @@
 	<select id="eventSearchCategory" resultType="map">
 		select distinct S.food_section_name name, F.food_section_no no
 		from food F left join food_section S on F.food_section_no=S.food_section_no
-		where F.food_company like '%'||#{srchCompany}||'%'
-		and S.food_section_name like '%'||#{eventCategory}||'%'
+		where S.food_section_name like '%'||#{eventCategory}||'%'
 	</select>
 	
 	
@@ -158,13 +157,18 @@
 	 -->
 	
 	<select id="selectFoodStockList" resultType="map">
-		select *
+		<!-- select *
 		from food F left join stock S on F.food_no=S.food_no
-		left join food_section D on F.food_section_no=D.food_section_no
+		left join food_division D on F.food_section_no=D.food_section_no -->
+		select *
+       	from food F left join stock S on F.food_no=S.food_no
+       	LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+       	LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+       	LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
 		<trim prefix="where" suffixOverrides="and">
 			S.market_no=#{marketNo}
 			<if test="foodDivision!=null and foodDivision!=''">
-			and food_division_no=#{foodDivision}
+			and D.food_division_no=#{foodDivision}
 			</if>
 			<if test="foodOrderSearchType=='food_name'">
 			and F.food_name like '%'||#{foodOrderSearchKeyword}||'%'

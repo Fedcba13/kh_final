@@ -69,5 +69,35 @@ public class FoodOrderDAOImpl implements FoodOrderDAO {
 	public int selectMarketOrderDetailTotal(String marketOrderNo) {
 		return sqlSession.selectOne("foodOrder.selectMarketOrderDetailTotal", marketOrderNo);
 	}
+
+	@Override
+	public int selectMarketOrderFlag(String marketOrderNo) {
+		return sqlSession.selectOne("foodOrder.selectMarketOrderFlag", marketOrderNo);
+	}
+
+	@Override
+	public int marketOrderUpdateAmount(Map<String, Object> param) {
+		return sqlSession.update("foodOrder.marketOrderUpdateAmount", param);
+	}
+
+	@Override
+	public int marketOrderDeleteFood(String marketOrderDetailNo) {
+		return sqlSession.update("foodOrder.marketOrderDeleteFood", marketOrderDetailNo);
+	}
+
+	@Override
+	public int marketOrderDetailDeleteAll(String marketOrderNo) {
+		return sqlSession.update("foodOrder.marketOrderDetailDeleteAll", marketOrderNo);
+	}
+
+	@Override
+	public int marketOrderDeleteAll(String marketOrderNo) {
+		return sqlSession.update("foodOrder.marketOrderDeleteAll", marketOrderNo);
+	}
+
+	@Override
+	public int selectMarketOrderPriceTotal(String marketOrderNo) {
+		return sqlSession.selectOne("foodOrder.selectMarketOrderPriceTotal", marketOrderNo);
+	}
 	
 }

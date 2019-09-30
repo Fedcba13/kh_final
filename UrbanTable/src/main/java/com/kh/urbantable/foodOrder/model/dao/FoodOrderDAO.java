@@ -27,4 +27,16 @@ public interface FoodOrderDAO {
 
 	int selectMarketOrderDetailTotal(String marketOrderNo);
 
+	int selectMarketOrderFlag(String marketOrderNo);
+
+	int marketOrderUpdateAmount(Map<String, Object> param);
+
+	int marketOrderDeleteFood(String marketOrderDetailNo);
+
+	int marketOrderDetailDeleteAll(String marketOrderNo);
+
+	int marketOrderDeleteAll(String marketOrderNo);
+
+	int selectMarketOrderPriceTotal(String marketOrderNo);
+
 }

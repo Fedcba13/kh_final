@@ -10,5 +10,6 @@ public class MarketOrderDetail {
 	private String foodNo;
 	private int marketOrderDetailAmount;
 	private String foodCompany;
+	private int marketOrderDetailEnabled;
 	
 }

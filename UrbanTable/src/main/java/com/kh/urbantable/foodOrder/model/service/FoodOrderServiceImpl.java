@@ -76,5 +76,34 @@ public class FoodOrderServiceImpl implements FoodOrderService {
 	public int selectMarketOrderDetailTotal(String marketOrderNo) {
 		return foodOrderDAO.selectMarketOrderDetailTotal(marketOrderNo);
 	}
+
+	@Override
+	public int selectMarketOrderFlag(String marketOrderNo) {
+		return foodOrderDAO.selectMarketOrderFlag(marketOrderNo);
+	}
+
+	@Override
+	public int marketOrderUpdateAmount(Map<String, Object> param) {
+		return foodOrderDAO.marketOrderUpdateAmount(param);
+	}
+
+	@Override
+	public int marketOrderDeleteFood(String marketOrderDetailNo) {
+		return foodOrderDAO.marketOrderDeleteFood(marketOrderDetailNo);
+	}
+
+	@Override
+	public int marketOrderDeleteFoodAll(String marketOrderNo) {
+		int deleteAll = foodOrderDAO.marketOrderDetailDeleteAll(marketOrderNo);
+		if(deleteAll>0) {
+			deleteAll=foodOrderDAO.marketOrderDeleteAll(marketOrderNo);
+		}
+		return deleteAll;
+	}
+
+	@Override
+	public int selectMarketOrderPriceTotal(String marketOrderNo) {
+		return foodOrderDAO.selectMarketOrderPriceTotal(marketOrderNo);
+	}
 	
 }

@@ -105,8 +105,12 @@ public class FoodOrderController {
 	@RequestMapping("/marketOrderView.do")
 	public String marketOrderView(@RequestParam String marketOrderNo, 
 			@RequestParam(value="cPage", defaultValue="1") int cPage, Model model) {
+		int marketOrderFlag = foodOrderService.selectMarketOrderFlag(marketOrderNo);
+		int priceTotal = foodOrderService.selectMarketOrderPriceTotal(marketOrderNo);
 		model.addAttribute("marketOrderNo", marketOrderNo);
 		model.addAttribute("cPage", cPage);
+		model.addAttribute("marketOrderFlag", marketOrderFlag);
+		model.addAttribute("priceTotal", priceTotal);
 		return "foodOrder/marketOrderView";
 	}
 	
@@ -115,6 +119,7 @@ public class FoodOrderController {
 	public Map<String, Object> marketOrderViewDetail(@RequestParam String marketOrderNo, 
 			@RequestParam(value="cPage", defaultValue="1") int cPage){
 		List<Map<String, String>> marketOrderDetail = foodOrderService.selectMarketOrderDetail(cPage, marketOrderNo);
+		
 		int totalContents = foodOrderService.selectMarketOrderDetailTotal(marketOrderNo);
 		int totalPage = (int)Math.ceil((double)totalContents/foodOrderService.NUM_PER_PAGE);
 		
@@ -147,6 +152,41 @@ public class FoodOrderController {
 		result.put("marketOrderDetailList", marketOrderDetail);
 		result.put("pageBar", pageBar);
 		
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/marketOrderUpdateAmount.do", method=RequestMethod.POST)
+	public Map<String, String> marketOrderUpdateAmount(@RequestParam String marketOrderDetailNo,
+			@RequestParam int marketOrderDetailAmount){
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("marketOrderDetailNo", marketOrderDetailNo);
+		param.put("marketOrderDetailAmount", marketOrderDetailAmount);
+		
+		int updateAmount = foodOrderService.marketOrderUpdateAmount(param);
+		
+		Map<String, String> result = new HashMap<String, String>();
+		result.put("msg", updateAmount>0?"발주 수량을 변경하였습니다.":"발주 수량 변경에 실패했습니다. 관리자에게 문의하세요.");
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/marketOrderDeleteFood.do", method=RequestMethod.POST)
+	public Map<String, String> marketOrderDeleteFood(@RequestParam String marketOrderDetailNo){
+		
+		int deleteAmount = foodOrderService.marketOrderDeleteFood(marketOrderDetailNo);
+		
+		Map<String, String> result = new HashMap<String, String>();
+		result.put("msg", deleteAmount>0?"해당 품목을 삭제하였습니다.":"해당 품목 삭제에 실패했습니다. 관리자에게 문의하세요.");
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/marketOrderDeleteAll.do", method=RequestMethod.POST)
+	public Map<String, String> marketOrderDeleteAll(@RequestParam String marketOrderNo){
+		int deleteAll = foodOrderService.marketOrderDeleteFoodAll(marketOrderNo);
+		Map<String, String> result = new HashMap<String, String>();
+		result.put("msg", deleteAll>0?"요청하신 발주를 취소하였습니다.":"요청하신 발주 취소에 실패했습니다. 관리자에게 문의하세요.");
 		return result;
 	}
 	

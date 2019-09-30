@@ -5,14 +5,14 @@
 <mapper namespace="foodOrder">
 	<insert id="insertMarketOrder">
 		insert into market_order
-		values('mreq'||LPAD(seq_market_order_no.nextval, 5, '0'), #{marketNo}, default, #{marketOrderPrice}, 0)
+		values('mreq'||LPAD(seq_market_order_no.nextval, 5, '0'), #{marketNo}, default, #{marketOrderPrice}, 0, default)
 	</insert>
 	
 	<insert id="insertMarketOrderDetail">
 		insert into market_order_detail
 		values('mdet'||LPAD(seq_market_order_detail_no.nextval, 5, '0'), 
 		'mreq'||LPAD(seq_market_order_no.currval, 5, '0'),
-		#{foodNo}, #{marketOrderDetailAmount}, #{foodCompany})
+		#{foodNo}, #{marketOrderDetailAmount}, #{foodCompany}, default)
 	</insert>
 	
 	<delete id="deleteMarketCart">
@@ -30,26 +30,63 @@
 		select distinct market_order_no, market_no, market_order_price, 
 		to_char(market_order_date, 'YYYY-MM-DD') order_date, market_order_flag
 		from market_order
-		where market_no=#{memberId}
+		where market_no=#{memberId} and market_order_enabled=1
 		order by market_order_no desc
 	</select>
 	
 	<select id="selectMarketOrderTotal" resultType="_int">
 		select count(*) from market_order
-		where market_no=#{memberId}
+		where market_no=#{marketNo} and market_order_enabled=1
 	</select>
 	
 	<select id="selectMarketOrderDetail" resultType="map">
 		select D.market_order_detail_no,  O.market_order_no, D.food_no, F.food_name, D.market_order_detail_amount, F.food_market_price, O.market_order_price, O.market_order_flag
 		from market_order_detail D left join market_order O on D.market_order_no= O.market_order_no
 		left join food F on D.food_no= F.food_no
-		where D.market_order_no=#{marketOrderNo}
+		where D.market_order_no=#{marketOrderNo} and D.market_order_detail_enabled=1
+		and O.market_order_enabled=1
 		order by D.market_order_detail_no desc
 	</select>
 	
 	<select id="selectMarketOrderDetailTotal" resultType="_int">
 		select count(*)
 		from market_order_detail
+		where market_order_no=#{marketOrderNo} and market_order_detail_enabled=1
+	</select>
+	
+	<select id="selectMarketOrderFlag" resultType="_int">
+		select market_order_flag 
+		from market_order
+		where market_order_no=#{marketOrderNo} and market_order_enabled=1
+	</select>
+	
+	<update id="marketOrderUpdateAmount">
+		update market_order_detail
+		set market_order_detail_amount=#{marketOrderDetailAmount}
+		where market_order_detail_no=#{marketOrderDetailNo}
+	</update>
+	
+	<update id="marketOrderDeleteFood">
+		update market_order_detail
+		set market_order_detail_enabled=0
+		where market_order_detail_no=#{marketOrderDetailNo}
+	</update>
+	
+	<update id="marketOrderDetailDeleteAll">
+		update market_order_detail
+		set market_order_detail_enabled=0
+		where market_order_no=#{marketOrderNo}
+	</update>
+	
+	<update id="marketOrderDeleteAll">
+		update market_order
+		set market_order_enabled=0
+		where market_order_no=#{marketOrderNo}
+	</update>
+	
+	<select id="selectMarketOrderPriceTotal" resultType="_int">
+		select market_order_price
+		from market_order
 		where market_order_no=#{marketOrderNo}
 	</select>
 </mapper>
