@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.kh.urbantable.event.model.dao.EventDAO;
 import com.kh.urbantable.event.model.vo.Coupon;
+import com.kh.urbantable.event.model.vo.Event;
 import com.kh.urbantable.member.model.vo.Member;
 
 @Service
@@ -19,4 +20,22 @@ public class EventServiceImpl implements EventService{
 	public int insertCoupon1(Map<String, String> event) {
 
 		return eventDAO.insertCoupon1(event);
+	}
+
+	@Override
+	public Member selectOne(String memberId) {
+		
+		return eventDAO.selectOne(memberId);
+	}
+
+	@Override
+	public String selectMarketNoByMemberId(String memberId) {
+		
+		return eventDAO.selectMarketNoByMemberId(memberId);
+	}
+
+	@Override
+	public int insertEvent(Event event) {
+
+		return eventDAO.insertEvent(event);
 	}}
