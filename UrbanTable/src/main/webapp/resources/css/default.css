@@ -483,8 +483,8 @@ input[type=text], input[type=password] {
 }
 
 
-/* 로그인 모달 */
-.login-modal {
+/* 모달 */
+.modal {
 	display: none; /* Hidden by default */
 	position: fixed; /* Stay in place */
 	z-index: 10; /* Sit on top */
@@ -497,14 +497,14 @@ input[type=text], input[type=password] {
 	background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
 	padding-top: 60px;
 }
-.login-modal .modal-content{
+.modal .modal-content{
 	width: 500px;
 	background-color: #fefefe;
 	border: 1px solid #888;
 	margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
 }
 
-.login-modal .container{
+.modal .container{
 	padding: 16px;
 	overflow: hidden;
 }
@@ -530,7 +530,7 @@ input[type=text], input[type=password] {
   font-weight: bold;
 }
 
-.login-modal .animate {
+.modal .animate {
   -webkit-animation: animatezoom 0.6s;
   animation: animatezoom 0.6s
 }
@@ -541,6 +541,7 @@ input[type=text], input[type=password] {
   margin: 10px 0px;
 }
 
+/*로그인 취소 버튼*/
 .login-modal .cancelbtn {
   width: auto;
   padding: 0px 18px;

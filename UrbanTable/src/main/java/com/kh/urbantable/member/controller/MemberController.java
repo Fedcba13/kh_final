@@ -218,20 +218,22 @@ public class MemberController {
 
 	@RequestMapping("/checkMessage.do")
 	@ResponseBody
-	public HashMap<String, String> checkMessage(@RequestParam("phone") String phone,
+	public HashMap<String, Object> checkMessage(@RequestParam("phone") String phone,
 												@RequestParam("authCode") String authCode,
 												@RequestParam("flag") int flag) {
-		HashMap<String, String> result = new HashMap<String, String>();
+		HashMap<String, Object> result = new HashMap<String, Object>();
 
 		HashMap<String, Object> param = new HashMap<String, Object>();
 		param.put("phone", phone);
 		param.put("authCode", authCode);
 		param.put("flag", flag);
 
-		result.put("msg", memberService.checkMessage(param) > 0 ? "인증 성공" : "인증 실패");
+		int authResult = memberService.checkMessage(param);
 		
-		if(flag == 2 || flag == 3) {
-			memberService.phoneDuplicate(param);
+		result.put("msg", authResult > 0 ? "인증 성공" : "인증 실패");
+		
+		if(authResult > 0 && (flag == 2 || flag == 3)) {
+			result.put("member", memberService.phoneDuplicate(param));
 		}
 
 		return result;
@@ -299,6 +301,7 @@ public class MemberController {
 				
 				if(distanceMile < nearLenth) {
 					nearLenth = distanceMile;
+					result.put("nearMarket", list.get(i).getMarketNo());
 				}
 			}
 		}
