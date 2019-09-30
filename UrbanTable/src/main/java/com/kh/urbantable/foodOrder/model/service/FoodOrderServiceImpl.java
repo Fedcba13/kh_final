@@ -68,8 +68,8 @@ public class FoodOrderServiceImpl implements FoodOrderService {
 	}
 
 	@Override
-	public List<Map<String, String>> selectMarketOrderDetail(int cPage, String marketOrderNo) {
-		return foodOrderDAO.selectMarketOrderDetail(cPage, marketOrderNo);
+	public List<Map<String, String>> selectMarketOrderDetail(int cPage, Map<String, Object> param) {
+		return foodOrderDAO.selectMarketOrderDetail(cPage, param);
 	}
 
 	@Override
@@ -78,18 +78,27 @@ public class FoodOrderServiceImpl implements FoodOrderService {
 	}
 
 	@Override
-	public int selectMarketOrderFlag(String marketOrderNo) {
-		return foodOrderDAO.selectMarketOrderFlag(marketOrderNo);
-	}
-
-	@Override
 	public int marketOrderUpdateAmount(Map<String, Object> param) {
-		return foodOrderDAO.marketOrderUpdateAmount(param);
+		int result = foodOrderDAO.marketOrderUpdateAmount(param);
+		if(result>0) {
+			//바뀐 정보의 총액 가져오기
+			int price = selectMarketOrderDetailPrice(param);
+			param.put("marketOrderPrice", price);
+			result = updateMarketOrderPrice(param);
+		}
+		return result;
 	}
 
 	@Override
-	public int marketOrderDeleteFood(String marketOrderDetailNo) {
-		return foodOrderDAO.marketOrderDeleteFood(marketOrderDetailNo);
+	public int marketOrderDeleteFood(Map<String, Object> param) {
+		int result = foodOrderDAO.marketOrderDeleteFood(param);
+		if(result>0) {
+			//바뀐 정보의 총액 가져오기
+			int price = selectMarketOrderDetailPrice(param);
+			param.put("marketOrderPrice", price);
+			result = updateMarketOrderPrice(param);
+		}
+		return result;
 	}
 
 	@Override
@@ -102,8 +111,18 @@ public class FoodOrderServiceImpl implements FoodOrderService {
 	}
 
 	@Override
-	public int selectMarketOrderPriceTotal(String marketOrderNo) {
-		return foodOrderDAO.selectMarketOrderPriceTotal(marketOrderNo);
+	public MarketOrder selectMarketOrderOne(String marketOrderNo) {
+		return foodOrderDAO.selectMarketOrderOne(marketOrderNo);
+	}
+
+	@Override
+	public int selectMarketOrderDetailPrice(Map<String, Object> param) {
+		return foodOrderDAO.selectMarketOrderDetailPrice(param);
+	}
+
+	@Override
+	public int updateMarketOrderPrice(Map<String, Object> param) {
+		return foodOrderDAO.updateMarketOrderPrice(param);
 	}
 	
 }

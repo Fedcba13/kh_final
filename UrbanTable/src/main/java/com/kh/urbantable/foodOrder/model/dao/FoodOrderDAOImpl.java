@@ -58,11 +58,11 @@ public class FoodOrderDAOImpl implements FoodOrderDAO {
 	}
 
 	@Override
-	public List<Map<String, String>> selectMarketOrderDetail(int cPage, String marketOrderNo) {
+	public List<Map<String, String>> selectMarketOrderDetail(int cPage, Map<String, Object> param) {
 		int offset = (cPage-1)*FoodOrderService.NUM_PER_PAGE;
 		int limit = FoodOrderService.NUM_PER_PAGE;
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		return sqlSession.selectList("foodOrder.selectMarketOrderDetail", marketOrderNo, rowBounds);
+		return sqlSession.selectList("foodOrder.selectMarketOrderDetail", param, rowBounds);
 	}
 
 	@Override
@@ -71,18 +71,13 @@ public class FoodOrderDAOImpl implements FoodOrderDAO {
 	}
 
 	@Override
-	public int selectMarketOrderFlag(String marketOrderNo) {
-		return sqlSession.selectOne("foodOrder.selectMarketOrderFlag", marketOrderNo);
-	}
-
-	@Override
 	public int marketOrderUpdateAmount(Map<String, Object> param) {
 		return sqlSession.update("foodOrder.marketOrderUpdateAmount", param);
 	}
 
 	@Override
-	public int marketOrderDeleteFood(String marketOrderDetailNo) {
-		return sqlSession.update("foodOrder.marketOrderDeleteFood", marketOrderDetailNo);
+	public int marketOrderDeleteFood(Map<String, Object> param) {
+		return sqlSession.update("foodOrder.marketOrderDeleteFood", param);
 	}
 
 	@Override
@@ -96,8 +91,18 @@ public class FoodOrderDAOImpl implements FoodOrderDAO {
 	}
 
 	@Override
-	public int selectMarketOrderPriceTotal(String marketOrderNo) {
-		return sqlSession.selectOne("foodOrder.selectMarketOrderPriceTotal", marketOrderNo);
+	public MarketOrder selectMarketOrderOne(String marketOrderNo) {
+		return sqlSession.selectOne("foodOrder.selectMarketOrderOne", marketOrderNo);
+	}
+
+	@Override
+	public int selectMarketOrderDetailPrice(Map<String, Object> param) {
+		return sqlSession.selectOne("foodOrder.selectMarketOrderDetailPrice", param);
+	}
+
+	@Override
+	public int updateMarketOrderPrice(Map<String, Object> param) {
+		return sqlSession.update("foodOrder.updateMarketOrderPrice", param);
 	}
 	
 }

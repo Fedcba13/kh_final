@@ -65,9 +65,11 @@ function printData(data){
 	if(mo.length>0){
 		for(var i in mo){
 			var flag = "";
-			if(mo[i].MARKET_ORDER_FLAG == 0){
+			if(mo[i].MARKET_ORDER_FLAG == 0 && mo[i].MARKET_ORDER_ENABLED == 1){
 				flag = "발주 요청";
-			} else {
+			} else if(mo[i].MARKET_ORDER_ENABLED == 0) {
+				flag = "발주 취소";
+			} else if(mo[i].MARKET_ORDER_FLAG == 1 && mo[i].MARKET_ORDER_ENABLED == 1){
 				flag = "입고 완료";
 			}
 			html += "<tr>";

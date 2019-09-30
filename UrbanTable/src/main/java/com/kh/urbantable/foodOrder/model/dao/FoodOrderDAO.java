@@ -23,20 +23,22 @@ public interface FoodOrderDAO {
 
 	int selectMarketOrderTotal(String marketNo);
 
-	List<Map<String, String>> selectMarketOrderDetail(int cPage, String marketOrderNo);
+	List<Map<String, String>> selectMarketOrderDetail(int cPage, Map<String, Object> param);
 
 	int selectMarketOrderDetailTotal(String marketOrderNo);
 
-	int selectMarketOrderFlag(String marketOrderNo);
-
 	int marketOrderUpdateAmount(Map<String, Object> param);
 
-	int marketOrderDeleteFood(String marketOrderDetailNo);
+	int marketOrderDeleteFood(Map<String, Object> param);
 
 	int marketOrderDetailDeleteAll(String marketOrderNo);
 
 	int marketOrderDeleteAll(String marketOrderNo);
 
-	int selectMarketOrderPriceTotal(String marketOrderNo);
+	MarketOrder selectMarketOrderOne(String marketOrderNo);
+
+	int selectMarketOrderDetailPrice(Map<String, Object> param);
+
+	int updateMarketOrderPrice(Map<String, Object> param);
 
 }

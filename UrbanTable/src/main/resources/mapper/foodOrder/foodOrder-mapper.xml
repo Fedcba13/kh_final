@@ -28,9 +28,9 @@
 	
 	<select id="selectMarketOrderList" resultType="map">
 		select distinct market_order_no, market_no, market_order_price, 
-		to_char(market_order_date, 'YYYY-MM-DD') order_date, market_order_flag
+		to_char(market_order_date, 'YYYY-MM-DD') order_date, market_order_flag, market_order_enabled
 		from market_order
-		where market_no=#{memberId} and market_order_enabled=1
+		where market_no=#{memberId}
 		order by market_order_no desc
 	</select>
 	
@@ -40,24 +40,19 @@
 	</select>
 	
 	<select id="selectMarketOrderDetail" resultType="map">
-		select D.market_order_detail_no,  O.market_order_no, D.food_no, F.food_name, D.market_order_detail_amount, F.food_market_price, O.market_order_price, O.market_order_flag
+		select D.market_order_detail_no, O.market_order_no, D.food_no, F.food_name, 
+		D.market_order_detail_amount, F.food_market_price, O.market_order_price, 
+		O.market_order_flag
 		from market_order_detail D left join market_order O on D.market_order_no= O.market_order_no
 		left join food F on D.food_no= F.food_no
-		where D.market_order_no=#{marketOrderNo} and D.market_order_detail_enabled=1
-		and O.market_order_enabled=1
+		where D.market_order_no=#{marketOrderNo} and D.market_order_detail_enabled=#{marketOrderEnabled}
 		order by D.market_order_detail_no desc
 	</select>
 	
 	<select id="selectMarketOrderDetailTotal" resultType="_int">
 		select count(*)
 		from market_order_detail
-		where market_order_no=#{marketOrderNo} and market_order_detail_enabled=1
-	</select>
-	
-	<select id="selectMarketOrderFlag" resultType="_int">
-		select market_order_flag 
-		from market_order
-		where market_order_no=#{marketOrderNo} and market_order_enabled=1
+		where market_order_no=#{marketOrderNo}
 	</select>
 	
 	<update id="marketOrderUpdateAmount">
@@ -84,9 +79,20 @@
 		where market_order_no=#{marketOrderNo}
 	</update>
 	
-	<select id="selectMarketOrderPriceTotal" resultType="_int">
-		select market_order_price
-		from market_order
+	<select id="selectMarketOrderOne" resultType="marketOrder">
+		select * from market_order
 		where market_order_no=#{marketOrderNo}
 	</select>
+	
+	<select id="selectMarketOrderDetailPrice" resultType="_int">
+		select sum(D.market_order_detail_amount*F.food_market_price)
+		from market_order_detail D left join food F on D.food_no=F.food_no
+		where market_order_no=#{marketOrderNo} and market_order_detail_enabled=1
+	</select>
+	
+	<update id="updateMarketOrderPrice">
+		update market_order 
+		set market_order_price=#{marketOrderPrice}
+		where market_order_no=#{marketOrderNo}
+	</update>
 </mapper>
