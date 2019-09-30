@@ -10,7 +10,7 @@ public interface FoodService {
 
 	List<FoodSection> selectFoodSectionList();
 
-	List<Food> selectFoodByDiv(String foodDivisionNo);
+	List<Food> selectFoodByDiv(Map<String, String> param);
 
 	List<Food> selectFoodByUpper(Map<String, String> param);
 

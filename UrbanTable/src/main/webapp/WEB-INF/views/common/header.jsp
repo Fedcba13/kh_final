@@ -62,10 +62,8 @@
 	                        <li><a href="${pageContext.request.contextPath}/market/myMarket.do?memberId=${memberLoggedIn.memberId}" class="dp_block">내 지점 관리</a></li>
 	                        <li><a href="${pageContext.request.contextPath}/market/marketOrder.do" class="dp_block">지점 주문 내역</a></li>
 	                        <li><a href="${pageContext.request.contextPath}/market/event.do" class="dp_block">이벤트 관리</a></li>
-	                        <li><a href="${pageContext.request.contextPath}/foodOrder/marketFoodOrder.do" class="dp_block">발주 요청</a></li>
-	                        <li><a href="${pageContext.request.contextPath}/market/marketStock.do" class="dp_block">재고 관리</a></li>
-	                        <li><a href="" class="dp_block">배송 관리</a></li>
-	                        <li><a href="" class="dp_block">지점 인기 상품</a></li>
+	                        <li><a href="${pageContext.request.contextPath}/market/marketStock.do?memberId=${memberLoggedIn.memberId}" class="dp_block">재고·발주 요청</a></li>
+	                        <li><a href="${pageContext.request.contextPath}/foodOrder/foodOrderRequest.do?memberId=${memberLoggedIn.memberId}" class="dp_block">발주 요청 내역</a></li>
 	                        <li><a href="" class="dp_block">지점 매출 현황</a></li>
 	                    </ul>
 	                </li>
@@ -101,18 +99,30 @@
                 <%-- </c:if> --%>
             </div>
         	<!-- FOOD 카테고리 가져오기 by 김기현 -->
-            <div id="gnb_menu_wrap">
+           <%--  <div id="gnb_menu_wrap">
                 <ul class="gnb_menu">
 					<%
 						for (FoodDivision foodDivision : new FoodServiceImpl().foodDivisionList) {
 					%>
 					<li><a href="${pageContext.request.contextPath }/food/selectFoodByDiv.do?foodDivisionNo=<%=foodDivision.getFoodDivisionNo() %>&foodDivisionName=<%=foodDivision.getFoodDivisionName() %>" class="dp_block"><%=foodDivision.getFoodDivisionName()%></a>
+							<li><a href="${pageContext.request.contextPath }/foodselectFoodByWhichCat?noWhichCat=<%=foodDivision.getFoodDivisionNo() %>"><%=foodDivision.getFoodDivisionName()%></a></li>
 						<ul class="sub_menu">
 							<%
 								for (FoodSection foodSection : new FoodServiceImpl().foodSectionList) {
-										if (foodDivision.getFoodDivisionNo().equals(foodSection.getFoodDivisionNo())) {
+										if (foodDivision.getFoodDivisionNo().equals(foodSection.getFoodDivisionNo()) && !"그 외".equals(foodSection.getFoodSectionUpper())) {
 							%>
 							<li><a href="${pageContext.request.contextPath }/food/selectFoodByUpper.do?foodDivisionNo=<%=foodSection.getFoodDivisionNo()%>&foodSectionUpper=<%=foodSection.getFoodSectionUpper() %>" class="dp_block"><%=foodSection.getFoodSectionUpper() %></a></li>
+							<li><a href="${pageContext.request.contextPath }/foodselectFoodByWhichCat?noWhichCat=<%=foodSection.getFoodSectionNo() %>"><%=foodSection.getFoodSectionUpper() %></a></li>
+
+							<%
+								}
+									}
+							%>
+							<%
+								for (FoodSection foodSection : new FoodServiceImpl().foodSectionList) {
+										if (foodDivision.getFoodDivisionNo().equals(foodSection.getFoodDivisionNo()) && "그 외".equals(foodSection.getFoodSectionUpper())) {
+							%>
+							<li><a href="${pageContext.request.contextPath }/foodselectFoodByWhichCat?noWhichCat=<%=foodSection.getFoodSectionNo() %>"><%=foodSection.getFoodSectionUpper() %></a></li>
 
 							<%
 								}
@@ -123,7 +133,30 @@
 						}
 					%>
                 </ul>
-            </div>
+            </div> --%>
+         <%--     <div id="gnb_menu_wrap">
+                <ul class="gnb_menu">
+					<%
+						for (FoodDivision foodDivision : new FoodServiceImpl().foodDivisionList) {
+					%>
+					<li><a href="${pageContext.request.contextPath }/food/selectFoodByDivOrSect.do?searchKeyword=<%=foodDivision.getFoodDivisionNo() %>foodDivisionNo=000" class="dp_block"><%=foodDivision.getFoodDivisionName()%></a>
+						<ul class="sub_menu">
+							<%
+								for (FoodSection foodSection : new FoodServiceImpl().foodSectionList) {
+										if (foodDivision.getFoodDivisionNo().equals(foodSection.getFoodDivisionNo())) {
+							%>
+							<li><a href="${pageContext.request.contextPath }/food/selectFoodByDivOrSect.do?searchKeyword=<%=foodSection.getFoodSectionUpper() %>&foodDivisionNo=<%=foodSection.getFoodDivisionNo() %>" class="dp_block"><%=foodSection.getFoodSectionUpper() %></a></li>
+
+							<%
+								}
+									}
+							%>
+						</ul></li>
+					<%
+						}
+					%>
+                </ul>
+            </div> --%>
         </div>
     </header>
 	<div class="login-modal txt_center">
@@ -136,11 +169,11 @@
 				<button type="button" class="btn login">로그인</button>
 				<div>
 					<div class="chk_option">
-						<input type="checkbox" checked="checked" name="saveId" id="saveId">
+						<input type="checkbox" name="saveId" id="saveId">
 						<label for="saveId">아이디저장</label>
 					</div>
 					<div class="chk_option">
-						<input type="checkbox" checked="checked" name="autoLogin" id="autoLogin">
+						<input type="checkbox" name="autoLogin" id="autoLogin">
 						<label for="autoLogin">자동로그인</label>
 					</div>
 				</div>

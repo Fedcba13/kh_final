@@ -11,5 +11,6 @@ public class MarketOrder {
 	private String marketNo;
 	private Date marketOrderDate;
 	private int marketOrderPrice;
+	private int marketOrderFlag;
 	
 }

@@ -108,6 +108,24 @@ public class MemberController {
 					
 					//쿠키 저장
 					response.addCookie(autoLoginCookie);
+				}else if(saveId.equals("true")) {
+					logger.debug("아이디 저장");
+					
+					//쿠키 생성
+					Cookie saveIdCookie = new Cookie("saveIdCookie", memberId);
+					saveIdCookie.setPath("/");
+					saveIdCookie.setMaxAge(60*60*24*7);
+					
+					response.addCookie(saveIdCookie);
+				}else if(saveId.equals("false")) {
+					logger.debug("아이디 저장 취소");
+					
+					//쿠키 삭제
+					Cookie saveIdCookie = new Cookie("saveIdCookie", null);
+					saveIdCookie.setPath("/");
+					saveIdCookie.setMaxAge(0);
+					
+					response.addCookie(saveIdCookie);
 				}
 				
 			}
@@ -246,6 +264,9 @@ public class MemberController {
 	      MemberAutoLogin memberAutoLogin = new MemberAutoLogin();
 	      memberAutoLogin.setCookieKey(cookieKey);
 	      memberService.removeAutoLogin(memberAutoLogin);
+	      
+	      //자동로그인 쿠키 삭제 시 
+	      
 	    }
 		
 		return "redirect:/";

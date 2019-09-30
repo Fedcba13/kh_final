@@ -132,13 +132,11 @@ $(()=>{
 			success: (data)=>{
 				alert(data.msg);
 				if(data.msg == '인증번호 발송 성공!'){
-					console.log(1);
 					timer = setInterval(PrintTime, 1000);
 					use($("[name=auth_code]"));
 					use($("#checkMsg"));
 					disabled($("[name=memberPhone]"));
 					disabled($("#sendMsg"));
-					console.log(2);
 				}
 			},
 			error: (xhr, txtStatus, err)=>{

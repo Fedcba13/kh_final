@@ -5,16 +5,18 @@ public class Cart {
 	private String memberId;
 	private String foodNo;
 	private int cartAmount;
+	private int flag;
 	
 	public Cart() {
 		
 	}
 	
-	public Cart(String memberId, String foodNo, int cartAmount) {
+	public Cart(String memberId, String foodNo, int cartAmount, int flag) {
 		super();
 		this.memberId = memberId;
 		this.foodNo = foodNo;
 		this.cartAmount = cartAmount;
+		this.flag=flag;
 	}
 
 	public String getMemberId() {
@@ -41,10 +43,18 @@ public class Cart {
 		this.cartAmount = cartAmount;
 	}
 
+	public int getFlag() {
+		return flag;
+	}
+
+	public void setFlag(int flag) {
+		this.flag = flag;
+	}
+
 	@Override
 	public String toString() {
-		return "Cart [memberId=" + memberId + ", foodNo=" + foodNo + ", cartAmount=" + cartAmount + "]";
+		return "Cart [memberId=" + memberId + ", foodNo=" + foodNo + ", cartAmount=" + cartAmount + ", flag=" + flag
+				+ "]";
 	}
-	
 
 }
