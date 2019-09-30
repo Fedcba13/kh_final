@@ -24,8 +24,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.recipe.model.service.RecipeService;
+import com.kh.urbantable.recipe.model.vo.BoardComment;
 import com.kh.urbantable.recipe.model.vo.Material;
+import com.kh.urbantable.recipe.model.vo.MaterialWithSection;
 import com.kh.urbantable.recipe.model.vo.Recipe;
 import com.kh.urbantable.recipe.model.vo.RecipeSequence;
 import com.kh.urbantable.recipe.model.vo.RecipeVO;
@@ -51,11 +54,20 @@ public class RecipeController {
 	}
 	
 	@RequestMapping("/recipeView.do")
-	public String recipeView(@RequestParam String recipeNo, Model model) {
+	public String recipeView(@RequestParam String recipeNo, @RequestParam String memberId, Model model) {
+		Recipe recipe = recipeService.selectOneRecipe(recipeNo);
+		List<MaterialWithSection> materialList = recipeService.selectMaterial(recipeNo);
+		List<BoardComment> commentList = recipeService.selectBoardCommentList(recipeNo);
 		
-		model.addAttribute("recipe", recipeService.selectOneRecipe(recipeNo));
-		List<Material> materialList = recipeService.selectMaterial(recipeNo);
+		
+		if(!recipe.getMemberId().equals(memberId)) {
+			int result = recipeService.readCountUp(recipeNo);
+			recipe = recipeService.selectOneRecipe(recipeNo);
+		}
+		
+		model.addAttribute("recipe", recipe);
 		model.addAttribute("material", materialList);
+		model.addAttribute("comment", commentList);
 		return "recipe/recipeView";
 	}
 	
@@ -175,6 +187,15 @@ public class RecipeController {
 		}
 		
 		return "common/msg";
+	}
+	
+	@ResponseBody
+	@GetMapping("/materialSelectBox")
+	public List<FoodSection> MaterialSelectBox(@RequestParam("fr") String fr) {
+		String foodDivisionNo = recipeService.selectFoodDivisionNo(fr);
+		List<FoodSection> sectionList = recipeService.selectFoodSectionList(foodDivisionNo);
+
+		return sectionList;
 	}
 
 }

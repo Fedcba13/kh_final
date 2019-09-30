@@ -5,9 +5,11 @@ import java.util.List;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.urbantable.food.model.vo.FoodSection;
+import com.kh.urbantable.recipe.model.vo.BoardComment;
 import com.kh.urbantable.recipe.model.vo.Material;
+import com.kh.urbantable.recipe.model.vo.MaterialWithSection;
 import com.kh.urbantable.recipe.model.vo.Recipe;
 import com.kh.urbantable.recipe.model.vo.RecipeSequence;
 import com.kh.urbantable.recipe.model.vo.RecipeVO;
@@ -29,7 +31,7 @@ public class RecipeDAOImpl implements RecipeDAO {
 	}
 
 	@Override
-	public List<Material> selectMaterial(String recipeNo) {
+	public List<MaterialWithSection> selectMaterial(String recipeNo) {
 		return sqlSession.selectList("recipe.selectMaterial", recipeNo);
 	}
 
@@ -61,5 +63,25 @@ public class RecipeDAOImpl implements RecipeDAO {
 	@Override
 	public List<String> selectFoodNo(String foodSectionNo) {
 		return sqlSession.selectList("recipe.selectFoodNo", foodSectionNo);
+	}
+
+	@Override
+	public String selectFoodDivisionNo(String fr) {
+		return sqlSession.selectOne("recipe.selectFoodDivisionNo", fr);
+	}
+
+	@Override
+	public List<FoodSection> selectFoodSectionList(String foodDivisionNo) {
+		return sqlSession.selectList("recipe.selectFoodSectionList", foodDivisionNo);
+	}
+
+	@Override
+	public int readCountUp(String recipeNo) {
+		return sqlSession.update("recipe.readCountUp", recipeNo);
+	}
+
+	@Override
+	public List<BoardComment> selectBoardCommentList(String recipeNo) {
+		return sqlSession.selectList("recipe.selectBoardCommentList", recipeNo);
 	}
 }

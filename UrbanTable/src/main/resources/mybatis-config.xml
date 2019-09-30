@@ -65,5 +65,9 @@
 			alias="memberAutoLogin"/>
 		<typeAlias type="com.kh.urbantable.foodOrder.model.vo.MarketCart"
 			alias="marketCart"/>
+		<typeAlias type="com.kh.urbantable.recipe.model.vo.MaterialWithSection"
+			alias="materialWithSection"/>
+		<typeAlias type="com.kh.urbantable.recipe.model.vo.BoardComment"
+			alias="boardComment"/>
 	</typeAliases>
 </configuration>

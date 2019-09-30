@@ -19,12 +19,14 @@
             </tr>
             <c:if test="${not empty list}">
             	<c:forEach items="${list}" var="li">
-		            <tr>
-		                <td>${li.memberId }</td>
-		                <td class="recipe_link"><a href="${pageContext.request.contextPath}/recipe/recipeView.do?recipeNo=${li.recipeNo}">${li.recipeTitle }</a></td>
-		                <td>${li.recipeReadcount }</td>
-		                <td>${li.recipeDate }</td>
-		            </tr>
+	            	<c:if test="${li.recipeEnabled != 0}">
+			            <tr>
+			                <td>${li.memberId }</td>
+			                <td class="recipe_link"><a href="${pageContext.request.contextPath}/recipe/recipeView.do?recipeNo=${li.recipeNo}&memberId=${memberLoggedIn.memberId}">${li.recipeTitle }</a></td>
+			                <td>${li.recipeReadcount }</td>
+			                <td>${li.recipeDate }</td>
+			            </tr>            	
+	            	</c:if>
             	</c:forEach>
             </c:if>
         </table>
