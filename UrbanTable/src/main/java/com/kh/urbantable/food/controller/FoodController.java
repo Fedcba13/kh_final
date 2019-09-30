@@ -9,8 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.kh.urbantable.food.model.service.FoodService;
@@ -29,8 +31,14 @@ public class FoodController {
 	private FoodService foodService;
 
 	@RequestMapping(value = "/selectFoodByDiv.do", method = RequestMethod.GET)
-	public String selectFoodByDiv(Model model, FoodDivision foodDivision) {
-		List<Food> foodList = foodService.selectFoodByDiv(foodDivision.getFoodDivisionNo());
+	public String selectFoodByDiv(Model model, FoodDivision foodDivision,
+			@RequestParam(value = "marketName", required = false, defaultValue = "mar00012") String marketNo) {
+
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("marketNo", marketNo);
+		param.put("foodDivisionNo", foodDivision.getFoodDivisionNo());
+
+		List<Food> foodList = foodService.selectFoodByDiv(param);
 		List<FoodSection> subSectionList = foodService.selectSubSectionList(foodDivision.getFoodDivisionNo());
 
 		model.addAttribute("firstCat", foodDivision.getFoodDivisionName());
@@ -78,4 +86,36 @@ public class FoodController {
 
 		return "food/foodList";
 	}
+
+//	// 카테고리 검색 실험용 로직 시작!!!
+	/*
+	 * @RequestMapping(value = "/selectFoodByDivOrSect.do", method =
+	 * RequestMethod.GET) public String selectFoodByDivOrSect(Model model,
+	 * 
+	 * @RequestParam(value = "searchKeyword", required = false) String
+	 * searchKeyword,
+	 * 
+	 * @RequestParam(value = "foodDivisionNo", required = false, defaultValue = " ")
+	 * String foodDivisionNo,
+	 * 
+	 * @RequestParam(value = "marketName", required = false, defaultValue =
+	 * "mar00012") String marketNo ) {
+	 * 
+	 * String catTable = searchKeyword.substring(0, 3); // div or sec Map<String,
+	 * String> param = new HashMap<String, String>(); param.put("marketNo",
+	 * marketNo); // division 클릭시 if ("DIV".equals(catTable)) {
+	 * param.put("foodDivisionNo", searchKeyword); } //최하위로 조회시 else if
+	 * ("SEC".equals(catTable)){ param.put("foodSectNo", searchKeyword); }//upper로
+	 * 조회시 else { param.put("foodSectionUpper", searchKeyword);
+	 * param.put("foodDivisionNo", foodDivisionNo); }
+	 * 
+	 * List<FoodSection> subSectionList =
+	 * foodService.selectFoodSectionNameList(param);
+	 * 
+	 * model.addAttribute("secCatList", subSectionList);
+	 * model.addAttribute("foodList", foodList); logger.debug("zzzzzzzzzzzzzzz");
+	 * logger.debug(foodList.toString()); logger.debug(subSectionList.toString());
+	 * 
+	 * return "food/foodList"; }
+	 */
 }

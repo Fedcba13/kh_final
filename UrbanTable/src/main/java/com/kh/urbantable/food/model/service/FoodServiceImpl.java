@@ -14,6 +14,7 @@ import com.kh.urbantable.food.model.dao.FoodDAO;
 import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodDivision;
 import com.kh.urbantable.food.model.vo.FoodSection;
+import com.kh.urbantable.marketOwner.model.vo.Market;
 
 @Service
 public class FoodServiceImpl implements FoodService {
@@ -21,6 +22,7 @@ public class FoodServiceImpl implements FoodService {
 	
 	public static List<FoodSection> foodSectionList = null;
 	public static List<FoodDivision> foodDivisionList = null;
+	public static List<Market> marketList = null;
 		
 	
 	@Autowired
@@ -30,7 +32,7 @@ public class FoodServiceImpl implements FoodService {
 	public void init() {
 		foodSectionList = foodDAO.selectFoodSectionList();
 		foodDivisionList = foodDAO.selectFoodDivisionList();
-		
+		marketList = foodDAO.selectMarketList();
 	}
 	@Override
 	public List<FoodSection> selectFoodSectionList() {
@@ -39,8 +41,8 @@ public class FoodServiceImpl implements FoodService {
 
 
 	@Override
-	public List<Food> selectFoodByDiv(String foodDivisionNo) {
-		return foodDAO.selectFoodByDiv(foodDivisionNo);
+	public List<Food> selectFoodByDiv(Map<String, String> param) {
+		return foodDAO.selectFoodByDiv(param);
 	}
 	@Override
 	public List<Food> selectFoodByUpper(Map<String, String> param) {

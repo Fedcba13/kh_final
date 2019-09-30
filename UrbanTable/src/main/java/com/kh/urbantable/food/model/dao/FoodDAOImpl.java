@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodDivision;
 import com.kh.urbantable.food.model.vo.FoodSection;
+import com.kh.urbantable.marketOwner.model.vo.Market;
 
 @Repository
 public class FoodDAOImpl implements FoodDAO {
@@ -28,8 +29,8 @@ public class FoodDAOImpl implements FoodDAO {
 	}
 
 	@Override
-	public List<Food> selectFoodByDiv(String foodDivisionNo) {
-		return sqlSession.selectList("food.selectFoodByDiv", foodDivisionNo);
+	public List<Food> selectFoodByDiv(Map<String, String> param) {
+		return sqlSession.selectList("food.selectFoodByDiv", param);
 	}
 
 	@Override
@@ -50,6 +51,11 @@ public class FoodDAOImpl implements FoodDAO {
 	@Override
 	public List<Food> selectFoodBySect(Map<String, String> param) {
 		return sqlSession.selectList("food.selectFoodBySect", param);
+	}
+
+	@Override
+	public List<Market> selectMarketList() {
+		return sqlSession.selectList("food.selectMarketList");
 	}
 
 }
