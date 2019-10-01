@@ -11,7 +11,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class FoodWithStockInMarket extends Food {
+public class FoodWithStockAndEvent extends Food {
 
 	private String marketNo;
 	private int stockAmount;
@@ -24,6 +24,8 @@ public class FoodWithStockInMarket extends Food {
 	private String marketName;
 	private String marketHoliday;
 	private String marketTime;
+	private int afterEventPrice;
+	private int eventPercent;
 
 	@Override
 	public String getFoodCompany() {

@@ -50,32 +50,33 @@
 		</c:if> 
 	</ul>
 </div>
-<section id="sec1" class="main_sec">
+<section class="main_sec">
 	<article class="inner">
 	    <h3 class="sub_tit">서브페이지 제목</h3>
 	    <select name="marketList" id="marketList" onchange="changeMarket()">
-	    	<%
-	    		for(Market m :FoodServiceImpl.marketList){
-	    			%>
-	    				<option value="<%=m.getMarketNo()%>" <%="강남대치점".equals(m.getMarketName())? "selected":" " %>><%=m.getMarketName() %></option>
-	    			<%
-	    		}
-	    	%>
+			<c:forEach items="${marketList}" var="m">
+				<option value="${m.marketNo }" ${m.marketNo eq marketNo? 'selected':' ' }>${m.marketName }</option>
+			</c:forEach>
 	    </select>
        <ul class="main_prd_list clearfix">
         <c:forEach items="${foodList }" var="f">
         	<c:if test="${f.stockAmount gt 0 }">
+<%--             <li onclick="goFoodView('${f.foodNo}');"> --%>
             <li>
-                <a href="" class="dp_block">
+                <a href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo=${f.foodNo }&marketNo=${f.marketNo}" class="dp_block">
                     <div class="prd_img_area">
-                        <p class="fw600 txt_center"><span>SALE</span><br>20%</p>
+                    <c:if test="${not empty f.afterEventPrice }">
+                        <%-- <p class="fw600 txt_center"><span>SALE</span><br>${f.eventPercent}%</p> --%>
+                    </c:if>
                         <img src="${f.foodImg }" alt="상품 사진">
                     </div>
                     <div class="prd_info_area">
                         <h4>${f.foodName }</h4>
+                        <c:if test="${not empty f.afterEventPrice }">
                         <p class="prd_price fw600">할인가</p>
-                        <p class="prd_price2">${f.foodMarketPrice }</p>
-                        <p class="prd_price2">${f.marketName }</p>
+                        <p class="prd_price">${f.afterEventPrice }</p>
+                        </c:if>
+                        <p class="prd_price2">${f.foodMemberPrice }</p>
                     </div>
                 </a>
             </li>
@@ -85,7 +86,7 @@
         <c:forEach items="${foodList }" var="f">
         	<c:if test="${f.stockAmount eq 0 }">
             <li>
-                <a href="" class="dp_block">
+                <a href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo=${f.foodNo }&marketNo=${f.marketNo}" class="dp_block">
                     <div class="prd_img_area">
                         <img src="${f.foodImg }" alt="상품 사진">
                     </div>
@@ -101,4 +102,12 @@
         </ul>
     </article>
 </section>
+<script>
+function changeMarket() {
+	var marketNo = $("#marketList option:selected").val();
+	location.href = "${pageContext.request.contextPath}/food/selectFoodByCat.do?searchNo=${searchNo}&searchKeyword=${searchKeyword}"
+		+"&marketNo="+marketNo;
+ }
+
+</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

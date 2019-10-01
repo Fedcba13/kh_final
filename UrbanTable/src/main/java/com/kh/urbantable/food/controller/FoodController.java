@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.kh.urbantable.food.model.service.FoodService;
-import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.food.model.vo.FoodUpper;
+import com.kh.urbantable.food.model.vo.FoodWithStockAndEvent;
 import com.kh.urbantable.marketOwner.model.vo.Market;
 
 @Controller
@@ -33,7 +33,7 @@ public class FoodController {
 	@RequestMapping(value = "/selectFoodByCat.do", method = RequestMethod.GET)
 	public String selectFoodByCat(Model model, @RequestParam(value = "searchNo") String searchNo,
 			@RequestParam(value = "searchKeyword") String searchKeyword,
-			@RequestParam(value = "marketName", required = false, defaultValue = "mar00012") String marketNo) {
+			@RequestParam(value = "marketNo", required = false, defaultValue = "mar00012") String marketNo) {
 
 		Map<String, String> param = new HashMap<String, String>();
 		param.put("searchNo", searchNo);
@@ -58,10 +58,16 @@ public class FoodController {
 			brotherSectList = foodService.selectBrotherSectList(upperNo);
 		}
 
-		List<Food> foodList = foodService.selectFoodListByCat(param);
+		List<FoodWithStockAndEvent> foodList = foodService.selectFoodListByCat(param);
 		List<Market> marketList = foodService.selectMarketList();
-
+		
+		for(FoodWithStockAndEvent food : foodList) {
+			food = calculateEventPrice(food);
+		}
+		
 		model.addAttribute("searchKeyword", searchKeyword);
+		model.addAttribute("searchNo", searchNo);
+		model.addAttribute("marketNo", marketNo);
 		model.addAttribute("subUpperList", subUpperList);
 		model.addAttribute("subSectList", subSectList);
 		model.addAttribute("brotherSectList", brotherSectList);
@@ -70,6 +76,39 @@ public class FoodController {
 
 		return "food/foodList";
 	}
+	
+	@RequestMapping(value = "/goFoodView.do", method = RequestMethod.GET)
+	public String goFoodView(Model model, @RequestParam(value = "foodNo") String foodNo,
+								@RequestParam(value = "marketNo") String marketNo) {
+		
+		logger.debug(foodNo);
+		logger.debug(marketNo);
+		
+		HashMap<String, String> param = new HashMap<String, String>();
+		param.put("foodNo", foodNo);
+		param.put("marketNo", marketNo);
+		
+		FoodWithStockAndEvent food = foodService.selectFood(param);
+		logger.debug(food.toString());
+		food = calculateEventPrice(food);
+		
+		model.addAttribute("food", food);
+		
+		return "food/foodView";
+	}
+	
+	public FoodWithStockAndEvent calculateEventPrice(FoodWithStockAndEvent food) {
+		int eventPercent = foodService.selectEventPercent(food);
+		
+		 	double M3=eventPercent*0.01; // M3는 %를 소수점으로 변환한 값이다 즉 20%를 0.2로 변환한다
+		    double yourmoney=food.getFoodMemberPrice()*M3; // 할인되는 가격
+		    double actually=food.getFoodMemberPrice()-yourmoney; // 실제 가격
 
-//
+		if(eventPercent != 0) {
+			food.setAfterEventPrice((int)actually);
+			food.setEventPercent(eventPercent);
+		}
+		return food;
+	}
+	
 }

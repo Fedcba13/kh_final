@@ -1,17 +1,19 @@
 package com.kh.urbantable.food.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.kh.urbantable.food.model.vo.Food;
+import com.kh.urbantable.event.model.vo.Event;
 import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.food.model.vo.FoodUpper;
+import com.kh.urbantable.food.model.vo.FoodWithStockAndEvent;
 import com.kh.urbantable.marketOwner.model.vo.Market;
 
 public interface FoodService {
 
 	// food 카테고리로 불러오기
-	List<Food> selectFoodListByCat(Map<String, String> param);
+	List<FoodWithStockAndEvent> selectFoodListByCat(Map<String, String> param);
 
 	// foodList view 카테고리 표시
 	List<FoodUpper> getSubUpperList(String searchNo);
@@ -25,5 +27,11 @@ public interface FoodService {
 
 	// foodList view markeList 표시
 	List<Market> selectMarketList();
+	
+	//food의 이벤트 최대 할인율 호출
+	int selectEventPercent(FoodWithStockAndEvent food);
+
+	FoodWithStockAndEvent selectFood(HashMap<String, String> param);
+
 
 }

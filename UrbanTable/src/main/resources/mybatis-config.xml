@@ -54,8 +54,8 @@
 			type="com.kh.urbantable.food.model.vo.FoodWithFoodSection"
 			alias="foodWithFoodSection" />
 		<typeAlias
-			type="com.kh.urbantable.food.model.vo.FoodWithStockInMarket"
-			alias="FoodWithStockInMarket" />
+			type="com.kh.urbantable.food.model.vo.FoodWithStockAndEvent"
+			alias="foodWithStockAndEvent" />
 		<typeAlias
 			type="com.kh.urbantable.payment.model.vo.PayDetail" alias="paydetail" />
 		<typeAlias
