@@ -1,3 +1,4 @@
+<%@page import="com.kh.urbantable.food.model.vo.FoodUpper"%>
 <%@page import="com.kh.urbantable.food.model.vo.FoodSection"%>
 <%@page import="com.kh.urbantable.food.model.service.FoodServiceImpl"%>
 <%@page import="com.kh.urbantable.food.model.vo.FoodDivision"%>
@@ -134,18 +135,28 @@
 					%>
                 </ul>
             </div> --%>
-         <%--     <div id="gnb_menu_wrap">
+          <div id="gnb_menu_wrap">
                 <ul class="gnb_menu">
 					<%
 						for (FoodDivision foodDivision : new FoodServiceImpl().foodDivisionList) {
 					%>
-					<li><a href="${pageContext.request.contextPath }/food/selectFoodByDivOrSect.do?searchKeyword=<%=foodDivision.getFoodDivisionNo() %>foodDivisionNo=000" class="dp_block"><%=foodDivision.getFoodDivisionName()%></a>
+					<li><a href="${pageContext.request.contextPath }/food/selectFoodByCat.do?searchNo=<%=foodDivision.getFoodDivisionNo() %>&searchKeyword=<%=foodDivision.getFoodDivisionName() %>" class="dp_block"><%=foodDivision.getFoodDivisionName()%></a>
 						<ul class="sub_menu">
 							<%
-								for (FoodSection foodSection : new FoodServiceImpl().foodSectionList) {
-										if (foodDivision.getFoodDivisionNo().equals(foodSection.getFoodDivisionNo())) {
+							for (FoodUpper foodUpper : new FoodServiceImpl().foodUpperList) {
+										if (foodDivision.getFoodDivisionNo().equals(foodUpper.getFoodDivisionNo()) && !"그 외".equals(foodUpper.getFoodUpperName())) {
 							%>
-							<li><a href="${pageContext.request.contextPath }/food/selectFoodByDivOrSect.do?searchKeyword=<%=foodSection.getFoodSectionUpper() %>&foodDivisionNo=<%=foodSection.getFoodDivisionNo() %>" class="dp_block"><%=foodSection.getFoodSectionUpper() %></a></li>
+							<li><a href="${pageContext.request.contextPath }/food/selectFoodByCat.do?searchNo=<%=foodUpper.getFoodUpperNo() %>&searchKeyword=<%=foodUpper.getFoodUpperName()%>" class="dp_block"><%=foodUpper.getFoodUpperName() %></a></li>
+
+							<%
+								}
+									}
+							%>
+							<%
+							for (FoodUpper foodUpper : new FoodServiceImpl().foodUpperList) {
+										if (foodDivision.getFoodDivisionNo().equals(foodUpper.getFoodDivisionNo()) &&  "그 외".equals(foodUpper.getFoodUpperName()) ) {
+							%>
+							<li><a href="${pageContext.request.contextPath }/food/selectFoodByCat.do?searchNo=<%=foodUpper.getFoodUpperNo() %>&searchKeyword=<%=foodUpper.getFoodUpperName()%>" class="dp_block"><%=foodUpper.getFoodUpperName() %></a></li>
 
 							<%
 								}
@@ -156,7 +167,7 @@
 						}
 					%>
                 </ul>
-            </div> --%>
+            </div> 
         </div>
     </header>
 	<div class="login-modal txt_center">

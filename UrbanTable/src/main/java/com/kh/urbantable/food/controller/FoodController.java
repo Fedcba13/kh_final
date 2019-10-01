@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -17,8 +16,9 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.kh.urbantable.food.model.service.FoodService;
 import com.kh.urbantable.food.model.vo.Food;
-import com.kh.urbantable.food.model.vo.FoodDivision;
 import com.kh.urbantable.food.model.vo.FoodSection;
+import com.kh.urbantable.food.model.vo.FoodUpper;
+import com.kh.urbantable.marketOwner.model.vo.Market;
 
 @Controller
 @RequestMapping("/food")
@@ -30,92 +30,46 @@ public class FoodController {
 	@Autowired
 	private FoodService foodService;
 
-	@RequestMapping(value = "/selectFoodByDiv.do", method = RequestMethod.GET)
-	public String selectFoodByDiv(Model model, FoodDivision foodDivision,
+	@RequestMapping(value = "/selectFoodByCat.do", method = RequestMethod.GET)
+	public String selectFoodByCat(Model model, @RequestParam(value = "searchNo") String searchNo,
+			@RequestParam(value = "searchKeyword") String searchKeyword,
 			@RequestParam(value = "marketName", required = false, defaultValue = "mar00012") String marketNo) {
 
 		Map<String, String> param = new HashMap<String, String>();
+		param.put("searchNo", searchNo);
 		param.put("marketNo", marketNo);
-		param.put("foodDivisionNo", foodDivision.getFoodDivisionNo());
 
-		List<Food> foodList = foodService.selectFoodByDiv(param);
-		List<FoodSection> subSectionList = foodService.selectSubSectionList(foodDivision.getFoodDivisionNo());
+		String whichCat = searchNo.substring(0, 3);
 
-		model.addAttribute("firstCat", foodDivision.getFoodDivisionName());
-		model.addAttribute("secCatList", subSectionList);
+		List<FoodUpper> subUpperList = null;
+		List<FoodSection> subSectList = null;
+		List<FoodSection> brotherSectList = null;
+
+		if ("DIV".equals(whichCat)) {
+			param.put("table", "DIVISION");
+			param.put("FOOD_DIVISION_NO", searchNo);
+			subUpperList = foodService.getSubUpperList(searchNo);
+		} else if ("UPP".equals(whichCat)) {
+			param.put("FOOD_UPPER_NO", searchNo);
+			subSectList = foodService.getSubSectList(searchNo);
+		} else if ("SEC".equals(whichCat)) {
+			param.put("FOOD_SECTION_NO", searchNo);
+			String upperNo = foodService.getUpperNoBySectNo(searchNo);
+			brotherSectList = foodService.selectBrotherSectList(upperNo);
+		}
+
+		List<Food> foodList = foodService.selectFoodListByCat(param);
+		List<Market> marketList = foodService.selectMarketList();
+
+		model.addAttribute("searchKeyword", searchKeyword);
+		model.addAttribute("subUpperList", subUpperList);
+		model.addAttribute("subSectList", subSectList);
+		model.addAttribute("brotherSectList", brotherSectList);
+		model.addAttribute("marketList", marketList);
 		model.addAttribute("foodList", foodList);
 
 		return "food/foodList";
 	}
 
-	@RequestMapping(value = "/selectFoodByUpper.do", method = RequestMethod.GET)
-	public String selectFoodByUpper(Model model, FoodSection foodSection) {
-
-		Map<String, String> param = new HashMap<String, String>();
-		param.put("foodDivisionNo", foodSection.getFoodDivisionNo());
-		param.put("foodSectionUpper", foodSection.getFoodSectionUpper());
-
-		List<Food> foodList = foodService.selectFoodByUpper(param);
-		List<FoodSection> subSectionList = foodService.selectFoodSectionNameList(param);
-
-		model.addAttribute("firstCat", foodSection.getFoodSectionUpper());
-		model.addAttribute("secCatList", subSectionList);
-
-		model.addAttribute("foodList", foodList);
-
-		return "food/foodList";
-
-	}
-
-	@RequestMapping(value = "/selectFoodBySect.do", method = RequestMethod.GET)
-	public String selectFoodBySect(Model model, FoodSection foodSection) {
-
-		Map<String, String> param = new HashMap<String, String>();
-		param.put("foodDivisionNo", foodSection.getFoodDivisionNo());
-		param.put("foodSectionUpper", foodSection.getFoodSectionUpper());
-
-		List<Food> foodList = foodService.selectFoodBySect(param);
-		List<FoodSection> subSectionList = foodService.selectFoodSectionNameList(param);
-
-		model.addAttribute("firstCat", foodSection.getFoodSectionUpper());
-		model.addAttribute("secCatList", subSectionList);
-		model.addAttribute("foodList", foodList);
-		logger.debug("zzzzzzzzzzzzzzz");
-		logger.debug(foodList.toString());
-		logger.debug(subSectionList.toString());
-
-		return "food/foodList";
-	}
-
-//	// 카테고리 검색 실험용 로직 시작!!!
-	/*
-	 * @RequestMapping(value = "/selectFoodByDivOrSect.do", method =
-	 * RequestMethod.GET) public String selectFoodByDivOrSect(Model model,
-	 * 
-	 * @RequestParam(value = "searchKeyword", required = false) String
-	 * searchKeyword,
-	 * 
-	 * @RequestParam(value = "foodDivisionNo", required = false, defaultValue = " ")
-	 * String foodDivisionNo,
-	 * 
-	 * @RequestParam(value = "marketName", required = false, defaultValue =
-	 * "mar00012") String marketNo ) {
-	 * 
-	 * String catTable = searchKeyword.substring(0, 3); // div or sec Map<String,
-	 * String> param = new HashMap<String, String>(); param.put("marketNo",
-	 * marketNo); // division 클릭시 if ("DIV".equals(catTable)) {
-	 * param.put("foodDivisionNo", searchKeyword); } //최하위로 조회시 else if
-	 * ("SEC".equals(catTable)){ param.put("foodSectNo", searchKeyword); }//upper로
-	 * 조회시 else { param.put("foodSectionUpper", searchKeyword);
-	 * param.put("foodDivisionNo", foodDivisionNo); }
-	 * 
-	 * List<FoodSection> subSectionList =
-	 * foodService.selectFoodSectionNameList(param);
-	 * 
-	 * model.addAttribute("secCatList", subSectionList);
-	 * model.addAttribute("foodList", foodList); logger.debug("zzzzzzzzzzzzzzz");
-	 * logger.debug(foodList.toString()); logger.debug(subSectionList.toString());
-	 * 
-	 * return "food/foodList"; }
-	 */
+//
 }
