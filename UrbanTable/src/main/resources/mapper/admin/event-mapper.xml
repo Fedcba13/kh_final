@@ -15,4 +15,30 @@
 			5000
 		)
 	</insert>
+	
+	<select id="selectOne" resultType="member">
+		select * 
+		from member 
+		where member_id = #{memberId} 
+				and member_enabled = 1 
+	</select>
+	
+		<select id="selectMarketNoByMemberId" resultType="string">
+		select market_no from market 
+		where member_id=#{memberId} and market_enabled=1
+	</select>
+	
+	<insert id="insertEvent">
+		insert into event values(
+			'event' || lpad(seq_event_id.nextval, 5, '0'),
+			#{eventTitle},
+			#{eventContent},
+			#{marketNo}, 
+			#{eventCategory},
+			#{eventDateStart},
+			#{eventDateEnd},
+			1,
+			#{eventPrice}			
+		)
+	</insert>
 </mapper>

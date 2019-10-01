@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
 import com.kh.urbantable.cart.model.vo.Cart;
+import com.kh.urbantable.event.model.vo.Event;
 import com.kh.urbantable.food.model.vo.FoodDivision;
 import com.kh.urbantable.marketOwner.model.service.MarketOwnerService;
-import com.kh.urbantable.marketOwner.model.vo.Event;
 import com.kh.urbantable.marketOwner.model.vo.Market;
 import com.kh.urbantable.marketOwner.model.vo.MarketEvent;
 

@@ -21,9 +21,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
 import com.kh.urbantable.cart.model.vo.Cart;
+import com.kh.urbantable.event.model.vo.Event;
 import com.kh.urbantable.food.model.vo.FoodDivision;
 import com.kh.urbantable.marketOwner.model.service.MarketOwnerService;
-import com.kh.urbantable.marketOwner.model.vo.Event;
 import com.kh.urbantable.marketOwner.model.vo.Market;
 import com.kh.urbantable.member.model.vo.Member;
 
@@ -225,17 +225,17 @@ public class MarketOwnerController {
 		return searchList;
 	}
 	
-	@RequestMapping("/event.do")
-	public String marketEvent() {
-		return "marketOwner/eventList";
-	}
+//	@RequestMapping("/event.do")
+//	public String marketEvent() {
+//		return "marketOwner/eventList";
+//	}
 	
-	@RequestMapping("/marketEventEnroll.do")
-	public String marketEventEnroll(@RequestParam(value="memberId") String memberId, Model model) {
-		String marketNo = marketOwnerService.selectMarketNoByMemberId(memberId);
-		model.addAttribute("eventMarketNo", marketNo);
-		return "marketOwner/marketEventEnroll";
-	}
+//	@RequestMapping("/marketEventEnroll.do")
+//	public String marketEventEnroll(@RequestParam(value="memberId") String memberId, Model model) {
+//		String marketNo = marketOwnerService.selectMarketNoByMemberId(memberId);
+//		model.addAttribute("eventMarketNo", marketNo);
+//		return "marketOwner/marketEventEnroll";
+//	}
 	
 	@ResponseBody
 	@RequestMapping("/eventCompanySearch.do")
@@ -257,11 +257,11 @@ public class MarketOwnerController {
 		return result;
 	}
 	
-	@PostMapping("/marketEventEnrollEnd.do")
-	public String marketEventEnrollEnd(Event event) {
-		logger.info("event={}",event);
-		return "marketOwner/marketEventEnroll";
-	}
+//	@PostMapping("/marketEventEnrollEnd.do")
+//	public String marketEventEnrollEnd(Event event) {
+//		logger.info("event={}",event);
+//		return "marketOwner/marketEventEnroll";
+//	}
 	
 	@RequestMapping("/marketStock.do")
 	public String marketStock(@RequestParam(value="cPage", defaultValue="1") int cPage,
