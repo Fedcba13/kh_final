@@ -85,5 +85,16 @@
 		delete from member_auto_login
 		where cookie_key = #{cookieKey}
 	</delete>
+	
+	<!-- 비밀번호 찾기 -> 비밀번호 변경 -->
+	<update id="modifyMember">
+		update member
+		<trim prefix="SET" suffixOverrides=",">
+ 			<if test="memberPassword != null">member_password=#{memberPassword},</if>
+			<if test="memberAddress != null">member_address=#{memberAddress},</if>
+			<if test="memberAddress2 != null">member_address2=#{memberAddress2},</if>
+		</trim>
+		where member_id = #{memberId}
+	</update>
 
 </mapper>

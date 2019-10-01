@@ -66,6 +66,7 @@
 			<beans:bean id="loggerInterceptor" class="com.kh.urbantable.common.interceptor.LoggerInterceptor"/>
 		</interceptor>
 		<interceptor>
+			<mapping path="/member/myPage"/>
 			<mapping path="/market/founded.do" />
 			<mapping path="/market/myMarket.do" />
 			<mapping path="/market/event.do" />

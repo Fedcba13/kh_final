@@ -117,6 +117,7 @@
 	
 	.find_modal .container:nth-child(2n-1) p{
 		margin: 10px 0 20px;
+		font-weight: bold;
 	}
 	
 }
@@ -149,10 +150,19 @@ var timer = null;
 		//modal 처리
 		var find_modal = $(".find_modal");
 		
+		find_modal.addClass(type);
+		
 		//modal창이 열려 있을 경우, 바탕 클릭시 모달 닫기
+		//닫기 전에 한번 물어보기.
 		$(window).click(function(e){
 			if (e.target == find_modal[0]) {
-				find_modal.css("display", "none");
+				if(find_modal.hasClass('pw')){
+					if(confirm('정말 취소하시겠습니까?')){
+						find_modal.css("display", "none");	
+					}	
+				}else{
+					find_modal.css("display", "none");
+				}
 		    }
 		});
 		
@@ -162,9 +172,11 @@ var timer = null;
 			var param = {
 					phone:$("[name=memberPhone]").val(), 
 					name:$("[name=memberName]").val(),
-					id:$("[name=memberId]").val(),
+					id:$("[name=memberId]:eq(1)").val(),
 					flag: flag
 			}
+			
+			console.log(param);
 			
 			if($("[name=memberPhone]").val().length < 8){
 				alert('핸드폰 번호를 입력하세요,');
@@ -175,7 +187,7 @@ var timer = null;
 			$.ajax({
 				url: "${pageContext.request.contextPath}/member/sendMessage.do",
 				data: param,
-				success: (data)=>{
+				success: (data)=> {
 					alert(data.msg);
 					if(data.msg == '인증번호 발송 성공!'){
 						timer = setInterval(PrintTime, 1000);
@@ -263,6 +275,76 @@ var timer = null;
 
 							}else{
 								
+								var html = '<p>비밀번호 변경</p>';
+								html += '<table class="tbl tbl_view">';
+								html += '<tr>';
+								html += '<th>새로운 비밀번호</th>';
+								html += '<td><input type="password" placeholder="비밀번호를 입력해주세요." maxlength="16" name="memberPassword" style="width: 100%;"></td>';
+								html += '</tr>';
+								html += '<tr>';
+								html += '<th>비밀번호 확인</th>';
+								html += '<td><input type="password" name="password2" maxlength="16" placeholder="비밀번호를 한번 더 입력해주세요." style="width: 100%;"></td>';
+								html += '</tr>';
+								html += '</table>';
+								
+								$(".find_modal .container:eq(0)").html(html);								
+								$(".find_modal .container:eq(1)").append('<input type="button" class="btn modify-pw" value="비밀번호 변경" style="margin-left: 0px;">');
+								$(".find_modal").css("display","block");
+								
+								$(".find_modal .container:eq(1) .modify-pw").click(() => {
+									
+									var password = $("[name=memberPassword]");
+									var rePassword = $("[name=password2]");
+									
+									//10글자 이상
+									var rep = /^[a-zA-Z0-9!@#$*-]{10,}$/;
+									
+									if(!rep.test(password.val())){
+										alert('비밀번호는 10글자 이상이어야 합니다.');
+										password.focus();
+										return;
+									}
+									
+									//영문자, 숫자, 특수문자 중 2가지 이상 포함
+									var rep1 = /^[a-zA-Z]*$/;
+									var rep2 = /^[0-9]*$/;
+									var rep3 = /^[!@#$*-]*$/;
+									
+									if((rep1.test(password.val()) || rep2.test(password.val()) || rep3.test(password.val()))){
+										alert('영문자, 숫자, 특수문자 중 2가지 이상 포함되어야 합니다.');
+										password.focus();
+										return;
+									}
+									
+									if(password.val() != rePassword.val()){
+										alert('비밀번호가 일치하지 않습니다.');
+										rePassword.focus();
+										return;
+									}
+									
+									var param = {
+										memberId : data.member.memberId,
+										memberPassword : password.val()
+									}
+									
+									$.ajax({
+										url: "${pageContext.request.contextPath}/member/modifyPw.do",
+										data: param,
+										type: "post",
+										success: (data) =>{
+											alert(data.msg);
+											if(data.msg == '비밀번호 변경 성공'){
+												$(".find_modal").css("display", "none")
+												$(".login-btn:eq(0)").trigger("click");
+											}else{
+												location.reload();
+											}
+										},
+										error: (xhr, txtStatus, err)=>{
+											console.log("ajax처리실패!", xhr, txtStatus, err);
+										}
+									});
+								});
 								
 							}							
 						}
@@ -275,7 +357,9 @@ var timer = null;
 			});
 		});
 		
-	});
+		
+	}); // on Load 끝
+	
 	
 	function disabled($input){
 		$input.attr('readonly', true);
@@ -388,16 +472,7 @@ var timer = null;
 <div class="modal txt_center find_modal">
 	<form class="modal-content animate">
 		<div class="container txt_center">
-			<table class='tbl tbl_view'>
-				<tr>
-					<th>새로운 비밀번호</th>
-					<td></td>
-				</tr>
-				<tr>
-					<th>비밀번호 확인</th>
-					<td></td>
-				</tr>
-			</table>
+			
 		</div>
 		<div class="container txt_center" style="background-color:#f4f4f0">
 			

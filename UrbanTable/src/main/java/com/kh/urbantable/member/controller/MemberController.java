@@ -345,4 +345,35 @@ public class MemberController {
 		return "member/memberFind";
 	}
 	
+	@RequestMapping("/modifyPw.do")
+	@ResponseBody
+	public Map<String, Object> modifyPw(@RequestParam String memberId,
+											@RequestParam String memberPassword){
+		
+		logger.debug("memberId : " + memberId +", password : " + memberPassword);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		Member member = memberService.selectOneMember(memberId);
+		member.setMemberPassword(passwordEncoder.encode(memberPassword));
+		
+		logger.debug("modifyPw.member@MemberController : " + member );
+		
+		int resultModifyPw = memberService.modifyPw(member);
+		
+		result.put("msg", resultModifyPw > 0 ? "비밀번호 변경 성공":"비밀번호 변경 실패");
+		
+		
+		
+		return result;
+	}
+	
+	@RequestMapping("/myPage")
+	public String myPage() {
+		
+		
+		
+		return "member/memberMyPage";
+	}
+	
 }
