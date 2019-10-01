@@ -6,21 +6,26 @@ import java.util.Map;
 import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodDivision;
 import com.kh.urbantable.food.model.vo.FoodSection;
+import com.kh.urbantable.food.model.vo.FoodUpper;
+import com.kh.urbantable.marketOwner.model.vo.Market;
 
 public interface FoodDAO {
-
-	List<FoodSection> selectFoodSectionList();
-
 	List<FoodDivision> selectFoodDivisionList();
 
-	List<Food> selectFoodByDiv(String foodDivisionNo);
+	List<FoodUpper> selectFoodUpperList();
 
-	List<Food> selectFoodByUpper(Map<String, String> param);
+	List<Food> selectFoodListByCat(Map<String, String> param);
 
-	List<FoodSection> selectSubSectionList(String foodDivisionNo);
+	List<FoodUpper> getSubUpperList(String searchNo);
 
-	List<FoodSection> selectFoodSectionNameList(Map<String, String> param);
+	List<Market> selectMarketList();
 
-	List<Food> selectFoodBySect(Map<String, String> param);
+	List<Food> selectFoodByDiv(Map<String, String> param);
+
+	List<FoodSection> getSubSectList(String searchNo);
+
+	String getUpperNoBySectNo(String searchNo);
+
+	List<FoodSection> selectBrotherSectList(String upperNo);
 
 }

@@ -1,3 +1,4 @@
+<%@page import="com.kh.urbantable.food.model.vo.FoodUpper"%>
 <%@page import="com.kh.urbantable.food.model.vo.FoodSection"%>
 <%@page import="com.kh.urbantable.food.model.service.FoodServiceImpl"%>
 <%@page import="com.kh.urbantable.food.model.vo.FoodDivision"%>
@@ -99,18 +100,30 @@
                 <%-- </c:if> --%>
             </div>
         	<!-- FOOD 카테고리 가져오기 by 김기현 -->
-            <div id="gnb_menu_wrap">
+           <%--  <div id="gnb_menu_wrap">
                 <ul class="gnb_menu">
 					<%
 						for (FoodDivision foodDivision : new FoodServiceImpl().foodDivisionList) {
 					%>
 					<li><a href="${pageContext.request.contextPath }/food/selectFoodByDiv.do?foodDivisionNo=<%=foodDivision.getFoodDivisionNo() %>&foodDivisionName=<%=foodDivision.getFoodDivisionName() %>" class="dp_block"><%=foodDivision.getFoodDivisionName()%></a>
+							<li><a href="${pageContext.request.contextPath }/foodselectFoodByWhichCat?noWhichCat=<%=foodDivision.getFoodDivisionNo() %>"><%=foodDivision.getFoodDivisionName()%></a></li>
 						<ul class="sub_menu">
 							<%
 								for (FoodSection foodSection : new FoodServiceImpl().foodSectionList) {
-										if (foodDivision.getFoodDivisionNo().equals(foodSection.getFoodDivisionNo())) {
+										if (foodDivision.getFoodDivisionNo().equals(foodSection.getFoodDivisionNo()) && !"그 외".equals(foodSection.getFoodSectionUpper())) {
 							%>
 							<li><a href="${pageContext.request.contextPath }/food/selectFoodByUpper.do?foodDivisionNo=<%=foodSection.getFoodDivisionNo()%>&foodSectionUpper=<%=foodSection.getFoodSectionUpper() %>" class="dp_block"><%=foodSection.getFoodSectionUpper() %></a></li>
+							<li><a href="${pageContext.request.contextPath }/foodselectFoodByWhichCat?noWhichCat=<%=foodSection.getFoodSectionNo() %>"><%=foodSection.getFoodSectionUpper() %></a></li>
+
+							<%
+								}
+									}
+							%>
+							<%
+								for (FoodSection foodSection : new FoodServiceImpl().foodSectionList) {
+										if (foodDivision.getFoodDivisionNo().equals(foodSection.getFoodDivisionNo()) && "그 외".equals(foodSection.getFoodSectionUpper())) {
+							%>
+							<li><a href="${pageContext.request.contextPath }/foodselectFoodByWhichCat?noWhichCat=<%=foodSection.getFoodSectionNo() %>"><%=foodSection.getFoodSectionUpper() %></a></li>
 
 							<%
 								}
@@ -121,7 +134,40 @@
 						}
 					%>
                 </ul>
-            </div>
+            </div> --%>
+          <div id="gnb_menu_wrap">
+                <ul class="gnb_menu">
+					<%
+						for (FoodDivision foodDivision : new FoodServiceImpl().foodDivisionList) {
+					%>
+					<li><a href="${pageContext.request.contextPath }/food/selectFoodByCat.do?searchNo=<%=foodDivision.getFoodDivisionNo() %>&searchKeyword=<%=foodDivision.getFoodDivisionName() %>" class="dp_block"><%=foodDivision.getFoodDivisionName()%></a>
+						<ul class="sub_menu">
+							<%
+							for (FoodUpper foodUpper : new FoodServiceImpl().foodUpperList) {
+										if (foodDivision.getFoodDivisionNo().equals(foodUpper.getFoodDivisionNo()) && !"그 외".equals(foodUpper.getFoodUpperName())) {
+							%>
+							<li><a href="${pageContext.request.contextPath }/food/selectFoodByCat.do?searchNo=<%=foodUpper.getFoodUpperNo() %>&searchKeyword=<%=foodUpper.getFoodUpperName()%>" class="dp_block"><%=foodUpper.getFoodUpperName() %></a></li>
+
+							<%
+								}
+									}
+							%>
+							<%
+							for (FoodUpper foodUpper : new FoodServiceImpl().foodUpperList) {
+										if (foodDivision.getFoodDivisionNo().equals(foodUpper.getFoodDivisionNo()) &&  "그 외".equals(foodUpper.getFoodUpperName()) ) {
+							%>
+							<li><a href="${pageContext.request.contextPath }/food/selectFoodByCat.do?searchNo=<%=foodUpper.getFoodUpperNo() %>&searchKeyword=<%=foodUpper.getFoodUpperName()%>" class="dp_block"><%=foodUpper.getFoodUpperName() %></a></li>
+
+							<%
+								}
+									}
+							%>
+						</ul></li>
+					<%
+						}
+					%>
+                </ul>
+            </div> 
         </div>
     </header>
 	<div class="modal login-modal txt_center">

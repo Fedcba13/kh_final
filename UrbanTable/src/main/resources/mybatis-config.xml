@@ -45,6 +45,9 @@
 			type="com.kh.urbantable.food.model.vo.FoodDivision"
 			alias="foodDivision" />
 		<typeAlias
+			type="com.kh.urbantable.food.model.vo.FoodUpper"
+			alias="foodUpper" />
+		<typeAlias
 			type="com.kh.urbantable.food.model.vo.FoodSection"
 			alias="foodSection" />
 		<typeAlias
