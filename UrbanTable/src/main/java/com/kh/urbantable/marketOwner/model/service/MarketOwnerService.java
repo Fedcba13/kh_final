@@ -62,4 +62,16 @@ public interface MarketOwnerService {
 
 	int selectCartTotal(String memberId);
 
+	List<Map<String, Object>> selectMarketOrderList(int cPage, Map<String, Object> param);
+
+	int selectMarketOrderTotalContents(Map<String, Object> param);
+
+	List<Map<String, Object>> selectOrderDetailFoodByPayNo(String payNo);
+
+	Map<String, Object> selectOrderDetailPayByPayNo(String payNo);
+
+	Map<String, Object> selectOrderDetailMemberByPayNo(String payNo);
+
+	int updatePayFlag(String payNo);
+
 }

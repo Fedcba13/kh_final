@@ -243,4 +243,108 @@
 		where C.member_id=#{memberId} and C.flag=2
 	</select>
 	
+	<select id="selectMarketOrderList" resultType="map">
+		select P.pay_no, P.member_id, P.pay_price, P.pay_flag, 
+		P.deliver_type, P.market_no, to_char(P.pay_date, 'yyyy-MM-dd') pay_date, 
+		PM.payment_way, M.member_name, M.member_phone
+		from pay P left join payment PM on P.pay_no=PM.pay_no
+		left join member M on P.member_id=M.member_id
+		<trim prefix="where" suffixOverrides="and">
+			P.pay_enabled=1 and M.member_enabled=1 
+			<if test="marketNo!=null and marketNo!=''">
+			and P.market_no=#{marketNo}
+			</if>
+			<if test="orderSearchKeyword!=null and orderSearchKeyword!=''">
+				<if test="orderSearchType=='payNo'">
+				and P.pay_no like '%'||#{orderSearchKeyword}||'%'
+				</if>
+				<if test="orderSearchType=='orderId'">
+				and P.member_id like '%'||#{orderSearchKeyword}||'%'
+				</if>
+				<if test="orderSearchType=='orderName'">
+				and M.member_name like '%'||#{orderSearchKeyword}||'%'
+				</if>
+			</if>
+			<if test="payFlag!=9">
+			and P.pay_flag like '%'||#{payFlag}||'%'
+			</if>
+			<if test="deliverType!=null and deliverType!=''">
+			and P.deliver_type like '%'||#{deliverType}||'%'
+			</if>
+			<if test="payStartDate!=null and payStartDate!=''">
+				<if test="payEndDate eq ''">
+				and P.pay_date >= to_date(#{payStartDate}, 'yy/MM/dd')
+				</if>
+				<if test="payEndDate!=null and payEndDate!=''">
+				and (P.pay_date between to_date(#{payStartDate}, 'yy/MM/dd') and (to_date(#{payEndDate}, 'yy/MM/dd')+1))
+				</if>
+			</if>
+		</trim>
+		order by P.pay_date desc
+	</select>
+	
+	<select id="selectMarketOrderTotalContents" resultType="_int">
+		select count(*)
+		from pay P left join payment PM on P.pay_no=PM.pay_no
+		left join member M on P.member_id=M.member_id
+		<trim prefix="where" suffixOverrides="and">
+			P.pay_enabled=1 and M.member_enabled=1 
+			<if test="marketNo!=null and marketNo!=''">
+			and P.market_no=#{marketNo}
+			</if>
+			<if test="orderSearchKeyword!=null and orderSearchKeyword!=''">
+				<if test="orderSearchType=='payNo'">
+				and P.pay_no like '%'||#{orderSearchKeyword}||'%'
+				</if>
+				<if test="orderSearchType=='orderId'">
+				and P.member_id like '%'||#{orderSearchKeyword}||'%'
+				</if>
+				<if test="orderSearchType=='orderName'">
+				and M.member_name like '%'||#{orderSearchKeyword}||'%'
+				</if>
+			</if>
+			<if test="payFlag!=9">
+			and P.pay_flag like '%'||#{payFlag}||'%'
+			</if>
+			<if test="deliverType!=null and deliverType!=''">
+			and P.deliver_type like '%'||#{deliverType}||'%'
+			</if>
+			<if test="payStartDate!=null and payStartDate!=''">
+				<if test="payEndDate eq ''">
+				and P.pay_date >= to_date(#{payStartDate}, 'yy/MM/dd')
+				</if>
+				<if test="payEndDate!=null and payEndDate!=''">
+				and (P.pay_date between to_date(#{payStartDate}, 'yy/MM/dd') and (to_date(#{payEndDate}, 'yy/MM/dd')+1))
+				</if>
+			</if>
+		</trim>
+		order by P.pay_date desc
+	</select>
+	
+	<select id="selectOrderDetailFoodByPayNo" resultType="map">
+		select P.pay_flag, D.*, F.food_name, F.food_company, F.food_member_price, F.food_img
+		from pay P left join pay_detail D on P.pay_no=D.pay_no
+		left join food F on D.food_no=F.food_no
+		where P.pay_no=#{payNo}
+	</select>
+	
+	<select id="selectOrderDetailPayByPayNo" resultType="map">
+		select distinct P.pay_no, P.pay_date, PM.payment_way, P.pay_price
+		from pay P left join pay_detail D on P.pay_no=D.pay_no
+		left join payment PM on PM.pay_no=P.pay_no
+		where P.pay_no=#{payNo}
+	</select>
+	
+	<select id="selectOrderDetailMemberByPayNo" resultType="map">
+		select P.member_id, M.member_name, M.member_address, 
+		M.member_address2, M.member_phone, P.deliver_type, P.pay_flag
+		from pay P left join member M on P.member_id=M.member_id
+		where P.pay_no=#{payNo}
+	</select>
+	
+	<update id="updatePayFlag">
+		update pay set pay_flag=2
+		where pay_no=#{payNo}
+	</update>
+	
 </mapper>

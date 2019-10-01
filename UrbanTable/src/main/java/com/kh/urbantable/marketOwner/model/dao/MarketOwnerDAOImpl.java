@@ -154,4 +154,37 @@ public class MarketOwnerDAOImpl implements MarketOwnerDAO {
 		return sqlSession.selectOne("marketOwner.selectCartTotal", memberId);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectMarketOrderList(int cPage, Map<String, Object> param) {
+		int offset = (cPage-1)*MarketOwnerService.NUM_PER_PAGE;
+		int limit = MarketOwnerService.NUM_PER_PAGE;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return sqlSession.selectList("marketOwner.selectMarketOrderList", param, rowBounds);
+	}
+
+	@Override
+	public int selectMarketOrderTotalContents(Map<String, Object> param) {
+		return sqlSession.selectOne("marketOwner.selectMarketOrderTotalContents", param);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectOrderDetailFoodByPayNo(String payNo) {
+		return sqlSession.selectList("marketOwner.selectOrderDetailFoodByPayNo", payNo);
+	}
+
+	@Override
+	public Map<String, Object> selectOrderDetailPayByPayNo(String payNo) {
+		return sqlSession.selectOne("marketOwner.selectOrderDetailPayByPayNo", payNo);
+	}
+
+	@Override
+	public Map<String, Object> selectOrderDetailMemberByPayNo(String payNo) {
+		return sqlSession.selectOne("marketOwner.selectOrderDetailMemberByPayNo", payNo);
+	}
+
+	@Override
+	public int updatePayFlag(String payNo) {
+		return sqlSession.update("marketOwner.updatePayFlag", payNo);
+	}
+
 }
