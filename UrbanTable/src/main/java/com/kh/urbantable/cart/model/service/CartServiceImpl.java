@@ -43,6 +43,21 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public int getExist(Map<String, String> map) {
 		return cartDAO.getExist(map);
+	}
+
+	@Override
+	public String getFoodSection(String foodNo) {
+		return cartDAO.getFoodSection(foodNo);
+	}
+
+	@Override
+	public List<Map<String, Object>> getDiscountList() {
+		return cartDAO.getDiscountList();
+	}
+
+	@Override
+	public int deleteCart(Map<String, String> map) {
+		return cartDAO.deleteCart(map);
 	} 
 	
 

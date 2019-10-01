@@ -96,7 +96,7 @@
                     </form>
                 </div>
                 <%-- <c:if test="${not empty memberLoggedIn}"> --%>
-                	<a href="${pageContext.request.contextPath}/cart/cartList.do?memberId=${memberLoggedIn.memberId}" class="go_cart dp_block"><img src="${pageContext.request.contextPath }/resources/images/cart.png" alt="장바구니"></a>
+                	<a href="${pageContext.request.contextPath}/cart/cartList.do?memberId=${memberLoggedIn.memberId}&memberCheck=${memberLoggedIn.memberCheck}" class="go_cart dp_block"><img src="${pageContext.request.contextPath }/resources/images/cart.png" alt="장바구니"></a>
                 <%-- </c:if> --%>
             </div>
         	<!-- FOOD 카테고리 가져오기 by 김기현 -->

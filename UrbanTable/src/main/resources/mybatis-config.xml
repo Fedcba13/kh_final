@@ -6,6 +6,8 @@
 	<settings>
 		<setting name="jdbcTypeForNull" value="NULL" />
 		<setting name="mapUnderscoreToCamelCase" value="true" />
+		<!-- resultType이 map 또는 List일때 컬럼의 값이 null인 값을 받기위한 설정 -->
+		<setting name="callSettersOnNulls" value="true"/>
 	</settings>
 	<typeAliases>
 		<typeAlias type="com.kh.urbantable.event.model.vo.Coupon"
