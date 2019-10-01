@@ -124,7 +124,7 @@
             </div>
         </div>
     </header>
-	<div class="login-modal txt_center">
+	<div class="modal login-modal txt_center">
 		<form class="modal-content animate">
 			<div class="container txt_center">
 				<label for="uname"><b>아이디</b></label>

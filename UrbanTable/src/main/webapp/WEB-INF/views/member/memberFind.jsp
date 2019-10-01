@@ -103,6 +103,24 @@
 	    line-height: 40px;
 	}
 	
+	.find_modal .tbl{
+		border-bottom: 2px solid #374818;
+	}	
+	
+	.find_modal .btn{
+		width: 100px;
+	}
+	
+	.find_modal .container:nth-child(2n) .btn:nth-child(2n-1) {
+		margin-right: 40px;
+	}
+	
+	.find_modal .container:nth-child(2n-1) p{
+		margin: 10px 0 20px;
+	}
+	
+}
+	
 </style>
 
 <script>
@@ -128,13 +146,27 @@ var timer = null;
 		disabled($("[name=auth_code]"));
 		disabled($("#checkMsg"));
 		
+		//modal 처리
+		var find_modal = $(".find_modal");
+		
+		//modal창이 열려 있을 경우, 바탕 클릭시 모달 닫기
+		$(window).click(function(e){
+			if (e.target == find_modal[0]) {
+				find_modal.css("display", "none");
+		    }
+		});
+		
 		//sendMSg => 인증번호 받기
 		$("#sendMsg").click(()=>{
-			var phone = $("[name=memberPhone]").val();
 			
-			console.log(phone);
+			var param = {
+					phone:$("[name=memberPhone]").val(), 
+					name:$("[name=memberName]").val(),
+					id:$("[name=memberId]").val(),
+					flag: flag
+			}
 			
-			if(phone.length < 8){
+			if($("[name=memberPhone]").val().length < 8){
 				alert('핸드폰 번호를 입력하세요,');
 				$("[name=memberPhone]").focus();
 				return;
@@ -142,7 +174,7 @@ var timer = null;
 			time = 180;
 			$.ajax({
 				url: "${pageContext.request.contextPath}/member/sendMessage.do",
-				data: {phone: phone, flag: flag},
+				data: param,
 				success: (data)=>{
 					alert(data.msg);
 					if(data.msg == '인증번호 발송 성공!'){
@@ -172,12 +204,69 @@ var timer = null;
 				success: (data)=>{
 					alert(data.msg);
 					if(data.msg == '인증 성공'){
+						
 						clearInterval(timer);
 						disabled($("[name=auth_code]"));
 						disabled($("#checkMsg"));
 						$("#time").html('인증 성공');
 						$('#time').removeClass('bad');
 						$("#time").addClass('good');
+						
+						//해당하는 member가 없을 때
+						if(data.member == null || data.member == ''){
+							console.log('member is null');
+							$(".find_modal .container:eq(0)").html("<p style='padding: 50px 0;border-top: 1px solid black;border-bottom: 1px solid black;'>입력하신 정보와 일치하는 회원이 없습니다.</p>");
+						}
+						//해당하는 member가 있을 때
+						else{
+							//ID찾기인 경우 ID를 띄어줍니다.
+							if(type == 'id'){
+								var date = new Date(data.member.memberEnrolldate);
+								
+								var month = '' + (date.getMonth() + 1);
+							    var day = '' + date.getDate();
+							    var year = date.getFullYear();
+
+							    if (month.length < 2) 
+							        month = '0' + month;
+							    if (day.length < 2) 
+							        day = '0' + day;
+							    
+							    date = year+'년 '+month+'월 '+day+'일';
+								
+								/* $(".find_modal .container:eq(0)").html("찾으시는 ID는 [" + data.member + "]입니다."); */
+								var html = "<p>입력하신 정보와 일치하는 회원입니다.</p>";
+								html += "<table class='tbl tbl_view'>";
+								html += '<tr>';
+								html += '<th>아이디</th>';
+								html += '<td>'+data.member.memberId+'</td>'
+								html += '</tr>';								
+								html += '<tr>';
+								html += '<th>가입일</th>';
+								html += '<td>'+date+'</td>';
+								html += '</tr>';
+								html += '</table>'; 
+								
+								$(".find_modal .container:eq(0)").html(html);								
+								$(".find_modal .container:eq(1)").append("<button type='button' class='btn login-btn'>로그인</button>");
+								$(".find_modal .container:eq(1)").append("<button type='button' class='btn btn3 find-pw'>비밀번호 찾기</button>");
+								$(".find_modal").css("display","block");
+								
+								$(".find_modal .container:eq(1) .login-btn").click(()=>{
+									$(".find_modal").css("display", "none")
+									$(".login-btn:eq(0)").trigger("click");
+								});
+								
+								$(".find_modal .container:eq(1) .find-pw").click(()=>{
+									location.href = contextPath + "/member/memberFind/pw";
+								});
+
+							}else{
+								
+								
+							}							
+						}
+						
 					}
 				},
 				error: (xhr, txtStatus, err)=>{
@@ -295,3 +384,23 @@ var timer = null;
 </section>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
+
+<div class="modal txt_center find_modal">
+	<form class="modal-content animate">
+		<div class="container txt_center">
+			<table class='tbl tbl_view'>
+				<tr>
+					<th>새로운 비밀번호</th>
+					<td></td>
+				</tr>
+				<tr>
+					<th>비밀번호 확인</th>
+					<td></td>
+				</tr>
+			</table>
+		</div>
+		<div class="container txt_center" style="background-color:#f4f4f0">
+			
+		</div>
+	</form>
+</div>

@@ -86,7 +86,7 @@ public class PayController {
 		int result = payService.insertPayDetail(payDetail);
 		if(result > 0) {
 			list = payService.getPayDetail();
-			Map<String, Object> map = new HashMap<>();
+			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("marketNo", marketNo);
 			map.put("foodNo", payDetail.getFoodNo());
 			map.put("amount", payDetail.getPayDetailAmount());
