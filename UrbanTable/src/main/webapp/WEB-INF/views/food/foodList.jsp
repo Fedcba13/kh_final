@@ -26,7 +26,7 @@
 			</c:forEach>
 		</ul>
 	</div>
-<section id="sec1" class="main_sec">
+<section class="main_sec">
 	<article class="inner">
 	    <h3 class="sub_tit">서브페이지 제목</h3>
        <ul class="main_prd_list clearfix">

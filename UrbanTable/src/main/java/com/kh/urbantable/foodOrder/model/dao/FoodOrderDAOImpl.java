@@ -58,16 +58,51 @@ public class FoodOrderDAOImpl implements FoodOrderDAO {
 	}
 
 	@Override
-	public List<Map<String, String>> selectMarketOrderDetail(int cPage, String marketOrderNo) {
+	public List<Map<String, String>> selectMarketOrderDetail(int cPage, Map<String, Object> param) {
 		int offset = (cPage-1)*FoodOrderService.NUM_PER_PAGE;
 		int limit = FoodOrderService.NUM_PER_PAGE;
 		RowBounds rowBounds = new RowBounds(offset, limit);
-		return sqlSession.selectList("foodOrder.selectMarketOrderDetail", marketOrderNo, rowBounds);
+		return sqlSession.selectList("foodOrder.selectMarketOrderDetail", param, rowBounds);
 	}
 
 	@Override
 	public int selectMarketOrderDetailTotal(String marketOrderNo) {
 		return sqlSession.selectOne("foodOrder.selectMarketOrderDetailTotal", marketOrderNo);
+	}
+
+	@Override
+	public int marketOrderUpdateAmount(Map<String, Object> param) {
+		return sqlSession.update("foodOrder.marketOrderUpdateAmount", param);
+	}
+
+	@Override
+	public int marketOrderDeleteFood(Map<String, Object> param) {
+		return sqlSession.update("foodOrder.marketOrderDeleteFood", param);
+	}
+
+	@Override
+	public int marketOrderDetailDeleteAll(String marketOrderNo) {
+		return sqlSession.update("foodOrder.marketOrderDetailDeleteAll", marketOrderNo);
+	}
+
+	@Override
+	public int marketOrderDeleteAll(String marketOrderNo) {
+		return sqlSession.update("foodOrder.marketOrderDeleteAll", marketOrderNo);
+	}
+
+	@Override
+	public MarketOrder selectMarketOrderOne(String marketOrderNo) {
+		return sqlSession.selectOne("foodOrder.selectMarketOrderOne", marketOrderNo);
+	}
+
+	@Override
+	public int selectMarketOrderDetailPrice(Map<String, Object> param) {
+		return sqlSession.selectOne("foodOrder.selectMarketOrderDetailPrice", param);
+	}
+
+	@Override
+	public int updateMarketOrderPrice(Map<String, Object> param) {
+		return sqlSession.update("foodOrder.updateMarketOrderPrice", param);
 	}
 	
 }

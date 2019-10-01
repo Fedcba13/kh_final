@@ -12,5 +12,6 @@ public class MarketOrder {
 	private Date marketOrderDate;
 	private int marketOrderPrice;
 	private int marketOrderFlag;
+	private int marketOrderEnabled;
 	
 }
