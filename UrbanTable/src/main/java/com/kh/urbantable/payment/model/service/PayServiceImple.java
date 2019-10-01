@@ -76,4 +76,9 @@ public class PayServiceImple implements PayService {
 		return payDAO.insertPayment(payment);
 	}
 
+	@Override
+	public int deleteCart(Map<String, Object> map) {
+		return payDAO.deleteCart(map);
+	}
+
 }

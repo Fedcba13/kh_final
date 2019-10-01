@@ -45,4 +45,19 @@ public class CartDAOImpl implements CartDAO{
 		return sqlSession.selectOne("cart.getExist", map);
 	}
 
+	@Override
+	public String getFoodSection(String foodNo) {
+		return sqlSession.selectOne("cart.getFoodSection", foodNo);
+	}
+
+	@Override
+	public List<Map<String, Object>> getDiscountList() {
+		return sqlSession.selectList("cart.getDiscountList");
+	}
+
+	@Override
+	public int deleteCart(Map<String, String> map) {
+		return sqlSession.delete("cart.deleteCart", map);
+	}
+
 }

@@ -76,4 +76,9 @@ public class PayDAOImple implements PayDAO {
 	public int insertPayment(Payment_ payment) {
 		return sqlSession.insert("pay.insertPayment", payment);
 	}
+
+	@Override
+	public int deleteCart(Map<String, Object> map) {
+		return sqlSession.delete("pay.deleteCart", map);
+	}
 }

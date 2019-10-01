@@ -4,13 +4,13 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cart">
 	<select id="getList" resultType="cart">
-		select * from cart where member_id=#{memberId}
+		select * from cart where member_id=#{memberId} and flag = 1
 	</select>
 	<select id="getFoodInfo" resultType="map">
 		select * from food where food_no=#{foodNo}
 	</select>
 	<select id="getMarketList" resultType="market">
-		select * from market where flag = 2
+		select * from market where market_enabled=1 and flag = 2
 	</select>
 	<select id="getProductStock" resultType="int">
 		select stock_amount from stock where market_no = #{marketNo} and food_no = #{foodNo}
@@ -18,5 +18,14 @@
 	<select id="getExist" resultType="int">
 		select count(*) from stock where market_no = #{marketNo} and food_no = #{foodNo}
 	</select>
+	<select id="getFoodSection" resultType="string">
+		select food_section_no from food where food_no = #{foodNo}
+	</select>
+	<select id="getDiscountList" resultType="map">
+		select * from event where event_date_end >= sysdate and event_enabled=1
+	</select>
+	<delete id="deleteCart">
+		delete cart where member_id=#{memberId} and food_no=#{foodNo}
+	</delete>
 
 </mapper>

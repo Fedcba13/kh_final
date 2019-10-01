@@ -199,7 +199,18 @@
 					} else {
 						opener.$("#regular").prop("checked", true);
 						opener.deliveryCost(deliveryWay);
-					}					
+					}
+					var length = opener.length;
+					console.log(length);
+					for(var i = 1; i <= length; i++){
+						opener.$("#item" + i).remove();
+					}
+					opener.getMarketNo();
+					opener.getList();
+					opener.totalPrice();
+					opener.discountCost();
+					opener.finalPrice();
+					opener.totalPayment();                    
 					window.close();
 				} else if(opener.location.pathname == "/urbantable/pay/order.do"){
 					opener.$("#marketAddressField").val(clickedAddress);
@@ -216,7 +227,7 @@
 						opener.$("#deliveryType").val("정기배송 (30000원+)");
 						opener.$("#deliverType").val("r")
 						opener.$("#totalPaymentCost").val(parseInt(opener.$("#totalPrice").val()) + 30000 + " 원")
-					}					
+					}
 					window.close();
 				}
 			});
