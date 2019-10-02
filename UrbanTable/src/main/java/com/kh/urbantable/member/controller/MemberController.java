@@ -371,9 +371,23 @@ public class MemberController {
 	@RequestMapping("/myPage")
 	public String myPage() {
 		
-		
-		
 		return "member/memberMyPage";
 	}
+	
+//	@RequestMapping("/myPage.do")
+//	public String myPageEnd(@RequestParam(defaultValue = "") String reMemberPassword){
+//		
+//		logger.debug("member@myPage.do = {}", member);
+//		
+//		//현재 멤버
+//		Member curMember = memberService.selectOneMember(member.getMemberId());
+//		logger.debug("curMember@myPage.do = {}", curMember);
+//		
+//		//변경할 멤버
+//		
+//		
+//		
+//		return "member/myPage";
+//	}
 	
 }

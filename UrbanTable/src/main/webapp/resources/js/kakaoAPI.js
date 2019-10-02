@@ -1,6 +1,3 @@
-
-document.write('<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>');
-
 //카카오 주소찾기 api
 function sample6_execDaumPostcode() {
 	

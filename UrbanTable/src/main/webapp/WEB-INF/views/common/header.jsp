@@ -33,7 +33,7 @@
                 </c:if>
                 <c:if test="${not empty memberLoggedIn }">
                 	<li><a href="${pageContext.request.contextPath }/member/memberLogout.do" class="dp_block">로그아웃</a></li>
-                	<li><a href="" class="dp_block">내 정보보기</a></li>
+                	<li><a href="${pageContext.request.contextPath }/member/myPage" class="dp_block">내 정보보기</a></li>
                 </c:if>
                 <li class="cs_center">
                     <a href="" class="dp_block">고객센터</a>
