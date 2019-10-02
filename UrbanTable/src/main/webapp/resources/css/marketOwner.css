@@ -492,3 +492,8 @@ form[name=orderSearchFrm2] input[type=submit] {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+#myChart {
+	width:400px;
+	height:400px;
+}

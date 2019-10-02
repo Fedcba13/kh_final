@@ -207,5 +207,10 @@ public class MarketOwnerServiceImpl implements MarketOwnerService {
 		return marketOwnerDAO.updatePayFlag(payNo);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectChartWeek(String marketNo) {
+		return marketOwnerDAO.selectChartWeek(marketNo);
+	}
+
 	
 }

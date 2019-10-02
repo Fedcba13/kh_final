@@ -187,4 +187,9 @@ public class MarketOwnerDAOImpl implements MarketOwnerDAO {
 		return sqlSession.update("marketOwner.updatePayFlag", payNo);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectChartWeek(String marketNo) {
+		return sqlSession.selectList("marketOwner.selectChartWeek", marketNo);
+	}
+
 }
