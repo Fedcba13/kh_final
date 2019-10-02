@@ -33,4 +33,8 @@ public interface PayDAO {
 
 	int deleteCart(Map<String, Object> map);
 
+	List<Map<String, Object>> getCoupons(String memberId);
+
+	int updateCoupon(Map<String, String> map);
+
 }

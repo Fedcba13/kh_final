@@ -66,4 +66,10 @@
 	<delete id="deleteCart">
 		delete from cart where member_id=#{memberId} and flag=#{flag}
 	</delete>
+	<select id="getCoupons" resultType="map">
+		select * from coupon where member_id=#{memberId} and coupon_end_date > sysdate and coupon_enabled = 1
+	</select>
+	<update id="updateCoupon">
+		update coupon set coupon_enabled = 0 where coupon_id=#{couponId} and member_id=#{memberId}
+	</update>
 </mapper>

@@ -69,6 +69,7 @@
 					        msg += '카드 승인번호 : ' + rsp.apply_num;
 							alert(msg);
 							deleteCart();
+							updateCoupon();
 						},
 						error: function(xhr, txtStatus, err){
 							console.log("ajax처리실패!", xhr, txtStatus, err);
@@ -89,6 +90,7 @@
 		});
 		orderInfo();
 		getCartList();
+		getCouponList();
 		$("#open").on("click", ()=>{
 			$("#list").slideToggle(100, "swing", function(){
 				if($("#list").css("display") == "none"){
@@ -114,7 +116,11 @@
 			if(confirm("매장 변경시 장바구니 페이지로 돌아가게 됩니다. 계속 하시겠습니까?")){
 				location.href="${pageContext.request.contextPath}/cart/cartList.do?memberId=${memberLoggedIn.memberId}&memberCheck=${memberLoggedIn.memberCheck}";
 			}
-		})
+		});
+		
+		$("#selectCoupon").on("click", ()=>{
+			$("#selectCouponModal").css("display", "block");
+		});
 	});	//onload 함수 끝
 	
 	
@@ -193,6 +199,51 @@
 			$("#deliverType").val("r");
 		}
 		$("#totalPaymentCost").val(cartInfoArr[0].payPrice + " 원");
+	}
+	
+	function getCouponList(){
+		$.ajax({
+			url: "${pageContext.request.contextPath}/pay/getCoupons.do",
+			type: "post",
+			data: {
+				memberId: "${memberLoggedIn.memberId}"
+			},
+			success: function(data){
+				//.log(data[0].COUPON_DISCOUNT);
+				//console.log(data);
+				var coupons = "";
+				for(var i =0; i < data.length; i++){
+					if(data[i].COUPON_MIN_PRICE < parseInt($("#totalPrice").val())){
+						var endDate = new Date(data[i].COUPON_END_DATE);
+						coupons += "<option value='"+data[i].COUPON_DISCOUNT+"|"+data[i].COUPON_ID+"'>"
+						coupons += data[i].COUPON_DISCOUNT + "% 할인쿠폰 (유효기간: " + endDate.getFullYear() + "년 " + (parseInt(endDate.getMonth())+1) + "월 " + endDate.getDate() +"일 까지)";
+					}
+					
+				}
+				$("#couponList").append(coupons);
+			},
+			error: function(xhr, txtStatus, err){
+				console.log("ajax처리실패!", xhr, txtStatus, err);
+			}
+		});
+	}
+	
+	function submitCoupon(){
+		$("#selectCouponModal").css("display", "none");
+		var selectedCoupon = $("#couponList option:selected").val()
+		$("#selectedCoupon").val($("#couponList option:selected").text());
+		//console.log(selectedCoupon);
+		$("#couponDiscount").val(selectedCoupon.substring(0, selectedCoupon.indexOf("|")));
+		$("#couponId").val(selectedCoupon.substring(selectedCoupon.indexOf("|")+1));
+		console.log($("#couponId").val());
+		//console.log($("#couponDiscount").val());
+		var payPrice = cartInfoArr[0].payPrice;
+		var dcRate = $("#couponDiscount").val();
+		var delCost = $("#deliveryCost").val();
+		$("#totalPrice").val(((payPrice - delCost) * (1-(dcRate/100))) + " 원");
+		var totalPrice = parseInt($("#totalPrice").val());
+		var totalPayment = totalPrice + parseInt(delCost);
+		$("#totalPaymentCost").val(totalPayment+ " 원");
 	}
 	
 	function createPayInfo(){
@@ -339,6 +390,27 @@
 		})
 	}
 	
+	function updateCoupon(){
+		$.ajax({
+			url: "${pageContext.request.contextPath}/pay/updateCoupon.do",
+			data: {
+				memberId: "${memberLoggedIn.memberId}",
+				couponId: $("#couponId").val()
+			},
+			type: "post",
+			success: function(data){
+				
+			},
+			error: function(xhr, txtStatus, err){
+				console.log("ajax처리실패!", xhr, txtStatus, err);
+			}
+		});
+	}
+	
+	function closeModal(){
+		$("#selectCouponModal").css("display", "none");
+	}
+	
 </script>
 
 <section class="sec_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
@@ -398,6 +470,8 @@
                 <th>쿠폰사용</th>
                 <td>
                 	<input type="text" id="selectedCoupon" size="50" placeholder="쿠폰을 선택하세요" readonly/>
+                	<input type="hidden" id="couponId" value=""/>
+                	<input type="hidden" id="couponDiscount" value=""/>
                 </td>
                 <td>&nbsp;&nbsp;<input type="button" id="selectCoupon" class="btn" value="쿠폰사용" /></td>
             </tr>
@@ -426,6 +500,19 @@
         <input type="hidden" id="payNo" />
         <input type="button" class="btn" value="결제하기" id="pay-btn"/>
     </article>
+    <div class="modal txt_center" id="selectCouponModal">
+		<form class="modal-content animate">
+			<div class="container txt_center">
+				<span>쿠폰을 선택하세요(유효기간이 지난 쿠폰은 자동으로 삭제됩니다)</span><br />
+				<select class="select" name="coupons" id="couponList">
+				</select>
+			</div>
+			<div class="container txt_center" style="background-color:#f4f4f0;">
+				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" onclick="closeModal();">취소</button>
+				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" onclick="submitCoupon();">쿠폰선택</button>
+		    </div>
+		</form>
+	</div>
 </section>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

@@ -60,4 +60,9 @@ public class CartDAOImpl implements CartDAO{
 		return sqlSession.delete("cart.deleteCart", map);
 	}
 
+	@Override
+	public int deleteCartAll(String memberId) {
+		return sqlSession.delete("cart.deleteCartAll", memberId);
+	}
+
 }

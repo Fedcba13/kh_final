@@ -177,15 +177,25 @@ HashMap<String, String> result = new HashMap<String, String>();
 	
 	@ResponseBody
 	@RequestMapping("/deleteCart.do")
-	public int deleteCart(@RequestParam String foodNo, @RequestParam String memberId, Model model) {
+	public List<Cart> deleteCart(@RequestParam String foodNo, @RequestParam String memberId, Model model) {
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("foodNo", foodNo);
 		map.put("memberId", memberId);
 		int result = cartService.deleteCart(map);
 		if(result > 0) {
 			List<Cart> list = cartService.getCartList(memberId);
+			logger.debug("listAfterDelete={}", list);
 			model.addAttribute("list", list);
-		}
+			return list;
+		} else {
+			return null;
+		}		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/deleteCartAll.do", method=RequestMethod.POST)
+	public int deleteCartAll(@RequestParam String memberId) {
+		int result = cartService.deleteCartAll(memberId);
 		
 		return result;
 	}

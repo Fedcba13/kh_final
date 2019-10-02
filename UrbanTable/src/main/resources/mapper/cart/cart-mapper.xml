@@ -27,5 +27,8 @@
 	<delete id="deleteCart">
 		delete cart where member_id=#{memberId} and food_no=#{foodNo}
 	</delete>
+	<delete id="deleteCartAll">
+		delete cart where member_id=#{memberId}
+	</delete>
 
 </mapper>

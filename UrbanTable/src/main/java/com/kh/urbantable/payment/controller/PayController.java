@@ -171,5 +171,25 @@ public class PayController {
 		return "pay/payEnd";
 	}
 	
+	@ResponseBody
+	@RequestMapping(value="/getCoupons.do", method=RequestMethod.POST)
+	public List<Map<String, Object>> getCoupons(@RequestParam String memberId){
+		List<Map<String, Object>> list = payService.getCoupons(memberId);
+		logger.debug("list={}", list);
+		
+		return list;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/updateCoupon.do", method=RequestMethod.POST)
+	public int updateCoupon(@RequestParam String memberId,
+							@RequestParam String couponId) {
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("memberId", memberId);
+		map.put("couponId", couponId);
+		int result = payService.updateCoupon(map);
+		
+		return result;		
+	}
 
 }

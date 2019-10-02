@@ -58,6 +58,11 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public int deleteCart(Map<String, String> map) {
 		return cartDAO.deleteCart(map);
+	}
+
+	@Override
+	public int deleteCartAll(String memberId) {
+		return cartDAO.deleteCartAll(memberId);
 	} 
 	
 

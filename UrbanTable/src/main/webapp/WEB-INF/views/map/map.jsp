@@ -64,9 +64,6 @@
 	        });
 	        //각 매장의 좌표를 배열에 저장
 	        markers.push(coords);
-	        //console.log(JSON.parse(JSON.stringify(marker.getPosition())));
-	        //console.log(marker.getPosition());
-	        console.log(marker.getPosition());
 	        var distance = getDistance(coords, marker, marketName);
 	        
 	        kakao.maps.event.addListener(marker, 'click', clickEvent(map, marker));
@@ -130,18 +127,9 @@
 				} catch(e){
 					console.log(e);
 				}
-			</c:forEach>	
-			//console.log(JSON.parse(JSON.stringify(markers)));
-			console.log(JSON.parse(JSON.stringify(distances)))
+			</c:forEach>
 			map.setCenter(markers[0]);
-		})();		
-		
-		//console.log(JSON.parse(JSON.stringify(markers)));
-		//var temp = $.extend(true, {}, markers);
-		//console.log(markers);		
-		//console.log(JSON.parse(JSON.stringify(temp)));
-		//console.log(markers[0]);
-		//console.log(markers.length);		
+		})();
 		
 		function getDistance(coords, marker, marketName){
 			var polyline = new kakao.maps.Polyline({

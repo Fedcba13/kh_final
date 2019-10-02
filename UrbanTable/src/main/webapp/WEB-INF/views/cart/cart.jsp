@@ -160,7 +160,7 @@
 	}
 	
 	function listCount(){
-		var total = ${fn:length(list)};
+		var total =  $("input:checkbox[name='list']").length;
 		var selected = $("input:checkbox[name='list']:checked").length;
 		var text = "전체선택 (" + selected + "/" + total + ")";
 		$("label[for='checkAll']").text(text);
@@ -289,7 +289,7 @@
 	}
 	
 	function getClosestMarket(){
-		if(confirm("매장을 변경할 겨우 일부상품의 재고가 없거나 할인에 변동이 있을 수 있습니다.\n 계속하시겠습니까?")){
+		if(confirm("매장을 변경할 경우 일부상품의 재고가 없거나 할인에 변동이 있을 수 있습니다.\n 계속하시겠습니까?")){
 			var popup = window.open("${pageContext.request.contextPath}/cart/searchMarket.do","매장찾기", "width=750, height=550");
 			popup.focus();
 			popup.opener = self;	
@@ -336,7 +336,7 @@
 	}
 	
 	function deleteSel(){
-		for(var i = 1; i <= ${fn:length(list)}; i++){
+		for(var i = 1; i <= $("input:checkbox[name='list']").length; i++){
 			if($("#item"+i).find("input:checkbox[name='list']").is(":checked")==true){
 				var foodNo = $("#item"+i).find("input:hidden[name='foodNo']").val();
 				$.ajax({
@@ -347,25 +347,39 @@
 					},
 					async: false,
 					success: function(data){
-						console.log(data);
+						$("#item"+i).remove();						
+						//console.log(data);
 					},
 					error: function(xhr, txtStatus, err){
 						console.log("ajax처리실패!", xhr, txtStatus, err);
 					}
 				});
-			}
-			$("#item"+i).remove();
+			}			
 		}
-		console.log("${list}");
-		getList();
-		totalPrice();
-		discountCost();
-		finalPrice();
-		totalPayment();
+		$("#checkAll").prop("checked", "true");
+		$("#checkAllTail").prop("checked", "true");
+		checkAll($("#checkAll"));
 	}
 	
 	function deleteAll(){
-		
+		var items = $("input:checkbox[name='list']").length;
+		for(var i = 1; i <= items; i++){			
+			$("#item"+i).remove();	
+		}
+		$.ajax({
+			url: "${pageContext.request.contextPath}/cart/deleteCartAll.do",
+			data: {
+				memberId: "${memberLoggedIn.memberId}"
+			},
+			type: "post",
+			success: function(data){
+				
+			},
+			error: function(xhr, txtStatus, err){
+				console.log("ajax처리실패!", xhr, txtStatus, err);
+			}
+		});
+		checkAll($("#checkAll"));
 	}
 
 </script>
@@ -377,7 +391,7 @@
 	                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->
             <tr id="head">
                 <th>
-                	<input type="checkbox" name="listAll" id="checkAll" checked="true" onclick="checkAll(this);"/>                
+                	<input type="checkbox" name="listAll" id="checkAll" checked="true" onchange="checkAll(this);"/>                
                 	<label for="checkAll"></label>
                 </th>
                 <th>
@@ -390,11 +404,10 @@
                 	금액
                 </th>
            </tr>
-           <tr id="body">
-           </tr>
+           
     	   <tr id="tail">
             	<td>
-            		<input type="checkbox" name="listAll" id="checkAll" checked="true" onclick="checkAll(this);"/>
+            		<input type="checkbox" name="listAll" id="checkAllTail" checked="true" onchange="checkAll(this);"/>
                 	<label for="checkAll"></label>
             	</td>	
             	<td>

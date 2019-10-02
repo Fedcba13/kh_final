@@ -81,4 +81,14 @@ public class PayServiceImple implements PayService {
 		return payDAO.deleteCart(map);
 	}
 
+	@Override
+	public List<Map<String, Object>> getCoupons(String memberId) {
+		return payDAO.getCoupons(memberId);
+	}
+
+	@Override
+	public int updateCoupon(Map<String, String> map) {
+		return payDAO.updateCoupon(map);
+	}
+
 }

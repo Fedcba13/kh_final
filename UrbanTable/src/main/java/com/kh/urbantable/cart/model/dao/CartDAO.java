@@ -23,6 +23,8 @@ public interface CartDAO {
 	List<Map<String, Object>> getDiscountList();
 
 	int deleteCart(Map<String, String> map);
+
+	int deleteCartAll(String memberId);
 	
 
 }
