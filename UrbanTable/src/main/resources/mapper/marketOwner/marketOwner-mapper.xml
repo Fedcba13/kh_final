@@ -108,7 +108,8 @@
 	
 	<select id="searchMarketList" resultType="market">
 		select * from market
-		where market_enabled=1 and flag=#{flag} and market_address like '%'||#{marketAddress}||'%'
+		where market_enabled=1 and flag=#{flag} 
+		and (market_address like '%'||#{marketAddress}||'%' or market_name like '%'||#{marketAddress}||'%')
 		order by market_no desc
 	</select>
 	
