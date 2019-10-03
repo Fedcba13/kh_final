@@ -5,6 +5,8 @@
 	border-left: 1px solid #999; /* 각 메뉴의 왼쪽에 "|" 표시(분류 표시) */
 	padding: 0 10px; /* 각 메뉴 간격 */
 }
+
+/* foodView.jsp */
 #foodExpression{
 	overflow: auto;
 }
@@ -28,4 +30,10 @@
 #buttons{
  text-align: right;
 	
+}
+
+/* insertFood.jsp */
+.catSelect{
+	width: 200px;
+	margin: 0px 20px 0px 0px;
 }

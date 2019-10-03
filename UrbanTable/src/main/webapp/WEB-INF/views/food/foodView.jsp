@@ -20,8 +20,9 @@
 					<tr>
 						<th>판매가</th>
 						<%--                 <td><fmt:formatNumber value="${food.afterEventPrice}" pattern="\#,###.##"/>원</td> --%>
-						<td><fmt:formatNumber value="${food.afterEventPrice}"
-								pattern="#,###.##" />원</td>
+						<td id="foodPrice"><fmt:formatNumber value="${food.afterEventPrice}"
+								pattern="#,###.##" />원 <input type="hidden" id="hiddenPrice" value="${food.afterEventPrice}" /></td>
+								
 					</tr>
 					<tr>
 						<th>배송구분</th>
@@ -38,13 +39,14 @@
 					<tr>
 						<th>구매수량</th>
 						<td>
-							<input id="amount" type="number" placeholder="수량">
+							<input id="amount" type="number" placeholder="1">
 						</td>
 					</tr>
 				</table>
 					<br />
 					<div style="float: right;">
-						<p>총 상품금액 : <span>1700</span>원</p>
+						<p id="finalPrice">총 상품금액 : <fmt:formatNumber value="${food.afterEventPrice}"
+								pattern="#,###.##" />원</p>
 					</div>
 					<br />
 					<div id="buttons">
@@ -53,8 +55,24 @@
 					<button>상품 문의</button>
 					</div>
 			</div>
-			
 			</div>
     </article>
-
+	<script>
+	$('#amount').change(function() {
+		var amount = $("#amount").val();
+		var html = "";		
+		if(amount <=0){
+			$("#amount").val(0);
+			html = "총 상품금액 : 0원"; 
+		}else{
+		console.log(amount);
+		var finalPrice = $("#hiddenPrice").val()*amount;
+		console.log(finalPrice);
+		var ppp =  finalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		 html = "총 상품금액 : "+ppp+"원" 
+			
+		}
+		 $("#finalPrice").html(html);  
+	}); 
+	</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

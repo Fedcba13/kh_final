@@ -1,8 +1,11 @@
 package com.kh.urbantable.food.controller;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +15,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.urbantable.admin.model.vo.Banner;
+import com.kh.urbantable.common.util.FileRenameUtils;
 import com.kh.urbantable.food.model.service.FoodService;
+import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.food.model.vo.FoodUpper;
 import com.kh.urbantable.food.model.vo.FoodWithStockAndEvent;
@@ -30,20 +38,68 @@ public class FoodController {
 	@Autowired
 	private FoodService foodService;
 
-
 	public FoodWithStockAndEvent calculateEventPrice(FoodWithStockAndEvent food) {
 		int eventPercent = foodService.selectEventPercent(food);
-		
-		 	double M3=eventPercent*0.01; // M3는 %를 소수점으로 변환한 값이다 즉 20%를 0.2로 변환한다
-		    double yourmoney=food.getFoodMemberPrice()*M3; // 할인되는 가격
-		    double actually=food.getFoodMemberPrice()-yourmoney; // 실제 가격
 
-		if(eventPercent != 0) {
-			food.setAfterEventPrice((int)actually);
+		double M3 = eventPercent * 0.01; // M3는 %를 소수점으로 변환한 값이다 즉 20%를 0.2로 변환한다
+		double yourmoney = food.getFoodMemberPrice() * M3; // 할인되는 가격
+		double actually = food.getFoodMemberPrice() - yourmoney; // 실제 가격
+
+		if (eventPercent != 0) {
+			food.setAfterEventPrice((int) actually);
 			food.setEventPercent(eventPercent);
 		}
 		return food;
 	}
+
+	@RequestMapping(value = "/selectFoodInMain1.do")
+	@ResponseBody
+	public List<FoodWithStockAndEvent> selectFoodInMain1() {
+
+		List<FoodWithStockAndEvent> foodList = foodService.selectFoodInMain1();
+		for (FoodWithStockAndEvent food : foodList) {
+			food = calculateEventPrice(food);
+		}
+
+		return foodList;
+	}
+
+	@RequestMapping(value = "/selectFoodInMain2.do")
+	@ResponseBody
+	public List<FoodWithStockAndEvent> selectFoodInMain2() {
+
+		List<FoodWithStockAndEvent> foodList = foodService.selectFoodInMain2();
+		for (FoodWithStockAndEvent food : foodList) {
+			food = calculateEventPrice(food);
+		}
+
+		return foodList;
+	}
+
+	@RequestMapping(value = "/selectFoodInMain3.do")
+	@ResponseBody
+	public List<FoodWithStockAndEvent> selectFoodInMain3(@RequestParam String foodDivisionNo) {
+
+		List<FoodWithStockAndEvent> foodList = foodService.selectFoodInMain3(foodDivisionNo);
+		for (FoodWithStockAndEvent food : foodList) {
+			food = calculateEventPrice(food);
+		}
+
+		return foodList;
+	}
+
+	@RequestMapping(value = "/selectFoodInMain4.do")
+	@ResponseBody
+	public List<FoodWithStockAndEvent> selectFoodInMain4() {
+
+		List<FoodWithStockAndEvent> foodList = foodService.selectFoodInMain4();
+		for (FoodWithStockAndEvent food : foodList) {
+			food = calculateEventPrice(food);
+		}
+
+		return foodList;
+	}
+
 	@RequestMapping(value = "/selectFoodByCat.do", method = RequestMethod.GET)
 	public String selectFoodByCat(Model model, @RequestParam(value = "searchNo") String searchNo,
 			@RequestParam(value = "searchKeyword") String searchKeyword,
@@ -74,11 +130,11 @@ public class FoodController {
 
 		List<FoodWithStockAndEvent> foodList = foodService.selectFoodListByCat(param);
 		List<Market> marketList = foodService.selectMarketList();
-		
-		for(FoodWithStockAndEvent food : foodList) {
+
+		for (FoodWithStockAndEvent food : foodList) {
 			food = calculateEventPrice(food);
 		}
-		
+
 		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("searchNo", searchNo);
 		model.addAttribute("marketNo", marketNo);
@@ -90,39 +146,69 @@ public class FoodController {
 
 		return "food/foodList";
 	}
-	
+
 	@RequestMapping(value = "/goFoodView.do", method = RequestMethod.GET)
 	public String goFoodView(Model model, @RequestParam(value = "foodNo") String foodNo,
-								@RequestParam(value = "marketNo") String marketNo) {
-		
-		
+			@RequestParam(value = "marketNo") String marketNo) {
+
 		HashMap<String, String> param = new HashMap<String, String>();
 		param.put("foodNo", foodNo);
 		param.put("marketNo", marketNo);
-		
+
 		FoodWithStockAndEvent food = foodService.selectFood(param);
 
 		food = calculateEventPrice(food);
 		model.addAttribute("food", food);
-		
+
 		return "food/foodView";
 	}
+
 	@RequestMapping(value = "/admin/goInsertFoodView.do", method = RequestMethod.GET)
 	public String goInsertFoodView(Model model) {
-		
-		//소분류리스트 가져오기
-//		List<FoodSection> foodSectionList = foodService.getFoodSectionList();
-//		model.addAttribute("sectionList", foodSectionList);
-		
+
 		return "food/insertFood";
 	}
-	@RequestMapping(value = "/admin/getUpperListToInsertFood.do", method = RequestMethod.POST)
+
+	@RequestMapping(value = "/admin/getUpperListToInsertFood.do")
+	@ResponseBody
 	public List<FoodUpper> getUpperListToInsertFood(String foodDivisionNo) {
-		
-//		List<FoodUpper> foodUpeprList = foodService.getUpperListToInsertFood();
-		
-		return null; 
+
+		List<FoodUpper> foodUpeprList = foodService.getUpperListToInsertFood(foodDivisionNo);
+		return foodUpeprList;
+
 	}
-	
-	
+
+	@RequestMapping(value = "/admin/getSectionListToInsertFood.do")
+	@ResponseBody
+	public List<FoodSection> getSectionListToInsertFood(String foodUpperNo) {
+
+		List<FoodSection> foodSectionList = foodService.getSectionListToInsertFood(foodUpperNo);
+		return foodSectionList;
+
+	}
+
+	@RequestMapping(value = "/admin/foodInsert.do")
+	public String foodInsert(Food food, @RequestParam("foodImgFile") MultipartFile foodImgFile,
+			HttpServletRequest request, Model model) {
+		try {
+
+			String saveDirectory = request.getSession().getServletContext().getRealPath("/resources/images/food");
+
+			String realFile = foodImgFile.getOriginalFilename();
+			String renamed = FileRenameUtils.getRenamedFileName(realFile);
+			food.setFoodOriginalFileName(realFile);
+			food.setFoodRenamedFileName(renamed);
+
+			foodImgFile.transferTo(new File(saveDirectory, "/" + renamed));
+		} catch (Exception e) {
+
+		}
+
+		int result = foodService.insertFood(food);
+
+		model.addAttribute("msg", result > 0 ? "등록 성공!" : "등록실패!");
+		model.addAttribute("loc", "/");
+		return "common/msg";
+	}
+
 }

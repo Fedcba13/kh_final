@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.kh.urbantable.event.model.vo.Event;
+import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.food.model.vo.FoodUpper;
 import com.kh.urbantable.food.model.vo.FoodWithStockAndEvent;
@@ -34,6 +35,20 @@ public interface FoodService {
 	FoodWithStockAndEvent selectFood(HashMap<String, String> param);
 
 	List<FoodSection> getFoodSectionList();
+
+	List<FoodUpper> getUpperListToInsertFood(String foodDivisionNo);
+
+	List<FoodSection> getSectionListToInsertFood(String foodSectionNo);
+
+	int insertFood(Food food);
+
+	List<FoodWithStockAndEvent> selectFoodInMain1();
+
+	List<FoodWithStockAndEvent> selectFoodInMain2();
+
+	List<FoodWithStockAndEvent> selectFoodInMain3(String foodDivisionNo);
+
+	List<FoodWithStockAndEvent> selectFoodInMain4();
 
 
 }

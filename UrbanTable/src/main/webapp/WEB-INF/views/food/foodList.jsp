@@ -62,25 +62,32 @@
         <c:forEach items="${foodList }" var="f">
         	<c:if test="${f.stockAmount gt 0 }">
 <%--             <li onclick="goFoodView('${f.foodNo}');"> --%>
-            <li>
-                <a href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo=${f.foodNo }&marketNo=${f.marketNo}" class="dp_block">
-                    <div class="prd_img_area">
-                    <c:if test="${not empty f.afterEventPrice }">
-                        <%-- <p class="fw600 txt_center"><span>SALE</span><br>${f.eventPercent}%</p> --%>
-                    </c:if>
-                        <img src="${f.foodImg }" alt="상품 사진">
-                    </div>
-                    <div class="prd_info_area">
-                        <h4>${f.foodName }</h4>
-                        <c:if test="${not empty f.afterEventPrice }">
-                        <p class="prd_price fw600">할인가</p>
-                        <p class="prd_price">${f.afterEventPrice }</p>
-                        </c:if>
-                        <p class="prd_price2">${f.foodMemberPrice }</p>
-                    </div>
-                </a>
-            </li>
-        	</c:if>
+					<li><a
+						href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo=${f.foodNo }&marketNo=${f.marketNo}"
+						class="dp_block">
+							<div class="prd_img_area">
+								<c:if test="${not empty f.afterEventPrice }">
+									<%-- <p class="fw600 txt_center"><span>SALE</span><br>${f.eventPercent}%</p> --%>
+								</c:if>
+								<c:if test="${not empty f.foodImg }">
+									<img src="${f.foodImg }" alt="상품 사진">
+								</c:if>
+								<c:if test="${not empty f.foodRenamedFileName }">
+									<img
+										src="${pageContext.request.contextPath}/resources/images/food/${f.foodRenamedFileName}"
+										alt="상품 사진">
+								</c:if>
+							</div>
+							<div class="prd_info_area">
+								<h4>${f.foodName }</h4>
+								<c:if test="${not empty f.afterEventPrice }">
+									<p class="prd_price fw600">할인가</p>
+									<p class="prd_price">${f.afterEventPrice }</p>
+								</c:if>
+								<p class="prd_price2">${f.foodMemberPrice }</p>
+							</div>
+					</a></li>
+				</c:if>
            
         </c:forEach>
         <c:forEach items="${foodList }" var="f">
@@ -88,7 +95,12 @@
             <li>
                 <a href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo=${f.foodNo }&marketNo=${f.marketNo}" class="dp_block">
                     <div class="prd_img_area">
+            	<c:if test="${not empty f.foodImg }">
                         <img src="${f.foodImg }" alt="상품 사진">
+            	</c:if>
+            	<c:if test="${not empty f.foodRenamedFileName }">
+                        <img src="${pageContext.request.contextPath}/resources/images/food/${f.foodRenamedFileName}" alt="상품 사진">
+            	</c:if>
                     </div>
                     <div class="prd_info_area">
                         <h4>${f.foodName }</h4>

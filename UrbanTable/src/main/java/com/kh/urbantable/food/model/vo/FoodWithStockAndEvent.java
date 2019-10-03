@@ -252,11 +252,7 @@ public class FoodWithStockAndEvent extends Food {
 		// TODO Auto-generated constructor stub
 	}
 
-	public FoodWithStockAndEvent(String foodNo, String foodName, String foodSectionNo, String foodCompany,
-			int foodMarketPrice, int foodMemberPrice, int foodEnabled, String foodImg) {
-		super(foodNo, foodName, foodSectionNo, foodCompany, foodMarketPrice, foodMemberPrice, foodEnabled, foodImg);
-		// TODO Auto-generated constructor stub
-	}
+
 	
 	
 

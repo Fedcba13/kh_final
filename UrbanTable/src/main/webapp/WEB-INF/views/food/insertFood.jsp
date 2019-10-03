@@ -8,26 +8,26 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8" />
+<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/main.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/food.css">
+<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/main.js"></script>
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 
 	<article class="subPage inner">
 	    <h3 class="sub_tit">서브페이지 제목</h3>
+        <form action="${pageContext.request.contextPath}/food/admin/foodInsert.do" id="foodInsertFrm"  method="post" enctype="multipart/form-data">
 	    <table class="tbl txt_center"> <!--가운데 정렬 아니면 txt_center 빼셔도 됩니다.
 	                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->
             <tr>
-                <th>컬럼 제목</th>
-                <td>컬럼 내용</td>
-            </tr>
-            <tr>
                 <th>상품명</th>
-                <td>컬럼 내용</td>
+                <td><input type="text" name="foodName" id="foodName"/></td>
             <tr>
                 <th>상품 등록자</th>
-                <td>컬럼 내용</td>
+                <td>urbanTable</td>
             </tr>
 		<tr>
 			<th>상품 분류</th>
-			<td><select id="divisionOptions" onchange="getDivisionList()">
+			<td><select class="catSelect"  id="divisionOptions" onchange="getDivisionList()">
 					<option selected>대분류</option>
 					<%
 						for (FoodDivision division : FoodServiceImpl.foodDivisionList) {
@@ -36,38 +36,69 @@
 					<%
 						}
 					%>
-			</select> <select name="upper">
+			</select>
+			 <select class="catSelect" id="upperOptions" onchange="getSectionList()">
 					<option selected>중분류</option>
-					<%
-						for (FoodUpper upper : FoodServiceImpl.foodUpperList) {
-					%>
-					<option value="<%=upper.getFoodUpperNo()%>"><%=upper.getFoodUpperName()%></option>>
-					<%
-						}
-					%>
-			</select> <select name="section">
+					
+			</select> 
+			<select  class="catSelect" id="sectionOptions" name="foodSectionNo">
 					<option selected>소분류</option>
-					<c:forEach items="${ sectionList}" var="section">
-						<option value="${section.foodSectionNo }">${section.foodSectionName }</option>
-					</c:forEach>
+
 			</select></td>
 		</tr>
 		<tr>
                 <th>납품 업체명</th>
-                <td></td>
+                <td><input type="text" name="foodCompany" id="foodCompany"/></td>
             </tr>
             <tr>
-                <th>상품 가격</th>
-                <td></td>
+                <th>상품 납품가</th>
+                <td><input type="number" name="foodMarketPrice" id="foodMarketPrice"/>원</td>
+            </tr>
+            <tr>
+                <th>상품 판매가</th>
+                <td><input type="number" name="foodMemberPrice" id="foodMemberPrice"/>원</td>
             </tr>
             <tr>
                 <th>상품 사진</th>
-                <td></td>
+                <td><input type="file" name="foodImgFile" /></td>
             </tr>
         </table>
+
+       	<input type="submit" value="등록" onsubmit="return validate();" />
+        </form>
        
     </article>
     <script>
+    function validate(){
+    	var foodName = $("#foodName").val();
+    	var foodSectionNo = $("#foodSectionNo option:selected").val();
+    	var foodCompany = $("#foodCompany").val();
+    	var foodMarketPrice = $("#foodMarketPrice").val();
+    	var foodMemberPrice = $("#foodMemberPrice").val();
+    	
+    	if(foodName == ''){
+    		console.log("음식명을 입력하세요.");
+    		return false;
+    	}
+    	if(foodCompany == ''){
+    		console.log("납품 업체명을 입력하세요.");
+    		return false;
+    	}
+    	if(foodSectionNo == '소분류'){
+    		console.log("분류를 명확하게 선택해주십시오");
+    		return false;
+    	}
+    	if(foodMarketPrice <= 0){
+    		console.log("상품 납품가를 다시 정해주세요.");
+    		return false;
+    	}
+    	if(foodMemberPrice <= 0){
+    		console.log("상품 판매가를 다시 정해주세요.");
+    		return false;
+    	}
+    	return true;
+    }
+    
     function getDivisionList(){	
 		var foodDivisionNo = $("#divisionOptions option:selected").val();
     	
@@ -78,19 +109,39 @@
     	$.ajax({
     		url: "${pageContext.request.contextPath}/food/admin/getUpperListToInsertFood.do",
     		data: param,
-    		dataType: "json",
-    		type: "POST",
     		success: (data)=> {
     			console.log(data);
-    			/* for(var i in data){
-    			html = "";
-    			html += "<div class='main_banner_con'>";
-    			html += "<a href='${pageContext.request.contextPath}/"+data[i].bannerURL + "' style='background-image:URL(${pageContext.request.contextPath}/resources/images/banner/"+data[i].bannerFileRenamed+");'class='aTag'>";
-    			html += "</a></div>";
+    			html = "<option selected>중분류</option>";
+    			for(var i in data){
+    			html += "<option value='"+data[i].foodUpperNo+"'>"+data[i].foodUpperName+"</option>";
     			
-    			console.log(html);
-    			$(".main_banner").append(html); 
-    			} */
+    			} 
+    			$("#upperOptions").html(html);
+    			$("#sectionOptions").html("<option selected>소분류</option>"); 
+    		},
+    		error: (xhr, txtStatus, err)=> {
+    			console.log("ajax 처리실패!", xhr, txtStatus, err);
+    		}
+    	});
+    }
+    function getSectionList(){	
+		var foodUpperNo = $("#upperOptions option:selected").val();
+    	
+	var param ={
+			foodUpperNo: foodUpperNo
+		}
+    	
+    	$.ajax({
+    		url: "${pageContext.request.contextPath}/food/admin/getSectionListToInsertFood.do",
+    		data: param,
+    		success: (data)=> {
+    			console.log(data);
+    			html = "<option selected>소분류</option>";
+    			for(var i in data){
+    			html += "<option value='"+data[i].foodSectionNo+"'>"+data[i].foodSectionName+"</option>";
+    			
+    			} 
+    			$("#sectionOptions").html(html); 
     		},
     		error: (xhr, txtStatus, err)=> {
     			console.log("ajax 처리실패!", xhr, txtStatus, err);
