@@ -568,4 +568,11 @@ public class MarketOwnerController {
 		List<Map<String, Object>> chartWeek = marketOwnerService.selectChartWeek(marketNo);
 		return chartWeek;
 	}
+	
+	@ResponseBody
+	@RequestMapping("/selectChartMonth.do")
+	public List<Map<String, Object>> selectChartMonth(@RequestParam String marketNo){
+		List<Map<String, Object>> chartMonth = marketOwnerService.selectChartMonth(marketNo);
+		return chartMonth;
+	}
 }

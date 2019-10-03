@@ -192,4 +192,9 @@ public class MarketOwnerDAOImpl implements MarketOwnerDAO {
 		return sqlSession.selectList("marketOwner.selectChartWeek", marketNo);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectChartMonth(String marketNo) {
+		return sqlSession.selectList("marketOwner.selectChartMonth", marketNo);
+	}
+
 }

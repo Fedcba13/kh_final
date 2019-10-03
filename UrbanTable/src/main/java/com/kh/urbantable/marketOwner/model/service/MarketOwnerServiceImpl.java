@@ -212,5 +212,10 @@ public class MarketOwnerServiceImpl implements MarketOwnerService {
 		return marketOwnerDAO.selectChartWeek(marketNo);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectChartMonth(String marketNo) {
+		return marketOwnerDAO.selectChartMonth(marketNo);
+	}
+
 	
 }

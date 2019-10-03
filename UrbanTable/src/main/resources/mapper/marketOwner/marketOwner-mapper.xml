@@ -358,4 +358,14 @@
 		order by to_char(pay_date, 'yyyy-MM-dd') asc
 	</select>
 	
+	<select id="selectChartMonth" resultType="map">
+		select market_no, to_char(pay_date, 'yyyy-MM') as paydate, count(*) as cnt, 
+		avg(pay_price) as avg_price
+		from pay
+		where to_char(pay_date, 'yyyy') = to_char(sysdate, 'yyyy')
+		group by to_char(pay_date, 'yyyy-MM'), market_no
+		having market_no='mar00014' 
+		order by to_char(pay_date, 'yyyy-MM') asc
+	</select>
+	
 </mapper>

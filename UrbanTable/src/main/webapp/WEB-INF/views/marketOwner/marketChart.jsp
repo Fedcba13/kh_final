@@ -6,7 +6,6 @@
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/marketOwner.css">
 <section>
 	<article class="subPage inner">
@@ -18,7 +17,7 @@
 	    		<option value="category">카테고리별</option>
 	    	</select>
 	    </div>
-	    <canvas id="myChart""></canvas>
+	    <canvas id="myChart"></canvas>
     </article>
 </section>
 <script>
@@ -26,20 +25,6 @@ var marketNo = "${marketNo}";
 var chartLabels = [];
 var barChartDataArr = [];
 var lineChartDataArr = [];
-$(()=>{
-	selectChartWeek();
-	$("#chartType").on('change', function(){
-		var type = $(this).children("option:selected").val();
-		if(type=='week'){
-			selectChartWeek();
-		} else if(type=='month'){
-			console.log("month");
-		} else if(type=='category'){
-			console.log("category");
-		}
-	});
-	
-});
 function selectChartWeek(){
 	$.ajax({
 		url: "${pageContext.request.contextPath}/market/selectChartWeek.do",
@@ -48,11 +33,34 @@ function selectChartWeek(){
 		type: "get",
 		success: function(data){
 			for(var i in data){
-				chartLabels.push(data[i].PAYDATE);
-				barChartDataArr.push(data[i].CNT);
-				lineChartDataArr.push(data[i].AVG_PRICE);
+				chartLabels[i]=data[i].PAYDATE;
+				barChartDataArr[i]=data[i].CNT;
+				lineChartDataArr[i]=data[i].AVG_PRICE;
 			}
 			createChart();
+		},
+		error: function(xhr, txtStatus, err){
+			console.log("ajax 처리 실패", xhr, txtStatus, err);
+		}
+	});
+}
+
+function selectChartMonth(){
+	$.ajax({
+		url: "${pageContext.request.contextPath}/market/selectChartMonth.do",
+		data: {marketNo:marketNo},
+		dataType: "json",
+		type: "get",
+		success: function(list){
+			for(var i in list){
+				myLineChart.config.data.labels[i]=list[i].PAYDATE;
+				var datasets = myLineChart.config.data.datasets;
+				for(var j=0; j<datasets.length; j++){
+					datasets[j].data[i]=list[i].CNT;
+					datasets[j].data[i]=list[i].AVG_PRICE;
+				}
+			}
+			myLineChart.update();
 		},
 		error: function(xhr, txtStatus, err){
 			console.log("ajax 처리 실패", xhr, txtStatus, err);
@@ -107,33 +115,59 @@ var chartData = {
     labels: chartLabels
 }
 
+var config = {
+	type : 'bar',
+	data : chartData,
+	options :{
+		animation: {
+            duration: 0
+        }, 
+		scales: { 
+		     yAxes: [
+		    	 { 
+				     id: 'A', 
+				     type: 'linear', 
+				     position: 'left', 
+				     ticks: { 
+				    	 beginAtZero : true
+				     } 
+			     }, 
+			     { 
+				     id: 'B', 
+				     type: 'linear', 
+				     position: 'right',
+				     ticks: { 
+				    	 min : 10000
+				     } 
+			     }] 
+		}
+	}
+}
+
 function createChart(){
 	var ctx = document.getElementById("myChart").getContext("2d");
-	LineChartDemo = new Chart(ctx,{
-		type : 'bar',
-		data : chartData,
-		options :{
-			scales: { 
-			     yAxes: [
-			    	 { 
-					     id: 'A', 
-					     type: 'linear', 
-					     position: 'left', 
-					     ticks: { 
-					    	 beginAtZero : true
-					     } 
-				     }, 
-				     { 
-					     id: 'B', 
-					     type: 'linear', 
-					     position: 'right',
-					     ticks: { 
-					    	 min : 10000
-					     } 
-				     }] 
-			}
-		}
-	})
+	myLineChart = new Chart(ctx, config);
 }
+
+$(()=>{
+	selectChartWeek();
+	$("#chartType").on('change', function(){
+		//myLineChart.clear();
+		myLineChart.data.labels.splice(0, myLineChart.data.labels.length);
+		myLineChart.data.datasets.forEach((dataset) => {
+	        dataset.data.splice(0, dataset.data.length);
+	    });
+		
+		var type = $(this).children("option:selected").val();
+		if(type=='week'){
+			selectChartWeek();
+		} else if(type=='month'){
+			selectChartMonth();
+		} else if(type=='category'){
+			console.log("category");
+		}
+	});
+	
+});
 </script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

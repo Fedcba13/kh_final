@@ -65,7 +65,7 @@
 	                        <li><a href="${pageContext.request.contextPath}/market/marketStock.do?memberId=${memberLoggedIn.memberId}" class="dp_block">재고·발주 요청</a></li>
 	                        <li><a href="${pageContext.request.contextPath}/foodOrder/foodOrderRequest.do?memberId=${memberLoggedIn.memberId}" class="dp_block">발주 요청 내역</a></li>
 	                        <li><a href="${pageContext.request.contextPath}/market/marketChart.do?memberId=${memberLoggedIn.memberId}" class="dp_block">지점 매출 현황</a></li>
-	                        <li><a href="${pageContext.request.contextPath}/market/event.do" class="dp_block">이벤트 관리</a></li>
+	                        <li><a href="${pageContext.request.contextPath}/event/eventList.do" class="dp_block">이벤트 관리</a></li>
 	                    </ul>
 	                </li>
                 </c:if>
