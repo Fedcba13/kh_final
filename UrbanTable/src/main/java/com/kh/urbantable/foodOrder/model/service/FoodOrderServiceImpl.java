@@ -68,13 +68,61 @@ public class FoodOrderServiceImpl implements FoodOrderService {
 	}
 
 	@Override
-	public List<Map<String, String>> selectMarketOrderDetail(int cPage, String marketOrderNo) {
-		return foodOrderDAO.selectMarketOrderDetail(cPage, marketOrderNo);
+	public List<Map<String, String>> selectMarketOrderDetail(int cPage, Map<String, Object> param) {
+		return foodOrderDAO.selectMarketOrderDetail(cPage, param);
 	}
 
 	@Override
 	public int selectMarketOrderDetailTotal(String marketOrderNo) {
 		return foodOrderDAO.selectMarketOrderDetailTotal(marketOrderNo);
+	}
+
+	@Override
+	public int marketOrderUpdateAmount(Map<String, Object> param) {
+		int result = foodOrderDAO.marketOrderUpdateAmount(param);
+		if(result>0) {
+			//바뀐 정보의 총액 가져오기
+			int price = selectMarketOrderDetailPrice(param);
+			param.put("marketOrderPrice", price);
+			result = updateMarketOrderPrice(param);
+		}
+		return result;
+	}
+
+	@Override
+	public int marketOrderDeleteFood(Map<String, Object> param) {
+		int result = foodOrderDAO.marketOrderDeleteFood(param);
+		if(result>0) {
+			//바뀐 정보의 총액 가져오기
+			int price = selectMarketOrderDetailPrice(param);
+			param.put("marketOrderPrice", price);
+			result = updateMarketOrderPrice(param);
+		}
+		return result;
+	}
+
+	@Override
+	public int marketOrderDeleteFoodAll(String marketOrderNo) {
+		int deleteAll = foodOrderDAO.marketOrderDetailDeleteAll(marketOrderNo);
+		if(deleteAll>0) {
+			deleteAll=foodOrderDAO.marketOrderDeleteAll(marketOrderNo);
+		}
+		return deleteAll;
+	}
+
+	@Override
+	public MarketOrder selectMarketOrderOne(String marketOrderNo) {
+		return foodOrderDAO.selectMarketOrderOne(marketOrderNo);
+	}
+
+	@Override
+	public int selectMarketOrderDetailPrice(Map<String, Object> param) {
+		return foodOrderDAO.selectMarketOrderDetailPrice(param);
+	}
+
+	@Override
+	public int updateMarketOrderPrice(Map<String, Object> param) {
+		return foodOrderDAO.updateMarketOrderPrice(param);
 	}
 	
 }

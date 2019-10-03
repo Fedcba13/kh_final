@@ -13,10 +13,10 @@ import org.springframework.stereotype.Service;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
 import com.kh.urbantable.cart.model.vo.Cart;
+import com.kh.urbantable.event.model.vo.Event;
 import com.kh.urbantable.food.model.vo.FoodDivision;
 import com.kh.urbantable.food.model.vo.FoodWithFoodSection;
 import com.kh.urbantable.marketOwner.model.dao.MarketOwnerDAO;
-import com.kh.urbantable.marketOwner.model.vo.Event;
 import com.kh.urbantable.marketOwner.model.vo.Market;
 import com.kh.urbantable.marketOwner.model.vo.MarketEvent;
 
@@ -175,6 +175,36 @@ public class MarketOwnerServiceImpl implements MarketOwnerService {
 	@Override
 	public int selectCartTotal(String memberId) {
 		return marketOwnerDAO.selectCartTotal(memberId);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectMarketOrderList(int cPage, Map<String, Object> param) {
+		return marketOwnerDAO.selectMarketOrderList(cPage, param);
+	}
+
+	@Override
+	public int selectMarketOrderTotalContents(Map<String, Object> param) {
+		return marketOwnerDAO.selectMarketOrderTotalContents(param);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectOrderDetailFoodByPayNo(String payNo) {
+		return marketOwnerDAO.selectOrderDetailFoodByPayNo(payNo);
+	}
+
+	@Override
+	public Map<String, Object> selectOrderDetailPayByPayNo(String payNo) {
+		return marketOwnerDAO.selectOrderDetailPayByPayNo(payNo);
+	}
+
+	@Override
+	public Map<String, Object> selectOrderDetailMemberByPayNo(String payNo) {
+		return marketOwnerDAO.selectOrderDetailMemberByPayNo(payNo);
+	}
+
+	@Override
+	public int updatePayFlag(String payNo) {
+		return marketOwnerDAO.updatePayFlag(payNo);
 	}
 
 	

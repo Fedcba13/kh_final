@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -86,7 +87,7 @@ public class PayController {
 		int result = payService.insertPayDetail(payDetail);
 		if(result > 0) {
 			list = payService.getPayDetail();
-			Map<String, Object> map = new HashMap<>();
+			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("marketNo", marketNo);
 			map.put("foodNo", payDetail.getFoodNo());
 			map.put("amount", payDetail.getPayDetailAmount());
@@ -147,7 +148,28 @@ public class PayController {
 	public int insertPayment(Payment_ payment) {
 		int result = payService.insertPayment(payment);
 		
-		return 0;
+		return result;
 	}
+	
+	@ResponseBody
+	@RequestMapping(value="/deleteCart.do", method=RequestMethod.POST)
+	public int deleteCart(@RequestParam(value="memberId") String memberId,
+						  @RequestParam(value="flag") int flag) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("flag", flag);
+		int result = payService.deleteCart(map);
+		
+		return result;
+	}
+	
+	@RequestMapping(value="/payEnd.do")
+	public String payEnd(@RequestParam String payNo, Model model) {
+		
+		model.addAttribute("payNo", payNo);
+		
+		return "pay/payEnd";
+	}
+	
 
 }

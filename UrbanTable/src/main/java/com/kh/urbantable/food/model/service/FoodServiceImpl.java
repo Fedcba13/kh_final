@@ -1,5 +1,6 @@
 package com.kh.urbantable.food.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,11 +11,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.urbantable.event.model.vo.Event;
 import com.kh.urbantable.food.model.dao.FoodDAO;
-import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodDivision;
 import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.food.model.vo.FoodUpper;
+import com.kh.urbantable.food.model.vo.FoodWithStockAndEvent;
 import com.kh.urbantable.marketOwner.model.vo.Market;
 
 @Service
@@ -36,7 +38,7 @@ public class FoodServiceImpl implements FoodService {
 	}
 
 	@Override
-	public List<Food> selectFoodListByCat(Map<String, String> param) {
+	public List<FoodWithStockAndEvent> selectFoodListByCat(Map<String, String> param) {
 		return foodDAO.selectFoodListByCat(param);
 	}
 
@@ -64,5 +66,22 @@ public class FoodServiceImpl implements FoodService {
 	public List<FoodSection> selectBrotherSectList(String upperNo) {
 		return foodDAO.selectBrotherSectList(upperNo);
 	}
+
+
+	@Override
+	public int selectEventPercent(FoodWithStockAndEvent food) {
+		return foodDAO.selectEventPercent(food);
+	}
+
+	@Override
+	public FoodWithStockAndEvent selectFood(HashMap<String, String> param) {
+		return foodDAO.selectFood(param);
+	}
+
+	@Override
+	public List<FoodSection> getFoodSectionList() {
+		return foodDAO.getFoodSectionList();
+	}
+
 
 }

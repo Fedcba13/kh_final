@@ -50,11 +50,12 @@
 			        				paymentWay: data.response.payMethod,
 			        				card: data.response.cardName,
 			        				bank: data.response.vbankName,
-			        				account: data.response.vbankNum
+			        				account: data.response.vbankNum,
+			        				payNo: $("#payNo").val()
 			        			},
 			        			success: function(data){
 			        				if(data==1){
-			        					alert("paymentTable에 삽입성공");
+			        					//alert("paymentTable에 삽입성공");
 			        				}
 			        			}, 
 			        			error: function(xhr, txtStatus, err){
@@ -67,20 +68,26 @@
 					        msg += '결제 금액 : ' + rsp.paid_amount + "\n";
 					        msg += '카드 승인번호 : ' + rsp.apply_num;
 							alert(msg);
+							deleteCart();
 						},
 						error: function(xhr, txtStatus, err){
 							console.log("ajax처리실패!", xhr, txtStatus, err);
-						}			        	
-			        })
+						},
+						complete: function(){
+							location.replace("${pageContext.request.contextPath}/pay/payEnd.do?payNo=" + $("#payNo").val());
+						}
+			        })			        
 			    } else {
-			        var msg = '결제에 실패하였습니다.';
+			        var msg = '결제에 실패하였습니다.\n';
 			        msg += '에러내용 : ' + rsp.error_msg;
 			        deletePayDetail();
 			        deletePayInfo();
+			        alert(msg);
 			    }
-			    alert(msg);
+			    
 			});
 		});
+		orderInfo();
 		getCartList();
 		$("#open").on("click", ()=>{
 			$("#list").slideToggle(100, "swing", function(){
@@ -91,7 +98,6 @@
 				}
 			});
 		});
-		orderInfo();
 		
 		$("#deliveryAddress").on("click", ()=>{
 			new daum.Postcode({
@@ -102,9 +108,12 @@
 		});
 		
 		$("#marketAddress").on("click", ()=>{
-			var popup = window.open("${pageContext.request.contextPath}/cart/searchMarket.do?addr=" + $("#userAddressField").val(),"매장찾기", "width=750, height=550");
-			popup.focus();
-			popup.opener = self;
+			//var popup = window.open("${pageContext.request.contextPath}/cart/searchMarket.do?addr=" + $("#userAddressField").val(),"매장찾기", "width=750, height=550");
+			//popup.focus();
+			//popup.opener = self;
+			if(confirm("매장 변경시 장바구니 페이지로 돌아가게 됩니다. 계속 하시겠습니까?")){
+				location.href="${pageContext.request.contextPath}/cart/cartList.do?memberId=${memberLoggedIn.memberId}&memberCheck=${memberLoggedIn.memberCheck}";
+			}
 		})
 	});	//onload 함수 끝
 	
@@ -129,13 +138,27 @@
 				dataType: "json",
 				async: false,
 				success: function(data){
-					foodInfo += "<tr id='item"+(i+1)+"'>";					
-					foodInfo += "<td><img src='"+data.FOOD_IMG+"' width='92px' height='130px'/></td>";
-					foodInfo += "<td>[" + data.FOOD_COMPANY + "] " + data.FOOD_NAME + "</td>";
-					foodInfo += "<td>수량 <input type='text' name='amount' value='" + cartInfoArr[i].payDetailAmount + "' size='5' style='text-align:center;' readonly></td>";
-					foodInfo += "<td>금액 <input type='text' name='totalPrice' value='" + data.FOOD_MEMBER_PRICE * cartInfoArr[i].payDetailAmount + "' size='11' style='text-align:center;' readonly></td>";
-					foodInfo += "</tr>";
-					$("#list").append(foodInfo);
+					$.ajax({
+						url: "${pageContext.request.contextPath}/cart/getDiscount.do",
+						type: "post",
+						async: false,
+						data: {
+							marketNo: $("#marketNo").val(),
+							foodNo: cartInfoArr[i].foodNo		
+						},
+						success: function(dc){
+							foodInfo += "<tr id='item"+(i+1)+"'>";					
+							foodInfo += "<td><img src='"+data.FOOD_IMG+"' width='92px' height='130px'/></td>";
+							foodInfo += "<td>[" + data.FOOD_COMPANY + "] " + data.FOOD_NAME + "</td>";
+							foodInfo += "<td>수량 <input type='text' name='amount' value='" + cartInfoArr[i].payDetailAmount + "' size='5' style='text-align:center;' readonly></td>";
+							foodInfo += "<td>금액 <input type='text' name='totalPrice' value='" + Math.floor((data.FOOD_MEMBER_PRICE * (1-dc/100))/10)*10 * cartInfoArr[i].payDetailAmount + "' size='11' style='text-align:center;' readonly></td>";
+							foodInfo += "</tr>";
+							$("#list").append(foodInfo);	
+						},
+						error: function(xhr, txtStatus, err){
+							console.log("ajax처리실패!", xhr, txtStatus, err);
+						}			
+					})
 				},
 				error: function(xhr, txtStatus, err){
 					console.log("ajax처리실패!", xhr, txtStatus, err);
@@ -224,6 +247,7 @@
 			url: "${pageContext.request.contextPath}/pay/marketNo.do",
 			type: "post",
 			data: param,
+			async: false,
 			success: function(data){
 				//console.log(data);
 				$("#marketNo").val(data);
@@ -287,6 +311,27 @@
 			data: param,
 			success: function(data){
 				console.log(data);
+			},
+			error: function(xhr, txtStatus, err){
+				console.log("ajax처리실패!", xhr, txtStatus, err);
+			}
+		})
+	}
+	
+	function deleteCart(){
+		var param = {
+				memberId: "${memberLoggedIn.memberId}",
+				flag: 1
+		}
+		$.ajax({
+			url: "${pageContext.request.contextPath}/pay/deleteCart.do",
+			data: param,
+			type: "post",
+			success: function(data){
+				if(data>0){
+					console.log("cart table 삭제 완료");
+				}
+				
 			},
 			error: function(xhr, txtStatus, err){
 				console.log("ajax처리실패!", xhr, txtStatus, err);

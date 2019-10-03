@@ -10,6 +10,21 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
 $(()=>{
+	
+	document.getElementById("eventDateStart").valueAsDate = new Date();
+	
+	$("#eventDateEnd").change(()=>{
+		
+		var start = $("#eventDateStart").val();
+		var end = $("#eventDateEnd");
+		
+		if(start > end.val()){
+			alert("종료일자가 시작일자보다 빠릅니다.");
+			end.val(start);
+		}
+		
+	});
+	
 	$(".eventDate").flatpickr({
 	  enableTime: false,
 	  dateFormat: "Y-m-d",
@@ -17,7 +32,7 @@ $(()=>{
 	
 	$(".submitBtn").click(function(){
 		var f = document.getElementById("eventEnrollEnd");
-		f.action = "${pageContext.request.contextPath }/market/marketEventEnrollEnd.do";
+		f.action = "${pageContext.request.contextPath }/event/marketEventEnrollEnd.do";
 		f.method = "post";
 		f.submit();
 	});
@@ -144,6 +159,8 @@ $(()=>{
 			});
 		}
 	});
+	
+
 });
 </script>
 <section>
@@ -160,13 +177,10 @@ $(()=>{
 	                <th>이벤트 내용<span class="red">*</span></th>
 	                <td><textarea class="form-control" id="eventContent" name="eventContent"></textarea></td>
 	            </tr>
-	            <tr>
-	                <th>이벤트 대상 업체</th>
-	                <td style="position:relative;">
-	                	<input type="text" name="eventCompany" id="eventCompany" autocomplete="off" style="width:200px;"  />
-	                	<ul id="autoComplete" class="autoComplete"></ul>
-	                </td>
-	            </tr>
+	          
+	                	<input type="hidden" name="eventCompany" id="eventCompany" autocomplete="off" style="width:200px;"  />
+	
+		            </tr>
 	            <tr style="display:none;">
 	            	<th>이벤트 대상 매장</th>
 	            	<td><input type="text" name="marketNo" value="${eventMarketNo }" /></td>
@@ -186,6 +200,12 @@ $(()=>{
             			~
             			<input type="date" name="eventDateEnd" id="eventDateEnd" class="dp_ib eventDate" style="width:200px;" />
 	                </td>
+	            </tr>
+	            <tr>
+	            	<th>이벤트 할인율<span class="red">*</span></th>
+	            	<td>
+	            	<input type="text" name="eventPrice" id=eventPrice class="dp_ib" style="width:200px;" autocomplete="off" required/>
+	            	</td>
 	            </tr>
 	        </table>
 	        <div class="txt_center mt30"><input type="button" value="등록" class="btn submitBtn" /></div>

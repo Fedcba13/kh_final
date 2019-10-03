@@ -59,6 +59,11 @@
 								   #{paymentWay},
 								   #{card},
 								   #{bank},
-								   #{account})
+								   #{account},
+								   #{payNo})
 	</insert>
+	
+	<delete id="deleteCart">
+		delete from cart where member_id=#{memberId} and flag=#{flag}
+	</delete>
 </mapper>

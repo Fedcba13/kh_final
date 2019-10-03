@@ -40,10 +40,21 @@
 		</collection>
 	</resultMap>
 	
-	<select id="selectMaterial" resultMap="materialMap">
-		select * from recipe_ingredient
+	<select id="selectMaterial" resultMap="materialSectionMap">
+		select * from recipe_ingredient i left join food_section s
+		on i.food_section_no = s.food_section_no
 		where recipe_no = #{recipeNo}
 	</select>
+	
+	<resultMap type="materialWithSection" id="materialSectionMap">
+		<result column="recip_ingre_no" property="recipeIngreNo" />
+		<result column="recipe_no" property="recipeNo" />
+		<result column="food_section_no" property="foodSectionNo" />
+		<result column="food_no" property="foodNo" />
+		<result column="food_division_no" property="foodDivisionNo" />
+		<result column="food_section_name" property="foodSectionName" />
+		<result column="food_section_upper" property="foodSectionUpper" />
+	</resultMap>
 	
 	<resultMap type="material" id="materialMap">
 		<result column="recip_ingre_no" property="recipeIngreNo" />
@@ -98,4 +109,38 @@
 	<select id="selectFoodNo" resultType="string">
 		select food_no from food where food_section_no = #{foodSectionNo}
 	</select>
+	
+	<select id="selectFoodDivisionNo" resultType="string">
+		select food_division_no from food_division where food_division_name = #{fr}
+	</select>
+	
+	<select id="selectFoodSectionList" resultMap="foodSectionMap">
+		select * from food_section where food_division_no = #{foodDivisionNo}
+	</select>
+	
+	<resultMap type="foodSection" id="foodSectionMap">
+		<result column="food_section_no" property="foodSectionNo" />
+		<result column="food_division_no" property="foodDivisionNo" />
+		<result column="food_section_name" property="foodSectionName" />
+		<result column="food_section_upper" property="foodSectionUpper" />
+	</resultMap>
+	
+	<update id="readCountUp">
+		update recipe set recipe_readcount = recipe_readcount + 1 where recipe_no = #{recipeNo}
+	</update>
+	
+	<select id="selectBoardCommentList" resultMap="boardCommentMap">
+		select * from board_comment where recipe_no = #{recipeNo}
+	</select>
+	
+	<resultMap type="boardComment" id="boardCommentMap">
+		<result column="board_comment_no" property="boardCommentNo" />
+		<result column="recipe_no" property="recipeNo" />
+		<result column="board_comment_writer" property="boardCommentWriter" />
+		<result column="board_comment_level" property="boardCommentLevel" />
+		<result column="board_comment_content" property="boardCommentContent" />
+		<result column="board_comment_ref" property="boardCommentRef" />
+		<result column="board_comment_date" property="boardCommentDate" />
+		<result column="board_comment_enabled" property="boardCommentEnabled" />
+	</resultMap>
 </mapper>

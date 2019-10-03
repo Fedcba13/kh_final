@@ -8,12 +8,14 @@ public class Payment_ {
 	private String card;
 	private String bank;
 	private String account;
+	private String payNo;
 	
 	public Payment_() {
 		
 	}
 
-	public Payment_(String paymentNo, String memberId, String paymentWay, String card, String bank, String account) {
+	public Payment_(String paymentNo, String memberId, String paymentWay, String card, String bank, String account,
+			String payNo) {
 		super();
 		this.paymentNo = paymentNo;
 		this.memberId = memberId;
@@ -21,6 +23,7 @@ public class Payment_ {
 		this.card = card;
 		this.bank = bank;
 		this.account = account;
+		this.payNo = payNo;
 	}
 
 	public String getPaymentNo() {
@@ -71,9 +74,19 @@ public class Payment_ {
 		this.account = account;
 	}
 
+	public String getPayNo() {
+		return payNo;
+	}
+
+	public void setPayNo(String payNo) {
+		this.payNo = payNo;
+	}
+
 	@Override
 	public String toString() {
-		return "Payment [paymentNo=" + paymentNo + ", memberId=" + memberId + ", paymentWay=" + paymentWay + ", card="
-				+ card + ", bank=" + bank + ", account=" + account + "]";
-	}	
+		return "Payment_ [paymentNo=" + paymentNo + ", memberId=" + memberId + ", paymentWay=" + paymentWay + ", card="
+				+ card + ", bank=" + bank + ", account=" + account + ", payNo=" + payNo + "]";
+	}
+
+	
 }

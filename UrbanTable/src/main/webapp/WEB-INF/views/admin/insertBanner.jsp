@@ -5,9 +5,13 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
 
 $(()=>{
+	
+
 	
 	document.getElementById("bannerStart").valueAsDate = new Date();
 	
@@ -21,7 +25,24 @@ $(()=>{
 		} 
 		
 	});
-
+	
+	$("#bannerStart").change(()=>{
+		
+		var start = $("#bannerStart").val();
+		console.log(today);
+		if(start < today){
+			console.log(today);
+			alert("지난 날짜는 고를 수 없습니다.");
+		}
+		
+	});
+	
+	
+	$(".bannerDate").flatpickr({
+		  enableTime: false,
+		  dateFormat: "Y-m-d",
+		});
+	
 });
 
 </script>
@@ -47,9 +68,9 @@ input[type="date"]::-webkit-inner-spin-button {
 				<tr>
 					<th>공고기간 </th>
 					<td>
-						<input type="date" name="bannerStartDate" id="bannerStart" />
+						<input type="date" class="bannerDate" name="bannerStartDate" id="bannerStart" />
 						~
-						<input type="date" name="bannerEndDate" id="bannerEnd" />
+						<input type="date" class="bannerDate" name="bannerEndDate" id="bannerEnd" />
 					</td>
 				</tr>
 				<tr>

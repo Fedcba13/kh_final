@@ -10,10 +10,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.kh.urbantable.event.model.service.EventService;
 import com.kh.urbantable.event.model.vo.Coupon;
+import com.kh.urbantable.event.model.vo.Event;
 import com.kh.urbantable.member.model.vo.Member;
 
 @Controller
@@ -28,7 +31,7 @@ public class EventController {
 	@RequestMapping("/eventList.do")
 	public String eventList() {
 		
-		return "/event/event_main";
+		return "/marketOwner/eventList";
 	}
 	
 	@RequestMapping("/insertCoupon.do")
@@ -49,5 +52,35 @@ public class EventController {
 		
 		return "/common/msg";
 	}
+
+	@RequestMapping("/marketEventEnroll.do")
+	public String marketEventEnroll(@RequestParam(value="memberId") String memberId, Model model) {
+		
+		Member m = eventService.selectOne(memberId);
+		logger.info("selectOne={}", m);
+
+		String marketNo = "";
+		if(m.getMemberCheck() != 9) {
+			
+			marketNo = eventService.selectMarketNoByMemberId(memberId);
+			
+		}
+		
+		model.addAttribute("eventMarketNo", marketNo);
+		
+		return "marketOwner/marketEventEnroll";
+	}
+	
+	@PostMapping("/marketEventEnrollEnd.do")
+	public String marketEventEnrollEnd(Event event, @RequestParam("eventCategory1") String eventCategory1) {
+		
+		logger.info("event={}",event);
+		logger.info("event={}",eventCategory1);
+		int result = eventService.insertEvent(event);
+		
+		return "marketOwner/marketEventEnroll";
+	}
+	
+
 	
 }

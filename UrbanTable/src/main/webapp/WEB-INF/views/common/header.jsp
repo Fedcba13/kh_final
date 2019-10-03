@@ -51,7 +51,7 @@
                     	<li><a href="${pageContext.request.contextPath}/admin/foundationList.do" class="dp_block">창업 신청 리스트</a></li>
                         <li><a href="${pageContext.request.contextPath}/market/marketList.do" class="dp_block">매장 리스트</a></li>
                         <li><a href="" class="dp_block">발주 리스트</a></li>
-                        <li><a href="" class="dp_block">식자재 등록</a></li>
+                        <li><a href="${pageContext.request.contextPath}/food/admin/goInsertFoodView.do" class="dp_block">식자재 등록</a></li>
                         <li><a href="${pageContext.request.contextPath}/banner/bannerList.do" class="dp_block">배너 등록</a></li>
                         <li><a href="${pageContext.request.contextPath}/event/eventList.do" class="dp_block">이벤트 등록</a></li>
                     </ul>
@@ -61,11 +61,11 @@
 	                    <a href="" class="dp_block">점주</a>
 	                    <ul>
 	                        <li><a href="${pageContext.request.contextPath}/market/myMarket.do?memberId=${memberLoggedIn.memberId}" class="dp_block">내 지점 관리</a></li>
-	                        <li><a href="${pageContext.request.contextPath}/market/marketOrder.do" class="dp_block">지점 주문 내역</a></li>
-	                        <li><a href="${pageContext.request.contextPath}/market/event.do" class="dp_block">이벤트 관리</a></li>
+	                        <li><a href="${pageContext.request.contextPath}/market/marketOrder.do?memberId=${memberLoggedIn.memberId}" class="dp_block">지점 주문 내역</a></li>
 	                        <li><a href="${pageContext.request.contextPath}/market/marketStock.do?memberId=${memberLoggedIn.memberId}" class="dp_block">재고·발주 요청</a></li>
 	                        <li><a href="${pageContext.request.contextPath}/foodOrder/foodOrderRequest.do?memberId=${memberLoggedIn.memberId}" class="dp_block">발주 요청 내역</a></li>
 	                        <li><a href="" class="dp_block">지점 매출 현황</a></li>
+	                        <li><a href="${pageContext.request.contextPath}/market/event.do" class="dp_block">이벤트 관리</a></li>
 	                    </ul>
 	                </li>
                 </c:if>
@@ -96,7 +96,7 @@
                     </form>
                 </div>
                 <%-- <c:if test="${not empty memberLoggedIn}"> --%>
-                	<a href="${pageContext.request.contextPath}/cart/cartList.do?memberId=${memberLoggedIn.memberId}" class="go_cart dp_block"><img src="${pageContext.request.contextPath }/resources/images/cart.png" alt="장바구니"></a>
+                	<a href="${pageContext.request.contextPath}/cart/cartList.do?memberId=${memberLoggedIn.memberId}&memberCheck=${memberLoggedIn.memberCheck}" class="go_cart dp_block"><img src="${pageContext.request.contextPath }/resources/images/cart.png" alt="장바구니"></a>
                 <%-- </c:if> --%>
             </div>
         	<!-- FOOD 카테고리 가져오기 by 김기현 -->
@@ -135,7 +135,7 @@
             </div> 
         </div>
     </header>
-	<div class="login-modal txt_center">
+	<div class="modal login-modal txt_center">
 		<form class="modal-content animate">
 			<div class="container txt_center">
 				<label for="uname"><b>아이디</b></label>

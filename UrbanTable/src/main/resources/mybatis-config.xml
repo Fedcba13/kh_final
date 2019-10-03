@@ -6,6 +6,8 @@
 	<settings>
 		<setting name="jdbcTypeForNull" value="NULL" />
 		<setting name="mapUnderscoreToCamelCase" value="true" />
+		<!-- resultType이 map 또는 List일때 컬럼의 값이 null인 값을 받기위한 설정 -->
+		<setting name="callSettersOnNulls" value="true"/>
 	</settings>
 	<typeAliases>
 		<typeAlias type="com.kh.urbantable.event.model.vo.Coupon"
@@ -35,7 +37,7 @@
 		<typeAlias type="com.kh.urbantable.recipe.model.vo.Material"
 			alias="material" />
 		<typeAlias
-			type="com.kh.urbantable.marketOwner.model.vo.Event" alias="event" />
+			type="com.kh.urbantable.event.model.vo.Event" alias="event" />
 		<typeAlias
 			type="com.kh.urbantable.marketOwner.model.vo.MarketEvent"
 			alias="marketWithEvent" />
@@ -54,8 +56,8 @@
 			type="com.kh.urbantable.food.model.vo.FoodWithFoodSection"
 			alias="foodWithFoodSection" />
 		<typeAlias
-			type="com.kh.urbantable.food.model.vo.FoodWithStockInMarket"
-			alias="FoodWithStockInMarket" />
+			type="com.kh.urbantable.food.model.vo.FoodWithStockAndEvent"
+			alias="foodWithStockAndEvent" />
 		<typeAlias
 			type="com.kh.urbantable.payment.model.vo.PayDetail" alias="paydetail" />
 		<typeAlias
@@ -68,5 +70,9 @@
 			alias="memberAutoLogin"/>
 		<typeAlias type="com.kh.urbantable.foodOrder.model.vo.MarketCart"
 			alias="marketCart"/>
+		<typeAlias type="com.kh.urbantable.recipe.model.vo.MaterialWithSection"
+			alias="materialWithSection"/>
+		<typeAlias type="com.kh.urbantable.recipe.model.vo.BoardComment"
+			alias="boardComment"/>
 	</typeAliases>
 </configuration>

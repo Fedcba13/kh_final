@@ -12,6 +12,7 @@
 <meta charset="UTF-8">
 <title>매장찾기</title>
 <style>
+.modal .cancelbtn {width: auto;padding: 0px 18px;float: left;}
 .customoverlay {position:relative;bottom:85px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:center;background-color:white;}
 .customoverlay .title {display:block;text-align:center;background:#fff;margin-right:35px;padding:10px 15px;font-size:14px;font-weight:bold;}
 </style>
@@ -199,7 +200,18 @@
 					} else {
 						opener.$("#regular").prop("checked", true);
 						opener.deliveryCost(deliveryWay);
-					}					
+					}
+					var length = opener.length;
+					console.log(length);
+					for(var i = 1; i <= length; i++){
+						opener.$("#item" + i).remove();
+					}
+					opener.getMarketNo();
+					opener.getList();
+					opener.totalPrice();
+					opener.discountCost();
+					opener.finalPrice();
+					opener.totalPayment();                    
 					window.close();
 				} else if(opener.location.pathname == "/urbantable/pay/order.do"){
 					opener.$("#marketAddressField").val(clickedAddress);
@@ -216,7 +228,7 @@
 						opener.$("#deliveryType").val("정기배송 (30000원+)");
 						opener.$("#deliverType").val("r")
 						opener.$("#totalPaymentCost").val(parseInt(opener.$("#totalPrice").val()) + 30000 + " 원")
-					}					
+					}
 					window.close();
 				}
 			});
@@ -227,7 +239,7 @@
 		}
 		
 	</script>
-	<div class="login-modal txt_center" id="selectDelWay">
+	<div class="modal txt_center" id="selectDelWay">
 		<form class="modal-content animate">
 			<div class="container txt_center">
 				<span>배송방식을 선택하세요(5km이상 샛별배송 불가)</span>

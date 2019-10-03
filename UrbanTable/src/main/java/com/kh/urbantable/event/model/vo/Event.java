@@ -1,4 +1,4 @@
-package com.kh.urbantable.marketOwner.model.vo;
+package com.kh.urbantable.event.model.vo;
 
 import java.sql.Date;
 
@@ -18,19 +18,21 @@ public class Event {
 	private String eventId;
 	private String eventTitle;
 	private String eventContent;
-	private String eventCompany;
 	private String marketNo;
 	private String eventCategory;
 	private Date eventDateStart;
 	private Date eventDateEnd;
 	private int eventEnabled;
+	private int eventPrice;
 	
+	
+
 	@Override
 	public String toString() {
 		return "Event [eventId=" + eventId + ", eventTitle=" + eventTitle + ", eventContent=" + eventContent
-				+ ", eventCompany=" + eventCompany + ", marketNo=" + marketNo + ", eventCategory=" + eventCategory
+				+ ", marketNo=" + marketNo + ", eventCategory=" + eventCategory
 				+ ", eventDateStart=" + eventDateStart + ", eventDateEnd=" + eventDateEnd + ", eventEnabled="
-				+ eventEnabled + "]";
+				+ eventEnabled + ", eventPrice=" + eventPrice + "]";
 	}
 	
 }

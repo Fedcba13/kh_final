@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.recipe.model.dao.RecipeDAO;
+import com.kh.urbantable.recipe.model.vo.BoardComment;
 import com.kh.urbantable.recipe.model.vo.Material;
+import com.kh.urbantable.recipe.model.vo.MaterialWithSection;
 import com.kh.urbantable.recipe.model.vo.Recipe;
 import com.kh.urbantable.recipe.model.vo.RecipeSequence;
 import com.kh.urbantable.recipe.model.vo.RecipeVO;
@@ -29,7 +31,7 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 
 	@Override
-	public List<Material> selectMaterial(String recipeNo) {
+	public List<MaterialWithSection> selectMaterial(String recipeNo) {
 		return recipeDAO.selectMaterial(recipeNo);
 	}
 
@@ -61,5 +63,25 @@ public class RecipeServiceImpl implements RecipeService {
 	@Override
 	public List<String> selectFoodNo(String foodSectionNo) {
 		return recipeDAO.selectFoodNo(foodSectionNo);
+	}
+
+	@Override
+	public String selectFoodDivisionNo(String fr) {
+		return recipeDAO.selectFoodDivisionNo(fr);
+	}
+
+	@Override
+	public List<FoodSection> selectFoodSectionList(String foodDivisionNo) {
+		return recipeDAO.selectFoodSectionList(foodDivisionNo);
+	}
+
+	@Override
+	public int readCountUp(String recipeNo) {
+		return recipeDAO.readCountUp(recipeNo);
+	}
+
+	@Override
+	public List<BoardComment> selectBoardCommentList(String recipeNo) {
+		return recipeDAO.selectBoardCommentList(recipeNo);
 	}
 }

@@ -16,9 +16,10 @@
 	<select id="selectMarketList" resultType="market">
 		SELECT *
 		FROM MARKET
+		WHERE MARKET_ENABLED = 1 AND FLAG = 2
 		ORDER BY MARKET_NAME
 	</select>
-	<select id="selectFoodListByCat" resultType="FoodWithStockInMarket" parameterType="map">
+	<select id="selectFoodListByCat" resultType="foodWithStockAndEvent" parameterType="map">
 		SELECT *
 		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
 					LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
@@ -61,6 +62,26 @@
 		SELECT *
 		FROM FOOD_SECTION
 		WHERE FOOD_UPPER_NO = #{upperNo}
+		ORDER BY FOOD_SECTION_NAME
+	</select>
+	<select id="selectEventPercent" resultType="int">
+	<![CDATA[
+		SELECT MAX(EVENT_PRICE)
+		FROM EVENT
+		WHERE (EVENT_CATEGORY = #{foodSectionNo} OR EVENT_CATEGORY IS NULL)
+			AND (MARKET_NO = #{marketNo} OR MARKET_NO IS NULL) AND (EVENT_DATE_START < SYSDATE)
+			AND (EVENT_DATE_END > SYSDATE)
+	]]>
+	</select>
+	<select id="selectFood" resultType="FoodWithStockAndEvent">
+		SELECT *
+		FROM FOOD F LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
+					LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
+		WHERE F.FOOD_NO = #{foodNo} AND M.MARKET_NO = #{marketNo}			
+	</select>
+	<select id="getFoodSectionList" resultType="foodSection">
+		SELECT *
+		FROM FOOD_SECTION
 		ORDER BY FOOD_SECTION_NAME
 	</select>
 </mapper>
