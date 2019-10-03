@@ -9,7 +9,7 @@
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/main.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/foodList.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/food.css">
 <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/main.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/foodList.js"></script>
 	<div>

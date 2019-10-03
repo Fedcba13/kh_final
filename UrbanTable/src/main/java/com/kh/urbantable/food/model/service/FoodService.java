@@ -33,5 +33,7 @@ public interface FoodService {
 
 	FoodWithStockAndEvent selectFood(HashMap<String, String> param);
 
+	List<FoodSection> getFoodSectionList();
+
 
 }

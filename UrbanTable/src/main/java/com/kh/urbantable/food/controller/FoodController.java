@@ -30,6 +30,20 @@ public class FoodController {
 	@Autowired
 	private FoodService foodService;
 
+
+	public FoodWithStockAndEvent calculateEventPrice(FoodWithStockAndEvent food) {
+		int eventPercent = foodService.selectEventPercent(food);
+		
+		 	double M3=eventPercent*0.01; // M3는 %를 소수점으로 변환한 값이다 즉 20%를 0.2로 변환한다
+		    double yourmoney=food.getFoodMemberPrice()*M3; // 할인되는 가격
+		    double actually=food.getFoodMemberPrice()-yourmoney; // 실제 가격
+
+		if(eventPercent != 0) {
+			food.setAfterEventPrice((int)actually);
+			food.setEventPercent(eventPercent);
+		}
+		return food;
+	}
 	@RequestMapping(value = "/selectFoodByCat.do", method = RequestMethod.GET)
 	public String selectFoodByCat(Model model, @RequestParam(value = "searchNo") String searchNo,
 			@RequestParam(value = "searchKeyword") String searchKeyword,
@@ -81,34 +95,34 @@ public class FoodController {
 	public String goFoodView(Model model, @RequestParam(value = "foodNo") String foodNo,
 								@RequestParam(value = "marketNo") String marketNo) {
 		
-		logger.debug(foodNo);
-		logger.debug(marketNo);
 		
 		HashMap<String, String> param = new HashMap<String, String>();
 		param.put("foodNo", foodNo);
 		param.put("marketNo", marketNo);
 		
 		FoodWithStockAndEvent food = foodService.selectFood(param);
-		logger.debug(food.toString());
+
 		food = calculateEventPrice(food);
-		
 		model.addAttribute("food", food);
 		
 		return "food/foodView";
 	}
-	
-	public FoodWithStockAndEvent calculateEventPrice(FoodWithStockAndEvent food) {
-		int eventPercent = foodService.selectEventPercent(food);
+	@RequestMapping(value = "/admin/goInsertFoodView.do", method = RequestMethod.GET)
+	public String goInsertFoodView(Model model) {
 		
-		 	double M3=eventPercent*0.01; // M3는 %를 소수점으로 변환한 값이다 즉 20%를 0.2로 변환한다
-		    double yourmoney=food.getFoodMemberPrice()*M3; // 할인되는 가격
-		    double actually=food.getFoodMemberPrice()-yourmoney; // 실제 가격
-
-		if(eventPercent != 0) {
-			food.setAfterEventPrice((int)actually);
-			food.setEventPercent(eventPercent);
-		}
-		return food;
+		//소분류리스트 가져오기
+//		List<FoodSection> foodSectionList = foodService.getFoodSectionList();
+//		model.addAttribute("sectionList", foodSectionList);
+		
+		return "food/insertFood";
 	}
+	@RequestMapping(value = "/admin/getUpperListToInsertFood.do", method = RequestMethod.POST)
+	public List<FoodUpper> getUpperListToInsertFood(String foodDivisionNo) {
+		
+//		List<FoodUpper> foodUpeprList = foodService.getUpperListToInsertFood();
+		
+		return null; 
+	}
+	
 	
 }

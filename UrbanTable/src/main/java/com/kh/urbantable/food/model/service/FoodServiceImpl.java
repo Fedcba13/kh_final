@@ -78,5 +78,10 @@ public class FoodServiceImpl implements FoodService {
 		return foodDAO.selectFood(param);
 	}
 
+	@Override
+	public List<FoodSection> getFoodSectionList() {
+		return foodDAO.getFoodSectionList();
+	}
+
 
 }

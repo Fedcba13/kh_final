@@ -73,10 +73,15 @@
 			AND (EVENT_DATE_END > SYSDATE)
 	]]>
 	</select>
-	<select id="selectFood" resultType="foodWithStockAndEvent">
+	<select id="selectFood" resultType="FoodWithStockAndEvent">
 		SELECT *
 		FROM FOOD F LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
 					LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
 		WHERE F.FOOD_NO = #{foodNo} AND M.MARKET_NO = #{marketNo}			
+	</select>
+	<select id="getFoodSectionList" resultType="foodSection">
+		SELECT *
+		FROM FOOD_SECTION
+		ORDER BY FOOD_SECTION_NAME
 	</select>
 </mapper>

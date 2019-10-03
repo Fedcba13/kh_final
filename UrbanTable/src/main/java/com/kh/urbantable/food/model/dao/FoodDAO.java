@@ -32,4 +32,6 @@ public interface FoodDAO {
 
 	FoodWithStockAndEvent selectFood(HashMap<String, String> param);
 
+	List<FoodSection> getFoodSectionList();
+
 }

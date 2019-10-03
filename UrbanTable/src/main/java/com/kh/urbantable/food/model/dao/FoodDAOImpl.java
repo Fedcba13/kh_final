@@ -74,6 +74,11 @@ public class FoodDAOImpl implements FoodDAO {
 		return sqlSession.selectOne("food.selectFood", param);
 	}
 
+	@Override
+	public List<FoodSection> getFoodSectionList() {
+		return sqlSession.selectList("food.getFoodSectionList");
+	}
+
 
 
 }
