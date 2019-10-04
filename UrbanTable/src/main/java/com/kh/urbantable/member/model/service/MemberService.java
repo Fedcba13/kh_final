@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.kh.urbantable.event.model.vo.Coupon;
 import com.kh.urbantable.member.model.vo.Member;
 import com.kh.urbantable.member.model.vo.MemberAutoLogin;
 
@@ -30,5 +31,7 @@ public interface MemberService {
 	void removeAutoLogin(MemberAutoLogin memberAutoLogin);
 
 	int modifyMember(Member member);
+
+	List<Coupon> selectCouponList(HashMap<String, Object> param);
 
 }

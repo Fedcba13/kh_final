@@ -72,4 +72,21 @@
 	<update id="updateCoupon">
 		update coupon set coupon_enabled = 0 where coupon_id=#{couponId} and member_id=#{memberId}
 	</update>
+	
+	<select id="getAllCoupons" resultType="coupon">
+		select * from(	select A.*, 1 as flag
+								from (	select *
+        								from coupon
+        								where member_id = #{memberId}
+                								and coupon_enabled = 1
+                								and to_date(sysdate, 'YYYY-MM-DD') between to_date(coupon_start_date, 'YYYY-MM-DD') and to_date(coupon_end_date, 'YYYY-MM-DD') order by coupon_end_date) A
+								union all
+								select coupon.*, 0 as flag
+								from coupon
+								where member_id = #{memberId}
+        						and(coupon_enabled = 0 or not to_date(sysdate, 'YYYY-MM-DD') between to_date(coupon_start_date, 'YYYY-MM-DD') and to_date(coupon_end_date, 'YYYY-MM-DD')))
+			<if test='enabled != null and enabled != ""'>
+				where flag = #{enabled};
+			</if>
+	</select>
 </mapper>
