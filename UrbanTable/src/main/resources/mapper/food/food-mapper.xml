@@ -69,14 +69,107 @@
 		SELECT MAX(EVENT_PRICE)
 		FROM EVENT
 		WHERE (EVENT_CATEGORY = #{foodSectionNo} OR EVENT_CATEGORY IS NULL)
-			AND (MARKET_NO = #{marketNo} OR MARKET_NO IS NULL) AND (EVENT_DATE_START < SYSDATE)
-			AND (EVENT_DATE_END > SYSDATE)
+			AND (MARKET_NO = #{marketNo} OR MARKET_NO IS NULL) AND (EVENT_START_DATE < SYSDATE)
+			AND (EVENT_END_DATE > SYSDATE)
 	]]>
 	</select>
-	<select id="selectFood" resultType="foodWithStockAndEvent">
+	<select id="selectFood" resultType="FoodWithStockAndEvent">
 		SELECT *
 		FROM FOOD F LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
 					LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
 		WHERE F.FOOD_NO = #{foodNo} AND M.MARKET_NO = #{marketNo}			
+	</select>
+	<select id="getFoodSectionList" resultType="foodSection">
+		SELECT *
+		FROM FOOD_SECTION
+		ORDER BY FOOD_SECTION_NAME
+	</select>
+	<select id="getUpperListToInsertFood" resultType="foodUpper">
+		SELECT *
+		FROM FOOD_UPPER
+		WHERE FOOD_DIVISION_NO = #{foodDivisionNo}
+		ORDER BY FOOD_UPPER_NAME
+	</select>
+	<select id="getSectionListToInsertFood" resultType="foodSection">
+		SELECT *
+		FROM FOOD_SECTION
+		WHERE FOOD_UPPER_NO = #{foodUpperNo}
+		ORDER BY FOOD_SECTION_NAME
+	</select>
+	<insert id="insertFood" parameterType="food">
+		INSERT INTO FOOD(FOOD_NO, FOOD_NAME, FOOD_SECTION_NO, FOOD_COMPANY, FOOD_MARKET_PRICE
+						, FOOD_MEMBER_PRICE, FOOD_ENABLED, FOOD_ORIGINAL_FILE_NAME, FOOD_RENAMED_FILE_NAME)
+		VALUES( 'FOOD'||LPAD(FOOD_SEQ_NO.NEXTVAL, 5, '0')
+				, #{foodName}, #{foodSectionNo}, #{foodCompany}
+				, #{foodMarketPrice}, #{foodMemberPrice}, DEFAULT
+				, #{foodOriginalFileName}, #{foodRenamedFileName})
+	</insert>
+	<select id="selectFoodInMain1" resultType="FoodWithStockAndEvent">
+	<![CDATA[
+	SELECT *
+	FROM 
+		(SELECT *
+		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+		            LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+		            LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
+		            LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
+		            LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
+		            WHERE M.MARKET_NO =  'mar00012' 
+		            ORDER BY T.STOCK_AMOUNT DESC)
+	WHERE ROWNUM<=4
+	]]>
+	</select>
+	<select id="selectFoodInMain2" resultType="FoodWithStockAndEvent">
+	<![CDATA[
+		SELECT *
+		FROM 
+		(SELECT *
+		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+	            LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+	            LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
+	            LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
+	            LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
+                LEFT JOIN (SELECT TARGET_ID, COUNT(GOOD) AS GOOD, COUNT(BAD) AS BAD
+                               FROM GOOD
+                               GROUP BY TARGET_ID) G ON F.FOOD_NO = G.TARGET_ID
+	            WHERE M.MARKET_NO =  'mar00012' 
+	            ORDER BY  (GOOD-BAD) DESC)
+		WHERE ROWNUM<=4
+	]]>
+	</select>
+	<select id="selectFoodInMain3" resultType="FoodWithStockAndEvent">
+	<![CDATA[
+		SELECT *
+		FROM 
+		(SELECT *
+		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+	            LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+	            LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
+	            LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
+	            LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
+                LEFT JOIN (SELECT TARGET_ID, COUNT(GOOD) AS GOOD, COUNT(BAD) AS BAD
+                               FROM GOOD
+                               GROUP BY TARGET_ID) G ON F.FOOD_NO = G.TARGET_ID
+	            WHERE M.MARKET_NO =  'mar00012' AND D.FOOD_DIVISION_NO = #{foodDivisionNo}
+	            ORDER BY  (GOOD-BAD) DESC)
+		WHERE ROWNUM<=4
+	]]>
+	</select>
+	<select id="selectFoodInMain4" resultType="FoodWithStockAndEvent">
+	<![CDATA[
+	SELECT *
+		FROM 
+		(SELECT *
+		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+	            LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+	            LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
+	            LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
+	            LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
+                LEFT JOIN  (SELECT * FROM EVENT WHERE  (EVENT_START_DATE < SYSDATE)
+                            	AND (EVENT_END_DATE > SYSDATE)) E ON F.FOOD_NO = E.EVENT_ID
+	            WHERE M.MARKET_NO =  'mar00012' 
+	            ORDER BY E.EVENT_PRICE DESC)
+		WHERE ROWNUM<=4
+		]]>
 	</select>
 </mapper>

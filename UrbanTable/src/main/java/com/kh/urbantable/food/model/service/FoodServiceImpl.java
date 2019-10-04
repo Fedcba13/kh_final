@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.kh.urbantable.event.model.vo.Event;
 import com.kh.urbantable.food.model.dao.FoodDAO;
+import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodDivision;
 import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.food.model.vo.FoodUpper;
@@ -76,6 +77,46 @@ public class FoodServiceImpl implements FoodService {
 	@Override
 	public FoodWithStockAndEvent selectFood(HashMap<String, String> param) {
 		return foodDAO.selectFood(param);
+	}
+
+	@Override
+	public List<FoodSection> getFoodSectionList() {
+		return foodDAO.getFoodSectionList();
+	}
+
+	@Override
+	public List<FoodUpper> getUpperListToInsertFood(String foodDivisionNo) {
+		return foodDAO.getUpperListToInsertFood(foodDivisionNo);
+	}
+
+	@Override
+	public List<FoodSection> getSectionListToInsertFood(String foodUpperNo) {
+		return foodDAO.getSectionListToInsertFood(foodUpperNo);
+	}
+
+	@Override
+	public int insertFood(Food food) {
+		return foodDAO.insertFood(food);
+	}
+
+	@Override
+	public List<FoodWithStockAndEvent> selectFoodInMain1() {
+		return foodDAO.selectFoodInMain1();
+	}
+
+	@Override
+	public List<FoodWithStockAndEvent> selectFoodInMain2() {
+		return foodDAO.selectFoodInMain2();
+	}
+
+	@Override
+	public List<FoodWithStockAndEvent> selectFoodInMain3(String foodDivisionNo) {
+		return foodDAO.selectFoodInMain3(foodDivisionNo);
+	}
+
+	@Override
+	public List<FoodWithStockAndEvent> selectFoodInMain4() {
+		return foodDAO.selectFoodInMain4();
 	}
 
 

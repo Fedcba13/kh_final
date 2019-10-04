@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.kh.urbantable.event.model.vo.Event;
+import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodDivision;
 import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.food.model.vo.FoodUpper;
@@ -72,6 +72,46 @@ public class FoodDAOImpl implements FoodDAO {
 	@Override
 	public FoodWithStockAndEvent selectFood(HashMap<String, String> param) {
 		return sqlSession.selectOne("food.selectFood", param);
+	}
+
+	@Override
+	public List<FoodSection> getFoodSectionList() {
+		return sqlSession.selectList("food.getFoodSectionList");
+	}
+
+	@Override
+	public List<FoodUpper> getUpperListToInsertFood(String foodDivisionNo) {
+		return sqlSession.selectList("food.getUpperListToInsertFood", foodDivisionNo);
+	}
+
+	@Override
+	public List<FoodSection> getSectionListToInsertFood(String foodUpperNo) {
+		return sqlSession.selectList("food.getSectionListToInsertFood", foodUpperNo);
+	}
+
+	@Override
+	public int insertFood(Food food) {
+		return sqlSession.insert("food.insertFood", food);
+	}
+
+	@Override
+	public List<FoodWithStockAndEvent> selectFoodInMain1() {
+		return sqlSession.selectList("food.selectFoodInMain1");
+	}
+
+	@Override
+	public List<FoodWithStockAndEvent> selectFoodInMain2() {
+		return sqlSession.selectList("food.selectFoodInMain2");
+	}
+
+	@Override
+	public List<FoodWithStockAndEvent> selectFoodInMain3(String foodDivisionNo) {
+		return sqlSession.selectList("food.selectFoodInMain3", foodDivisionNo);
+	}
+
+	@Override
+	public List<FoodWithStockAndEvent> selectFoodInMain4() {
+		return sqlSession.selectList("food.selectFoodInMain4");
 	}
 
 

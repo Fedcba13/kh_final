@@ -20,4 +20,6 @@ public class Food {
 	private int foodMemberPrice;
 	private int foodEnabled;
 	private String foodImg;
+	private String foodOriginalFileName;
+	private String foodRenamedFileName;
 }

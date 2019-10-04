@@ -76,6 +76,10 @@
 			<mapping path="/pay/order.do" />
 			<beans:bean id="LoginInterceptor" class="com.kh.urbantable.common.interceptor.LoginInterceptor" />
 		</interceptor>
+ 		<interceptor>
+		<mapping path="/food/admin/**"/>
+			<beans:bean id="AdminInerceptor" class="com.kh.urbantable.common.interceptor.AdminInerceptor" />
+		</interceptor>
 	</interceptors>
 	
 	 <!-- #13.1 파일업로드를 처리할 Resolver클래스 빈등록(빈이름 주의) -->
