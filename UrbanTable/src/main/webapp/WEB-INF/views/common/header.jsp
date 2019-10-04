@@ -84,8 +84,8 @@
             <div id="menu_wrap">
                 <ul id="gnb" class="clearfix">
                     <li><a href="" class="dp_block gnb_menu1">전체 카테고리</a></li>
-                    <li><a href="" class="dp_block">신상품</a></li>
-                    <li><a href="" class="dp_block">베스트</a></li>
+                    <li><a href="${pageContext.request.contextPath}/food/selectNewFoodList.do" class="dp_block">신상품</a></li>
+                    <li><a href="${pageContext.request.contextPath}/food/selectBestFoodList.do" class="dp_block">베스트</a></li>
                     <li><a href="" class="dp_block">알뜰 쇼핑</a></li>
                     <li><a href="${pageContext.request.contextPath }/recipe/recipe" class="dp_block">레시피</a></li>
                 </ul>

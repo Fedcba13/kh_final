@@ -16,6 +16,7 @@ import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.food.model.vo.FoodUpper;
 import com.kh.urbantable.food.model.vo.FoodWithStockAndEvent;
 import com.kh.urbantable.marketOwner.model.vo.Market;
+import com.kh.urbantable.recipe.model.vo.RelatedRecipe;
 
 @Repository
 public class FoodDAOImpl implements FoodDAO {
@@ -112,6 +113,21 @@ public class FoodDAOImpl implements FoodDAO {
 	@Override
 	public List<FoodWithStockAndEvent> selectFoodInMain4() {
 		return sqlSession.selectList("food.selectFoodInMain4");
+	}
+
+	@Override
+	public List<FoodWithStockAndEvent> selectNewFoodList(String marketNo) {
+		return sqlSession.selectList("food.selectNewFoodList", marketNo);
+	}
+
+	@Override
+	public List<FoodWithStockAndEvent> selectBestFoodList(String marketNo) {
+		return sqlSession.selectList("food.selectBestFoodList", marketNo);
+	}
+
+	@Override
+	public List<RelatedRecipe> selectRelatedRecipe(String foodNo) {
+		return sqlSession.selectList("food.selectRelatedRecipe", foodNo);
 	}
 
 

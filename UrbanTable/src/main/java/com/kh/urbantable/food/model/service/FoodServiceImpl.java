@@ -19,6 +19,7 @@ import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.food.model.vo.FoodUpper;
 import com.kh.urbantable.food.model.vo.FoodWithStockAndEvent;
 import com.kh.urbantable.marketOwner.model.vo.Market;
+import com.kh.urbantable.recipe.model.vo.RelatedRecipe;
 
 @Service
 public class FoodServiceImpl implements FoodService {
@@ -117,6 +118,21 @@ public class FoodServiceImpl implements FoodService {
 	@Override
 	public List<FoodWithStockAndEvent> selectFoodInMain4() {
 		return foodDAO.selectFoodInMain4();
+	}
+
+	@Override
+	public List<FoodWithStockAndEvent> selectNewFoodList(String marketNo) {
+		return foodDAO.selectNewFoodList(marketNo);
+	}
+
+	@Override
+	public List<FoodWithStockAndEvent> selectBestFoodList(String marketNo) {
+		return foodDAO.selectBestFoodList(marketNo);
+	}
+
+	@Override
+	public List<RelatedRecipe> selectRelatedRecipe(String foodNo) {
+		return foodDAO.selectRelatedRecipe(foodNo);
 	}
 
 
