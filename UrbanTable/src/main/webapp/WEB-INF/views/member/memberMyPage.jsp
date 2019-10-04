@@ -5,6 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/kakaoAPI.js" charset="UTF-8"></script>
 
 
@@ -129,20 +130,46 @@ $(()=>{
 	//수정하기 버튼
 	$(".myPage .modify-btn").click(()=>{
 		var $case = $(".txt_guide").children('.txt');
-		
-		if($("[name=memberPassword]").val().length == 0){
+
+		if($("[name=reMemberPassword]").val().length != 0 
+				&$ ("[name=memberPassword]").val().length == 0){
 			alert('비밀번호를 입력해주세요.')
 			$("[name=memberPassword]").focus();
 			return;
 		}
 		
 		for(var i=0; i<$case.length; i++){
-			if(!$($case[i]).hasClass('good')){
+			if($($case[i]).parent().siblings('input:not(.btn)').val().length != 0 
+					&& !$($case[i]).hasClass('good')){
 				alert($($case[i]).text());
 				$($case[i]).parent().siblings('input:not(.btn)').focus();
 				return;
 			}
 		}
+		
+		//주소
+		if($("[name=memberAddress]").length == 0 || $("[name=memberAddress]").val() == ''){
+			alert('주소를 입력해주세요.');
+			return;
+		}
+		
+		//ajax로 데이터 전송
+		$.ajax({
+			url: '${pageContext.request.contextPath}/member/myPage.do',
+			data: $("#form_myPage").serialize(),
+			type: "POST",
+			success: (data)=>{
+				console.log(data);
+				alert(data.msg);
+				if(data.pw == "true"){
+					location.href = "${pageContext.request.contextPath}/member/memberLogout.do";
+				}
+			},
+			error: (xhr, txtStatus, err)=>{
+				console.log("ajax처리실패!", xhr, txtStatus, err);
+			}
+		});
+		
 		
 	});
 	
@@ -169,54 +196,56 @@ $(()=>{
 	    </div>
 	    <div class="sec_bg">
 	    	<h3 class="sub_tit" style="background-color: white;">개인정보수정</h3>
-		    <table class="tbl tbl_view member_mypage">
-				<tr>
-					<th>아이디</th>
-					<td>
-						<input type="text" name="memberId" placeholder="예: UrbanTable" readonly="readonly" value="${memberLoggedIn.memberId }">
-					</td>
-				</tr>
-				<tr>
-					<th>현재 비밀번호</th>
-					<td><input type="password" placeholder="현재 비밀번호를 입력해주세요." maxlength="16" name="memberPassword"></td>
-				</tr>
-				<tr>
-					<th>변경하실 비밀번호</th>
-					<td><input type="password" placeholder="변경하실 비밀번호를 입력해주세요." maxlength="16" name="reMemberPassword">
-						<p class="txt_guide" style="display: block;">
-							<span class="txt txt_case1">10자 이상 입력해주세요.</span>
-							<span class="txt txt_case2">영문/숫자/특수문자(!@#$*-)만 허용하며, 2개 이상 조합해 주세요.</span>
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<th>비밀번호확인</th>
-					<td>
-						<input type="password" name="password2" maxlength="16" placeholder="비밀번호를 한번 더 입력해주세요.">
-						<p class="txt_guide">
-							<span class="txt txt_case1">동일한 비밀번호를 입력해주세요.</span>
-						</p>
-					</td>
-				</tr>
-				<tr>
-					<th>이름</th>
-					<td><input type="text" name="memberName" readonly="readonly" value="${memberLoggedIn.memberName }"></td>
-				</tr>
-				<tr>
-					<th>휴대폰</th>
-					<td><input type="text" name="memberPhone" maxlength="11" readonly="readonly" value="${memberLoggedIn.memberPhone }"></td>
-				</tr>
-				<tr class="tbl_addr">
-					<th rowspan="3">배송주소</th>
-					<td><input type="button" value="주소 변경" class="btn btn3" onclick="sample6_execDaumPostcode()"></td>
-				</tr>
-				<tr class="tbl_addr1">
-					<td><input type="text" name="memberAddress" readonly="readonly" value="${memberLoggedIn.memberAddress }"></td>
-				</tr>
-				<tr class="tbl_addr2">
-					<td><input type="text" placeholder="세부주소를 입력해주세요." maxlength="35" name="memberAddress2" value="${memberLoggedIn.memberAddress2 }"></td>
-				</tr>
-			</table>
+	    	<form id="form_myPage">
+			    <table class="tbl tbl_view member_mypage">
+					<tr>
+						<th>아이디</th>
+						<td>
+							<input type="text" name="memberId" placeholder="예: UrbanTable" readonly="readonly" value="${memberLoggedIn.memberId }">
+						</td>
+					</tr>
+					<tr>
+						<th>현재 비밀번호</th>
+						<td><input type="password" placeholder="현재 비밀번호를 입력해주세요." maxlength="16" name="memberPassword"></td>
+					</tr>
+					<tr>
+						<th>변경하실 비밀번호</th>
+						<td><input type="password" placeholder="변경하실 비밀번호를 입력해주세요." maxlength="16" name="reMemberPassword">
+							<p class="txt_guide" style="display: block;">
+								<span class="txt txt_case1">10자 이상 입력해주세요.</span>
+								<span class="txt txt_case2">영문/숫자/특수문자(!@#$*-)만 허용하며, 2개 이상 조합해 주세요.</span>
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<th>비밀번호확인</th>
+						<td>
+							<input type="password" name="password2" maxlength="16" placeholder="비밀번호를 한번 더 입력해주세요.">
+							<p class="txt_guide">
+								<span class="txt txt_case1">동일한 비밀번호를 입력해주세요.</span>
+							</p>
+						</td>
+					</tr>
+					<tr>
+						<th>이름</th>
+						<td><input type="text" name="memberName" readonly="readonly" value="${memberLoggedIn.memberName }"></td>
+					</tr>
+					<tr>
+						<th>휴대폰</th>
+						<td><input type="text" name="memberPhone" maxlength="11" readonly="readonly" value="${memberLoggedIn.memberPhone }"></td>
+					</tr>
+					<tr class="tbl_addr">
+						<th rowspan="3">배송주소</th>
+						<td><input type="button" value="주소 변경" class="btn btn3" onclick="sample6_execDaumPostcode()"></td>
+					</tr>
+					<tr class="tbl_addr1">
+						<td><input type="text" name="memberAddress" readonly="readonly" value="${memberLoggedIn.memberAddress }"></td>
+					</tr>
+					<tr class="tbl_addr2">
+						<td><input type="text" placeholder="세부주소를 입력해주세요." maxlength="35" name="memberAddress2" value="${memberLoggedIn.memberAddress2 }"></td>
+					</tr>
+				</table>
+			</form>
 			<p style="text-align: center; margin: 30px 0 20px;">
 				<input type="button" class="btn modify-btn" value="수정하기" style="margin-right: 50px;">
         		<input type="button" class="btn btn2 cancel-btn" value="취소하기">

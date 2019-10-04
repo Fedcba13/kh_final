@@ -5,7 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
-
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/kakaoAPI.js" charset="UTF-8"></script>
 
 <style>
@@ -310,8 +310,6 @@ $(()=>{
 			alert('주소를 입력해주세요.');
 			return;
 		}
-		
-		//disabled 는 값 전송이 안되므로 disabled 속성 제거
 		
 		$("#form_register").submit();
 		
