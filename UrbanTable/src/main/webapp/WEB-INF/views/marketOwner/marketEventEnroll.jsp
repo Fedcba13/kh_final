@@ -34,6 +34,7 @@ $(()=>{
 		var f = document.getElementById("eventEnrollEnd");
 		f.action = "${pageContext.request.contextPath }/event/marketEventEnrollEnd.do";
 		f.method = "post";
+		f.enctype="multipart/form-data"
 		f.submit();
 	});
 	
@@ -194,6 +195,12 @@ $(()=>{
 	                </td>
 	            </tr>
 	            <tr>
+	            	<th>파일 첨부</th>
+	            	<td>
+	            	<input type="file" name="eventFile1" id="eventFile" class="dp_ib" style="width:200px;" autocomplete="off" required/>
+	            	</td>
+	            </tr>
+	            <tr>
 	                <th>이벤트 날짜<span class="red">*</span></th>
 	                <td>
 	                	<input type="date" name="eventDateStart" required id="eventDateStart" class="dp_ib eventDate" style="width:200px;" />
@@ -204,7 +211,7 @@ $(()=>{
 	            <tr>
 	            	<th>이벤트 할인율<span class="red">*</span></th>
 	            	<td>
-	            	<input type="text" name="eventPrice" id=eventPrice class="dp_ib" style="width:200px;" autocomplete="off" required/>
+	            	<input type="text" name="eventPrice" id="eventPrice" class="dp_ib" style="width:200px;" autocomplete="off" required/>
 	            	</td>
 	            </tr>
 	        </table>

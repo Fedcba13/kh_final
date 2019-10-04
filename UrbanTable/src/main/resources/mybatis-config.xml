@@ -10,6 +10,8 @@
 		<setting name="callSettersOnNulls" value="true"/>
 	</settings>
 	<typeAliases>
+		<typeAlias type="com.kh.urbantable.event.model.vo.EventWithFoodSection"
+			alias="eventWithFoodSection" />
 		<typeAlias type="com.kh.urbantable.event.model.vo.Coupon"
 			alias="coupon" />
 		<typeAlias type="com.kh.urbantable.admin.model.vo.Banner"

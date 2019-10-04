@@ -12,13 +12,12 @@
 <script>
    $(()=>{
 
-	
+	// 배너
 	$.ajax({
 		url: "${pageContext.request.contextPath}/banner/mainBannerList.do",
 		dataType: "json",
 		type: "POST",
 		success: (data)=> {
-			console.log(data);
 			var html = "";
 			for(var i in data){
 			html = "";
@@ -26,7 +25,6 @@
 			html += "<a href='${pageContext.request.contextPath}/"+data[i].bannerURL + "' style='background-image:URL(${pageContext.request.contextPath}/resources/images/banner/"+data[i].bannerFileRenamed+");'class='aTag'>";
 			html += "</a></div>";
 			
-			console.log(html);
 			$(".main_banner").append(html); 
 			}
 		},
@@ -202,7 +200,29 @@
 			}
 		});
 	
-
+	// 이벤트 List
+		$.ajax({
+			 url: "${pageContext.request.contextPath}/event/mainEventList.do", 
+			 dataType: "json",
+			type: "POST",
+			success: (data)=> {
+					html = '';
+				for(var i in data){
+					html += '<li><a href="" class="dp_block">'
+					html += '<div class="event_img_area"><img src="${pageContext.request.contextPath }/resources/images/event/'+data[i].eventFile +'" alt="이벤트 사진" >';
+					html += '</div>';
+					html += '<div class="event_info_area">';
+					html += '<h4>'+data[i].eventTitle + '</h4>';
+					html += '<p>'+data[i].eventContent + '</p>';
+					html += '</div></a></li>'
+				}
+				
+				$('.event_div').html(html);
+			},
+			error: (xhr, txtStatus, err)=> {
+				console.log("ajax 처리실패!", xhr, txtStatus, err);
+			}
+		});
 	
 });   
 </script>
@@ -310,7 +330,7 @@
 <section id="sec5" class="main_sec sec_bg">
     <article class="inner">
         <h3 class="main_tit txt_center">이벤트 소식</h3>
-        <ul class="main_event_list txt_center clearfix">
+        <ul class="main_event_list txt_center clearfix event_div">
             <li>
                 <a href="" class="dp_block">
                     <div class="event_img_area">
