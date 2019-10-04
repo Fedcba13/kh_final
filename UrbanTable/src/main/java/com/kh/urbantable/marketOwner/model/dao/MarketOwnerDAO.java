@@ -80,4 +80,8 @@ public interface MarketOwnerDAO {
 
 	List<Map<String, Object>> selectChartMonth(String marketNo);
 
+	List<Map<String, Object>> selectChartCategory(String marketNo);
+
+	int selectTotalPayDetail(String marketNo);
+
 }
