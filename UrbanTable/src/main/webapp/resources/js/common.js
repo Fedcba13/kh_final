@@ -19,12 +19,12 @@ $(document).ready(function(){
     
     //로그인 모달
     
-    var modal = $(".login-modal");
+    var login_modal = $(".login-modal");
     $(".login-modal [name=autoLogin]").prop("disabled", true);
     
     //로그인 버튼 클릭시
     $(".login-btn").click(()=>{
-		modal.css("display", "block");
+		login_modal.css("display", "block");
 	});
     
     //비밀번호에서 엔터 누를시 login 버튼 클릭
@@ -34,10 +34,14 @@ $(document).ready(function(){
     	}
     });
     
+    $(".login-modal .cancelbtn").click(()=>{
+    	login_modal.css("display", "none");
+    });
+    
     //modal창이 열려 있을 경우, 바탕 클릭시 모달 닫기
 	$(window).click(function(e){
-		if (e.target == modal[0]) {
-			modal.css("display", "none");
+		if (e.target == login_modal[0]) {
+			login_modal.css("display", "none");
 	    }
 	});
 	

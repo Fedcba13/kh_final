@@ -29,4 +29,6 @@ public interface MemberService {
 	
 	void removeAutoLogin(MemberAutoLogin memberAutoLogin);
 
+	int modifyMember(Member member);
+
 }

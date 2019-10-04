@@ -1,23 +1,54 @@
 package com.kh.urbantable.food.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.kh.urbantable.event.model.vo.Event;
 import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodSection;
+import com.kh.urbantable.food.model.vo.FoodUpper;
+import com.kh.urbantable.food.model.vo.FoodWithStockAndEvent;
+import com.kh.urbantable.marketOwner.model.vo.Market;
 
 public interface FoodService {
 
-	List<FoodSection> selectFoodSectionList();
+	// food 카테고리로 불러오기
+	List<FoodWithStockAndEvent> selectFoodListByCat(Map<String, String> param);
 
-	List<Food> selectFoodByDiv(String foodDivisionNo);
+	// foodList view 카테고리 표시
+	List<FoodUpper> getSubUpperList(String searchNo);
 
-	List<Food> selectFoodByUpper(Map<String, String> param);
+	List<FoodSection> getSubSectList(String searchNo);
 
-	List<FoodSection> selectSubSectionList(String foodDivisionNo);
+	List<FoodSection> selectBrotherSectList(String upperNo);
 
-	List<FoodSection> selectFoodSectionNameList(Map<String, String> param);
+	// sect로 조회시 형제 가져오늘 upperNo
+	String getUpperNoBySectNo(String searchNo);
 
-	List<Food> selectFoodBySect(Map<String, String> param);
+	// foodList view markeList 표시
+	List<Market> selectMarketList();
+	
+	//food의 이벤트 최대 할인율 호출
+	int selectEventPercent(FoodWithStockAndEvent food);
+
+	FoodWithStockAndEvent selectFood(HashMap<String, String> param);
+
+	List<FoodSection> getFoodSectionList();
+
+	List<FoodUpper> getUpperListToInsertFood(String foodDivisionNo);
+
+	List<FoodSection> getSectionListToInsertFood(String foodSectionNo);
+
+	int insertFood(Food food);
+
+	List<FoodWithStockAndEvent> selectFoodInMain1();
+
+	List<FoodWithStockAndEvent> selectFoodInMain2();
+
+	List<FoodWithStockAndEvent> selectFoodInMain3(String foodDivisionNo);
+
+	List<FoodWithStockAndEvent> selectFoodInMain4();
+
 
 }

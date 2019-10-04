@@ -1,26 +1,52 @@
 package com.kh.urbantable.food.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.kh.urbantable.event.model.vo.Event;
 import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodDivision;
 import com.kh.urbantable.food.model.vo.FoodSection;
+import com.kh.urbantable.food.model.vo.FoodUpper;
+import com.kh.urbantable.food.model.vo.FoodWithStockAndEvent;
+import com.kh.urbantable.marketOwner.model.vo.Market;
 
 public interface FoodDAO {
-
-	List<FoodSection> selectFoodSectionList();
-
 	List<FoodDivision> selectFoodDivisionList();
 
-	List<Food> selectFoodByDiv(String foodDivisionNo);
+	List<FoodUpper> selectFoodUpperList();
 
-	List<Food> selectFoodByUpper(Map<String, String> param);
+	List<FoodWithStockAndEvent> selectFoodListByCat(Map<String, String> param);
 
-	List<FoodSection> selectSubSectionList(String foodDivisionNo);
+	List<FoodUpper> getSubUpperList(String searchNo);
 
-	List<FoodSection> selectFoodSectionNameList(Map<String, String> param);
+	List<Market> selectMarketList();
 
-	List<Food> selectFoodBySect(Map<String, String> param);
+	List<FoodSection> getSubSectList(String searchNo);
+
+	String getUpperNoBySectNo(String searchNo);
+
+	List<FoodSection> selectBrotherSectList(String upperNo);
+
+	int selectEventPercent(FoodWithStockAndEvent food);
+
+	FoodWithStockAndEvent selectFood(HashMap<String, String> param);
+
+	List<FoodSection> getFoodSectionList();
+
+	List<FoodUpper> getUpperListToInsertFood(String foodDivisionNo);
+
+	List<FoodSection> getSectionListToInsertFood(String foodSectionNo);
+
+	int insertFood(Food food);
+
+	List<FoodWithStockAndEvent> selectFoodInMain1();
+
+	List<FoodWithStockAndEvent> selectFoodInMain2();
+
+	List<FoodWithStockAndEvent> selectFoodInMain3(String foodDivisionNo);
+
+	List<FoodWithStockAndEvent> selectFoodInMain4();
 
 }

@@ -3,76 +3,173 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="food">
-	<!-- <insert id="inserTest">
-		INSERT INTO food_section (FOOD_SECTION_NO, FOOD_DIVISION_NO, FOOD_SECTION_NAME)
-		VALUES('SECT'||FOOD_sect_SEQ.NEXTVAL, 'DIV49', #{string} )
-	</insert>
-	<select id="getfoodSectionList" resultType="foodSection">
-		SELECT *
-		FROM FOOD_SECTION
-	</select>
-	<insert id="insertFoodToDB" parameterType="food">
-		INSERT INTO FOOD(FOOD_NO, FOOD_NAME, FOOD_SECTION_NO
-                         , FOOD_COMPANY, FOOD_MARKET_PRICE, FOOD_MEMBER_PRICE
-                         , FOOD_ENABLED, FOOD_IMG)
-		VALUES('FOOD'|| LPAD(FOOD_SEQ_NO.NEXTVAL, 5, '0')
-				, #{foodName}
-				, #{foodSectionNo}
-				, #{foodCompany}
-				, #{foodMarketPrice}
-				, #{foodMemberPrice}
-				, DEFAULT
-				,#{foodImg} )
-	</insert> -->
-	<select id="selectFoodSectionList" resultType="foodSection">
-		SELECT DISTINCT FOOD_DIVISION_NO, FOOD_SECTION_UPPER
-		FROM FOOD_SECTION
-	</select>
 	<select id="selectFoodDivisionList" resultType="foodDivision">
 		SELECT *
 		FROM FOOD_DIVISION
 		ORDER BY FOOD_DIVISION_NAME
 	</select>
-<!-- 	<select id="selectFoodByCat" resultType="food">
-		select F.FOOD_NO, F.FOOD_NAME, F.FOOD_SECTION_NO, F.FOOD_COMPANY, F.FOOD_MARKET_PRICE, F.FOOD_MEMBER_PRICE, F.FOOD_ENABLED, F.FOOD_IMG
-		from food_division d left join food_section s on d.food_division_no = s.food_division_no
-        					left join food f on s.food_section_no = f.food_section_no
-		where (S.food_section_no like #{foodCatNo}) OR (D.FOOD_DIVISION_NO like #{foodCatNo}) 
-	</select> -->
-	<select id="selectFoodByDiv" resultType="FoodWithStockInMarket">
-		<!-- select F.FOOD_NO, F.FOOD_NAME, F.FOOD_SECTION_NO, F.FOOD_COMPANY, F.FOOD_MARKET_PRICE, F.FOOD_MEMBER_PRICE, F.FOOD_ENABLED, F.FOOD_IMG
-		from food_division d left join food_section s on d.food_division_no = s.food_division_no
-        					left join food f on s.food_section_no = f.food_section_no
-		where D.FOOD_DIVISION_NO like #{foodDivisionNo} -->
-		select *
-		from food_division d left join food_section s on d.food_division_no = s.food_division_no
-        					left join food f on s.food_section_no = f.food_section_no
-                           	LEFT JOIN STOCK S ON F.FOOD_NO = S.FOOD_NO
-                    		LEFT JOIN MARKET M ON S.MARKET_NO = M.MARKET_NO
-		where D.FOOD_DIVISION_NO like #{foodDivisionNo}
+	<select id="selectFoodUpperList" resultType="foodUpper">
+		SELECT *
+		FROM FOOD_UPPER
+		ORDER BY FOOD_UPPER_NAME
+	</select>
+	<select id="selectMarketList" resultType="market">
+		SELECT *
+		FROM MARKET
+		WHERE MARKET_ENABLED = 1 AND FLAG = 2
+		ORDER BY MARKET_NAME
+	</select>
+	<select id="selectFoodListByCat" resultType="foodWithStockAndEvent" parameterType="map">
+		SELECT *
+		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+					LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+					LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
+					LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
+					LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO 
+		<trim prefix="WHERE" suffixOverrides="AND">
+			M.MARKET_NO = #{marketNo} 
+			<if test="FOOD_DIVISION_NO !=null and FOOD_DIVISION_NO !=''">
+			AND D.FOOD_DIVISION_NO = #{FOOD_DIVISION_NO}
+			</if>
+			<if test="FOOD_UPPER_NO !=null and FOOD_UPPER_NO !=''">
+			AND U.FOOD_UPPER_NO = #{FOOD_UPPER_NO}
+			</if>
+			<if test="FOOD_SECTION_NO !=null and FOOD_SECTION_NO !=''">
+			AND S.FOOD_SECTION_NO = #{FOOD_SECTION_NO}
+			</if>
+			AND M.MARKET_ENABLED = 1 AND FLAG = 2
+		</trim>
 		
 	</select>
-	<select id="selectFoodByUpper" parameterType="map" resultType="FoodWithStockInMarket">
-		select *
-		from food_division d left join food_section s on d.food_division_no = s.food_division_no
-        					left join food f on s.food_section_no = f.food_section_no
-                           	LEFT JOIN STOCK S ON F.FOOD_NO = S.FOOD_NO
-                    		LEFT JOIN MARKET M ON S.MARKET_NO = M.MARKET_NO
-		where (D.FOOD_DIVISION_NO like #{foodDivisionNo}) AND (S.FOOD_SECTION_UPPER LIKE #{foodSectionUpper})
-	</select>
-	<select id="selectSubSectionList" resultType="foodSection">
-		SELECT DISTINCT FOOD_DIVISION_NO, FOOD_SECTION_UPPER
+	<select id="getSubUpperList" resultType="foodUpper">
+		SELECT *
+		FROM FOOD_UPPER
+		WHERE FOOD_DIVISION_NO = #{searchNo}
+		ORDER BY FOOD_UPPER_NAME
+	</select>	
+	<select id="getSubSectList" resultType="foodSection">
+		SELECT *
 		FROM FOOD_SECTION
-        WHERE FOOD_DIVISION_NO LIKE #{foodDivisionNo}
-	</select>
-	<select id="selectFoodSectionNameList" resultType="foodSection">
-		SELECT * 
+		WHERE FOOD_UPPER_NO = #{searchNo}
+		ORDER BY FOOD_SECTION_NAME
+	</select>	
+	<select id="getUpperNoBySectNo" resultType="string" >
+		SELECT FOOD_UPPER_NO
 		FROM FOOD_SECTION
-		where (FOOD_DIVISION_NO like #{foodDivisionNo}) AND (FOOD_SECTION_UPPER LIKE #{foodSectionUpper})
+		WHERE FOOD_SECTION_NO = #{searchNo}
 	</select>
-	<select id="selectFoodBySect" parameterType="map" resultType="foodSection">
-		select * 
-		from food_section
-		where food_division_no like #{foodDivisionNo} AND FOOD_SECTION_UPPER LIKE #{foodSectionUpper}
+	<select id="selectBrotherSectList" resultType="foodSection">
+		SELECT *
+		FROM FOOD_SECTION
+		WHERE FOOD_UPPER_NO = #{upperNo}
+		ORDER BY FOOD_SECTION_NAME
+	</select>
+	<select id="selectEventPercent" resultType="int">
+	<![CDATA[
+		SELECT MAX(EVENT_PRICE)
+		FROM EVENT
+		WHERE (EVENT_CATEGORY = #{foodSectionNo} OR EVENT_CATEGORY IS NULL)
+			AND (MARKET_NO = #{marketNo} OR MARKET_NO IS NULL) AND (EVENT_START_DATE < SYSDATE)
+			AND (EVENT_END_DATE > SYSDATE)
+	]]>
+	</select>
+	<select id="selectFood" resultType="FoodWithStockAndEvent">
+		SELECT *
+		FROM FOOD F LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
+					LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
+		WHERE F.FOOD_NO = #{foodNo} AND M.MARKET_NO = #{marketNo}			
+	</select>
+	<select id="getFoodSectionList" resultType="foodSection">
+		SELECT *
+		FROM FOOD_SECTION
+		ORDER BY FOOD_SECTION_NAME
+	</select>
+	<select id="getUpperListToInsertFood" resultType="foodUpper">
+		SELECT *
+		FROM FOOD_UPPER
+		WHERE FOOD_DIVISION_NO = #{foodDivisionNo}
+		ORDER BY FOOD_UPPER_NAME
+	</select>
+	<select id="getSectionListToInsertFood" resultType="foodSection">
+		SELECT *
+		FROM FOOD_SECTION
+		WHERE FOOD_UPPER_NO = #{foodUpperNo}
+		ORDER BY FOOD_SECTION_NAME
+	</select>
+	<insert id="insertFood" parameterType="food">
+		INSERT INTO FOOD(FOOD_NO, FOOD_NAME, FOOD_SECTION_NO, FOOD_COMPANY, FOOD_MARKET_PRICE
+						, FOOD_MEMBER_PRICE, FOOD_ENABLED, FOOD_ORIGINAL_FILE_NAME, FOOD_RENAMED_FILE_NAME)
+		VALUES( 'FOOD'||LPAD(FOOD_SEQ_NO.NEXTVAL, 5, '0')
+				, #{foodName}, #{foodSectionNo}, #{foodCompany}
+				, #{foodMarketPrice}, #{foodMemberPrice}, DEFAULT
+				, #{foodOriginalFileName}, #{foodRenamedFileName})
+	</insert>
+	<select id="selectFoodInMain1" resultType="FoodWithStockAndEvent">
+	<![CDATA[
+	SELECT *
+	FROM 
+		(SELECT *
+		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+		            LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+		            LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
+		            LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
+		            LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
+		            WHERE M.MARKET_NO =  'mar00012' 
+		            ORDER BY T.STOCK_AMOUNT DESC)
+	WHERE ROWNUM<=4
+	]]>
+	</select>
+	<select id="selectFoodInMain2" resultType="FoodWithStockAndEvent">
+	<![CDATA[
+		SELECT *
+		FROM 
+		(SELECT *
+		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+	            LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+	            LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
+	            LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
+	            LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
+                LEFT JOIN (SELECT TARGET_ID, COUNT(GOOD) AS GOOD, COUNT(BAD) AS BAD
+                               FROM GOOD
+                               GROUP BY TARGET_ID) G ON F.FOOD_NO = G.TARGET_ID
+	            WHERE M.MARKET_NO =  'mar00012' 
+	            ORDER BY  (GOOD-BAD) DESC)
+		WHERE ROWNUM<=4
+	]]>
+	</select>
+	<select id="selectFoodInMain3" resultType="FoodWithStockAndEvent">
+	<![CDATA[
+		SELECT *
+		FROM 
+		(SELECT *
+		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+	            LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+	            LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
+	            LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
+	            LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
+                LEFT JOIN (SELECT TARGET_ID, COUNT(GOOD) AS GOOD, COUNT(BAD) AS BAD
+                               FROM GOOD
+                               GROUP BY TARGET_ID) G ON F.FOOD_NO = G.TARGET_ID
+	            WHERE M.MARKET_NO =  'mar00012' AND D.FOOD_DIVISION_NO = #{foodDivisionNo}
+	            ORDER BY  (GOOD-BAD) DESC)
+		WHERE ROWNUM<=4
+	]]>
+	</select>
+	<select id="selectFoodInMain4" resultType="FoodWithStockAndEvent">
+	<![CDATA[
+	SELECT *
+		FROM 
+		(SELECT *
+		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+	            LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+	            LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
+	            LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
+	            LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
+                LEFT JOIN  (SELECT * FROM EVENT WHERE  (EVENT_START_DATE < SYSDATE)
+                            	AND (EVENT_END_DATE > SYSDATE)) E ON F.FOOD_NO = E.EVENT_ID
+	            WHERE M.MARKET_NO =  'mar00012' 
+	            ORDER BY E.EVENT_PRICE DESC)
+		WHERE ROWNUM<=4
+		]]>
 	</select>
 </mapper>

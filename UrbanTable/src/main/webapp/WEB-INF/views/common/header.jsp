@@ -1,3 +1,4 @@
+<%@page import="com.kh.urbantable.food.model.vo.FoodUpper"%>
 <%@page import="com.kh.urbantable.food.model.vo.FoodSection"%>
 <%@page import="com.kh.urbantable.food.model.service.FoodServiceImpl"%>
 <%@page import="com.kh.urbantable.food.model.vo.FoodDivision"%>
@@ -32,7 +33,7 @@
                 </c:if>
                 <c:if test="${not empty memberLoggedIn }">
                 	<li><a href="${pageContext.request.contextPath }/member/memberLogout.do" class="dp_block">로그아웃</a></li>
-                	<li><a href="" class="dp_block">내 정보보기</a></li>
+                	<li><a href="${pageContext.request.contextPath }/member/myPage" class="dp_block">내 정보보기</a></li>
                 </c:if>
                 <li class="cs_center">
                     <a href="" class="dp_block">고객센터</a>
@@ -50,7 +51,7 @@
                     	<li><a href="${pageContext.request.contextPath}/admin/foundationList.do" class="dp_block">창업 신청 리스트</a></li>
                         <li><a href="${pageContext.request.contextPath}/market/marketList.do" class="dp_block">매장 리스트</a></li>
                         <li><a href="" class="dp_block">발주 리스트</a></li>
-                        <li><a href="" class="dp_block">식자재 등록</a></li>
+                        <li><a href="${pageContext.request.contextPath}/food/admin/goInsertFoodView.do" class="dp_block">식자재 등록</a></li>
                         <li><a href="${pageContext.request.contextPath}/banner/bannerList.do" class="dp_block">배너 등록</a></li>
                         <li><a href="${pageContext.request.contextPath}/event/eventList.do" class="dp_block">이벤트 등록</a></li>
                     </ul>
@@ -60,11 +61,11 @@
 	                    <a href="" class="dp_block">점주</a>
 	                    <ul>
 	                        <li><a href="${pageContext.request.contextPath}/market/myMarket.do?memberId=${memberLoggedIn.memberId}" class="dp_block">내 지점 관리</a></li>
-	                        <li><a href="${pageContext.request.contextPath}/market/marketOrder.do" class="dp_block">지점 주문 내역</a></li>
-	                        <li><a href="${pageContext.request.contextPath}/market/event.do" class="dp_block">이벤트 관리</a></li>
+	                        <li><a href="${pageContext.request.contextPath}/market/marketOrder.do?memberId=${memberLoggedIn.memberId}" class="dp_block">지점 주문 내역</a></li>
 	                        <li><a href="${pageContext.request.contextPath}/market/marketStock.do?memberId=${memberLoggedIn.memberId}" class="dp_block">재고·발주 요청</a></li>
 	                        <li><a href="${pageContext.request.contextPath}/foodOrder/foodOrderRequest.do?memberId=${memberLoggedIn.memberId}" class="dp_block">발주 요청 내역</a></li>
-	                        <li><a href="" class="dp_block">지점 매출 현황</a></li>
+	                        <li><a href="${pageContext.request.contextPath}/market/marketChart.do?memberId=${memberLoggedIn.memberId}" class="dp_block">지점 매출 현황</a></li>
+	                        <li><a href="${pageContext.request.contextPath}/event/eventList.do" class="dp_block">이벤트 관리</a></li>
 	                    </ul>
 	                </li>
                 </c:if>
@@ -95,22 +96,32 @@
                     </form>
                 </div>
                 <%-- <c:if test="${not empty memberLoggedIn}"> --%>
-                	<a href="${pageContext.request.contextPath}/cart/cartList.do?memberId=${memberLoggedIn.memberId}" class="go_cart dp_block"><img src="${pageContext.request.contextPath }/resources/images/cart.png" alt="장바구니"></a>
+                	<a href="${pageContext.request.contextPath}/cart/cartList.do?memberId=${memberLoggedIn.memberId}&memberCheck=${memberLoggedIn.memberCheck}" class="go_cart dp_block"><img src="${pageContext.request.contextPath }/resources/images/cart.png" alt="장바구니"></a>
                 <%-- </c:if> --%>
             </div>
         	<!-- FOOD 카테고리 가져오기 by 김기현 -->
-            <div id="gnb_menu_wrap">
+          <div id="gnb_menu_wrap">
                 <ul class="gnb_menu">
 					<%
 						for (FoodDivision foodDivision : new FoodServiceImpl().foodDivisionList) {
 					%>
-					<li><a href="${pageContext.request.contextPath }/food/selectFoodByDiv.do?foodDivisionNo=<%=foodDivision.getFoodDivisionNo() %>&foodDivisionName=<%=foodDivision.getFoodDivisionName() %>" class="dp_block"><%=foodDivision.getFoodDivisionName()%></a>
+					<li><a href="${pageContext.request.contextPath }/food/selectFoodByCat.do?searchNo=<%=foodDivision.getFoodDivisionNo() %>&searchKeyword=<%=foodDivision.getFoodDivisionName() %>" class="dp_block"><%=foodDivision.getFoodDivisionName()%></a>
 						<ul class="sub_menu">
 							<%
-								for (FoodSection foodSection : new FoodServiceImpl().foodSectionList) {
-										if (foodDivision.getFoodDivisionNo().equals(foodSection.getFoodDivisionNo())) {
+							for (FoodUpper foodUpper : new FoodServiceImpl().foodUpperList) {
+										if (foodDivision.getFoodDivisionNo().equals(foodUpper.getFoodDivisionNo()) && !"그 외".equals(foodUpper.getFoodUpperName())) {
 							%>
-							<li><a href="${pageContext.request.contextPath }/food/selectFoodByUpper.do?foodDivisionNo=<%=foodSection.getFoodDivisionNo()%>&foodSectionUpper=<%=foodSection.getFoodSectionUpper() %>" class="dp_block"><%=foodSection.getFoodSectionUpper() %></a></li>
+							<li><a href="${pageContext.request.contextPath }/food/selectFoodByCat.do?searchNo=<%=foodUpper.getFoodUpperNo() %>&searchKeyword=<%=foodUpper.getFoodUpperName()%>" class="dp_block"><%=foodUpper.getFoodUpperName() %></a></li>
+
+							<%
+								}
+									}
+							%>
+							<%
+							for (FoodUpper foodUpper : new FoodServiceImpl().foodUpperList) {
+										if (foodDivision.getFoodDivisionNo().equals(foodUpper.getFoodDivisionNo()) &&  "그 외".equals(foodUpper.getFoodUpperName()) ) {
+							%>
+							<li><a href="${pageContext.request.contextPath }/food/selectFoodByCat.do?searchNo=<%=foodUpper.getFoodUpperNo() %>&searchKeyword=<%=foodUpper.getFoodUpperName()%>" class="dp_block"><%=foodUpper.getFoodUpperName() %></a></li>
 
 							<%
 								}
@@ -121,10 +132,10 @@
 						}
 					%>
                 </ul>
-            </div>
+            </div> 
         </div>
     </header>
-	<div class="login-modal txt_center">
+	<div class="modal login-modal txt_center">
 		<form class="modal-content animate">
 			<div class="container txt_center">
 				<label for="uname"><b>아이디</b></label>

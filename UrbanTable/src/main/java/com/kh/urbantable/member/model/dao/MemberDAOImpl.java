@@ -78,4 +78,9 @@ public class MemberDAOImpl implements MemberDAO {
 		sqlSession.delete("member.deleteAutoLogin", memberAutoLogin);
 	}
 
+	@Override
+	public int modifyMember(Member member) {
+		return sqlSession.update("member.modifyMember", member);
+	}
+
 }

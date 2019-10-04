@@ -18,4 +18,12 @@ public interface CartService {
 
 	int getExist(Map<String, String> map);
 
+	String getFoodSection(String foodNo);
+
+	List<Map<String, Object>> getDiscountList();
+
+	int deleteCart(Map<String, String> map);
+
+	int deleteCartAll(String memberId);
+
 }

@@ -6,12 +6,16 @@
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <script>
+	var length = ${fn:length(list)};
 	$(()=>{
+		getMarket();
 		getList();
 		totalPrice();
 		listCount();
 		deliveryCost("n");
-		totalPayment();
+		discountCost();
+		finalPrice();
+		totalPayment();		
 		
 		$("#searchMarket").on("click", function(){
 			getClosestMarket();
@@ -22,6 +26,10 @@
 			var selectedCount = 0;
 			var count = 0;
 			var lackedProduct = new Array();
+			<c:if test="${empty list}">
+				alert("장바구니에 상품을 넣어주세요!")
+				return ;
+			</c:if>
 			if($("#market").val() == ""){
 				alert("배송할 매장을 선택하세요!")
 				return;
@@ -79,29 +87,47 @@
 		
 	});
 	
-	function getList(){
+	function getList(){				
 		<c:forEach items="${list}" var="l" varStatus="vs">
 			var param ={
 				foodNo: '${l.foodNo}'
 			};
 			var foodInfo = "";
+			var dc;
 			$.ajax({
 				url: "${pageContext.request.contextPath}/cart/foodInfo.do",
 				type: "POST",
 				data: param,
 				dataType: "json",
 				async: false,
-				success: function(data){
-					foodInfo += "<tr id='item"+${vs.count}+"'>";
-					foodInfo += "<input type='hidden' name='price' value='"+ data.FOOD_MEMBER_PRICE +"'>";
-					foodInfo += "<input type='hidden' name='foodNo' value='"+ data.FOOD_NO +"'>";
-					foodInfo += "<td><input type='checkbox' name='list' id='check"+${vs.count}+"' checked='true' onclick='checkManage(this)'/>&nbsp;&nbsp;&nbsp;";
-					foodInfo += "<img src='"+data.FOOD_IMG+"' width='92px' height='130px'/></td>";
-					foodInfo += "<td name='foodName'>[" + data.FOOD_COMPANY + "] " + data.FOOD_NAME + "</td>";
-					foodInfo += "<td> <input type='button' value='-' onclick='del(this);'>&nbsp;<input type='text' name='amount' value='" + ${l.cartAmount} + "' size='5' style='text-align:center;' onchange='change(this);'>&nbsp;<input type='button' value='+' onclick='add(this);'></td>";
-					foodInfo += "<td><input type='text' name='totalPrice' value='" + data.FOOD_MEMBER_PRICE * ${l.cartAmount} + "' size='11' style='text-align:center;' readonly></td>";
-					foodInfo += "</tr>";
-					$("#tail").before(foodInfo);
+				success: function(data){					
+					$.ajax({
+						url: "${pageContext.request.contextPath}/cart/getDiscount.do",
+						type: "post",
+						async: false,
+						data: {
+							marketNo: $("#marketNo").val(),
+							foodNo: data.FOOD_NO		
+						},
+						success: function(dc){
+							console.log(dc);							
+							foodInfo += "<tr id='item"+${vs.count}+"'>";
+							foodInfo += "<input type='hidden' name='price' value='"+ data.FOOD_MEMBER_PRICE +"'>";
+							foodInfo += "<input type='hidden' name='discountPrice' value='"+Math.floor((data.FOOD_MEMBER_PRICE * (1-dc/100))/10)*10+"'>"
+							foodInfo += "<input type='hidden' name='foodNo' value='"+ data.FOOD_NO +"'>";
+							foodInfo += "<td><input type='checkbox' name='list' id='check"+${vs.count}+"' checked='true' onclick='checkManage(this)'/>&nbsp;&nbsp;&nbsp;";
+							foodInfo += "<img src='"+data.FOOD_IMG+"' width='92px' height='130px'/></td>";
+							foodInfo += "<td name='foodName'>[" + data.FOOD_COMPANY + "] " + data.FOOD_NAME + "</td>";
+							foodInfo += "<td> <input type='button' value='-' onclick='del(this);'>&nbsp;<input type='text' name='amount' value='" + ${l.cartAmount} + "' size='5' style='text-align:center;' onchange='change(this);'>&nbsp;<input type='button' value='+' onclick='add(this);'></td>";
+							foodInfo += "<td><input type='text' name='totalDiscountPrice' value='"+Math.floor((data.FOOD_MEMBER_PRICE * (1-dc/100))/10)*10 * ${l.cartAmount}+"' size='11' style='text-align:center;' readonly></td>";
+							foodInfo += "<input type='hidden' name='totalPrice' value='" + data.FOOD_MEMBER_PRICE * ${l.cartAmount} + "' size='11' style='text-align:center;' readonly>"
+							foodInfo += "</tr>";
+							$("#tail").before(foodInfo);
+						},
+						error: function(xhr, txtStatus, err){
+							console.log("ajax처리실패!", xhr, txtStatus, err);
+						}			
+					})
 				},
 				error: function(xhr, txtStatus, err){
 					console.log("ajax처리실패!", xhr, txtStatus, err);
@@ -128,11 +154,13 @@
 		}
 		listCount();
 		totalPrice();
+		discountCost();
+		finalPrice();
 		totalPayment();
 	}
 	
 	function listCount(){
-		var total = ${fn:length(list)};
+		var total =  $("input:checkbox[name='list']").length;
 		var selected = $("input:checkbox[name='list']:checked").length;
 		var text = "전체선택 (" + selected + "/" + total + ")";
 		$("label[for='checkAll']").text(text);
@@ -150,6 +178,8 @@
 		}
 		listCount();
 		totalPrice();
+		discountCost();
+		finalPrice();
 		totalPayment();
 	}
 	
@@ -157,10 +187,15 @@
 		var root = $(e).parent().parent();
 		var amount = root.find("input[name='amount']");
 		var total = root.find("input[name='totalPrice']");
-		var price = root.children("input[type='hidden']").val();
+		var price = root.children("input[name='price']").val();
+		var dcTotal = root.find("input[name='totalDiscountPrice']");
+		var dcPrice = root.children("input[name='discountPrice']").val();
 		amount.val(parseInt(amount.val())+1);
 		total.val(amount.val()*price);
+		dcTotal.val(amount.val()*dcPrice);
 		totalPrice();
+		discountCost();
+		finalPrice();
 		totalPayment();
 	}
 	
@@ -169,13 +204,18 @@
 		var amount = root.find("input[name='amount']");
 		var total = root.find("input[name='totalPrice']");
 		var price = root.children("input[type='hidden']").val();
+		var dcTotal = root.find("input[name='totalDiscountPrice']");
+		var dcPrice = root.children("input[name='discountPrice']").val();
 		if(parseInt(amount.val())-1 < 1){
 			alert("최소 구매수량은 1개입니다 주문을 취소하시려면 구매삭제 버튼을 이용해주세요")
 			return ;
 		}
 		amount.val(parseInt(amount.val())-1);
 		total.val(amount.val()*price);
+		dcTotal.val(amount.val()*dcPrice);
 		totalPrice();
+		discountCost();
+		finalPrice();
 		totalPayment();
 	}
 	
@@ -184,8 +224,17 @@
 		var amount = root.find("input[name='amount']");
 		var total = root.find("input[name='totalPrice']");
 		var price = root.children("input[type='hidden']").val();
+		var dcTotal = root.find("input[name='totalDiscountPrice']");
+		var dcPrice = root.children("input[name='discountPrice']").val();
+		if(parseInt(amount.val())==0){
+			alert("최소 구매수량은 1개입니다 주문을 취소하시려면 구매삭제 버튼을 이용해주세요")
+			amount.val(1);
+		}
 		total.val(amount.val()*price);
+		dcTotal.val(amount.val()*dcPrice);
 		totalPrice();
+		discountCost();
+		finalPrice();
 		totalPayment();
 	}
 	
@@ -199,8 +248,26 @@
 		return sum;
 	}	
 		
-	function totalDiscount(){
-			
+	function discountCost(){
+		var listPrice = 0;
+		var dcPrice = 0;
+		for(var i = 1; i <= ${fn:length(list)}; i++){
+			if($("#item"+i).find("input:checkbox[name='list']").is(":checked")==true){
+				listPrice += parseInt($("#item" + i).find("input[name='totalPrice']").val());
+				dcPrice += parseInt($("#item" + i).find("input[name='totalDiscountPrice']").val());
+			}				
+		}
+		$("#discount").text("-" + (listPrice-dcPrice) + " 원");
+	}
+	
+	function finalPrice(){
+		var dcPrice = 0;
+		for(var i = 1; i <= ${fn:length(list)}; i++){
+			if($("#item"+i).find("input:checkbox[name='list']").is(":checked")==true){
+				dcPrice += parseInt($("#item" + i).find("input[name='totalDiscountPrice']").val());
+			}				
+		}
+		$("#finalCost").text(dcPrice + " 원");
 	}
 		
 	function deliveryCost(v){
@@ -217,14 +284,102 @@
 	}
 		
 	function totalPayment(){
-		var total = parseInt($("#priceSum").text()) + parseInt($("#deliveryCost").text());
+		var total = parseInt($("#finalCost").text()) + parseInt($("#deliveryCost").text());
 		$("#totalPayment").text(total + " 원");
 	}
 	
 	function getClosestMarket(){
-		var popup = window.open("${pageContext.request.contextPath}/cart/searchMarket.do","매장찾기", "width=750, height=550");
-		popup.focus();
-		popup.opener = self;
+		if(confirm("매장을 변경할 경우 일부상품의 재고가 없거나 할인에 변동이 있을 수 있습니다.\n 계속하시겠습니까?")){
+			var popup = window.open("${pageContext.request.contextPath}/cart/searchMarket.do","매장찾기", "width=750, height=550");
+			popup.focus();
+			popup.opener = self;	
+		}
+	}
+	
+	function getMarket(){
+		$.ajax({
+			url: "${pageContext.request.contextPath}/cart/getMarket.do",
+			data: {
+				address: "${memberLoggedIn.memberAddress}"
+			},
+			async: false,
+			success: function(data){
+				console.log(data);
+				$("#market").val(data.nearMarket + " (" + data.marketName + ")");
+				$("#marketNo").val(data.marketNo);
+			},
+			error: function(xhr, txtStatus, err){
+				console.log("ajax처리실패!", xhr, txtStatus, err);
+			}
+		})
+	}
+	
+	function getMarketNo(){
+		$.ajax({
+			url: "${pageContext.request.contextPath}/cart/getMarket.do",
+			data: {
+				address: $("#market").val().substring(0,$("#market").val().indexOf("("))
+			},
+			async: false,
+			success: function(data){
+				console.log(data);				
+				$("#marketNo").val(data.marketNo);
+			},
+			error: function(xhr, txtStatus, err){
+				console.log("ajax처리실패!", xhr, txtStatus, err);
+			}
+		});
+	}
+	
+	function changeMarket(){
+		console.log($("#market").val().substring(0,$("#market").val().indexOf("(")))
+	}
+	
+	function deleteSel(){
+		for(var i = 1; i <= $("input:checkbox[name='list']").length; i++){
+			if($("#item"+i).find("input:checkbox[name='list']").is(":checked")==true){
+				var foodNo = $("#item"+i).find("input:hidden[name='foodNo']").val();
+				$.ajax({
+					url: "${pageContext.request.contextPath}/cart/deleteCart.do",
+					data: {
+						foodNo: foodNo,
+						memberId: "${memberLoggedIn.memberId}"
+					},
+					async: false,
+					success: function(data){
+						$("#item"+i).remove();						
+						//console.log(data);
+					},
+					error: function(xhr, txtStatus, err){
+						console.log("ajax처리실패!", xhr, txtStatus, err);
+					}
+				});
+			}			
+		}
+		$("#checkAll").prop("checked", "true");
+		$("#checkAllTail").prop("checked", "true");
+		checkAll($("#checkAll"));
+	}
+	
+	function deleteAll(){
+		var items = $("input:checkbox[name='list']").length;
+		for(var i = 1; i <= items; i++){			
+			$("#item"+i).remove();	
+		}
+		$.ajax({
+			url: "${pageContext.request.contextPath}/cart/deleteCartAll.do",
+			data: {
+				memberId: "${memberLoggedIn.memberId}"
+			},
+			type: "post",
+			success: function(data){
+				
+			},
+			error: function(xhr, txtStatus, err){
+				console.log("ajax처리실패!", xhr, txtStatus, err);
+			}
+		});
+		checkAll($("#checkAll"));
 	}
 
 </script>
@@ -236,7 +391,7 @@
 	                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->
             <tr id="head">
                 <th>
-                	<input type="checkbox" name="listAll" id="checkAll" checked="true" onclick="checkAll(this);"/>                
+                	<input type="checkbox" name="listAll" id="checkAll" checked="true" onchange="checkAll(this);"/>                
                 	<label for="checkAll"></label>
                 </th>
                 <th>
@@ -249,14 +404,15 @@
                 	금액
                 </th>
            </tr>
+           
     	   <tr id="tail">
             	<td>
-            		<input type="checkbox" name="listAll" id="checkAll" checked="true" onclick="checkAll(this);"/>
+            		<input type="checkbox" name="listAll" id="checkAllTail" checked="true" onchange="checkAll(this);"/>
                 	<label for="checkAll"></label>
             	</td>	
             	<td>
-            		<button type="button" class="btn">선택삭제</button>
-            		<button type="button" class="btn">전체삭제</button>
+            		<button type="button" class="btn" onclick="deleteSel()">선택삭제</button>
+            		<button type="button" class="btn" onclick="deleteAll()">전체삭제</button>
             	</td>	
             	<td colspan="2">
             		<input type="radio" name="delivery" id="dawn" value="d" onchange="deliveryCost(this.value)"/>
@@ -273,6 +429,7 @@
             	</td>
             	<td colspan="3">
             		<input type="text" id="market" size="80" readonly/>
+            		<input type="hidden" id="marketNo" />
             	</td>
             </tr>
         </table>
@@ -283,7 +440,11 @@
             </tr>
             <tr>
                 <th>할인금액</th>
-                <td id="discount"></td>
+                <td id="discount"></td>	
+            </tr>
+            <tr>
+            	<th>최종금액</th>
+            	<td id="finalCost"></td>
             </tr>
             <tr>
                 <th>배송비</th>

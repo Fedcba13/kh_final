@@ -98,4 +98,9 @@ public class MemberServiceImpl implements MemberService {
 		memberDAO.deleteAutoLogin(memberAutoLogin);
 	}
 
+	@Override
+	public int modifyMember(Member member) {
+		return memberDAO.modifyMember(member);
+	}
+
 }

@@ -1,5 +1,6 @@
 package com.kh.urbantable.marketOwner.controller;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,10 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
-import com.kh.urbantable.cart.model.vo.Cart;
+import com.kh.urbantable.event.model.vo.Event;
 import com.kh.urbantable.food.model.vo.FoodDivision;
 import com.kh.urbantable.marketOwner.model.service.MarketOwnerService;
-import com.kh.urbantable.marketOwner.model.vo.Event;
 import com.kh.urbantable.marketOwner.model.vo.Market;
 import com.kh.urbantable.member.model.vo.Member;
 
@@ -127,10 +126,111 @@ public class MarketOwnerController {
 	}
 	
 	@RequestMapping("/marketOrder.do")
-	public String marketOrder() {
+	public String marketOrder(@RequestParam String memberId, Model model,
+			@RequestParam(value="cPage", defaultValue="1") int cPage,
+			@RequestParam(value="orderSearchType", defaultValue="") String orderSearchType,
+			@RequestParam(value="orderSearchKeyword", defaultValue="") String orderSearchKeyword,
+			@RequestParam(value="payFlag", defaultValue="9") int payFlag,
+			@RequestParam(value="deliverType", defaultValue="") String deliverType,
+			@RequestParam(value="payStartDate", defaultValue="") String payStartDate,
+			@RequestParam(value="payEndDate", defaultValue="") String payEndDate){
 		logger.info("지점 주문내역 페이지 요청");
-		
+		String marketNo = marketOwnerService.selectMarketNoByMemberId(memberId);
+		model.addAttribute("marketNo", marketNo);
+		model.addAttribute("cPage", cPage);
+		model.addAttribute("orderSearchType", orderSearchType);
+		model.addAttribute("orderSearchKeyword", orderSearchKeyword);
+		model.addAttribute("payFlag", payFlag);
+		model.addAttribute("deliverType", deliverType);
+		model.addAttribute("payStartDate", payStartDate);
+		model.addAttribute("payEndDate", payEndDate);
 		return "marketOwner/marketOrder";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/marketOrderList.do", method=RequestMethod.GET)
+	public Map<String, Object> marketOrderList(@RequestParam(value="marketNo") String marketNo,
+			@RequestParam(value="cPage", defaultValue="1", required=false) int cPage,
+			@RequestParam(value="orderSearchType", defaultValue="") String orderSearchType,
+			@RequestParam(value="orderSearchKeyword", defaultValue="") String orderSearchKeyword,
+			@RequestParam(value="payFlag", defaultValue="9") int payFlag,
+			@RequestParam(value="deliverType", defaultValue="") String deliverType,
+			@RequestParam(value="payStartDate", defaultValue="") String payStartDate,
+			@RequestParam(value="payEndDate", defaultValue="") String payEndDate){
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("marketNo", marketNo);
+		param.put("orderSearchType", orderSearchType);
+		param.put("orderSearchKeyword", orderSearchKeyword);
+		param.put("payFlag", payFlag);
+		param.put("deliverType", deliverType);
+		param.put("payStartDate", payStartDate);
+		param.put("payEndDate", payEndDate);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		List<Map<String, Object>> marketOrderList = marketOwnerService.selectMarketOrderList(cPage, param);
+		int totalContents = marketOwnerService.selectMarketOrderTotalContents(param);
+		int totalPage = (int)Math.ceil((double)totalContents/marketOwnerService.NUM_PER_PAGE);
+		
+		final int pageBarSize = 10;
+		String pageBar = "";
+		
+		int pageStart = ((cPage-1)/pageBarSize)*pageBarSize+1;
+		int pageEnd = pageStart+pageBarSize-1;
+		
+		int pageNo = pageStart;
+		
+		//이전
+		if(pageNo==1) { //첫번째 페이지일 경우
+			//pageBar += "<span><</span>";
+		} else {
+			pageBar += "<a href='#' rel='"+(pageNo-1)+"'><</a>";
+		}
+		
+		//page
+		while(pageNo<=pageEnd && pageNo<=totalPage) {
+			if(pageNo==cPage) {
+				pageBar+="<span class='cPage'>"+pageNo+"</span>";
+			} else {
+				pageBar+="<a href='#' rel='"+pageNo+"'>"+pageNo+"</a>";
+			}
+			pageNo++;
+		}
+		
+		//다음
+		if(pageNo>totalPage) {
+			//pageBar += "<span>></span>";
+		} else {
+			pageBar += "<a href='#' rel='"+pageNo+"'>></a>";
+		}
+		
+		result.put("marketNo", marketNo);
+		result.put("pageBar", pageBar);
+		result.put("marketOrderList", marketOrderList);
+		
+		return result;
+	}
+	
+	@RequestMapping("/marketOrderView.do")
+	public String marketOrderView(@RequestParam String payNo, Model model) {
+		List<Map<String, Object>> orderDetailFood = marketOwnerService.selectOrderDetailFoodByPayNo(payNo);
+		Map<String, Object> orderDetailPay = marketOwnerService.selectOrderDetailPayByPayNo(payNo);
+		Map<String, Object> orderDetailMember = marketOwnerService.selectOrderDetailMemberByPayNo(payNo);
+		model.addAttribute("orderDetailFood", orderDetailFood);
+		model.addAttribute("orderDetailPay", orderDetailPay);
+		model.addAttribute("orderDetailMember", orderDetailMember);
+		model.addAttribute("payNo", payNo);
+		return "marketOwner/marketOrderView";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/marketOrderDelivery.do", method=RequestMethod.POST)
+	public Map<String, String> marketOrderDelivery(@RequestParam String payNo){
+		int delivery = marketOwnerService.updatePayFlag(payNo);
+		Map<String, String> result = new HashMap<String, String>();
+		result.put("msg", delivery>0?"배송이 완료되었습니다.":"배송 완료에 실패했습니다. 관리자에게 문의하세요.");
+		return result;
 	}
 	
 	@RequestMapping("/myMarket.do")
@@ -225,17 +325,17 @@ public class MarketOwnerController {
 		return searchList;
 	}
 	
-	@RequestMapping("/event.do")
-	public String marketEvent() {
-		return "marketOwner/eventList";
-	}
+//	@RequestMapping("/event.do")
+//	public String marketEvent() {
+//		return "marketOwner/eventList";
+//	}
 	
-	@RequestMapping("/marketEventEnroll.do")
-	public String marketEventEnroll(@RequestParam(value="memberId") String memberId, Model model) {
-		String marketNo = marketOwnerService.selectMarketNoByMemberId(memberId);
-		model.addAttribute("eventMarketNo", marketNo);
-		return "marketOwner/marketEventEnroll";
-	}
+//	@RequestMapping("/marketEventEnroll.do")
+//	public String marketEventEnroll(@RequestParam(value="memberId") String memberId, Model model) {
+//		String marketNo = marketOwnerService.selectMarketNoByMemberId(memberId);
+//		model.addAttribute("eventMarketNo", marketNo);
+//		return "marketOwner/marketEventEnroll";
+//	}
 	
 	@ResponseBody
 	@RequestMapping("/eventCompanySearch.do")
@@ -257,11 +357,11 @@ public class MarketOwnerController {
 		return result;
 	}
 	
-	@PostMapping("/marketEventEnrollEnd.do")
-	public String marketEventEnrollEnd(Event event) {
-		logger.info("event={}",event);
-		return "marketOwner/marketEventEnroll";
-	}
+//	@PostMapping("/marketEventEnrollEnd.do")
+//	public String marketEventEnrollEnd(Event event) {
+//		logger.info("event={}",event);
+//		return "marketOwner/marketEventEnroll";
+//	}
 	
 	@RequestMapping("/marketStock.do")
 	public String marketStock(@RequestParam(value="cPage", defaultValue="1") int cPage,
@@ -453,5 +553,26 @@ public class MarketOwnerController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("msg", delCart>0?"발주 요청 품목에서 삭제했습니다.":"발푸 요청 품목 삭제에 실패했습니다. 관리자에게 문의하세요.");
 		return result;
+	}
+	
+	@RequestMapping("/marketChart.do")
+	public String marketChart(@RequestParam String memberId, Model model) {
+		String marketNo = marketOwnerService.selectMarketNoByMemberId(memberId);
+		model.addAttribute("marketNo", marketNo);
+		return "marketOwner/marketChart";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/selectChartWeek.do")
+	public List<Map<String, Object>> selectChartWeek(@RequestParam String marketNo){
+		List<Map<String, Object>> chartWeek = marketOwnerService.selectChartWeek(marketNo);
+		return chartWeek;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/selectChartMonth.do")
+	public List<Map<String, Object>> selectChartMonth(@RequestParam String marketNo){
+		List<Map<String, Object>> chartMonth = marketOwnerService.selectChartMonth(marketNo);
+		return chartMonth;
 	}
 }

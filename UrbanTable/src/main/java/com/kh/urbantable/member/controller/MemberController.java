@@ -218,20 +218,22 @@ public class MemberController {
 
 	@RequestMapping("/checkMessage.do")
 	@ResponseBody
-	public HashMap<String, String> checkMessage(@RequestParam("phone") String phone,
+	public HashMap<String, Object> checkMessage(@RequestParam("phone") String phone,
 												@RequestParam("authCode") String authCode,
 												@RequestParam("flag") int flag) {
-		HashMap<String, String> result = new HashMap<String, String>();
+		HashMap<String, Object> result = new HashMap<String, Object>();
 
 		HashMap<String, Object> param = new HashMap<String, Object>();
 		param.put("phone", phone);
 		param.put("authCode", authCode);
 		param.put("flag", flag);
 
-		result.put("msg", memberService.checkMessage(param) > 0 ? "인증 성공" : "인증 실패");
+		int authResult = memberService.checkMessage(param);
 		
-		if(flag == 2 || flag == 3) {
-			memberService.phoneDuplicate(param);
+		result.put("msg", authResult > 0 ? "인증 성공" : "인증 실패");
+		
+		if(authResult > 0 && (flag == 2 || flag == 3)) {
+			result.put("member", memberService.phoneDuplicate(param));
 		}
 
 		return result;
@@ -299,6 +301,7 @@ public class MemberController {
 				
 				if(distanceMile < nearLenth) {
 					nearLenth = distanceMile;
+					result.put("nearMarket", list.get(i).getMarketNo());
 				}
 			}
 		}
@@ -340,6 +343,83 @@ public class MemberController {
 	public String memberFind(@PathVariable String type, Model model) {
 		model.addAttribute("type", type);
 		return "member/memberFind";
+	}
+	
+	@RequestMapping("/modifyPw.do")
+	@ResponseBody
+	public Map<String, Object> modifyPw(@RequestParam String memberId,
+											@RequestParam String memberPassword){
+		
+		logger.debug("memberId : " + memberId +", password : " + memberPassword);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		Member member = memberService.selectOneMember(memberId);
+		member.setMemberPassword(passwordEncoder.encode(memberPassword));
+		
+		logger.debug("modifyPw.member@MemberController : " + member );
+		
+		int resultModifyPw = memberService.modifyMember(member);
+		
+		result.put("msg", resultModifyPw > 0 ? "비밀번호 변경 성공":"비밀번호 변경 실패");
+		
+		
+		
+		return result;
+	}
+	
+	@RequestMapping("/myPage")
+	public String myPage() {
+		
+		return "member/memberMyPage";
+	}
+	
+	@RequestMapping("/myPage.do")
+	@ResponseBody
+	public Map<String, Object> myPageEnd(@RequestParam String memberId,
+							@RequestParam(defaultValue = "") String reMemberPassword,
+							@RequestParam(defaultValue = "") String memberPassword,
+							@RequestParam(defaultValue = "") String memberAddress,
+							@RequestParam(defaultValue = "") String memberAddress2,
+							Model model){
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		boolean isContinue = true;
+		int updateResult = 0;
+		
+		logger.debug("member@myPage.do = {}" + reMemberPassword + memberPassword + memberAddress + memberAddress2);
+		
+		
+		//현재 멤버
+		Member curMember = memberService.selectOneMember(memberId);
+		logger.debug("curMember@myPage.do = {}", curMember);
+		
+		//변경할 멤버
+		//비밀번호 변경
+		if(isContinue && reMemberPassword != null && !reMemberPassword.equals("")) {
+			if(passwordEncoder.matches(memberPassword, curMember.getMemberPassword())) {
+				//비밀번호가 같을때 => 비밀번호 변경
+				curMember.setMemberPassword(passwordEncoder.encode(reMemberPassword));
+				
+				//패스워드 변경 여부 => 변경시 로그아웃 처리
+				result.put("pw", "true");
+			}else {
+				//비밀번호 불일치 => 비밀번호가 틀립니다, 리턴
+				isContinue = false;
+				result.put("msg", "비밀번호가 일치하지 않습니다.");
+			}
+		}
+		
+		//주소 변경
+		if(isContinue) {
+			curMember.setMemberAddress(memberAddress);
+			curMember.setMemberAddress2(memberAddress2);
+			updateResult = memberService.modifyMember(curMember);
+			result.put("msg", updateResult > 0 ? "회원정보 수정 성공" : "회원정보 수정 실패");
+		}		
+		
+		return result;
 	}
 	
 }

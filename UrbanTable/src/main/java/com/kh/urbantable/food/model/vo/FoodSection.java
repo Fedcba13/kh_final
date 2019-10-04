@@ -12,7 +12,6 @@ import lombok.ToString;
 @ToString
 public class FoodSection {
 	private String foodSectionNo;
-	private String foodDivisionNo;
 	private String foodSectionName;
-	private String foodSectionUpper;
+	private String foodUpperNo;
 }

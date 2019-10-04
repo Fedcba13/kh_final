@@ -108,7 +108,8 @@
 	
 	<select id="searchMarketList" resultType="market">
 		select * from market
-		where market_enabled=1 and flag=#{flag} and market_address like '%'||#{marketAddress}||'%'
+		where market_enabled=1 and flag=#{flag} 
+		and (market_address like '%'||#{marketAddress}||'%' or market_name like '%'||#{marketAddress}||'%')
 		order by market_no desc
 	</select>
 	
@@ -121,8 +122,7 @@
 	<select id="eventSearchCategory" resultType="map">
 		select distinct S.food_section_name name, F.food_section_no no
 		from food F left join food_section S on F.food_section_no=S.food_section_no
-		where F.food_company like '%'||#{srchCompany}||'%'
-		and S.food_section_name like '%'||#{eventCategory}||'%'
+		where S.food_section_name like '%'||#{eventCategory}||'%'
 	</select>
 	
 	
@@ -158,13 +158,18 @@
 	 -->
 	
 	<select id="selectFoodStockList" resultType="map">
-		select *
+		<!-- select *
 		from food F left join stock S on F.food_no=S.food_no
-		left join food_section D on F.food_section_no=D.food_section_no
+		left join food_division D on F.food_section_no=D.food_section_no -->
+		select *
+       	from food F left join stock S on F.food_no=S.food_no
+       	LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+       	LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+       	LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
 		<trim prefix="where" suffixOverrides="and">
 			S.market_no=#{marketNo}
 			<if test="foodDivision!=null and foodDivision!=''">
-			and food_division_no=#{foodDivision}
+			and D.food_division_no=#{foodDivision}
 			</if>
 			<if test="foodOrderSearchType=='food_name'">
 			and F.food_name like '%'||#{foodOrderSearchKeyword}||'%'
@@ -237,6 +242,130 @@
 		select sum(C.cart_amount*F.food_market_price)
 		from cart C left join food F on C.food_no=F.food_no
 		where C.member_id=#{memberId} and C.flag=2
+	</select>
+	
+	<select id="selectMarketOrderList" resultType="map">
+		select P.pay_no, P.member_id, P.pay_price, P.pay_flag, 
+		P.deliver_type, P.market_no, to_char(P.pay_date, 'yyyy-MM-dd') pay_date, 
+		PM.payment_way, M.member_name, M.member_phone
+		from pay P left join payment PM on P.pay_no=PM.pay_no
+		left join member M on P.member_id=M.member_id
+		<trim prefix="where" suffixOverrides="and">
+			P.pay_enabled=1 and M.member_enabled=1 
+			<if test="marketNo!=null and marketNo!=''">
+			and P.market_no=#{marketNo}
+			</if>
+			<if test="orderSearchKeyword!=null and orderSearchKeyword!=''">
+				<if test="orderSearchType=='payNo'">
+				and P.pay_no like '%'||#{orderSearchKeyword}||'%'
+				</if>
+				<if test="orderSearchType=='orderId'">
+				and P.member_id like '%'||#{orderSearchKeyword}||'%'
+				</if>
+				<if test="orderSearchType=='orderName'">
+				and M.member_name like '%'||#{orderSearchKeyword}||'%'
+				</if>
+			</if>
+			<if test="payFlag!=9">
+			and P.pay_flag like '%'||#{payFlag}||'%'
+			</if>
+			<if test="deliverType!=null and deliverType!=''">
+			and P.deliver_type like '%'||#{deliverType}||'%'
+			</if>
+			<if test="payStartDate!=null and payStartDate!=''">
+				<if test="payEndDate eq ''">
+				and P.pay_date >= to_date(#{payStartDate}, 'yy/MM/dd')
+				</if>
+				<if test="payEndDate!=null and payEndDate!=''">
+				and (P.pay_date between to_date(#{payStartDate}, 'yy/MM/dd') and (to_date(#{payEndDate}, 'yy/MM/dd')+1))
+				</if>
+			</if>
+		</trim>
+		order by P.pay_date desc
+	</select>
+	
+	<select id="selectMarketOrderTotalContents" resultType="_int">
+		select count(*)
+		from pay P left join payment PM on P.pay_no=PM.pay_no
+		left join member M on P.member_id=M.member_id
+		<trim prefix="where" suffixOverrides="and">
+			P.pay_enabled=1 and M.member_enabled=1 
+			<if test="marketNo!=null and marketNo!=''">
+			and P.market_no=#{marketNo}
+			</if>
+			<if test="orderSearchKeyword!=null and orderSearchKeyword!=''">
+				<if test="orderSearchType=='payNo'">
+				and P.pay_no like '%'||#{orderSearchKeyword}||'%'
+				</if>
+				<if test="orderSearchType=='orderId'">
+				and P.member_id like '%'||#{orderSearchKeyword}||'%'
+				</if>
+				<if test="orderSearchType=='orderName'">
+				and M.member_name like '%'||#{orderSearchKeyword}||'%'
+				</if>
+			</if>
+			<if test="payFlag!=9">
+			and P.pay_flag like '%'||#{payFlag}||'%'
+			</if>
+			<if test="deliverType!=null and deliverType!=''">
+			and P.deliver_type like '%'||#{deliverType}||'%'
+			</if>
+			<if test="payStartDate!=null and payStartDate!=''">
+				<if test="payEndDate eq ''">
+				and P.pay_date >= to_date(#{payStartDate}, 'yy/MM/dd')
+				</if>
+				<if test="payEndDate!=null and payEndDate!=''">
+				and (P.pay_date between to_date(#{payStartDate}, 'yy/MM/dd') and (to_date(#{payEndDate}, 'yy/MM/dd')+1))
+				</if>
+			</if>
+		</trim>
+		order by P.pay_date desc
+	</select>
+	
+	<select id="selectOrderDetailFoodByPayNo" resultType="map">
+		select P.pay_flag, D.*, F.food_name, F.food_company, F.food_member_price, F.food_img
+		from pay P left join pay_detail D on P.pay_no=D.pay_no
+		left join food F on D.food_no=F.food_no
+		where P.pay_no=#{payNo}
+	</select>
+	
+	<select id="selectOrderDetailPayByPayNo" resultType="map">
+		select distinct P.pay_no, P.pay_date, PM.payment_way, P.pay_price
+		from pay P left join pay_detail D on P.pay_no=D.pay_no
+		left join payment PM on PM.pay_no=P.pay_no
+		where P.pay_no=#{payNo}
+	</select>
+	
+	<select id="selectOrderDetailMemberByPayNo" resultType="map">
+		select P.member_id, M.member_name, M.member_address, 
+		M.member_address2, M.member_phone, P.deliver_type, P.pay_flag
+		from pay P left join member M on P.member_id=M.member_id
+		where P.pay_no=#{payNo}
+	</select>
+	
+	<update id="updatePayFlag">
+		update pay set pay_flag=2
+		where pay_no=#{payNo}
+	</update>
+	
+	<select id="selectChartWeek" resultType="map">
+		select market_no, to_char(pay_date, 'yyyy-MM-dd') as paydate, count(*) as cnt, 
+		avg(pay_price) as avg_price
+		from pay
+		where pay_date between sysdate-7 and sysdate
+		group by market_no, to_char(pay_date, 'yyyy-MM-dd')
+		having market_no=#{marketNo}
+		order by to_char(pay_date, 'yyyy-MM-dd') asc
+	</select>
+	
+	<select id="selectChartMonth" resultType="map">
+		select market_no, to_char(pay_date, 'yyyy-MM') as paydate, count(*) as cnt, 
+		avg(pay_price) as avg_price
+		from pay
+		where to_char(pay_date, 'yyyy') = to_char(sysdate, 'yyyy')
+		group by to_char(pay_date, 'yyyy-MM'), market_no
+		having market_no='mar00014' 
+		order by to_char(pay_date, 'yyyy-MM') asc
 	</select>
 	
 </mapper>

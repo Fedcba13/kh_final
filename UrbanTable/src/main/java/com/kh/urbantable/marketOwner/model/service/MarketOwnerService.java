@@ -5,9 +5,9 @@ import java.util.Map;
 
 import com.kh.urbantable.admin.model.vo.MarketMember;
 import com.kh.urbantable.cart.model.vo.Cart;
+import com.kh.urbantable.event.model.vo.Event;
 import com.kh.urbantable.food.model.vo.FoodDivision;
 import com.kh.urbantable.food.model.vo.FoodWithFoodSection;
-import com.kh.urbantable.marketOwner.model.vo.Event;
 import com.kh.urbantable.marketOwner.model.vo.Market;
 import com.kh.urbantable.marketOwner.model.vo.MarketEvent;
 
@@ -61,5 +61,21 @@ public interface MarketOwnerService {
 	int delMarketOrderCart(Map<String, String> param);
 
 	int selectCartTotal(String memberId);
+
+	List<Map<String, Object>> selectMarketOrderList(int cPage, Map<String, Object> param);
+
+	int selectMarketOrderTotalContents(Map<String, Object> param);
+
+	List<Map<String, Object>> selectOrderDetailFoodByPayNo(String payNo);
+
+	Map<String, Object> selectOrderDetailPayByPayNo(String payNo);
+
+	Map<String, Object> selectOrderDetailMemberByPayNo(String payNo);
+
+	int updatePayFlag(String payNo);
+
+	List<Map<String, Object>> selectChartWeek(String marketNo);
+
+	List<Map<String, Object>> selectChartMonth(String marketNo);
 
 }

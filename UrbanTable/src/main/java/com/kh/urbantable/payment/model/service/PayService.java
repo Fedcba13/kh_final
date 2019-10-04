@@ -31,4 +31,10 @@ public interface PayService {
 
 	int insertPayment(Payment_ payment);
 
+	int deleteCart(Map<String, Object> map);
+
+	List<Map<String, Object>> getCoupons(String memberId);
+
+	int updateCoupon(Map<String, String> map);
+
 }

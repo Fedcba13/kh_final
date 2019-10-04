@@ -66,12 +66,19 @@
 			<beans:bean id="loggerInterceptor" class="com.kh.urbantable.common.interceptor.LoggerInterceptor"/>
 		</interceptor>
 		<interceptor>
+			<mapping path="/member/myPage"/>
 			<mapping path="/market/founded.do" />
 			<mapping path="/market/myMarket.do" />
 			<mapping path="/market/event.do" />
 			<mapping path="/market/marketEventEnroll.do" />
 			<mapping path="/market/marketEventEnrollEnd.do" />
+			<mapping path="/cart/cartList.do" />
+			<mapping path="/pay/order.do" />
 			<beans:bean id="LoginInterceptor" class="com.kh.urbantable.common.interceptor.LoginInterceptor" />
+		</interceptor>
+ 		<interceptor>
+		<mapping path="/food/admin/**"/>
+			<beans:bean id="AdminInerceptor" class="com.kh.urbantable.common.interceptor.AdminInerceptor" />
 		</interceptor>
 	</interceptors>
 	

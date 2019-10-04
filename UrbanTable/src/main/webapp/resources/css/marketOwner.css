@@ -60,22 +60,36 @@ form[name=orderSearchFrm2] input[type=submit] {
     cursor: pointer;
 }
 
-form[name=orderSearchFrm2] {
-	margin-bottom:10px;
+.orderSearch_wrap > div {
+	margin-bottom:15px;
 	padding:15px;
 	font-size:15px;
-	border-radius:3px;
 	box-sizing:border-box;
+	border:1px solid #374818;
 }
 
-form[name=orderSearchFrm2] > div > p {
+.orderSearch_wrap div.clearfix {
+	padding:7px 0 0;
+}
+
+.orderSearch_wrap > div > div > p {
 	float:left;
-	width: 80px;
+	width: 120px;
 	line-height:42px;
+	padding-left:10px;
 }
 
-form[name=orderSearchFrm2] > div > div {
+.orderSearch_wrap > div > div > div {
 	float:left;
+}
+
+.orderSearch_wrap .btn {
+	width:70px;
+	margin-left:6px;
+}
+
+.orderSearch_wrap select {
+	width:120px;
 }
 
 .mapAddress {
@@ -460,4 +474,26 @@ form[name=orderSearchFrm2] > div > div {
 
 #foodOrderRequest .tbl a:hover {
 	text-decoration:underline;
+}
+
+#marketOrderView .tbl td {
+	padding:10px;
+}
+
+#marketOrderView .tbl td img {
+	border:1px solid #e9e9e9;
+	margin-right:5px;
+	vertical-align:middle;
+}
+
+#marketOrderView .tbl td span {
+	width:445px;
+	overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+#myChart {
+	width:400px;
+	height:400px;
 }

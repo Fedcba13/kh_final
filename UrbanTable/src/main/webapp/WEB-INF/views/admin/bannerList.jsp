@@ -5,6 +5,8 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <style>
 input[type="date"], input[type="date"]::-webkit-inner-spin-button {
 	border: 0;
@@ -23,6 +25,13 @@ img.img {
 }
 </style>
 <script>
+$(()=>{
+	
+	$(".bannerDate").flatpickr({
+		  enableTime: false,
+		  dateFormat: "Y-m-d",
+		});
+});
 function test(idx){
 		
 		console.log(idx);
@@ -98,11 +107,12 @@ function insertBanner(){
 						<tr>
 							<td><input type="text" class="view txt_center"
 								name="bannerTitle" value="${b.bannerTitle}" /></td>
-							<td><input type="date" class="start${vs.index }"
+							<td><input type="date" class="start${vs.index } bannerDate"
 								name="bannerStartDate" value="${b.bannerStartDate}" /></td>
-							<td><input type="date" class="end${vs.index }"
-								name="bannerEndDate" onchange="test(${vs.index });"
-								value="${b.bannerEndDate }" /></td>
+							<td>
+							<input type="date" class="end${vs.index } bannerDate" name="bannerEndDate" 
+									onchange="test(${vs.index });" value="${b.bannerEndDate }" />
+								</td>
 							<td rowspan="2">
 							<img src="${pageContext.request.contextPath}/resources/images/banner/${b.bannerFileRenamed}"
 								alt="" class='img' /> <input type="file" name="bannerFile1"

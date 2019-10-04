@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="t">
+	<select id="getMemebers" resultType="string">
+		SELECT MEMBER_ID
+		FROM MEMBER 
+		WHERE MEMBER_CHECK=1
+	</select>
+	<select id="getFoods" resultType="food">
+		SELECT *
+		FROM FOOD
+	</select>
+	<insert id="insertLike">
+		INSERT INTO GOOD(TARGET_ID, MEMBER_ID, GOOD, BAD)
+		VALUES(#{foodNo}, #{memberId}, 1, DEFAULT)
+	</insert>
+	<insert id="insertBad">
+		INSERT INTO GOOD(TARGET_ID, MEMBER_ID, GOOD, BAD)
+		VALUES(#{foodNo} , #{memberId}, DEFAULT, 1)
+	</insert>
+
+</mapper>
