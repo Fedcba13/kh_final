@@ -11,7 +11,6 @@
 <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/main.js"></script>
 <script>
    $(()=>{
-
 	
 	$.ajax({
 		url: "${pageContext.request.contextPath}/banner/mainBannerList.do",
@@ -21,14 +20,12 @@
 			console.log(data);
 			var html = "";
 			for(var i in data){
-			html = "";
-			html += "<div class='main_banner_con'>";
-			html += "<a href='${pageContext.request.contextPath}/"+data[i].bannerURL + "' style='background-image:URL(${pageContext.request.contextPath}/resources/images/banner/"+data[i].bannerFileRenamed+");'class='aTag'>";
-			html += "</a></div>";
-			
-			console.log(html);
-			$(".main_banner").append(html); 
+				html += "<div class='main_banner_con'>";
+				html += "<a href='${pageContext.request.contextPath}/"+data[i].bannerURL + "' style='background-image:URL(${pageContext.request.contextPath}/resources/images/banner/"+data[i].bannerFileRenamed+");'class='aTag'>";
+				html += "</a></div>";
 			}
+			$(".main_banner").html(html);
+			bannerSlide();
 		},
 		error: (xhr, txtStatus, err)=> {
 			console.log("ajax 처리실패!", xhr, txtStatus, err);
@@ -42,7 +39,7 @@
 		success: (data)=> {
 			var html = ' ';
 			for(var i in data){
-				html += '<li><a href="" class="dp_block"><div class="prd_img_area">';
+				html += '<li><a href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo='+data[i].foodNo+'&marketNo=mar00012" class="dp_block"><div class="prd_img_area">';
 				if(data[i].eventPercent != 0){
 					html +=  '<p class="fw600 txt_center"><span>SALE</span><br>'+data[i].eventPercent+'%</p>';
 				}
@@ -77,7 +74,7 @@
 			var html = '<ul class="main_prd_list clearfix">';
 			for(var i in data){
 				
-				html += '<li> <a href="" class="dp_block">';
+				html += '<li> <a href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo='+data[i].foodNo+'&marketNo=mar00012" class="dp_block">';
 				html += '<div class="prd_img_area">';
 				if(data[i].eventPercent != 0){
 					html += '<p class="fw600 txt_center"><span>SALE</span><br>'+data[i].eventPercent+'%</p>';
@@ -98,7 +95,7 @@
 				html += '</div></a> </li> ';
 				
 			} 
-				html += '</ul><a href="" class="dp_block">베스트 전체보기 <img src="${pageContext.request.contextPath }/resources/images/more.png" alt="" /></a>';
+				html += '</ul><a href="${pageContext.request.contextPath}/food/selectBestFoodList.do" class="dp_block">베스트 전체보기 <img src="${pageContext.request.contextPath }/resources/images/more.png" alt="" /></a>';
 				$("#recom1").html(html); 
 		},
 		error: (xhr, txtStatus, err)=> {
@@ -136,7 +133,7 @@
    			console.log(foodDivisionNo);
    			for(var i in data){
    				
-   				html += '<li> <a href="" class="dp_block">';
+   				html += '<li> <a href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo='+data[i].foodNo+'&marketNo=mar00012" class="dp_block">';
    				html += '<div class="prd_img_area">';
    				if(data[i].eventPercent != 0){
    					html += '<p class="fw600 txt_center"><span>SALE</span><br>'+data[i].eventPercent+'%</p>';
@@ -157,7 +154,7 @@
    				html += '</div></a> </li> ';
    				
    			} 
-   				html += '</ul><a href="" class="dp_block">'+foodDivisionName+'전체보기 <img src="${pageContext.request.contextPath }/resources/images/more.png" alt="" /></a>';
+   				html += '</ul><a href="" class="dp_block">'+foodDivisionName+' 베스트 전체보기 <img src="${pageContext.request.contextPath }/resources/images/more.png" alt="" /></a>';
    				var recomId = $('[name="'+foodDivisionNo+'"]').attr('id');
    				$("#"+recomId).html(html); 
    		},
@@ -175,7 +172,7 @@
 			success: (data)=> {
 				var html = ' ';
 				for(var i in data){
-					html += '<li><a href="" class="dp_block"><div class="prd_img_area">';
+					html += '<li><a href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo='+data[i].foodNo+'&marketNo=mar00012" class="dp_block"><div class="prd_img_area">';
 					if(data[i].eventPercent != 0){
 						html +=  '<p class="fw600 txt_center"><span>SALE</span><br>'+data[i].eventPercent+'%</p>';
 					}
@@ -202,9 +199,19 @@
 			}
 		});
 	
-
 	
-});   
+}); 
+   
+function bannerSlide(){
+	$('.main_banner').slick({
+        autoplay:true,
+        infinite: true,
+        speed: 700,
+        autoplaySpeed: 3000,
+        slidesToShow: 1,
+        arrows:false
+    });
+}
 </script>
 <style>
 .main_banner_con a.aTag{

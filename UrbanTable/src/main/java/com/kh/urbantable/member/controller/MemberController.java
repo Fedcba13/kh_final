@@ -27,6 +27,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.kh.urbantable.common.util.Utils;
+import com.kh.urbantable.event.model.vo.Coupon;
 import com.kh.urbantable.marketOwner.model.service.MarketOwnerService;
 import com.kh.urbantable.marketOwner.model.vo.Market;
 import com.kh.urbantable.member.model.service.MemberService;
@@ -420,6 +421,31 @@ public class MemberController {
 		}		
 		
 		return result;
+	}
+	
+	@RequestMapping("/myCoupon")
+	public String myCoupon() {
+		
+		return "/member/memberCoupon";
+	}
+	
+	@RequestMapping("/myCoupon.do")
+	@ResponseBody
+	public List<Coupon> myCouponEnd(HttpSession session, @RequestParam(defaultValue = "") String enabled){
+
+		String memberId = ((Member)session.getAttribute("memberLoggedIn")).getMemberId();
+
+		logger.debug("memberId : " + memberId);
+		
+		HashMap<String, Object> param = new HashMap<String, Object>();
+		
+		param.put("memberId", memberId);
+		param.put("enabled", enabled);
+
+		List<Coupon> couponList = memberService.selectCouponList(param);
+		
+
+		return couponList;
 	}
 	
 }

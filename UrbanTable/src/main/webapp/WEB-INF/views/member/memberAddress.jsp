@@ -43,7 +43,7 @@
     </style>
 </head>
 <body>
-	<section class="popup"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
+	<section>
 		<article class="subPage inner">
 		    <h3 class="sub_tit">주소지 관리</h3>
 		    <div class="address_content">

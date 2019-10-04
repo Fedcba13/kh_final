@@ -6,8 +6,10 @@
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/food.css">
+<link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/main.css">
+<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/main.js"></script>
 	<article class="subPage inner">
-	    <h3 class="sub_tit">서브페이지 제목</h3>
+	    <h3 class="sub_tit">상품정보</h3>
 		 <div id="foodExpression"> 
 			<div id="foodExpressionImg">
 			<img src="${food.foodImg }" alt="상품사진" />
@@ -56,7 +58,22 @@
 					</div>
 			</div>
 			</div>
-    </article>
+			<hr>
+			        <h3 class="main_tit txt_center">관련 레시피</h3>
+        <ul class="main_event_list main_receipe txt_center clearfix" id="toAppend">
+            <%-- <li>
+                <a href="" class="dp_block">
+                    <div class="event_img_area">
+                        <img src="${pageContext.request.contextPath }/resources/images/example2.PNG" alt="이벤트 사진">
+                    </div>
+                    <div class="event_info_area">
+                        <p>레시피명</p>
+                    </div>
+                </a>
+            </li> --%>
+        </ul>
+        <input type="hidden" name="" id="foodNoToRe" value="${food.foodNo }" />
+</article>
 	<script>
 	$('#amount').change(function() {
 		var amount = $("#amount").val();
@@ -74,5 +91,41 @@
 		}
 		 $("#finalPrice").html(html);  
 	}); 
+	
+	$(()=>{
+		var foodNo = $("#foodNoToRe").val();
+		
+		var param = {
+				foodNo : foodNo
+		}
+		
+		// 관련 레시피 출력
+	 	$.ajax({
+	    	url: "${pageContext.request.contextPath}/food/selectRelatedRecipe.do",
+	    	type: "get",
+			data: param,
+			dataType:"json",
+	   		success: (data)=> {
+	   			var html = ' ';
+	   			for(var i in data){
+	   			console.log(data[i].renamedRecipePic);
+	   				html += '<li>  <a href="" class="dp_block"><div class="event_img_area">';
+	   				html += '<img src="${pageContext.request.contextPath }/resources/upload/recipe/'+data[i].renamedRecipePic+'">';
+	   				console.log('<img src="${pageContext.request.contextPath }/resources/upload/recipe/'+data[i].renamedRecipePic+'">');
+	   				html += '</div><div class="event_info_area">  <p>'+data[i].recipeTitle+'</p>';
+	   				html += '</div> </a> </li> ';
+	   			} 
+	   				$("#toAppend").html(html); 
+	   		},
+	   		error: (xhr, txtStatus, err)=> {
+	   			console.log("ajax 처리실패!", xhr, txtStatus, err);
+	   		}
+	   	}); 
+		
+		
+	});
+	
+	
+	
 	</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>
