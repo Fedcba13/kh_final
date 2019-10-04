@@ -20,14 +20,12 @@
 			console.log(data);
 			var html = "";
 			for(var i in data){
-			html = "";
-			html += "<div class='main_banner_con'>";
-			html += "<a href='${pageContext.request.contextPath}/"+data[i].bannerURL + "' style='background-image:URL(${pageContext.request.contextPath}/resources/images/banner/"+data[i].bannerFileRenamed+");'class='aTag'>";
-			html += "</a></div>";
-			
-			console.log(html);
-			$(".main_banner").append(html); 
+				html += "<div class='main_banner_con'>";
+				html += "<a href='${pageContext.request.contextPath}/"+data[i].bannerURL + "' style='background-image:URL(${pageContext.request.contextPath}/resources/images/banner/"+data[i].bannerFileRenamed+");'class='aTag'>";
+				html += "</a></div>";
 			}
+			$(".main_banner").html(html);
+			bannerSlide();
 		},
 		error: (xhr, txtStatus, err)=> {
 			console.log("ajax 처리실패!", xhr, txtStatus, err);
@@ -202,7 +200,18 @@
 		});
 	
 	
-});   
+}); 
+   
+function bannerSlide(){
+	$('.main_banner').slick({
+        autoplay:true,
+        infinite: true,
+        speed: 700,
+        autoplaySpeed: 3000,
+        slidesToShow: 1,
+        arrows:false
+    });
+}
 </script>
 <style>
 .main_banner_con a.aTag{

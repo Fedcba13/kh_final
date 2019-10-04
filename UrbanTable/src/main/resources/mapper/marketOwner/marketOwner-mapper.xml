@@ -364,8 +364,26 @@
 		from pay
 		where to_char(pay_date, 'yyyy') = to_char(sysdate, 'yyyy')
 		group by to_char(pay_date, 'yyyy-MM'), market_no
-		having market_no='mar00014' 
+		having market_no=#{marketNo}
 		order by to_char(pay_date, 'yyyy-MM') asc
+	</select>
+	
+	<select id="selectChartCategory" resultType="map">
+		select P.market_no, D.food_division_no, D.food_division_name, sum(PD.pay_detail_amount) as amount,
+		sum(PD.pay_detail_amount*F.food_member_price) as total
+		from pay_detail PD left join food F on PD.food_no=F.food_no
+		left join food_section S on F.food_section_no=S.food_section_no
+		left join food_upper U on U.food_upper_no=S.food_upper_no
+		left join food_division D on U.food_division_no=D.food_division_no
+		left join pay P on P.pay_no=PD.pay_no
+		group by P.market_no, D.food_division_no, D.food_division_name
+		having P.market_no=#{marketNo}
+	</select>
+	
+	<select id="selectTotalPayDetail" resultType="_int">
+		select sum(pay_detail_amount) 
+		from pay_detail PD left join pay P on PD.pay_no=P.pay_no
+		where P.market_no=#{marketNo}
 	</select>
 	
 </mapper>

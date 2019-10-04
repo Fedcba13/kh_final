@@ -575,4 +575,15 @@ public class MarketOwnerController {
 		List<Map<String, Object>> chartMonth = marketOwnerService.selectChartMonth(marketNo);
 		return chartMonth;
 	}
+	
+	@ResponseBody
+	@RequestMapping("/selectChartCategory.do")
+	public Map<String, Object> selectChartCategory(@RequestParam String marketNo){
+		List<Map<String, Object>> chartCategory = marketOwnerService.selectChartCategory(marketNo);
+		int totalOrder = marketOwnerService.selectTotalPayDetail(marketNo);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("chartCategory",chartCategory);
+		result.put("totalOrder",totalOrder);
+		return result;
+	}
 }
