@@ -27,6 +27,8 @@ import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.food.model.vo.FoodUpper;
 import com.kh.urbantable.food.model.vo.FoodWithStockAndEvent;
 import com.kh.urbantable.marketOwner.model.vo.Market;
+import com.kh.urbantable.recipe.model.vo.Recipe;
+import com.kh.urbantable.recipe.model.vo.RelatedRecipe;
 
 @Controller
 @RequestMapping("/food")
@@ -99,6 +101,35 @@ public class FoodController {
 
 		return foodList;
 	}
+	@RequestMapping("/selectNewFoodList.do")
+	public String selectNewFoodList (Model model,
+			@RequestParam(value = "marketNo", required = false, defaultValue = "mar00012") String marketNo) {
+		
+		List<FoodWithStockAndEvent> foodList = foodService.selectNewFoodList(marketNo);
+		List<Market> marketList = foodService.selectMarketList();
+		for (FoodWithStockAndEvent food : foodList) {
+			food = calculateEventPrice(food);
+		}
+		model.addAttribute("foodList", foodList);
+		model.addAttribute("marketList", marketList);
+		model.addAttribute("marketNo", marketNo);
+		return "food/newFoodList";
+	}
+	@RequestMapping("/selectBestFoodList.do")
+	public String selectBestFoodList (Model model,
+			@RequestParam(value = "marketNo", required = false, defaultValue = "mar00012") String marketNo) {
+		
+		List<FoodWithStockAndEvent> foodList = foodService.selectBestFoodList(marketNo);
+		List<Market> marketList = foodService.selectMarketList();
+		for (FoodWithStockAndEvent food : foodList) {
+			food = calculateEventPrice(food);
+		}
+		model.addAttribute("foodList", foodList);
+		model.addAttribute("marketList", marketList);
+		model.addAttribute("marketNo", marketNo);
+		return "food/bestFoodList";
+	}
+	
 
 	@RequestMapping(value = "/selectFoodByCat.do", method = RequestMethod.GET)
 	public String selectFoodByCat(Model model, @RequestParam(value = "searchNo") String searchNo,
@@ -186,7 +217,21 @@ public class FoodController {
 		return foodSectionList;
 
 	}
+	
+	
+	
+	@RequestMapping(value = "/selectRelatedRecipe.do")
+	@ResponseBody
+	public List<RelatedRecipe> selectRelatedRecipe(String foodNo) {
+		
+		List<RelatedRecipe> relatedRecipeList = foodService.selectRelatedRecipe(foodNo);
+		
+		return relatedRecipeList;
+		
+	}
 
+	
+	
 	@RequestMapping(value = "/admin/foodInsert.do")
 	public String foodInsert(Food food, @RequestParam("foodImgFile") MultipartFile foodImgFile,
 			HttpServletRequest request, Model model) {

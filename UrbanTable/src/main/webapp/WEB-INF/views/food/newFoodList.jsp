@@ -12,14 +12,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/food.css">
 <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/main.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/foodList.js"></script>
-	<div>
-		<span style="padding: 0 10px;">${searchKeyword }</span>
-	</div>
-<div>
-	<ul id="foodList_Cat">
-		<li><a href="">전체보기</a></li>
-	</ul>
-</div>
+
 <section class="main_sec">
 	<article class="inner">
 	    <h3 class="sub_tit">서브페이지 제목</h3>
@@ -37,7 +30,7 @@
 						class="dp_block">
 							<div class="prd_img_area">
 								<c:if test="${not empty f.afterEventPrice }">
-									< <p class="fw600 txt_center"><span>SALE</span><br>${f.eventPercent}%</p> 
+									<p class="fw600 txt_center"><span>SALE</span><br>${f.eventPercent}%</p> 
 								</c:if>
 								<c:if test="${not empty f.foodImg }">
 									<img src="${f.foodImg }" alt="상품 사진">
@@ -52,9 +45,9 @@
 								<h4>${f.foodName }</h4>
 								<c:if test="${not empty f.afterEventPrice }">
 									<p class="prd_price fw600">할인가</p>
-									<p class="prd_price">${f.afterEventPrice }</p>
+									<p class="prd_price">${f.afterEventPrice } 원</p>
 								</c:if>
-								<p class="prd_price2">${f.foodMemberPrice }</p>
+								<p class="prd_price2">${f.foodMemberPrice } 원</p>
 							</div>
 					</a></li>
 				</c:if>
@@ -79,7 +72,6 @@
                 </a>
             </li>
         	</c:if>
-           
         </c:forEach>
         </ul>
     </article>
@@ -87,8 +79,8 @@
 <script>
 function changeMarket() {
 	var marketNo = $("#marketList option:selected").val();
-	location.href = "${pageContext.request.contextPath}/food/selectFoodByCat.do?searchNo=${searchNo}&searchKeyword=${searchKeyword}"
-		+"&marketNo="+marketNo;
+	location.href = "${pageContext.request.contextPath}/food/selectNewFoodList.do?"
+		+"marketNo="+marketNo;
  }
 
 </script>

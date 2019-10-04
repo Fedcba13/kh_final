@@ -31,6 +31,9 @@
 			alias="marketMember" />
 		<typeAlias type="com.kh.urbantable.recipe.model.vo.RecipeVO"
 			alias="recipevo" />
+		<typeAlias type="com.kh.urbantable.recipe.model.vo.RelatedRecipe"
+			alias="relatedRecipe" />
+			
 		<typeAlias
 			type="com.kh.urbantable.recipe.model.vo.RecipeSequence"
 			alias="recipeSequence" />

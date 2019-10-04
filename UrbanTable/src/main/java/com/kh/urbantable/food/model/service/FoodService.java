@@ -10,6 +10,7 @@ import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.food.model.vo.FoodUpper;
 import com.kh.urbantable.food.model.vo.FoodWithStockAndEvent;
 import com.kh.urbantable.marketOwner.model.vo.Market;
+import com.kh.urbantable.recipe.model.vo.RelatedRecipe;
 
 public interface FoodService {
 
@@ -49,6 +50,12 @@ public interface FoodService {
 	List<FoodWithStockAndEvent> selectFoodInMain3(String foodDivisionNo);
 
 	List<FoodWithStockAndEvent> selectFoodInMain4();
+
+	List<FoodWithStockAndEvent> selectNewFoodList(String marketNo);
+
+	List<FoodWithStockAndEvent> selectBestFoodList(String marketNo);
+
+	List<RelatedRecipe> selectRelatedRecipe(String foodNo);
 
 
 }
