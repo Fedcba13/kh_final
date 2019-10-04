@@ -554,4 +554,25 @@ public class MarketOwnerController {
 		result.put("msg", delCart>0?"발주 요청 품목에서 삭제했습니다.":"발푸 요청 품목 삭제에 실패했습니다. 관리자에게 문의하세요.");
 		return result;
 	}
+	
+	@RequestMapping("/marketChart.do")
+	public String marketChart(@RequestParam String memberId, Model model) {
+		String marketNo = marketOwnerService.selectMarketNoByMemberId(memberId);
+		model.addAttribute("marketNo", marketNo);
+		return "marketOwner/marketChart";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/selectChartWeek.do")
+	public List<Map<String, Object>> selectChartWeek(@RequestParam String marketNo){
+		List<Map<String, Object>> chartWeek = marketOwnerService.selectChartWeek(marketNo);
+		return chartWeek;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/selectChartMonth.do")
+	public List<Map<String, Object>> selectChartMonth(@RequestParam String marketNo){
+		List<Map<String, Object>> chartMonth = marketOwnerService.selectChartMonth(marketNo);
+		return chartMonth;
+	}
 }

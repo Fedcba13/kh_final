@@ -108,7 +108,8 @@
 	
 	<select id="searchMarketList" resultType="market">
 		select * from market
-		where market_enabled=1 and flag=#{flag} and market_address like '%'||#{marketAddress}||'%'
+		where market_enabled=1 and flag=#{flag} 
+		and (market_address like '%'||#{marketAddress}||'%' or market_name like '%'||#{marketAddress}||'%')
 		order by market_no desc
 	</select>
 	
@@ -346,5 +347,25 @@
 		update pay set pay_flag=2
 		where pay_no=#{payNo}
 	</update>
+	
+	<select id="selectChartWeek" resultType="map">
+		select market_no, to_char(pay_date, 'yyyy-MM-dd') as paydate, count(*) as cnt, 
+		avg(pay_price) as avg_price
+		from pay
+		where pay_date between sysdate-7 and sysdate
+		group by market_no, to_char(pay_date, 'yyyy-MM-dd')
+		having market_no=#{marketNo}
+		order by to_char(pay_date, 'yyyy-MM-dd') asc
+	</select>
+	
+	<select id="selectChartMonth" resultType="map">
+		select market_no, to_char(pay_date, 'yyyy-MM') as paydate, count(*) as cnt, 
+		avg(pay_price) as avg_price
+		from pay
+		where to_char(pay_date, 'yyyy') = to_char(sysdate, 'yyyy')
+		group by to_char(pay_date, 'yyyy-MM'), market_no
+		having market_no='mar00014' 
+		order by to_char(pay_date, 'yyyy-MM') asc
+	</select>
 	
 </mapper>

@@ -74,4 +74,8 @@ public interface MarketOwnerService {
 
 	int updatePayFlag(String payNo);
 
+	List<Map<String, Object>> selectChartWeek(String marketNo);
+
+	List<Map<String, Object>> selectChartMonth(String marketNo);
+
 }
