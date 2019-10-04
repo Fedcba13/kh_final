@@ -3,6 +3,7 @@ package com.kh.urbantable.recipe.model.dao;
 import java.util.List;
 
 import com.kh.urbantable.food.model.vo.FoodSection;
+import com.kh.urbantable.recipe.model.vo.Blame;
 import com.kh.urbantable.recipe.model.vo.BoardComment;
 import com.kh.urbantable.recipe.model.vo.Material;
 import com.kh.urbantable.recipe.model.vo.MaterialWithSection;
@@ -37,5 +38,15 @@ public interface RecipeDAO {
 	int readCountUp(String recipeNo);
 
 	List<BoardComment> selectBoardCommentList(String recipeNo);
+
+	int boardCommentInsert(BoardComment comment);
+
+	int boardCommentUpdate(BoardComment comment);
+
+	int boardCommentDelete(String boardCommentNo);
+
+	BoardComment selectOneBoardComment(String boardCommentNo);
+
+	int boardCommentBlame(Blame blame);
 
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.kh.urbantable.food.model.vo.FoodSection;
+import com.kh.urbantable.recipe.model.vo.Blame;
 import com.kh.urbantable.recipe.model.vo.BoardComment;
 import com.kh.urbantable.recipe.model.vo.Material;
 import com.kh.urbantable.recipe.model.vo.MaterialWithSection;
@@ -83,5 +84,30 @@ public class RecipeDAOImpl implements RecipeDAO {
 	@Override
 	public List<BoardComment> selectBoardCommentList(String recipeNo) {
 		return sqlSession.selectList("recipe.selectBoardCommentList", recipeNo);
+	}
+
+	@Override
+	public int boardCommentInsert(BoardComment comment) {
+		return sqlSession.insert("recipe.boardCommentInsert", comment);
+	}
+
+	@Override
+	public int boardCommentUpdate(BoardComment comment) {
+		return sqlSession.update("recipe.boardCommentUpdate", comment);
+	}
+
+	@Override
+	public int boardCommentDelete(String boardCommentNo) {
+		return sqlSession.update("recipe.boardCommentDelete", boardCommentNo);
+	}
+
+	@Override
+	public BoardComment selectOneBoardComment(String boardCommentNo) {
+		return sqlSession.selectOne("recipe.selectOneBoardComment", boardCommentNo);
+	}
+
+	@Override
+	public int boardCommentBlame(Blame blame) {
+		return sqlSession.insert("recipe.boardCommentBlame", blame);
 	}
 }
