@@ -99,8 +99,8 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public int modifyPw(Member member) {
-		return memberDAO.modifyPw(member);
+	public int modifyMember(Member member) {
+		return memberDAO.modifyMember(member);
 	}
 
 }

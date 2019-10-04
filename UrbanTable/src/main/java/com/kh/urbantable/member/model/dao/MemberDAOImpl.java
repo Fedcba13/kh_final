@@ -79,7 +79,7 @@ public class MemberDAOImpl implements MemberDAO {
 	}
 
 	@Override
-	public int modifyPw(Member member) {
+	public int modifyMember(Member member) {
 		return sqlSession.update("member.modifyMember", member);
 	}
 

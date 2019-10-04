@@ -153,7 +153,22 @@ $(()=>{
 			return;
 		}
 		
-		$("#form_myPage").submit();
+		//ajax로 데이터 전송
+		$.ajax({
+			url: '${pageContext.request.contextPath}/member/myPage.do',
+			data: $("#form_myPage").serialize(),
+			type: "POST",
+			success: (data)=>{
+				console.log(data);
+				alert(data.msg);
+				if(data.pw == "true"){
+					location.href = "${pageContext.request.contextPath}/member/memberLogout.do";
+				}
+			},
+			error: (xhr, txtStatus, err)=>{
+				console.log("ajax처리실패!", xhr, txtStatus, err);
+			}
+		});
 		
 		
 	});
@@ -181,7 +196,7 @@ $(()=>{
 	    </div>
 	    <div class="sec_bg">
 	    	<h3 class="sub_tit" style="background-color: white;">개인정보수정</h3>
-	    	<form action="${pageContext.request.contextPath}/member/myPage.do" method="post" id="form_myPage">
+	    	<form id="form_myPage">
 			    <table class="tbl tbl_view member_mypage">
 					<tr>
 						<th>아이디</th>

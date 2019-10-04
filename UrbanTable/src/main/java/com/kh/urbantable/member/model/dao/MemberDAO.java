@@ -33,6 +33,6 @@ public interface MemberDAO {
 
 	void deleteAutoLogin(MemberAutoLogin memberAutoLogin);
 
-	int modifyPw(Member member);
+	int modifyMember(Member member);
 
 }
