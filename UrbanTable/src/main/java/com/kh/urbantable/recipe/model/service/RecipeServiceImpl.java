@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.recipe.model.dao.RecipeDAO;
+import com.kh.urbantable.recipe.model.vo.Blame;
 import com.kh.urbantable.recipe.model.vo.BoardComment;
 import com.kh.urbantable.recipe.model.vo.Material;
 import com.kh.urbantable.recipe.model.vo.MaterialWithSection;
@@ -83,5 +84,30 @@ public class RecipeServiceImpl implements RecipeService {
 	@Override
 	public List<BoardComment> selectBoardCommentList(String recipeNo) {
 		return recipeDAO.selectBoardCommentList(recipeNo);
+	}
+
+	@Override
+	public int boardCommentInsert(BoardComment comment) {
+		return recipeDAO.boardCommentInsert(comment);
+	}
+
+	@Override
+	public int boardCommentUpdate(BoardComment comment) {
+		return recipeDAO.boardCommentUpdate(comment);
+	}
+
+	@Override
+	public int boardCommentDelete(String boardCommentNo) {
+		return recipeDAO.boardCommentDelete(boardCommentNo);
+	}
+
+	@Override
+	public BoardComment selectOneBoardComment(String boardCommentNo) {
+		return recipeDAO.selectOneBoardComment(boardCommentNo);
+	}
+
+	@Override
+	public int boardCommentBlame(Blame blame) {
+		return recipeDAO.boardCommentBlame(blame);
 	}
 }

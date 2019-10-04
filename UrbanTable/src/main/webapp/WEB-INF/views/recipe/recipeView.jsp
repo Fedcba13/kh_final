@@ -6,6 +6,109 @@
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/recipe.css">
+<script>
+$(()=> {
+	
+	$(".reply_btn").on("click", function(e) {
+		var html = "";
+		
+		$(".comment_update_div").remove();
+		$(".reply_add").remove();
+		$(".comment_update").prop("disabled", false);
+		$(".reply_btn").prop("disabled", false);
+		
+		html += "<div class='reply_add'>";
+		html += "<form action='${pageContext.request.contextPath}/recipe/commentInsert'>"
+		html += "<textarea name='boardCommentContent' id='boardCommentContentRef2' cols='70' rows='3' placeholder='비속어가 들어간 댓글은 삭제될 수 있습니다.'></textarea> ";
+		html += "<button class='btn comment_insert_ref2'>등록</button>";
+		html += "<input type='hidden' name='recipeNo' value='${recipe.recipeNo}' />";
+		html += "<input type='hidden' name='boardCommentWriter' id='memberId' value='${memberLoggedIn.memberId}' />";
+		html += "<input type='hidden' name='boardCommentLevel' value='2' />"
+		html += "<input type='hidden' name='boardCommentRef' value='" + this.value + "'/>";
+		html += "</form>";
+		html += "</div>";
+		
+		$(".comment_td[value='" + this.value + "']").append(html);
+		
+		$(".comment_insert_ref2").on("click", function() {
+			if($("#memberId").val() == "") {
+				alert("로그인 후 이용해 주세요");
+				return false;
+			}
+			
+			if($("#boardCommentContentRef2").val() == null || $("#boardCommentContentRef2").val() == "") {
+				alert("내용을 입력해주세요");
+				return false;
+			}
+		});
+		
+		$(this).prop("disabled", true);
+	});
+	
+	$(".comment_update").on("click", function(e) {
+		var html = "";
+		
+		$(".reply_add").remove();
+		$(".comment_update_div").remove();
+		$(".reply_btn").prop("disabled", false);
+		$(".comment_update").prop("disabled", false);
+		
+		var comment = $(".comment_content_span[value='" + this.value + "']").text();
+		
+		html += "<div class='comment_update_div'>";
+		html += "<form action='${pageContext.request.contextPath}/recipe/commentUpdate'>"
+		html += "<textarea name='boardCommentContent' id='updateCommentArea' cols='70' rows='3'>" + comment + "</textarea> ";
+		html += "<button class='btn comment_update_btn'>수정</button>";
+		html += "<input type='hidden' name='boardCommentNo' value='" + this.value + "' />";
+		html += "<input type='hidden' name='recipeNo' value='${recipe.recipeNo}' />";
+		html += "</form>";
+		html += "</div>";
+		
+		$(".comment_td[value='" + this.value + "']").append(html);
+		
+		$(this).prop("disabled", true);
+		
+		$(".comment_update_btn").on("click", function() {
+			if($("#updateCommentArea").val() == null || $("#updateCommentArea").val() == "") {
+				alert("내용을 입력해주세요");
+				return false;
+			}
+		});
+	});
+	
+	$(".comment_insert").on("click", function() {
+		if($("#memberId").val() == "") {
+			alert("로그인 후 이용해 주세요");
+			return false;
+		}
+		
+		if($("#boardCommentContentRef1").val() == null || $("#boardCommentContentRef1").val() == "") {
+			alert("내용을 입력해주세요");
+			return false;
+		}
+	});
+	
+	$(".comment_delete").on("click", function() {
+		var result = confirm("삭제하시겠습니까?");
+		
+		if(result) {
+			return true;
+		} else {
+			return false;
+		}
+	});
+	
+	$(".comment_decla").on("click", function() {
+		if($("#memberId").val() == "") {
+			alert("로그인 후 이용해 주세요");
+			return false;
+		}
+		
+		location.href = "${pageContext.request.contextPath}/recipe/blameComment?blameTargetId=" + this.value + "&memberId="
+				+ $(this).attr("memberId") + "&blameContent=" + $(this).attr("boardCommentContent") + "&recipeNo=" + $(this).attr("recipeNo");		
+	});
+});
+</script>
 <c:if test="${recipe.recipeEnabled != 1}">
 	<script>
 		alert("삭제된 게시물입니다!");
@@ -57,20 +160,66 @@
     <h2 class="comment_h2">댓글(${comment.size()})</h2>
     <table class="tbl tbl_view" style="width:90%; margin:auto; margin-top:20px;">
     	<c:if test="${not empty comment}">
-    		<c:forEach items="${comment}" var="com" >
-    			<tr class="level${com.boardCommentLevel}">
-    				<td>
-    					<sub>${com.boardCommentWriter}</sub>
-    					<sub>${com.boardCommentDate}</sub> <br />
-    					${com.boardCommentContent}
-    				</td>
-    				<td class="comment_btn">
-	    				<button class="btn btn2" value="${com.boardCommentNo}">답글</button>
-	    				<c:if test="${memberLoggedIn != null && (memberLoggedIn.memberId eq com.boardCommentWriter || memberLoggedIn.memberCheck == 9)}">
-	    					<button class="" value="${com.boardCommentNo}">x</button>
-	    				</c:if>    					
-    				</td>
-    			</tr>
+    		<c:forEach items="${comment}" var="com" varStatus="vs">
+    			<c:if test="${com.boardCommentEnabled == 1}">
+		    		<c:if test="${com.boardCommentLevel == 1}">
+		    			<tr class="level1">
+		    				<td class="comment_td" value="${com.boardCommentNo}">
+		    					<sub>${com.boardCommentWriter}</sub>
+		    					<sub>${com.boardCommentDate}</sub> <br />
+		    					<span class="comment_content_span" value="${com.boardCommentNo}">${com.boardCommentContent}</span> <br />
+		    					<button class="reply_btn" value="${com.boardCommentNo}"><sub>답글쓰기</sub></button>
+		    					<c:if test="${memberLoggedIn.memberId eq com.boardCommentWriter}">
+			    					<button class="comment_update" value="${com.boardCommentNo}"><sub>수정</sub></button>
+			    				</c:if>	
+			    				<c:if test="${memberLoggedIn.memberId ne com.boardCommentWriter}">
+			    					<button class="comment_decla" value="${com.boardCommentWriter}" memberId=${memberLoggedIn.memberId}
+			    						boardCommentContent=${com.boardCommentContent} recipeNo=${recipe.recipeNo}><sub>신고</sub></button>
+			    				</c:if>
+		    				</td>
+		    				<td style="text-align:right; vertical-align:top;">
+		    					<c:if test="${memberLoggedIn != null && (memberLoggedIn.memberId eq com.boardCommentWriter || memberLoggedIn.memberCheck == 9)}">
+			    					<form action="${pageContext.request.contextPath}/recipe/commentDelete">
+				    					<button class="comment_delete">x</button>
+				    					<input type="hidden" name="boardCommentNo" value="${com.boardCommentNo}" />
+				    					<input type="hidden" name="recipeNo" value="${recipe.recipeNo}" />		    					
+			    					</form>
+			    				</c:if>	
+		    				</td>
+		    			</tr>    		
+		    		</c:if>
+		    		<c:if test="${com.boardCommentLevel == 2}">
+		    			<tr class="level2">
+		    				<td class="comment_td" value="${com.boardCommentNo}">
+		    					<sub>${com.boardCommentWriter}</sub>
+		    					<sub>${com.boardCommentDate}</sub> <br />
+		    					<c:forEach items="${comment}" var="c">
+		    						<c:if test="${c.boardCommentNo eq com.boardCommentRef}">
+		    							<span class="ref_writer">@${c.boardCommentWriter}</span> 
+		    						</c:if>
+		    					</c:forEach>
+		    					<span class="comment_content_span" value="${com.boardCommentNo}">${com.boardCommentContent}</span> <br />
+		    					<button class="reply_btn" value="${com.boardCommentNo}"><sub>답글쓰기</sub></button>
+		    					<c:if test="${memberLoggedIn != null && memberLoggedIn.memberId eq com.boardCommentWriter}">
+			    					<button class="comment_update" value="${com.boardCommentNo}"><sub>수정</sub></button>
+			    				</c:if>
+			    				<c:if test="${memberLoggedIn.memberId ne com.boardCommentWriter}">
+			    					<button class="comment_decla" value="${com.boardCommentWriter}" memberId=${memberLoggedIn.memberId}
+			    						boardCommentContent=${com.boardCommentContent} recipeNo=${recipe.recipeNo}><sub>신고</sub></button>
+			    				</c:if>
+		    				</td>
+		    				<td style="text-align:right; vertical-align:top;">
+		    					<c:if test="${(memberLoggedIn.memberId eq com.boardCommentWriter || memberLoggedIn.memberCheck == 9)}">
+			    					<form action="${pageContext.request.contextPath}/recipe/commentDelete">
+				    					<button class="comment_delete">x</button>
+				    					<input type="hidden" name="boardCommentNo" value="${com.boardCommentNo}" />
+				    					<input type="hidden" name="recipeNo" value="${recipe.recipeNo}" />		    					
+			    					</form>
+			    				</c:if>	
+		    				</td>
+		    			</tr>
+		    		</c:if>	
+    			</c:if>
     		</c:forEach>
     	</c:if>
     	<c:if test="${empty comment}">
@@ -80,9 +229,12 @@
     	</c:if>
     </table>
     <div class="content_add">
-    	<form action="">
-    		<textarea name="boardCommentContent" id="boardCommentContent" cols="100" rows="3"></textarea>
+    	<form action="${pageContext.request.contextPath}/recipe/commentInsert">
+    		<textarea name="boardCommentContent" id="boardCommentContentRef1" cols="100" rows="3" placeholder="비속어가 들어간 댓글은 삭제될 수 있습니다."></textarea>
     		<button class="btn comment_insert">등록</button>
+    		<input type="hidden" name="recipeNo" value="${recipe.recipeNo}" />
+    		<input type="hidden" name="boardCommentWriter" id="memberId" value="${memberLoggedIn.memberId}" />
+    		<input type="hidden" name="boardCommentLevel" value="1" />
     	</form>
     </div>
     <div class="list_btn">

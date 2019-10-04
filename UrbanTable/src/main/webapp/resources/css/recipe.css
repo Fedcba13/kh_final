@@ -123,16 +123,77 @@
 	text-align: right;
 }
 
-.level2 {
-	display: none;
-}
-
 .content_add {
 	margin-top: 20px;
 	text-align: center;
 }
 
-.comment_insert {
+.comment_insert, .comment_insert_ref2 {
+	position: relative;
+	top: -25px;
+}
+
+.reply_show {
+	cursor: pointer;
+	cursor: hand;
+}
+
+.reply_show:hover {
+	color: black;
+}
+
+.level2 {
+	background: #f7f7f7;
+}
+
+.ref_writer {
+	color: #374818;
+}
+
+.comment_delete {
+	background-color: transparent !important;
+	background-image: none !important;
+	border: none;
+	color: red;
+	cursor: pointer;
+	cursor: hand;
+}
+
+.reply_btn, .comment_update, .comment_decla {
+	background-color: transparent !important;
+	background-image: none !important;
+	border: none;
+	color: #c0c0c0;
+	cursor: pointer;
+	cursor: hand;
+	padding: 0px;
+}
+
+.reply_btn:hover, .comment_update:hover, .comment_decla:hover {
+	color: black;
+}
+
+.comment_update, .comment_decla {
+	margin-left: 10px;
+}
+
+.level1 td:first-of-type {
+	padding-left: 30px;
+}
+
+.level2 td:first-of-type {
+	padding-left: 130px;
+}
+
+.reply_add {
+	margin-top: 20px;
+}
+
+.comment_update_div {
+	margin-top: 20px;
+}
+
+.comment_update_btn {
 	position: relative;
 	top: -25px;
 }

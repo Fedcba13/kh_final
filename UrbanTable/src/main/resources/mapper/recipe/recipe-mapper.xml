@@ -130,7 +130,8 @@
 	</update>
 	
 	<select id="selectBoardCommentList" resultMap="boardCommentMap">
-		select * from board_comment where recipe_no = #{recipeNo}
+		select * from board_comment where recipe_no = #{recipeNo} and board_comment_enabled = 1
+		start with board_comment_level=1 connect by prior board_comment_no=board_comment_ref order siblings by board_comment_date
 	</select>
 	
 	<resultMap type="boardComment" id="boardCommentMap">
@@ -143,4 +144,37 @@
 		<result column="board_comment_date" property="boardCommentDate" />
 		<result column="board_comment_enabled" property="boardCommentEnabled" />
 	</resultMap>
+	
+	<insert id="boardCommentInsert">
+		insert into board_comment(board_comment_no, recipe_no, board_comment_writer, board_comment_level, board_comment_content, board_comment_ref, board_comment_date, board_comment_enabled)
+		values('com' || lpad(comment_seq.nextval, 5, '0'), #{recipeNo}, #{boardCommentWriter}, #{boardCommentLevel}, #{boardCommentContent}, #{boardCommentRef}, default, default)
+	</insert>
+	
+	<update id="boardCommentUpdate">
+	 update board_comment
+	 <set>
+	 	<if test="boardCommentContent != null and boardCommentContent != ''">
+	 		board_comment_content = #{boardCommentContent}
+	 	</if>
+	 </set>
+	 where board_comment_no = #{boardCommentNo}
+	</update>
+	
+	<update id="boardCommentDelete">
+		update board_comment
+		<set>
+			board_comment_enabled = 0
+		</set>
+		where board_comment_no = #{boardCommentNo}
+	</update>
+	
+	<select id="selectOneBoardComment" resultMap="boardCommentMap">
+		select * from board_comment
+		where board_comment_no = #{boardCommentNo}
+	</select>
+	
+	<insert id="boardCommentBlame">
+		insert into blame(blame_id, member_id, bla_content, blme_target_id, target_type, blame_date, blame_action)
+		values('bla' || lpad(blame_seq.nextval, 5, '0'), #{memberId}, #{blameContent}, #{blameTargetId}, 4, default, default)
+	</insert>
 </mapper>

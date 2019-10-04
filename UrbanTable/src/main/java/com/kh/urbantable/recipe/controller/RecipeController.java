@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.recipe.model.service.RecipeService;
+import com.kh.urbantable.recipe.model.vo.Blame;
 import com.kh.urbantable.recipe.model.vo.BoardComment;
 import com.kh.urbantable.recipe.model.vo.Material;
 import com.kh.urbantable.recipe.model.vo.MaterialWithSection;
@@ -196,6 +197,84 @@ public class RecipeController {
 		List<FoodSection> sectionList = recipeService.selectFoodSectionList(foodDivisionNo);
 
 		return sectionList;
+	}
+	
+	@RequestMapping("/commentInsert")
+	public String BoardCommentInsert(BoardComment comment, Model model) {
+		if(comment.getBoardCommentRef() != null && comment.getBoardCommentRef() != "") {
+			logger.debug(comment.getBoardCommentRef());
+			
+			BoardComment refComment = recipeService.selectOneBoardComment(comment.getBoardCommentRef());			
+			if(refComment.getBoardCommentEnabled() != 1) {
+				String msg = "삭제된 댓글입니다!";
+				
+				model.addAttribute("msg", msg);
+				model.addAttribute("loc", "/recipe/recipeView.do?recipeNo=" + comment.getRecipeNo() + "&memberId=");
+				
+				return "common/msg";
+			}
+		}
+		
+		
+		try {
+			int result = recipeService.boardCommentInsert(comment);
+			String msg = result>0?"댓글 등록 성공":"댓글 등록 실패";
+			
+			model.addAttribute("msg", msg);
+			model.addAttribute("loc", "/recipe/recipeView.do?recipeNo=" + comment.getRecipeNo() + "&memberId=");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "common/msg";
+	}
+	
+	@RequestMapping("/commentUpdate")
+	public String BoardCommentUpdate(BoardComment comment, Model model) {
+		
+		try {
+			int result = recipeService.boardCommentUpdate(comment);
+			String msg = result>0?"댓글 수정 성공":"댓글 수정 실패";
+			
+			model.addAttribute("msg", msg);
+			model.addAttribute("loc", "/recipe/recipeView.do?recipeNo=" + comment.getRecipeNo() + "&memberId=");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "common/msg";
+	}
+	
+	@RequestMapping("/commentDelete")
+	public String BoardCommentDelete(@RequestParam String boardCommentNo, @RequestParam String recipeNo, Model model) {
+		
+		try {
+			int result = recipeService.boardCommentDelete(boardCommentNo);
+			String msg = result>0?"댓글 삭제 성공":"댓글 삭제 실패";
+			
+			model.addAttribute("msg", msg);
+			model.addAttribute("loc", "/recipe/recipeView.do?recipeNo=" + recipeNo + "&memberId=");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "common/msg";
+	}
+	
+	@RequestMapping("/blameComment")
+	public String BoardCommentBlame(Blame blame, @RequestParam String recipeNo, Model model) {
+		
+		try {
+			int result = recipeService.boardCommentBlame(blame);
+			String msg = result>0?"신고 성공":"신고 실패";
+			
+			model.addAttribute("msg", msg);
+			model.addAttribute("loc", "/recipe/recipeView.do?recipeNo=" + recipeNo + "&memberId=");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "common/msg";
 	}
 
 }
