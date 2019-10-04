@@ -10,15 +10,6 @@
 
 
 <style>
-.myPage>div{
-	display: inline-block;
-	vertical-align: top;
-}
-
-.myPage .myPage-nav {
-	width: 200px;
-}
-
 .myPage .good{
 color: #0f851a;
 }
@@ -185,15 +176,7 @@ $(()=>{
 
 <section>
 	<article class="subPage inner myPage">
-	    <div class="myPage-nav">
-	    <h3 class="sub_tit">마이페이지</h3>
-	    	<ul>
-	    		<li>개인정보 수정</li>
-	    		<li>주소지 관리</li>
-	    		<li>쿠폰 관리</li>
-	    		<li>주문내역 확인</li>
-	    	</ul>
-	    </div>
+	    <jsp:include page="/WEB-INF/views/member/memberNav.jsp" />
 	    <div class="sec_bg">
 	    	<h3 class="sub_tit" style="background-color: white;">개인정보수정</h3>
 	    	<form id="form_myPage">

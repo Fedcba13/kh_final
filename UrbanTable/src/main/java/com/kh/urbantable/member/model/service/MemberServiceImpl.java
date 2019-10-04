@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.urbantable.event.model.vo.Coupon;
 import com.kh.urbantable.member.model.dao.MemberDAO;
 import com.kh.urbantable.member.model.vo.Member;
 import com.kh.urbantable.member.model.vo.MemberAutoLogin;
@@ -101,6 +102,11 @@ public class MemberServiceImpl implements MemberService {
 	@Override
 	public int modifyMember(Member member) {
 		return memberDAO.modifyMember(member);
+	}
+
+	@Override
+	public List<Coupon> selectCouponList(HashMap<String, Object> param) {
+		return memberDAO.selectCouponList(param);
 	}
 
 }

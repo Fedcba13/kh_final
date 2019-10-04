@@ -91,5 +91,22 @@ $(document).ready(function(){
 		$(".login-modal input[type=checkbox][name=saveId]").prop("checked", true);
 		$(".login-modal [name=autoLogin]").prop("disabled", !$(".login-modal [name=saveId]").prop("checked"));
 	}
-
+	
 });
+
+var toDate = function(prevDate){
+	var date = new Date(prevDate);
+	
+	var month = '' + (date.getMonth() + 1);
+    var day = '' + date.getDate();
+    var year = date.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+    
+    date = year+'년 '+month+'월 '+day+'일';
+    
+	return date;
+}

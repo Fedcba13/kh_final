@@ -8,6 +8,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.urbantable.event.model.vo.Coupon;
 import com.kh.urbantable.member.model.service.MemberService;
 import com.kh.urbantable.member.model.vo.Member;
 import com.kh.urbantable.member.model.vo.MemberAutoLogin;
@@ -81,6 +82,11 @@ public class MemberDAOImpl implements MemberDAO {
 	@Override
 	public int modifyMember(Member member) {
 		return sqlSession.update("member.modifyMember", member);
+	}
+
+	@Override
+	public List<Coupon> selectCouponList(HashMap<String, Object> param) {
+		return sqlSession.selectList("pay.getAllCoupons", param);
 	}
 
 }
