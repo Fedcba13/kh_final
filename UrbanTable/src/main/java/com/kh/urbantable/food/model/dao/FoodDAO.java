@@ -56,4 +56,6 @@ public interface FoodDAO {
 
 	List<RelatedRecipe> selectRelatedRecipe(String foodNo);
 
+	List<FoodWithStockAndEvent> selectNeedToOrderListListByCat(Map<String, String> param);
+
 }

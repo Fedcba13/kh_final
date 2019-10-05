@@ -27,17 +27,55 @@
 					LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
 					LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO 
 		<trim prefix="WHERE" suffixOverrides="AND">
-			M.MARKET_NO = #{marketNo} 
+			M.MARKET_NO = #{marketNo}
+			<![CDATA[AND T.STOCK_AMOUNT > 0]]>
 			<if test="FOOD_DIVISION_NO !=null and FOOD_DIVISION_NO !=''">
-			AND D.FOOD_DIVISION_NO = #{FOOD_DIVISION_NO}
+				AND D.FOOD_DIVISION_NO = #{FOOD_DIVISION_NO}
 			</if>
 			<if test="FOOD_UPPER_NO !=null and FOOD_UPPER_NO !=''">
-			AND U.FOOD_UPPER_NO = #{FOOD_UPPER_NO}
+				AND U.FOOD_UPPER_NO = #{FOOD_UPPER_NO}
 			</if>
 			<if test="FOOD_SECTION_NO !=null and FOOD_SECTION_NO !=''">
-			AND S.FOOD_SECTION_NO = #{FOOD_SECTION_NO}
+				AND S.FOOD_SECTION_NO = #{FOOD_SECTION_NO}
 			</if>
-			AND M.MARKET_ENABLED = 1 AND FLAG = 2
+		</trim>
+	</select>
+	<select id="selectNeedToOrderListListByCat" resultType="foodWithStockAndEvent" parameterType="map">
+		SELECT *
+		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+					LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+					LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
+					LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
+					LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO 
+		<trim prefix="WHERE" suffixOverrides="AND">
+			F.FOOD_NO NOT IN (SELECT F.FOOD_NO
+								FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+											LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+											LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
+											LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
+											LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
+								<trim prefix="WHERE" suffixOverrides="AND">
+									M.MARKET_NO =  #{marketNo}
+								<if test="FOOD_DIVISION_NO !=null and FOOD_DIVISION_NO !=''">
+									AND D.FOOD_DIVISION_NO = #{FOOD_DIVISION_NO}
+								</if>
+								<if test="FOOD_UPPER_NO !=null and FOOD_UPPER_NO !=''">
+									AND U.FOOD_UPPER_NO = #{FOOD_UPPER_NO}
+								</if>
+								<if test="FOOD_SECTION_NO !=null and FOOD_SECTION_NO !=''">
+									AND S.FOOD_SECTION_NO = #{FOOD_SECTION_NO}
+								</if>
+							</trim>)
+				<!-- (M.MARKET_NO = #{marketNo} AND T.STOCK_AMOUNT = 0) -->
+			<if test="FOOD_DIVISION_NO !=null and FOOD_DIVISION_NO !=''">
+				AND D.FOOD_DIVISION_NO = #{FOOD_DIVISION_NO}
+			</if>
+			<if test="FOOD_UPPER_NO !=null and FOOD_UPPER_NO !=''">
+				AND U.FOOD_UPPER_NO = #{FOOD_UPPER_NO}
+			</if>
+			<if test="FOOD_SECTION_NO !=null and FOOD_SECTION_NO !=''">
+				AND S.FOOD_SECTION_NO = #{FOOD_SECTION_NO}
+			</if>
 		</trim>
 		
 	</select>
@@ -166,7 +204,7 @@
 	            LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
 	            LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
 	            LEFT JOIN EVENT E ON S.FOOD_SECTION_NO = E.EVENT_CATEGORY
-	            WHERE M.MARKET_NO =  'mar00012' 
+	            WHERE M.MARKET_NO =  'mar00012' AND E.EVENT_PRICE IS NOT NULL 
 	            ORDER BY E.EVENT_PRICE DESC)
 		WHERE ROWNUM<=4
 		]]>

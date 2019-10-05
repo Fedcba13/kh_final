@@ -29,7 +29,7 @@
 						href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo=${f.foodNo }&marketNo=${f.marketNo}"
 						class="dp_block">
 							<div class="prd_img_area">
-								<c:if test="${not empty f.afterEventPrice }">
+								<c:if test="${f.eventPercent ne 0}">
 									 <p class="fw600 txt_center"><span>SALE</span><br>${f.eventPercent}%</p> 
 								</c:if>
 								<c:if test="${not empty f.foodImg }">
@@ -43,11 +43,11 @@
 							</div>
 							<div class="prd_info_area">
 								<h4>${f.foodName }</h4>
-								<c:if test="${not empty f.afterEventPrice }">
+								<c:if test="${f.eventPercent ne 0}">
 									<p class="prd_price fw600">할인가</p>
 									<p class="prd_price">${f.afterEventPrice } 원</p>
 								</c:if>
-								<p class="prd_price2">${f.foodMemberPrice } 원</p>
+								<p class="prd_price">${f.foodMemberPrice } 원</p>
 							</div>
 					</a></li>
 				</c:if>

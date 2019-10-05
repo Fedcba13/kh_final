@@ -218,16 +218,16 @@ public class FoodWithStockAndEvent extends Food {
 		this.eventPercent = eventPercent;
 	}
 
+	
 
 	@Override
 	public String toString() {
 		return "FoodWithStockAndEvent [marketNo=" + marketNo + ", stockAmount=" + stockAmount + ", memberId=" + memberId
-				+ ", marketResident=" + marketResident + ", marketTelephone=" + marketTelephone + ", marketAddress="
-				+ marketAddress + ", marketEnabled=" + marketEnabled + ", flag=" + flag + ", marketName=" + marketName
-				+ ", marketHoliday=" + marketHoliday + ", marketTime=" + marketTime + ", afterEventPrice="
-				+ afterEventPrice + ", eventPercent=" + eventPercent + "]";
+				+ ", marketResident=" + marketResident + ", marketAddress=" + marketAddress + ", marketEnabled="
+				+ marketEnabled + ", flag=" + flag + ", marketName=" + marketName + ", marketHoliday=" + marketHoliday
+				+ ", marketTime=" + marketTime + ", afterEventPrice=" + afterEventPrice + ", eventPercent="
+				+ eventPercent + ", marketTelephone=" + marketTelephone + ", toString()=" + super.toString() + "]";
 	}
-
 	public FoodWithStockAndEvent(String marketNo, int stockAmount, String memberId, String marketResident,
 			String marketTelephone, String marketAddress, int marketEnabled, int flag, String marketName,
 			String marketHoliday, String marketTime, int afterEventPrice, int eventPercent) {

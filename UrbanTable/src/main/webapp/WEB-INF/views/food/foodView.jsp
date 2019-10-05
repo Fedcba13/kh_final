@@ -55,6 +55,7 @@
 					<button>장바구니 담기</button>
 					<button>늘 사는 것</button>
 					<button>상품 문의</button>
+					<button>재고알림</button>
 					</div>
 			</div>
 			</div>
