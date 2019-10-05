@@ -1,5 +1,6 @@
 package com.kh.urbantable.common.scheduler;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -15,7 +16,8 @@ public class Scheduler {
 	@Scheduled(cron="0 * * * * ?")
 	public void curTime() {
 		Date date = new Date();
-		logger.debug(date.toString());
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		logger.debug(sdf.format(date));
 	}
  
 }
