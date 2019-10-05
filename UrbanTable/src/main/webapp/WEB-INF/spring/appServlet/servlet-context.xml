@@ -67,6 +67,8 @@
 		</interceptor>
 		<interceptor>
 			<mapping path="/member/myPage"/>
+			<mapping path="/member/myCoupon"/>
+			<mapping path="/member/payList"/>
 			<mapping path="/market/founded.do" />
 			<mapping path="/market/myMarket.do" />
 			<mapping path="/market/event.do" />

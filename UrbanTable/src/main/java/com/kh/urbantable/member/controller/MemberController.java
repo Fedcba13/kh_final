@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,11 +22,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.kh.urbantable.common.util.Utils;
-import com.kh.urbantable.event.model.vo.Coupon;
 import com.kh.urbantable.marketOwner.model.service.MarketOwnerService;
 import com.kh.urbantable.marketOwner.model.vo.Market;
 import com.kh.urbantable.member.model.service.MemberService;
@@ -431,7 +427,7 @@ public class MemberController {
 	
 	@RequestMapping("/myCoupon.do")
 	@ResponseBody
-	public List<Coupon> myCouponEnd(HttpSession session, @RequestParam(defaultValue = "") String enabled){
+	public List<HashMap<String, Object>> myCouponEnd(HttpSession session, @RequestParam(defaultValue = "") String enabled){
 
 		String memberId = ((Member)session.getAttribute("memberLoggedIn")).getMemberId();
 
@@ -442,10 +438,17 @@ public class MemberController {
 		param.put("memberId", memberId);
 		param.put("enabled", enabled);
 
-		List<Coupon> couponList = memberService.selectCouponList(param);
+		List<HashMap<String, Object>> couponList = memberService.selectCouponList(param);
 		
+		logger.debug("couponList = {}", couponList);
 
 		return couponList;
+	}
+	
+	@RequestMapping("/payList")
+	public String myPayList() {
+		
+		return "/member/memberPayList";
 	}
 	
 }
