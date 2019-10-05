@@ -105,7 +105,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public List<Coupon> selectCouponList(HashMap<String, Object> param) {
+	public List<HashMap<String, Object>> selectCouponList(HashMap<String, Object> param) {
 		return memberDAO.selectCouponList(param);
 	}
 

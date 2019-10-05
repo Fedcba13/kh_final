@@ -32,6 +32,6 @@ public interface MemberService {
 
 	int modifyMember(Member member);
 
-	List<Coupon> selectCouponList(HashMap<String, Object> param);
+	List<HashMap<String, Object>> selectCouponList(HashMap<String, Object> param);
 
 }
