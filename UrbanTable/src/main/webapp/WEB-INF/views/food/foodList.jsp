@@ -30,13 +30,13 @@
 	    </select>
        <ul class="main_prd_list clearfix">
         <c:forEach items="${foodList }" var="f">
-        	<c:if test="${f.stockAmount gt 0 }">
 <%--             <li onclick="goFoodView('${f.foodNo}');"> --%>
 					<li><a
 						href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo=${f.foodNo }&marketNo=${f.marketNo}"
 						class="dp_block">
 							<div class="prd_img_area">
-								<c:if test="${not empty f.afterEventPrice }">
+								<%-- <c:if test="${not empty f.afterEventPrice }"> --%>
+								<c:if test="${f.eventPercent ne 0}">
 									< <p class="fw600 txt_center"><span>SALE</span><br>${f.eventPercent}%</p> 
 								</c:if>
 								<c:if test="${not empty f.foodImg }">
@@ -50,18 +50,19 @@
 							</div>
 							<div class="prd_info_area">
 								<h4>${f.foodName }</h4>
-								<c:if test="${not empty f.afterEventPrice }">
+								<c:if test="${f.eventPercent ne 0 }">
 									<p class="prd_price fw600">할인가</p>
 									<p class="prd_price">${f.afterEventPrice }</p>
 								</c:if>
-								<p class="prd_price2">${f.foodMemberPrice }</p>
+								<p class="prd_price">${f.foodMemberPrice }</p>
 							</div>
 					</a></li>
-				</c:if>
            
         </c:forEach>
-        <c:forEach items="${foodList }" var="f">
-        	<c:if test="${f.stockAmount eq 0 }">
+        </ul>
+        <hr />
+         <ul class="main_prd_list clearfix">
+        <c:forEach items="${needToOrderList }" var="f">
             <li>
                 <a href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo=${f.foodNo }&marketNo=${f.marketNo}" class="dp_block">
                     <div class="prd_img_area">
@@ -74,11 +75,10 @@
                     </div>
                     <div class="prd_info_area">
                         <h4>${f.foodName }</h4>
-                        <p class="prd_price2">상품준비중</p>
+                        <p class="prd_price">상품준비중</p>
                     </div>
                 </a>
             </li>
-        	</c:if>
            
         </c:forEach>
         </ul>

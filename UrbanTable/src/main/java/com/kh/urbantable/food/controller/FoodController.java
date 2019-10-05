@@ -41,8 +41,12 @@ public class FoodController {
 	private FoodService foodService;
 
 	public FoodWithStockAndEvent calculateEventPrice(FoodWithStockAndEvent food) {
-		int eventPercent = foodService.selectEventPercent(food);
-
+		int eventPercent = 0;
+		try {
+			eventPercent = foodService.selectEventPercent(food);
+		}catch(NullPointerException e) {
+			eventPercent = 0;
+		}
 		double M3 = eventPercent * 0.01; // M3는 %를 소수점으로 변환한 값이다 즉 20%를 0.2로 변환한다
 		double yourmoney = food.getFoodMemberPrice() * M3; // 할인되는 가격
 		double actually = food.getFoodMemberPrice() - yourmoney; // 실제 가격
@@ -52,7 +56,7 @@ public class FoodController {
 			food.setEventPercent(eventPercent);
 		}
 		return food;
-	}
+	}	
 
 	@RequestMapping(value = "/selectFoodInMain1.do")
 	@ResponseBody
@@ -135,11 +139,11 @@ public class FoodController {
 	public String selectFoodByCat(Model model, @RequestParam(value = "searchNo") String searchNo,
 			@RequestParam(value = "searchKeyword") String searchKeyword,
 			@RequestParam(value = "marketNo", required = false, defaultValue = "mar00012") String marketNo) {
-
+		
 		Map<String, String> param = new HashMap<String, String>();
 		param.put("searchNo", searchNo);
 		param.put("marketNo", marketNo);
-
+		
 		String whichCat = searchNo.substring(0, 3);
 
 		List<FoodUpper> subUpperList = null;
@@ -160,12 +164,15 @@ public class FoodController {
 		}
 
 		List<FoodWithStockAndEvent> foodList = foodService.selectFoodListByCat(param);
+		List<FoodWithStockAndEvent> needToOrderList = foodService.selectNeedToOrderListListByCat(param);
+		
 		List<Market> marketList = foodService.selectMarketList();
 
 		for (FoodWithStockAndEvent food : foodList) {
 			food = calculateEventPrice(food);
 		}
-
+		
+		
 		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("searchNo", searchNo);
 		model.addAttribute("marketNo", marketNo);
@@ -174,6 +181,7 @@ public class FoodController {
 		model.addAttribute("brotherSectList", brotherSectList);
 		model.addAttribute("marketList", marketList);
 		model.addAttribute("foodList", foodList);
+		model.addAttribute("needToOrderList", needToOrderList);
 
 		return "food/foodList";
 	}
