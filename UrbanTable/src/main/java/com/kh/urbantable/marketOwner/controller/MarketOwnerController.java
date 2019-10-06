@@ -1,13 +1,23 @@
 package com.kh.urbantable.marketOwner.controller;
 
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor.HSSFColorPredefined;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -586,4 +596,156 @@ public class MarketOwnerController {
 		result.put("totalOrder",totalOrder);
 		return result;
 	}
+	
+	@RequestMapping(value="/excelDown.do")
+	public void excelDown(HttpServletResponse response,
+			@RequestParam(value="marketNo") String marketNo,
+			@RequestParam(value="cPage", defaultValue="1", required=false) int cPage,
+			@RequestParam(value="orderSearchType", defaultValue="") String orderSearchType,
+			@RequestParam(value="orderSearchKeyword", defaultValue="") String orderSearchKeyword,
+			@RequestParam(value="payFlag", defaultValue="9") int payFlag,
+			@RequestParam(value="deliverType", defaultValue="") String deliverType,
+			@RequestParam(value="payStartDate", defaultValue="") String payStartDate,
+			@RequestParam(value="payEndDate", defaultValue="") String payEndDate) throws Exception {
+	    
+		//게시판 목록조회
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("marketNo", marketNo);
+		param.put("orderSearchType", orderSearchType);
+		param.put("orderSearchKeyword", orderSearchKeyword);
+		param.put("payFlag", payFlag);
+		param.put("deliverType", deliverType);
+		param.put("payStartDate", payStartDate);
+		param.put("payEndDate", payEndDate);
+		
+	    List<Map<String, Object>> marketOrderList = marketOwnerService.selectMarketOrderList(cPage, param);
+	    
+	    logger.info("@controller="+marketOrderList);
+	    
+	    // 워크북 생성
+	    Workbook wb = new HSSFWorkbook();
+	    Sheet sheet = wb.createSheet("게시판");
+	    Row row = null;
+	    Cell cell = null;
+	    int rowNo = 0;
+
+	    // 테이블 헤더용 스타일
+	    CellStyle headStyle = wb.createCellStyle();
+	    headStyle.setBorderTop(BorderStyle.THIN);
+	    headStyle.setBorderBottom(BorderStyle.THIN);
+	    headStyle.setBorderLeft(BorderStyle.THIN);
+	    headStyle.setBorderRight(BorderStyle.THIN);
+	    headStyle.setFillForegroundColor(HSSFColorPredefined.YELLOW.getIndex());
+	    headStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+	    headStyle.setAlignment(HorizontalAlignment.CENTER);
+
+	    // 데이터용 경계 스타일 테두리만 지정
+	    CellStyle bodyStyle = wb.createCellStyle();
+	    bodyStyle.setBorderTop(BorderStyle.THIN);
+	    bodyStyle.setBorderBottom(BorderStyle.THIN);
+	    bodyStyle.setBorderLeft(BorderStyle.THIN);
+	    bodyStyle.setBorderRight(BorderStyle.THIN);
+
+	    // 헤더 생성
+	    row = sheet.createRow(rowNo++);
+	    cell = row.createCell(0);
+	    cell.setCellStyle(headStyle);
+	    cell.setCellValue("주문번호");
+	    cell = row.createCell(1);
+	    cell.setCellStyle(headStyle);
+	    cell.setCellValue("주문자 ID");
+	    cell = row.createCell(2);
+	    cell.setCellStyle(headStyle);
+	    cell.setCellValue("주문자명");
+	    cell = row.createCell(3);
+	    cell.setCellStyle(headStyle);
+	    cell.setCellValue("연락처");
+	    cell = row.createCell(4);
+	    cell.setCellStyle(headStyle);
+	    cell.setCellValue("주문일자");
+	    cell = row.createCell(5);
+	    cell.setCellStyle(headStyle);
+	    cell.setCellValue("주문상태");
+	    cell = row.createCell(6);
+	    cell.setCellStyle(headStyle);
+	    cell.setCellValue("주문 합계");
+	    cell = row.createCell(7);
+	    cell.setCellStyle(headStyle);
+	    cell.setCellValue("결제 수단");
+	    cell = row.createCell(8);
+	    cell.setCellStyle(headStyle);
+	    cell.setCellValue("배송 종류");
+
+	    // 데이터 부분 생성
+	    for(Map<String, Object> list : marketOrderList) {
+	        row = sheet.createRow(rowNo++);
+	        cell = row.createCell(0);
+	        cell.setCellStyle(bodyStyle);
+	        cell.setCellValue(String.valueOf(list.get("PAY_NO")));
+	        cell = row.createCell(1);
+	        cell.setCellStyle(bodyStyle);
+	        cell.setCellValue(String.valueOf(list.get("MEMBER_ID")));
+	        cell = row.createCell(2);
+	        cell.setCellStyle(bodyStyle);
+	        cell.setCellValue(String.valueOf(list.get("MEMBER_NAME")));
+	        cell = row.createCell(3);
+	        cell.setCellStyle(bodyStyle);
+	        cell.setCellValue(String.valueOf(list.get("MEMBER_PHONE")));
+	        cell = row.createCell(4);
+	        cell.setCellStyle(bodyStyle);
+	        cell.setCellValue(String.valueOf(list.get("PAY_DATE")));
+	        
+	        String flag = "";
+			if(Integer.parseInt(String.valueOf(list.get("PAY_FLAG")))==0){
+				flag = "주문";
+			} else if(Integer.parseInt(String.valueOf(list.get("PAY_FLAG")))==1){
+				flag = "결제 완료";
+			} if(Integer.parseInt(String.valueOf(list.get("PAY_FLAG")))==2){
+				flag = "배송 완료";
+			}
+	        cell = row.createCell(5);
+	        cell.setCellStyle(bodyStyle);
+	        cell.setCellValue(flag);
+	        cell = row.createCell(6);
+	        cell.setCellStyle(bodyStyle);
+	        cell.setCellValue(String.valueOf(list.get("PAY_PRICE")));
+	        
+	        String paymentway = "";
+			if(list.get("PAYMENT_WAY")!=null 
+					&& String.valueOf(list.get("PAYMENT_WAY")).equals("card")){
+				paymentway = "신용카드";
+			} else if(list.get("PAYMENT_WAY")==null ){
+				paymentway = "";
+			} else {
+				paymentway = String.valueOf(list.get("PAYMENT_WAY"));
+			}
+
+			cell = row.createCell(7);
+	        cell.setCellStyle(bodyStyle);
+	        cell.setCellValue(paymentway);
+	        
+	        String delivery = "";
+			if(String.valueOf(list.get("DELIVER_TYPE")).equals("d")){
+				delivery = "샛별 배송";
+			} else if(String.valueOf(list.get("DELIVER_TYPE")).equals("n")){
+				delivery = "일반 배송";
+			} else if(String.valueOf(list.get("DELIVER_TYPE")).equals("r")){
+				delivery = "정기 배송";
+			}
+	        cell = row.createCell(8);
+	        cell.setCellStyle(bodyStyle);
+	        cell.setCellValue(delivery);
+	    }
+
+	    // 컨텐츠 타입과 파일명 지정
+	    response.setContentType("ms-vnd/excel");
+	    response.setHeader("Content-Disposition", "attachment;filename=order_list.xls");
+	    response.setHeader("Set-Cookie", "fileDownload=true; path=/");
+	   
+	    // 엑셀 출력
+	    wb.write(response.getOutputStream());
+	    wb.close();
+	}
+
+
 }
