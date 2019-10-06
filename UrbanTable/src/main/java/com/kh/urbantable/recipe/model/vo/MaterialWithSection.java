@@ -22,4 +22,15 @@ public class MaterialWithSection {
 	private String foodDivisionNo;
 	private String foodSectionName;
 	private String foodSectionUpper;
+	private String foodName;
+	private String foodCompany;
+	private int foodMarketPrice;
+	private int foodMemberPrice;
+	private int foodEnabled;
+	private String foodImg;
+	private String foodOriginalFileName;
+	private String foodRenamedFileName;
+	private String foodDivisionName;
+	private String foodUpperNo;
+	private String foodUpperName;
 }

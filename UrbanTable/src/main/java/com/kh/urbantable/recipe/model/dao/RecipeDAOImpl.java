@@ -128,4 +128,9 @@ public class RecipeDAOImpl implements RecipeDAO {
 	public String searchFoodNo(String searchResult) {
 		return sqlSession.selectOne("recipe.searchFoodNo", searchResult);
 	}
+
+	@Override
+	public int recipeDelete(String recipeNo) {
+		return sqlSession.update("recipe.recipeDelete", recipeNo);
+	}
 }

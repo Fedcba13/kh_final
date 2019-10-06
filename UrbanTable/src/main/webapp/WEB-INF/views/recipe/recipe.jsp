@@ -7,9 +7,16 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/recipe.css">
 <script>
-/* if($("#memberId").val() == null || $("#memberId").val() == "") {
-	alert("로그인")
-} */
+$(()=> {
+	$(".insert_btn").on("click", function() {
+		if(this.value == null || this.value == "") {
+			alert("로그인을 해주세요!");
+			return false;
+		}
+		
+		location.href='${pageContext.request.contextPath}/recipe/insert';
+	});	
+});
 </script>
 <section class="sub_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
@@ -45,7 +52,7 @@
 		    <jsp:param name="finalPageNo" value="${paging.finalPageNo}" />
 		</jsp:include>
         <div class="recipe_insert">
-        	<button class="btn" onclick="location.href='${pageContext.request.contextPath}/recipe/insert'">글쓰기</button>        
+        	<button class="btn insert_btn" value="${memberLoggedIn.memberId}">글쓰기</button>        
         </div>
     </article>
 </section>

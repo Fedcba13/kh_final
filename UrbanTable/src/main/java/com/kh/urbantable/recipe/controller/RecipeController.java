@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -43,8 +44,7 @@ public class RecipeController {
 	@Autowired
 	RecipeService recipeService;
 	
-	Set<String> set = new HashSet<String>();
-	Set<String> srhSet = new HashSet<String>();
+	List<String> set = new ArrayList<String>();
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@RequestMapping("/recipe")
@@ -91,12 +91,21 @@ public class RecipeController {
 	
 	@ResponseBody
 	@GetMapping("/materialInsert/{section}")
-	public Set<String> materialInsert(@PathVariable("section") String section, @RequestParam("materialSet") String materialSet, @RequestParam("searchResult") String searchResult) {
+	public List<String> materialInsert(@PathVariable("section") String section, @RequestParam("materialSet") String materialSet, @RequestParam("searchResult") String searchResult) {
 		if(materialSet.equals("")) {
-			set = new HashSet<String>();
+			set = new ArrayList<String>();
 		}
 		
 		set.add(section + "-" + searchResult);
+		
+		return set;
+	}
+	
+	@ResponseBody
+	@GetMapping("/materialDelete/{index}")
+	public List<String> materialDelete(@PathVariable("index") String index, @RequestParam("materialSet") String materialSet) {
+		
+		set.remove(Integer.parseInt(index) - 1);
 		
 		return set;
 	}
@@ -301,6 +310,50 @@ public class RecipeController {
 		List<Food> list = recipeService.foodSearchList(searchName);
 		
 		return list;
+	}
+	
+	@RequestMapping("/recipeDelete")
+	public String recipeDelete(@RequestParam("recipeNo") String recipeNo, Model model) {
+		
+		try {
+			int result = recipeService.recipeDelete(recipeNo);
+			String msg = result>0?"게시글 삭제 성공":"게시글 삭제 실패";
+			
+			model.addAttribute("msg", msg);
+			model.addAttribute("loc", "/recipe/recipe");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "common/msg";
+	}
+	
+	@RequestMapping("/recipeUpdate")
+	public String recipeUpdate(@RequestParam("recipeNo") String recipeNo, Model model) {
+		
+		RecipeVO recipeVo = recipeService.selectOneRecipe(recipeNo);
+		List<MaterialWithSection> list = recipeService.selectMaterial(recipeNo);
+		
+		model.addAttribute("recipe", recipeVo);
+		model.addAttribute("material", list);
+		
+		return "recipe/recipeUpdate";
+	}
+	
+	@RequestMapping("/recipeUpdateEnd")
+	public String recipeUpdateEnd(@RequestParam("recipeNo") String recipeNo, Model model) {
+		
+		try {
+			int result = recipeService.recipeDelete(recipeNo);
+			String msg = result>0?"게시글 수정 성공":"게시글 수정 실패";
+			
+			model.addAttribute("msg", msg);
+			model.addAttribute("loc", "/recipe/recipe");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "common/msg";
 	}
 
 }

@@ -57,4 +57,6 @@ public interface RecipeService {
 
 	String searchFoodNo(String searchResult);
 
+	int recipeDelete(String recipeNo);
+
 }

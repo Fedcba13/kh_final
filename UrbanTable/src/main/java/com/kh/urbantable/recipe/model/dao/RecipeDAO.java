@@ -57,4 +57,6 @@ public interface RecipeDAO {
 
 	String searchFoodNo(String searchResult);
 
+	int recipeDelete(String recipeNo);
+
 }

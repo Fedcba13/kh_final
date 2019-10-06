@@ -42,6 +42,9 @@
 	<select id="selectMaterial" resultMap="materialSectionMap">
 		select * from recipe_ingredient i left join food_section s
 		on i.food_section_no = s.food_section_no
+		left join food f on i.food_no = f.food_no
+		left join food_upper u on s.food_upper_no = u.food_upper_no
+		left join food_division d on u.food_division_no = d.food_division_no
 		where recipe_no = #{recipeNo}
 	</select>
 	
@@ -53,6 +56,14 @@
 		<result column="food_division_no" property="foodDivisionNo" />
 		<result column="food_section_name" property="foodSectionName" />
 		<result column="food_section_upper" property="foodSectionUpper" />
+		<result column="food_name" property="foodName" />
+		<result column="food_company" property="foodCompany" />
+		<result column="food_market_price" property="foodMarketPrice" />
+		<result column="food_user_price" property="foodUserPrice" />
+		<result column="food_enabled" property="foodEnabled" />
+		<result column="food_division_name" property="foodDivisionName" />
+		<result column="food_upper_no" property="foodUpperNo" />
+		<result column="food_upper_name" property="foodUpperName" />
 	</resultMap>
 	
 	<resultMap type="material" id="materialMap">
@@ -204,4 +215,12 @@
 		select food_no from food
 		where food_name = #{searchResult}
 	</select>
+	
+	<update id="recipeDelete">
+		update recipe
+		<set>
+			recipe_enabled = 0
+		</set>
+		where recipe_no = #{recipeNo}
+	</update>
 </mapper>

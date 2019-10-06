@@ -127,4 +127,9 @@ public class RecipeServiceImpl implements RecipeService {
 	public String searchFoodNo(String searchResult) {
 		return recipeDAO.searchFoodNo(searchResult);
 	}
+
+	@Override
+	public int recipeDelete(String recipeNo) {
+		return recipeDAO.recipeDelete(recipeNo);
+	}
 }

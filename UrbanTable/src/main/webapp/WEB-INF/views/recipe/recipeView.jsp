@@ -107,6 +107,20 @@ $(()=> {
 		location.href = "${pageContext.request.contextPath}/recipe/blameComment?blameTargetId=" + this.value + "&memberId="
 				+ $(this).attr("memberId") + "&blameContent=" + $(this).attr("boardCommentContent") + "&recipeNo=" + $(this).attr("recipeNo");		
 	});
+	
+	$(".recipe_delete_btn").on("click", function() {
+		var result = confirm("삭제하시겠습니까?");
+		
+		if(result) {
+			location.href = "${pageContext.request.contextPath}/recipe/recipeDelete?recipeNo=" + this.value;
+		} else {
+			return false;
+		}
+	});
+	
+	$(".recipe_update_btn").on("click", function() {
+		location.href = "${pageContext.request.contextPath}/recipe/recipeUpdate?recipeNo=" + this.value;
+	});
 });
 </script>
 <c:if test="${recipe.recipeEnabled != 1}">
@@ -117,6 +131,10 @@ $(()=> {
 </c:if>
 <section class=""> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
+		<div class="update_div">
+			<button class="btn recipe_update_btn" value="${recipe.recipeNo}">수정</button>
+			<button class="btn recipe_delete_btn" value="${recipe.recipeNo}">삭제</button>		
+		</div>
         <table class="tbl tbl_view">
             <c:if test="${not empty recipe}">
             	<tr>
@@ -155,6 +173,19 @@ $(()=> {
 	        	<li>${rec.recipeContent}</li>
         	</c:forEach>
         </ol>
+        <div class="recomList">
+		    <ol class="recomOl">
+	        	<c:if test="${not empty material}">
+			        <c:forEach items="${material}" var="m">
+			        	<c:if test="${m.foodNo != null}">
+			        			<li>
+			        				${m.foodName}
+			        			</li>
+			        	</c:if>
+			        </c:forEach>                	
+	        	</c:if>
+    		</ol>
+        </div>
     </article>
     <hr width="97%" />
     <h2 class="comment_h2">댓글(${comment.size()})</h2>
