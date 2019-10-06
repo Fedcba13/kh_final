@@ -6,6 +6,11 @@
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/recipe.css">
+<script>
+/* if($("#memberId").val() == null || $("#memberId").val() == "") {
+	alert("로그인")
+} */
+</script>
 <section class="sub_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 	    <h3 class="sub_tit">레시피</h3>
@@ -30,6 +35,15 @@
             	</c:forEach>
             </c:if>
         </table>
+        <jsp:include page="paging.jsp" flush="true">
+		    <jsp:param name="firstPageNo" value="${paging.firstPageNo}" />
+		    <jsp:param name="prevPageNo" value="${paging.prevPageNo}" />
+		    <jsp:param name="startPageNo" value="${paging.startPageNo}" />
+		    <jsp:param name="pageNo" value="${paging.pageNo}" />
+		    <jsp:param name="endPageNo" value="${paging.endPageNo}" />
+		    <jsp:param name="nextPageNo" value="${paging.nextPageNo}" />
+		    <jsp:param name="finalPageNo" value="${paging.finalPageNo}" />
+		</jsp:include>
         <div class="recipe_insert">
         	<button class="btn" onclick="location.href='${pageContext.request.contextPath}/recipe/insert'">글쓰기</button>        
         </div>

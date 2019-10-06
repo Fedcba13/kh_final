@@ -24,12 +24,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.recipe.model.service.RecipeService;
 import com.kh.urbantable.recipe.model.vo.Blame;
 import com.kh.urbantable.recipe.model.vo.BoardComment;
 import com.kh.urbantable.recipe.model.vo.Material;
 import com.kh.urbantable.recipe.model.vo.MaterialWithSection;
+import com.kh.urbantable.recipe.model.vo.Paging;
 import com.kh.urbantable.recipe.model.vo.Recipe;
 import com.kh.urbantable.recipe.model.vo.RecipeSequence;
 import com.kh.urbantable.recipe.model.vo.RecipeVO;
@@ -42,14 +44,23 @@ public class RecipeController {
 	RecipeService recipeService;
 	
 	Set<String> set = new HashSet<String>();
+	Set<String> srhSet = new HashSet<String>();
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@RequestMapping("/recipe")
 	public String recipe(HttpServletRequest request) {
 		
-		List<Recipe> list = recipeService.selectRecipeList();
+		int totalCount = recipeService.selectRecipeListCnt();
+
+        Paging paging = new Paging();
+        paging.setPageNo(1);
+        paging.setPageSize(10);
+        paging.setTotalCount(totalCount);
+        
+        List<Recipe> list = recipeService.selectRecipeList(paging);
 		
 		request.setAttribute("list", list);
+		request.setAttribute("paging", paging);
 //		logger.debug("list=" + list);
 		return "/recipe/recipe";
 	}
@@ -80,11 +91,12 @@ public class RecipeController {
 	
 	@ResponseBody
 	@GetMapping("/materialInsert/{section}")
-	public Set<String> materialInsert(@PathVariable("section") String section, @RequestParam("materialSet") String materialSet) {
+	public Set<String> materialInsert(@PathVariable("section") String section, @RequestParam("materialSet") String materialSet, @RequestParam("searchResult") String searchResult) {
 		if(materialSet.equals("")) {
 			set = new HashSet<String>();
 		}
-		set.add(section);
+		
+		set.add(section + "-" + searchResult);
 		
 		return set;
 	}
@@ -152,24 +164,22 @@ public class RecipeController {
 			
 			String[] materialArr = materialSet.split(",");
 			
+			
 			logger.debug(Arrays.toString(materialArr));
 			
 			for(int j = 0; j<materialArr.length; j++) {
-				String foodSectionNo = recipeService.selectFoodSectionNo(materialArr[j]);
-				List<String> foodNoList = recipeService.selectFoodNo(foodSectionNo);
-				String foodNo = "";
+				logger.debug(materialArr[j]);
+				String[] ingreArray = materialArr[j].split("-");
+				logger.debug(Arrays.toString(ingreArray));
+				String foodSectionNo = recipeService.selectFoodSectionNo(ingreArray[0]);
 				
 				Material material = new Material();
 				material.setRecipeNo(recipeNo);
 				material.setFoodSectionNo(foodSectionNo);
-				for(int k=0; k<foodNoList.size(); k++) {
-					foodNo = foodNoList.get(k);
-//					foodNo += foodNoList.get(k);
-//					if(k != foodNoList.size()-1) {
-//						foodNo += ",";
-//					}
+				if(ingreArray.length == 2) {
+					material.setFoodNo(ingreArray[1]);									
+					logger.debug(ingreArray[1]);
 				}
-				material.setFoodNo(foodNo);
 				materialList.add(material);
 			}
 			
@@ -192,15 +202,16 @@ public class RecipeController {
 	
 	@ResponseBody
 	@GetMapping("/materialSelectBox")
-	public List<FoodSection> MaterialSelectBox(@RequestParam("fr") String fr) {
+	public List<FoodSection> materialSelectBox(@RequestParam("fr") String fr) {
 		String foodDivisionNo = recipeService.selectFoodDivisionNo(fr);
+		
 		List<FoodSection> sectionList = recipeService.selectFoodSectionList(foodDivisionNo);
 
 		return sectionList;
 	}
 	
 	@RequestMapping("/commentInsert")
-	public String BoardCommentInsert(BoardComment comment, Model model) {
+	public String boardCommentInsert(BoardComment comment, Model model) {
 		if(comment.getBoardCommentRef() != null && comment.getBoardCommentRef() != "") {
 			logger.debug(comment.getBoardCommentRef());
 			
@@ -230,7 +241,7 @@ public class RecipeController {
 	}
 	
 	@RequestMapping("/commentUpdate")
-	public String BoardCommentUpdate(BoardComment comment, Model model) {
+	public String boardCommentUpdate(BoardComment comment, Model model) {
 		
 		try {
 			int result = recipeService.boardCommentUpdate(comment);
@@ -246,7 +257,7 @@ public class RecipeController {
 	}
 	
 	@RequestMapping("/commentDelete")
-	public String BoardCommentDelete(@RequestParam String boardCommentNo, @RequestParam String recipeNo, Model model) {
+	public String boardCommentDelete(@RequestParam String boardCommentNo, @RequestParam String recipeNo, Model model) {
 		
 		try {
 			int result = recipeService.boardCommentDelete(boardCommentNo);
@@ -262,7 +273,7 @@ public class RecipeController {
 	}
 	
 	@RequestMapping("/blameComment")
-	public String BoardCommentBlame(Blame blame, @RequestParam String recipeNo, Model model) {
+	public String boardCommentBlame(Blame blame, @RequestParam String recipeNo, Model model) {
 		
 		try {
 			int result = recipeService.boardCommentBlame(blame);
@@ -275,6 +286,21 @@ public class RecipeController {
 		}
 		
 		return "common/msg";
+	}
+	
+	@RequestMapping("/searchFrm")
+	public String SearchFrm() {
+		
+		return "recipe/foodSearch";
+	}
+	
+	@ResponseBody
+	@GetMapping("/foodSearchList")
+	public List<Food> foodSearchList(@RequestParam("searchName") String searchName) {
+		
+		List<Food> list = recipeService.foodSearchList(searchName);
+		
+		return list;
 	}
 
 }

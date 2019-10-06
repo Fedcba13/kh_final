@@ -2,18 +2,20 @@ package com.kh.urbantable.recipe.model.dao;
 
 import java.util.List;
 
+import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.recipe.model.vo.Blame;
 import com.kh.urbantable.recipe.model.vo.BoardComment;
 import com.kh.urbantable.recipe.model.vo.Material;
 import com.kh.urbantable.recipe.model.vo.MaterialWithSection;
+import com.kh.urbantable.recipe.model.vo.Paging;
 import com.kh.urbantable.recipe.model.vo.Recipe;
 import com.kh.urbantable.recipe.model.vo.RecipeSequence;
 import com.kh.urbantable.recipe.model.vo.RecipeVO;
 
 public interface RecipeDAO {
 
-	List<Recipe> selectRecipeList();
+	List<Recipe> selectRecipeList(Paging paging);
 
 	RecipeVO selectOneRecipe(String recipeNo);
 
@@ -48,5 +50,11 @@ public interface RecipeDAO {
 	BoardComment selectOneBoardComment(String boardCommentNo);
 
 	int boardCommentBlame(Blame blame);
+
+	int selectRecipeListCnt();
+
+	List<Food> foodSearchList(String searchName);
+
+	String searchFoodNo(String searchResult);
 
 }

@@ -110,6 +110,7 @@ $(()=> {
 		
 		var html = "";
 		var section = $("#food_section").val();
+		var searchResult = $("#searchResultNo").val();
 		
 		html += "<li class='mate_li' value='" + material_i + "'>" + $("#food_division").val() + ">" + section + "</li>"
 		html += "<button type='button' class='mate_li_delete' value='" + material_i + "'>x</button>";
@@ -122,20 +123,25 @@ $(()=> {
 		});
 		
 		var materialSet = $("#materialSet").val();
+		var searchSet = $("#searchSet").val();
 		
 		$.ajax({
 			url: "${pageContext.request.contextPath}/recipe/materialInsert/" + section,
-			data: {materialSet: materialSet},
+			data: {materialSet: materialSet, searchResult: searchResult},
 			dataType: "json",
 			type: "GET",
 			success: (data)=>{
 				console.log(data);
 				$("#materialSet").val(data);
+				
 			},
 			error: (xhr, txtStatus, err)=> {
 				console.log("ajax 처리실패!", xhr, txtStatus, err);
 			}
 		});
+		
+		$("#searchResult").val("");
+		$("#searchResultNo").val("");
 		
 		material_i++;
 	});
@@ -143,13 +149,31 @@ $(()=> {
 	pic_Event();
 	
 	$(".btn_insert").on("click", function() {
-		for(var i=1; i<=index; i++) {
-			if($("#recipe_content" + i).val().includes("바보") || $("#recipe_content" + i).val().includes("멍청이")
-					|| $("#recipe_title").val().includes("바보") || $("#recipe_title").val().includes("멍청이")) {
-				alert("금지어가 포함되어 있습니다!");
+		if(index != 2) {
+			if($("#upload_name" + (index-1)).val() == null || $("#upload_name" + (index-1)).val() == "") {
+				alert("마지막 탭에 사진을 첨부해주세요!");
 				return false;
-			}			
+			}
+			
+			for(var i=1; i<=index; i++) {
+				if($("#recipe_content" + i).val().includes("바보") || $("#recipe_content" + i).val().includes("멍청이")
+						|| $("#recipe_title").val().includes("바보") || $("#recipe_title").val().includes("멍청이")) {
+					alert("금지어가 포함되어 있습니다!");
+					return false;
+				}
+			}
+		} else {
+			if($("#upload_name1").val() == null || $("#upload_name1").val() == "") {
+				alert("마지막 탭에 사진을 첨부해주세요!");
+				return false;
+			}
 		}
+	});
+	
+	$(".search_btn").on("click", function() {
+		var loc = "${pageContext.request.contextPath}/recipe/searchFrm";
+		
+		window.open(loc,'추천 상품 선택','width=430,height=500,location=no,status=no,scrollbars=yes');
 	});
 });
 
@@ -198,6 +222,22 @@ var pic_index = $("#tab_remove").val();
 		$("#upload_name" + pic_index).val(name[name.length-1]);
 	});
 }
+
+function setChildValue(searchResult){
+	
+/* 	if(searchResult.length > 9) {
+		searchResult = searchResult.substring(0, 8) + "...";
+	} */
+
+    $("#searchResult").val(searchResult);
+
+}
+
+function setChildNoValue(searchResultNo){
+
+    $("#searchResultNo").val(searchResultNo);
+
+}
 </script>
 <section class=""> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
@@ -234,6 +274,9 @@ var pic_index = $("#tab_remove").val();
 	                	<select name="food_section" id="food_section">
 	                		<option value="">--소분류--</option>
 	                	</select>
+	                	<input type="text" id="searchResult" placeholder="추천 재료(선택 사항)" readonly />
+	            		<input type="hidden" name="searchResultNo" id="searchResultNo" />
+	            		<button type="button" class="btn search_btn" style="width:50px;">검색</button>
 	                	<button type="button" class="btn btn_material">추가</button>
 	                	<br />
 	                	<ol id="material_list"></ol>
@@ -254,7 +297,8 @@ var pic_index = $("#tab_remove").val();
 	                	</div><br />
 	                	<p>
 	                		*레시피 순서에 따라 하나씩 넣어주세요<br />
-	                		*욕설이 들어간 게시글은 삭제 될 수 있습니다
+	                		*욕설이 들어간 게시글은 삭제 될 수 있습니다<br />
+	                		*마지막 탭에는 완성된 요리 사진을 필수로 첨부해주세요
 	                	</p>
 	                	<div class="btn_add">
 		                	<button type="button" class="btn btn_content_ar" id="tab_add">+</button>
