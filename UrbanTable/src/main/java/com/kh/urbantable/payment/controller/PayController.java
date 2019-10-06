@@ -191,5 +191,17 @@ public class PayController {
 		
 		return result;		
 	}
+	
+	@ResponseBody
+	@RequestMapping(value="/updatePoint.do", method=RequestMethod.POST)
+	public int updatePoint(@RequestParam String memberId,
+						   @RequestParam int memberPoint) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("memberId", memberId);
+		map.put("memberPoint", memberPoint);
+		int result = payService.updatePoint(map);
+		
+		return result;
+	}
 
 }

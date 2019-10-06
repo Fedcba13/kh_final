@@ -91,4 +91,9 @@ public class PayDAOImple implements PayDAO {
 	public int updateCoupon(Map<String, String> map) {
 		return sqlSession.update("pay.updateCoupon", map);
 	}
+
+	@Override
+	public int updatePoint(Map<String, Object> map) {
+		return sqlSession.update("pay.updatePoint", map);
+	}
 }

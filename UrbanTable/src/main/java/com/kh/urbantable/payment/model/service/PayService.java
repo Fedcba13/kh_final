@@ -37,4 +37,6 @@ public interface PayService {
 
 	int updateCoupon(Map<String, String> map);
 
+	int updatePoint(Map<String, Object> map);
+
 }

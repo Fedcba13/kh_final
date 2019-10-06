@@ -91,4 +91,9 @@ public class PayServiceImple implements PayService {
 		return payDAO.updateCoupon(map);
 	}
 
+	@Override
+	public int updatePoint(Map<String, Object> map) {
+		return payDAO.updatePoint(map);
+	}
+
 }

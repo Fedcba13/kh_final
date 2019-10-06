@@ -25,7 +25,7 @@
 			    pay_method : $("input:radio[name='paymentWay']:checked").val(),
 			    merchant_uid : $("#payNo").val(),
 			    name : '주문명:결제테스트',
-			    amount : 100,//cartInfoArr[0].payPrice,			    
+			    amount : 100,//parseInt($("#totalPaymentCost").val()),			    
 			    buyer_name : "${memberLoggedIn.memberName}",
 			    buyer_tel : '${memberLoggedIn.memberPhone}',
 			    buyer_addr : '${memberLoggedIn.memberAddress}',
@@ -70,6 +70,7 @@
 							alert(msg);
 							deleteCart();
 							updateCoupon();
+							updatePoint();
 						},
 						error: function(xhr, txtStatus, err){
 							console.log("ajax처리실패!", xhr, txtStatus, err);
@@ -121,6 +122,14 @@
 		$("#selectCoupon").on("click", ()=>{
 			$("#selectCouponModal").css("display", "block");
 		});
+		$("#showPoint").on("click", ()=>{
+			console.log(${memberLoggedIn.memberPoint});
+			if(${memberLoggedIn.memberPoint} < 1000){
+				alert("보유하신 포인트가 1000포인트 미만입니다("+${memberLoggedIn.memberPoint}+"보유중)");
+			} else {
+				$("#showPointModal").css("display", "block");
+			}
+		})
 	});	//onload 함수 끝
 	
 	
@@ -243,6 +252,20 @@
 		$("#totalPrice").val(((payPrice - delCost) * (1-(dcRate/100))) + " 원");
 		var totalPrice = parseInt($("#totalPrice").val());
 		var totalPayment = totalPrice + parseInt(delCost);
+		$("#totalPaymentCost").val(totalPayment+ " 원");
+	}
+	
+	function submitPoint(){
+		if($("#usePoint").val() < 1000){
+			alert("최소 1000포인트부터 사용하실수 있습니다");
+			return ;
+		}
+		$("#showPointModal").css("display", "none");
+		var point = $("#usePoint").val();		
+		$("#memberPoint").val(point);
+		var totalPrice = parseInt($("#totalPrice").val());
+		var delCost = $("#deliveryCost").val();
+		var totalPayment = (totalPrice + parseInt(delCost)) - parseInt($("#memberPoint").val());
 		$("#totalPaymentCost").val(totalPayment+ " 원");
 	}
 	
@@ -407,8 +430,29 @@
 		});
 	}
 	
+	function updatePoint(){
+		$.ajax({
+			url: "${pageContext.request.contextPath}/pay/updatePoint.do",
+			data: {
+				memberId: "${memberLoggedIn.memberId}",
+				memberPoint: parseInt($("#memberPoint").val())
+			},
+			type: "post",
+			success: function(data){
+				
+			},
+			error: function(xhr, txtStatus, err){
+				console.log("ajax처리실패!", xhr, txtStatus, err);
+			}
+		});
+	}
+	
 	function closeModal(){
 		$("#selectCouponModal").css("display", "none");
+	}
+	
+	function closePoint(){
+		$("#showPointModal").css("display", "none");
 	}
 	
 </script>
@@ -476,6 +520,13 @@
                 <td>&nbsp;&nbsp;<input type="button" id="selectCoupon" class="btn" value="쿠폰사용" /></td>
             </tr>
             <tr>
+            	<th>포인트 사용</th>
+            	<td>
+            		<input type="text" id="memberPoint" size="50" placeholder="1000포인트 이상 보유시 사용할수 있습니다" readonly/>
+            	</td>
+            	<td>&nbsp;&nbsp;<input type="button" id="showPoint" class="btn" value="포인트 보기"/></td>
+            </tr>
+            <tr>
                 <th>총 결제금액</th>
                 <td colspan="2"><input type="text" id="totalPaymentCost" size="50" readonly/></td>
             </tr>
@@ -510,6 +561,19 @@
 			<div class="container txt_center" style="background-color:#f4f4f0;">
 				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" onclick="closeModal();">취소</button>
 				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" onclick="submitCoupon();">쿠폰선택</button>
+		    </div>
+		</form>
+	</div>
+    <div class="modal txt_center" id="showPointModal">
+		<form class="modal-content animate">
+			<div class="container txt_center">
+				<span>${memberLoggedIn.memberId}님이 보유하고 있는 포인트는 총 ${memberLoggedIn.memberPoint}점 입니다</span><br />
+				<input type="number" id="usePoint" style="width: 100px;" value=0 max="${memberLoggedIn.memberPoint}" min="1000"/> 포인트 사용
+				</select>
+			</div>
+			<div class="container txt_center" style="background-color:#f4f4f0;">
+				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" onclick="closePoint();">취소</button>
+				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" onclick="submitPoint();">포인트사용</button>
 		    </div>
 		</form>
 	</div>
