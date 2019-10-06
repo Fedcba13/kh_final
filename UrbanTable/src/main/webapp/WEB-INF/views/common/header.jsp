@@ -23,6 +23,17 @@
     <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/slick.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/common.js" charset="UTF-8"></script>
 </head>
+<script>
+	function mainSrchValidate(){
+		var searchKeyword = $("#searchKeyword").val();
+		console.log(searchKeyword);
+		if(searchKeyword.trim().length == 0){
+			return false;
+		}
+		return true;
+	}
+	
+</script>
 <body>
     <header id="header">
         <div id="util_wrap">
@@ -86,11 +97,11 @@
                     <li><a href="" class="dp_block gnb_menu1">전체 카테고리</a></li>
                     <li><a href="${pageContext.request.contextPath}/food/selectNewFoodList.do" class="dp_block">신상품</a></li>
                     <li><a href="${pageContext.request.contextPath}/food/selectBestFoodList.do" class="dp_block">베스트</a></li>
-                    <li><a href="" class="dp_block">알뜰 쇼핑</a></li>
+                    <li><a href="${pageContext.request.contextPath}/food/selectSaleFoodList.do" class="dp_block">알뜰 쇼핑</a></li>
                     <li><a href="${pageContext.request.contextPath }/recipe/recipe" class="dp_block">레시피</a></li>
                 </ul>
                 <div id="main_search">
-                    <form action="" class="dp_block">
+                    <form action="${pageContext.request.contextPath }/food/selectFoodBySearchKeyword.do" method="GET" class="dp_block" onsubmit="return mainSrchValidate();">
                         <input type="text" name="searchKeyword" id="searchKeyword" class="dp_block" placeholder="상품을 검색하세요!">
                         <input type="submit" value="검색">
                     </form>

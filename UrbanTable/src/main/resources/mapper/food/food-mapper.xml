@@ -40,6 +40,27 @@
 			</if>
 		</trim>
 	</select>
+	<select id="selectFoodBySearchKeyword" resultType="foodWithStockAndEvent" parameterType="map">
+		SELECT *
+		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+					LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+					LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
+					LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
+					LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO 
+		<trim prefix="WHERE" suffixOverrides="AND">
+			M.MARKET_NO = #{marketNo} AND F.FOOD_NAME LIKE '%'||#{searchKeyword}||'%'
+			<![CDATA[AND T.STOCK_AMOUNT > 0]]>
+			<if test="FOOD_DIVISION_NO !=null and FOOD_DIVISION_NO !=''">
+				AND D.FOOD_DIVISION_NO = #{FOOD_DIVISION_NO}
+			</if>
+			<if test="FOOD_UPPER_NO !=null and FOOD_UPPER_NO !=''">
+				AND U.FOOD_UPPER_NO = #{FOOD_UPPER_NO}
+			</if>
+			<if test="FOOD_SECTION_NO !=null and FOOD_SECTION_NO !=''">
+				AND S.FOOD_SECTION_NO = #{FOOD_SECTION_NO}
+			</if>
+		</trim>
+	</select>
 	<select id="selectNeedToOrderListListByCat" resultType="foodWithStockAndEvent" parameterType="map">
 		SELECT *
 		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
@@ -75,6 +96,9 @@
 			</if>
 			<if test="FOOD_SECTION_NO !=null and FOOD_SECTION_NO !=''">
 				AND S.FOOD_SECTION_NO = #{FOOD_SECTION_NO}
+			</if>
+			<if test="searchKeyword !=null and searchKeyword !=''">
+				AND F.FOOD_NAME LIKE '%'||#{searchKeyword}||'%'
 			</if>
 		</trim>
 		
@@ -112,9 +136,12 @@
 	]]>
 	</select>
 	<select id="selectFood" resultType="FoodWithStockAndEvent">
-		SELECT *
+        SELECT *
 		FROM FOOD F LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
 					LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
+                  	LEFT JOIN  (SELECT TARGET_ID, COUNT(GOOD) AS GOOD, COUNT(BAD) AS BAD
+                             	FROM GOOD
+                             	GROUP BY TARGET_ID) G ON F.FOOD_NO = G.TARGET_ID
 		WHERE F.FOOD_NO = #{foodNo} AND M.MARKET_NO = #{marketNo}			
 	</select>
 	<select id="getFoodSectionList" resultType="foodSection">
@@ -198,13 +225,17 @@
 	SELECT *
 		FROM 
 		(SELECT *
-		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+			FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
 	            LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
 	            LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
 	            LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
 	            LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
 	            LEFT JOIN EVENT E ON S.FOOD_SECTION_NO = E.EVENT_CATEGORY
-	            WHERE M.MARKET_NO =  'mar00012' AND E.EVENT_PRICE IS NOT NULL 
+	            WHERE ((E.MARKET_NO ='mar00012' AND  E.MARKET_NO IS NULL) 
+                        OR (E.MARKET_NO IS NULL AND E.EVENT_CATEGORY IS NULL)
+                        OR (E.MARKET_NO IS NULL AND E.EVENT_CATEGORY IS NOT NULL))
+                        AND E.EVENT_DATE_START < SYSDATE AND E.EVENT_DATE_END > SYSDATE
+                        AND T.STOCK_AMOUNT > 0
 	            ORDER BY E.EVENT_PRICE DESC)
 		WHERE ROWNUM<=4
 		]]>
@@ -232,7 +263,7 @@
                 LEFT JOIN (SELECT TARGET_ID, COUNT(GOOD) AS GOOD, COUNT(BAD) AS BAD
                                FROM GOOD
                                GROUP BY TARGET_ID) G ON F.FOOD_NO = G.TARGET_ID
-	            WHERE M.MARKET_NO =  #{marketNo} 
+	            WHERE M.MARKET_NO =  #{marketNo} AND D.FOOD_DIVISION_NAME LIKE #{foodDivisionName} 
 	            ORDER BY  (GOOD-BAD) DESC
 	]]>
 	</select>
@@ -249,4 +280,46 @@
 		    WHERE I.FOOD_NO = #{foodNo})
 	    AND ROWNUM <= 4]]>
 	</select> 
+	<select id="selectGoodOne" resultType="good">
+		SELECT *
+		FROM GOOD
+		WHERE TARGET_ID = #{foodNo} AND MEMBER_ID = #{memberId}
+	</select>
+	<select id="cancelGood" resultType="int">
+		UPDATE GOOD
+        SET GOOD = NULL, BAD = NULL 
+        WHERE MEMBER_ID = #{memberId} AND TARGET_ID = #{foodNo} 
+	</select>
+	<select id="changeGood" resultType="int">
+		UPDATE GOOD
+	    SET 
+	    	GOOD = CASE
+	    	WHEN GOOD IS NULL THEN 1
+	    	WHEN GOOD = 1 THEN NULL END
+	    	,BAD = CASE
+	   		WHEN BAD IS NULL THEN 1
+	    	WHEN BAD = 1 THEN NULL END
+	    WHERE MEMBER_ID = #{memberId}  AND TARGET_ID = #{foodNo}
+	</select>
+	<select id="updateGood" resultType="int">
+		UPDATE GOOD
+        SET ${column} = 1
+        WHERE MEMBER_ID = #{memberId} AND TARGET_ID = #{foodNo} 
+	</select>
+	<select id="selectGoodTotal" resultType="good">
+		SELECT  TARGET_ID, COUNT(GOOD) GOOD, COUNT(BAD) BAD
+		FROM GOOD
+		WHERE TARGET_ID = #{foodNo}
+		GROUP BY TARGET_ID
+	</select>
+	<select id="selectSaleFoodList" resultType="FoodWithStockAndEvent">
+		<![CDATA[ SELECT *
+			FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+	            LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+	            LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
+	            LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
+	            LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
+	            WHERE M.MARKET_NO = #{marketNo} AND T.STOCK_AMOUNT > 0
+	            ORDER BY F.FOOD_NAME]]>
+	</select>
 </mapper>

@@ -5,6 +5,31 @@
 	border-left: 1px solid #999; /* 각 메뉴의 왼쪽에 "|" 표시(분류 표시) */
 	padding: 0 10px; /* 각 메뉴 간격 */
 }
+.prd_img_area{ 
+    position:relative; 
+} 
+.prd_img_area .inner_box{ 
+	width: 300px;
+	height: 300px;
+    position:absolute; 
+    background:black; 
+    opacity: 0.5;
+    top:50%; 
+    left:50%; 
+    transform:translate(-50%,-50%); 
+    padding:35px; 
+    text-align:center; 
+} 
+
+.prd_img_area .inner_box h2{ 
+    font-family:arial; 
+    text-align:center; 
+    font-size:26px; 
+    font-weight:normal; 
+    color: gray; 
+    padding: 100px 0px;
+} 
+
 
 /* foodView.jsp */
 #foodExpression{
@@ -14,6 +39,17 @@
 	float:left;
 	margin: 0 100px 0px 70px;
 }
+
+#good div{
+	float: right;	
+	margin: 0px 0px 0px 10px;
+	text-align: center;
+}
+#good div img{
+	width: 50px;
+	height: 50px;
+}
+
 #foodExpressionTb {
 	float:left; 
 	width: 400px;

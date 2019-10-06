@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.urbantable.admin.model.vo.Good;
 import com.kh.urbantable.event.model.vo.Event;
 import com.kh.urbantable.food.model.dao.FoodDAO;
 import com.kh.urbantable.food.model.vo.Food;
@@ -126,8 +127,8 @@ public class FoodServiceImpl implements FoodService {
 	}
 
 	@Override
-	public List<FoodWithStockAndEvent> selectBestFoodList(String marketNo) {
-		return foodDAO.selectBestFoodList(marketNo);
+	public List<FoodWithStockAndEvent> selectBestFoodList(Map<String, String> param) {
+		return foodDAO.selectBestFoodList(param);
 	}
 
 	@Override
@@ -138,6 +139,42 @@ public class FoodServiceImpl implements FoodService {
 	@Override
 	public List<FoodWithStockAndEvent> selectNeedToOrderListListByCat(Map<String, String> param) {
 		return foodDAO.selectNeedToOrderListListByCat(param);
+	}
+
+	@Override
+	public List<FoodWithStockAndEvent> selectFoodBySearchKeyword(Map<String, String> param) {
+		return foodDAO.selectFoodBySearchKeyword(param);
+	}
+
+	@Override
+	public Good selectGoodOne(Map<String, String> param) {
+		return foodDAO.selectGoodOne(param);
+		
+	}
+
+	@Override
+	public int cancelGood(Map<String, String> param) {
+		return foodDAO.cancelGood(param);
+	}
+
+	@Override
+	public int changeGood(Map<String, String> param) {
+		return foodDAO.changeGood(param);
+	}
+
+	@Override
+	public int updateGood(Map<String, String> param) {
+		return foodDAO.updateGood(param);
+	}
+
+	@Override
+	public Good selectGoodTotal(String foodNo) {
+		return foodDAO.selectGoodTotal(foodNo);
+	}
+
+	@Override
+	public List<FoodWithStockAndEvent> selectSaleFoodList(String marketNo) {
+		return foodDAO.selectSaleFoodList(marketNo);
 	}
 
 

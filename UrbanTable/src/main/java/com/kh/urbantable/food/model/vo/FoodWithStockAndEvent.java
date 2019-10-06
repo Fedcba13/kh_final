@@ -14,6 +14,8 @@ public class FoodWithStockAndEvent extends Food {
 	private String marketTime;
 	private int afterEventPrice;
 	private int eventPercent;
+	private int good;
+	private int bad;
 	
 	private String marketTelephone;
 	
@@ -138,6 +140,18 @@ public class FoodWithStockAndEvent extends Food {
 		this.stockAmount = stockAmount;
 	}
 
+	public int getGood() {
+		return good;
+	}
+	public void setGood(int good) {
+		this.good = good;
+	}
+	public int getBad() {
+		return bad;
+	}
+	public void setBad(int bad) {
+		this.bad = bad;
+	}
 	public String getMemberId() {
 		return memberId;
 	}
@@ -220,23 +234,24 @@ public class FoodWithStockAndEvent extends Food {
 
 	
 
+	
 	@Override
 	public String toString() {
 		return "FoodWithStockAndEvent [marketNo=" + marketNo + ", stockAmount=" + stockAmount + ", memberId=" + memberId
 				+ ", marketResident=" + marketResident + ", marketAddress=" + marketAddress + ", marketEnabled="
 				+ marketEnabled + ", flag=" + flag + ", marketName=" + marketName + ", marketHoliday=" + marketHoliday
 				+ ", marketTime=" + marketTime + ", afterEventPrice=" + afterEventPrice + ", eventPercent="
-				+ eventPercent + ", marketTelephone=" + marketTelephone + ", toString()=" + super.toString() + "]";
+				+ eventPercent + ", good=" + good + ", bad=" + bad + ", marketTelephone=" + marketTelephone
+				+ ", toString()=" + super.toString() + "]";
 	}
 	public FoodWithStockAndEvent(String marketNo, int stockAmount, String memberId, String marketResident,
-			String marketTelephone, String marketAddress, int marketEnabled, int flag, String marketName,
-			String marketHoliday, String marketTime, int afterEventPrice, int eventPercent) {
+			String marketAddress, int marketEnabled, int flag, String marketName, String marketHoliday,
+			String marketTime, int afterEventPrice, int eventPercent, int good, int bad, String marketTelephone) {
 		super();
 		this.marketNo = marketNo;
 		this.stockAmount = stockAmount;
 		this.memberId = memberId;
 		this.marketResident = marketResident;
-		this.marketTelephone = marketTelephone;
 		this.marketAddress = marketAddress;
 		this.marketEnabled = marketEnabled;
 		this.flag = flag;
@@ -245,8 +260,10 @@ public class FoodWithStockAndEvent extends Food {
 		this.marketTime = marketTime;
 		this.afterEventPrice = afterEventPrice;
 		this.eventPercent = eventPercent;
+		this.good = good;
+		this.bad = bad;
+		this.marketTelephone = marketTelephone;
 	}
-
 	public FoodWithStockAndEvent() {
 		super();
 		// TODO Auto-generated constructor stub

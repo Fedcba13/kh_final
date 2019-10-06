@@ -63,8 +63,9 @@
                 <td><input type="file" name="foodImgFile" /></td>
             </tr>
         </table>
-
+		<div>
        	<input type="submit" value="등록" onsubmit="return validate();" />
+       	
         </form>
        
     </article>

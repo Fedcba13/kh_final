@@ -79,5 +79,7 @@
 			alias="materialWithSection"/>
 		<typeAlias type="com.kh.urbantable.recipe.model.vo.BoardComment"
 			alias="boardComment"/>
+		<typeAlias type="com.kh.urbantable.admin.model.vo.Good"
+			alias="good"/>
 	</typeAliases>
 </configuration>
