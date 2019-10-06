@@ -44,18 +44,20 @@
                         <li><a href="" class="dp_block">상품 제안</a></li>
                     </ul>
                 </li>
-                
+                <c:if test="${memberLoggedIn.memberCheck eq 9 }">
                 <li class="cs_center">
                     <a href="" class="dp_block">관리자</a>
                     <ul>
                     	<li><a href="${pageContext.request.contextPath}/admin/foundationList.do" class="dp_block">창업 신청 리스트</a></li>
                         <li><a href="${pageContext.request.contextPath}/market/marketList.do" class="dp_block">매장 리스트</a></li>
-                        <li><a href="" class="dp_block">발주 리스트</a></li>
+                        <li><a href="${pageContext.request.contextPath}/check/marketOrderCheckList.do" class="dp_block">발주 리스트</a></li>
                         <li><a href="${pageContext.request.contextPath}/food/admin/goInsertFoodView.do" class="dp_block">식자재 등록</a></li>
                         <li><a href="${pageContext.request.contextPath}/banner/bannerList.do" class="dp_block">배너 등록</a></li>
                         <li><a href="${pageContext.request.contextPath}/event/eventList.do" class="dp_block">이벤트 등록</a></li>
+                        <li><a href="${pageContext.request.contextPath}/check/blameList.do" class="dp_block">신고 확인</a></li>
                     </ul>
                 </li>
+                </c:if>
                 <c:if test="${memberLoggedIn.memberCheck eq 3 }">
 	                <li class="cs_center">
 	                    <a href="" class="dp_block">점주</a>
