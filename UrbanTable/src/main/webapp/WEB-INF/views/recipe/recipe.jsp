@@ -21,27 +21,16 @@ $(()=> {
 <section class="sub_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 	    <h3 class="sub_tit">레시피</h3>
-	    <table class="tbl txt_center"> <!--가운데 정렬 아니면 txt_center 빼셔도 됩니다.
-	                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->
-            <tr>
-                <th>작성자</th>
-                <th>제목</th>
-                <th>조회수</th>
-                <th>작성일</th>
-            </tr>
-            <c:if test="${not empty list}">
-            	<c:forEach items="${list}" var="li">
-	            	<c:if test="${li.recipeEnabled != 0}">
-			            <tr>
-			                <td>${li.memberId }</td>
-			                <td class="recipe_link"><a href="${pageContext.request.contextPath}/recipe/recipeView.do?recipeNo=${li.recipeNo}&memberId=${memberLoggedIn.memberId}">${li.recipeTitle }</a></td>
-			                <td>${li.recipeReadcount }</td>
-			                <td>${li.recipeDate }</td>
-			            </tr>            	
-	            	</c:if>
-            	</c:forEach>
-            </c:if>
-        </table>
+	    <c:if test="${not empty list}">
+        	<c:forEach items="${list}" var="li" varStatus="vs">
+	            <c:if test="${li.recipeEnabled != 0}">
+			        <ol>
+			            <li><a href="${pageContext.request.contextPath}/recipe/recipeView.do?recipeNo=${li.recipeNo}&memberId=${memberLoggedIn.memberId}"><img src="${pageContext.request.contextPath}/resources/upload/recipe/${image[vs.index]}" alt="" /></a></li>
+			            <li class="recipe_link"><a href="${pageContext.request.contextPath}/recipe/recipeView.do?recipeNo=${li.recipeNo}&memberId=${memberLoggedIn.memberId}">${li.recipeTitle }</a></li>
+			    	</ol>            	
+	            </c:if>
+            </c:forEach>
+        </c:if>
         <jsp:include page="paging.jsp" flush="true">
 		    <jsp:param name="firstPageNo" value="${paging.firstPageNo}" />
 		    <jsp:param name="prevPageNo" value="${paging.prevPageNo}" />

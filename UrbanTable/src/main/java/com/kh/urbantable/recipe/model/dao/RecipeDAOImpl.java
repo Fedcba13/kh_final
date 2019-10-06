@@ -133,4 +133,9 @@ public class RecipeDAOImpl implements RecipeDAO {
 	public int recipeDelete(String recipeNo) {
 		return sqlSession.update("recipe.recipeDelete", recipeNo);
 	}
+
+	@Override
+	public String selectLastImage(String recipeNo) {
+		return sqlSession.selectOne("recipe.selectLastImage", recipeNo);
+	}
 }

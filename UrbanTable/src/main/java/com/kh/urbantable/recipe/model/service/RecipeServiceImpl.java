@@ -132,4 +132,9 @@ public class RecipeServiceImpl implements RecipeService {
 	public int recipeDelete(String recipeNo) {
 		return recipeDAO.recipeDelete(recipeNo);
 	}
+
+	@Override
+	public String selectLastImage(String recipeNo) {
+		return recipeDAO.selectLastImage(recipeNo);
+	}
 }

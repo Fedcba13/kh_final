@@ -265,12 +265,12 @@ function setChildNoValue(searchResultNo){
 </script>
 <section class=""> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
-	    <h3 class="sub_tit">레시피 만들기</h3>
+	    <h3 class="sub_tit">레시피 수정</h3>
 	    <form action="${pageContext.request.contextPath}/recipe/recipeUpdateEnd.do" method="post" enctype="multipart/form-data">
 		    <table class="tbl tbl_view recipe_insert_tbl"> <!--가운데 정렬 아니면 txt_center 빼셔도 됩니다.
 		                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->
 	            <tr>
-	                <th style="width:200px">제목</th>
+	                <th style="width:200px">이름</th>
 	                <td><input type="text" value="${recipe.recipeTitle}" id="recipe_title" name="recipeTitle" style="width:720px;" /></td>
 	            </tr>
 	            <tr>

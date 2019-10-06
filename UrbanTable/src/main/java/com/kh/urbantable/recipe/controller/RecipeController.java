@@ -58,9 +58,16 @@ public class RecipeController {
         paging.setTotalCount(totalCount);
         
         List<Recipe> list = recipeService.selectRecipeList(paging);
+        List<String> imageList = null;
+        for(int i=0; i<list.size(); i++) {
+        	String renamedFileName = recipeService.selectLastImage(list.get(i).getRecipeNo());
+        	
+        	imageList.add(renamedFileName);
+        }
 		
 		request.setAttribute("list", list);
 		request.setAttribute("paging", paging);
+		request.setAttribute("image", imageList);
 //		logger.debug("list=" + list);
 		return "/recipe/recipe";
 	}

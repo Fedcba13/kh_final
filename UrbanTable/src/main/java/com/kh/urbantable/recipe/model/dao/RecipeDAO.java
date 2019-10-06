@@ -59,4 +59,6 @@ public interface RecipeDAO {
 
 	int recipeDelete(String recipeNo);
 
+	String selectLastImage(String recipeNo);
+
 }

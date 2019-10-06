@@ -223,4 +223,8 @@
 		</set>
 		where recipe_no = #{recipeNo}
 	</update>
+	
+	<select id="selectLastImage" resultType="string">
+		SELECT renamed_recipe_pic FROM (SELECT * FROM recipe_sequence where recipe_no = #{recipeNo} ORDER BY recipe_order desc) WHERE rownum = 1
+	</select>
 </mapper>

@@ -262,7 +262,7 @@ function setChildNoValue(searchResultNo){
 		    <table class="tbl tbl_view recipe_insert_tbl"> <!--가운데 정렬 아니면 txt_center 빼셔도 됩니다.
 		                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->
 	            <tr>
-	                <th style="width:200px">제목</th>
+	                <th style="width:200px">이름</th>
 	                <td><input type="text" id="recipe_title" name="recipeTitle" style="width:720px;" /></td>
 	            </tr>
 	            <tr>
