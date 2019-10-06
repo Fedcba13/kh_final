@@ -39,7 +39,7 @@
                     <a href="" class="dp_block">고객센터</a>
                     <ul>
                         <li><a href="${pageContext.request.contextPath }/notice/noticeList.do" class="dp_block">공지사항</a></li>
-                        <li><a href="${pageContext.request.contextPath }/event/eventList.do" class="dp_block">이벤트</a></li>
+                        <li><a href="${pageContext.request.contextPath }/event/eventMain.do" class="dp_block">이벤트</a></li>
                         <li><a href="" class="dp_block">자주하는 질문</a></li>
                         <li><a href="" class="dp_block">상품 제안</a></li>
                     </ul>

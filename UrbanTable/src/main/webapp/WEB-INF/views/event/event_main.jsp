@@ -22,7 +22,7 @@ img.eventImg{
 	    <div class="event_list_wrapper">
 	    	<ul id="event-list" style="position: relative; ">  		
 	    		<li class="event_item" style="">
-	    			<a href='${pageContext.request.contextPath}/event/insertCoupon.do?couponDiscount=10&couponEndDate=newDate()+s7'>
+	    			<a href='${pageContext.request.contextPath}/event/insertCoupon.do?couponDiscount=10'>
 	    				<img src="${pageContext.request.contextPath }/resources/images/banner/20190926_154703374_893.jpg" alt="" class="eventImg"/>
 	    			</a>
 	    		</li>	    		

@@ -130,6 +130,11 @@ public class FoodDAOImpl implements FoodDAO {
 		return sqlSession.selectList("food.selectRelatedRecipe", foodNo);
 	}
 
+	@Override
+	public List<FoodWithStockAndEvent> selectNeedToOrderListListByCat(Map<String, String> param) {
+		return sqlSession.selectList("food.selectNeedToOrderListListByCat", param);
+	}
+
 
 
 }

@@ -24,6 +24,7 @@ public class Event {
 	private Date eventDateEnd;
 	private int eventEnabled;
 	private int eventPrice;
+	private String eventFile;
 	
 	
 
@@ -31,8 +32,8 @@ public class Event {
 	public String toString() {
 		return "Event [eventId=" + eventId + ", eventTitle=" + eventTitle + ", eventContent=" + eventContent
 				+ ", marketNo=" + marketNo + ", eventCategory=" + eventCategory
-				+ ", eventDateStart=" + eventDateStart + ", eventDateEnd=" + eventDateEnd + ", eventEnabled="
-				+ eventEnabled + ", eventPrice=" + eventPrice + "]";
+				+ ", eventDateStart=" + eventDateStart + ", eventEndDate=" + eventDateEnd + ", eventEnabled="
+				+ eventEnabled + ", eventPrice=" + eventPrice +", eventFile=" + eventFile + "]";
 	}
 	
 }

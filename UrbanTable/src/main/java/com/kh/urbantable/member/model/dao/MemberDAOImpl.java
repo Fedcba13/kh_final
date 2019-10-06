@@ -85,7 +85,7 @@ public class MemberDAOImpl implements MemberDAO {
 	}
 
 	@Override
-	public List<Coupon> selectCouponList(HashMap<String, Object> param) {
+	public List<HashMap<String, Object>> selectCouponList(HashMap<String, Object> param) {
 		return sqlSession.selectList("pay.getAllCoupons", param);
 	}
 

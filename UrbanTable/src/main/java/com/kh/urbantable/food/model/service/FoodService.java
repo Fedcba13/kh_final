@@ -57,5 +57,7 @@ public interface FoodService {
 
 	List<RelatedRecipe> selectRelatedRecipe(String foodNo);
 
+	List<FoodWithStockAndEvent> selectNeedToOrderListListByCat(Map<String, String> param);
+
 
 }

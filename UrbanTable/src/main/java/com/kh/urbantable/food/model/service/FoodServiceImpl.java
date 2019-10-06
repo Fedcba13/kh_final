@@ -135,5 +135,10 @@ public class FoodServiceImpl implements FoodService {
 		return foodDAO.selectRelatedRecipe(foodNo);
 	}
 
+	@Override
+	public List<FoodWithStockAndEvent> selectNeedToOrderListListByCat(Map<String, String> param) {
+		return foodDAO.selectNeedToOrderListListByCat(param);
+	}
+
 
 }

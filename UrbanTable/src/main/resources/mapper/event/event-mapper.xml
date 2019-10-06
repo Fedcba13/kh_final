@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="event">
+
+	<insert id="insertCoupon1">
+		insert into coupon values(
+			'coup' || lpad(coupon_seq.nextval, 5, '0'),
+			#{memberId},
+			#{couponDiscount},
+			sysdate,
+			sysdate + 7,
+			1, 
+			5000
+		)
+	</insert>
+	
+	<select id="selectOne" resultType="member">
+		select * 
+		from member 
+		where member_id = #{memberId} 
+				and member_enabled = 1 
+	</select>
+	
+		<select id="selectMarketNoByMemberId" resultType="string">
+		select market_no from market 
+		where member_id=#{memberId} and market_enabled=1
+	</select>
+	
+	<insert id="insertEvent">
+		insert into event values(
+			'event' || lpad(seq_event_id.nextval, 5, '0'),
+			#{eventTitle},
+			#{eventContent},
+			#{marketNo}, 
+			#{eventCategory},
+			#{eventDateStart},
+			#{eventDateEnd},
+			1,
+			#{eventPrice},
+			#{eventFile}			
+		)
+	</insert>
+	
+	<resultMap type="market" id="market">
+
+		</resultMap>
+	<select id="selectEventList" resultMap="eventWithFoodSection">
+		select e.*, food_section_name,market_name
+		from event e left join food_section on event_category = food_section_no
+        	    left join market m on e.market_no = m.market_no
+       	where event_enabled = 1
+	</select>
+
+ 		<resultMap type="eventWithFoodSection" id="eventWithFoodSection">
+		<id column="event_id" property="eventId"/>
+		<result column="event_title" property="eventTitle"/>
+		<result column="event_content" property="eventContent"/>
+		<result column="market_no" property="marketNo"/>
+		<result column="event_category" property="eventCategory"/>
+		<result column="event_date_start" property="eventDateStart"/>
+		<result column="event_date_end" property="eventDateEnd"/>
+		<result column="event_enabled" property="eventEnabled"/>
+		<result column="event_price" property="eventPrice"/>
+		<result column="event_file" property="eventFile"/>
+		<collection property="foodSection" ofType="foodSection">
+			<id column="food_section_no" property="foodSectionNo"/>
+			<result column="food_section_name" property="foodSectionName"/>
+			<result column="food_section_upper" property="foodSectionUpper"/>
+		</collection>
+		<collection property="market" ofType="market">
+			<id column="market_no" property="marketNo"/>
+			<result column="member_id" property="memberId"/>
+			<result column="market_resident" property="marketResident"/>
+			<result column="market_telephone" property="marketTelephone"/>
+			<result column="market_address" property="marketAddress"/>
+			<result column="market_address2" property="marketAddress2"/>
+			<result column="market_enabled" property="marketEnabled"/>
+			<result column="flag" property="flag"/>	
+			<result column="market_name" property="marketName"/>
+			</collection>
+	</resultMap> 
+	
+	<update id="deleteEvent">
+		update event set event_enabled = 0 where event_id = #{eventId}
+	</update>
+	
+	<select id="selectEventAllList" resultType="event">
+		select * from event where event_enabled = 1 and event_file is not null
+	</select>
+	
+</mapper>
