@@ -207,4 +207,17 @@ public class MarketOwnerDAOImpl implements MarketOwnerDAO {
 		return sqlSession.selectOne("marketOwner.selectTotalPayDetail", marketNo);
 	}
 
+	@Override
+	public List<Map<String, String>> selectFoodStockListAll(int cPage, Map<String, String> param) {
+		int offset = (cPage-1)*MarketOwnerService.NUM_PER_PAGE;
+		int limit = MarketOwnerService.NUM_PER_PAGE;
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		return sqlSession.selectList("marketOwner.selectFoodStockListAll", param, rowBounds);
+	}
+
+	@Override
+	public int selectTotalContentsAll(Map<String, String> param) {
+		return sqlSession.selectOne("marketOwner.selectTotalContentsAll", param);
+	}
+
 }

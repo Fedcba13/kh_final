@@ -35,6 +35,19 @@ $(()=>{
 		}
 	});
 	
+	$.ajax({
+		url: "${pageContext.request.contextPath}/market/marketNewStockPage.do",
+		type: "get",
+		data: param,
+		dataType:"json",
+		success: function(data){
+			printNewData(data);
+		},
+		error: function(xhr, txtStatus, err){
+			console.log("ajax 처리 실패", xhr, txtStatus, err);
+		}
+	});
+	
 	var cartParam = {
 		memberId: "${memberLoggedIn.memberId}",
 		cPage: cPage
@@ -68,9 +81,9 @@ $(()=>{
 		var param = {
 			memberId: "${memberLoggedIn.memberId}",
 			cPage: $(e.target).attr("rel"),
-			foodDivision: $("#foodDivision option:selected").val(),
-			foodOrderSearchType: $("#foodOrderSearchType option:selected").val(),
-			foodOrderSearchKeyword: $("#foodOrderSearchKeyword").val()
+			foodDivision: $("#stockList #foodDivision option:selected").val(),
+			foodOrderSearchType: $("#stockList #foodOrderSearchType option:selected").val(),
+			foodOrderSearchKeyword: $("#stockList #foodOrderSearchKeyword").val()
 		}
 		
 		console.log(param);
@@ -89,13 +102,39 @@ $(()=>{
 		});
 	});
 	
+	$(document).on('click', "#newStockList .pageBar a", function(e){
+		e.preventDefault();
+		var param = {
+			memberId: "${memberLoggedIn.memberId}",
+			cPage: $(e.target).attr("rel"),
+			foodDivision: $("#newStockList #foodDivision option:selected").val(),
+			foodOrderSearchType: $("#newStockList #foodOrderSearchType option:selected").val(),
+			foodOrderSearchKeyword: $("#newStockList #foodOrderSearchKeyword").val()
+		}
+		
+		console.log(param);
+			
+		$.ajax({
+			url: "${pageContext.request.contextPath}/market/marketNewStockPage.do",
+			type: "get",
+			data: param,
+			dataType:"json",
+			success: function(data){
+				printNewData(data);
+			},
+			error: function(xhr, txtStatus, err){
+				console.log("ajax 처리 실패", xhr, txtStatus, err);
+			}
+		});
+	});
+	
 	$("#stockList .searchFrm input[type=button]").click(function(){
 		var param = {
 			memberId: "${memberLoggedIn.memberId}",
 			cPage: cPage,
-			foodDivision: $("#foodDivision option:selected").val(),
-			foodOrderSearchType: $("#foodOrderSearchType option:selected").val(),
-			foodOrderSearchKeyword: $("#foodOrderSearchKeyword").val()
+			foodDivision: $("#stockList #foodDivision option:selected").val(),
+			foodOrderSearchType: $("#stockList #foodOrderSearchType option:selected").val(),
+			foodOrderSearchKeyword: $("#stockList #foodOrderSearchKeyword").val()
 		}
 		
 		console.log(param);
@@ -107,6 +146,31 @@ $(()=>{
 			dataType:"json",
 			success: function(data){
 				printData(data);
+			},
+			error: function(xhr, txtStatus, err){
+				console.log("ajax 처리 실패", xhr, txtStatus, err);
+			}
+		});
+	});
+	
+	$("#newStockList .searchFrm input[type=button]").click(function(){
+		var param = {
+			memberId: "${memberLoggedIn.memberId}",
+			cPage: cPage,
+			foodDivision: $("#newStockList #foodDivision option:selected").val(),
+			foodOrderSearchType: $("#newStockList #foodOrderSearchType option:selected").val(),
+			foodOrderSearchKeyword: $("#newStockList #foodOrderSearchKeyword").val()
+		}
+		
+		console.log(param);
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/market/marketNewStockPage.do",
+			type: "get",
+			data: param,
+			dataType:"json",
+			success: function(data){
+				printNewData(data);
 			},
 			error: function(xhr, txtStatus, err){
 				console.log("ajax 처리 실패", xhr, txtStatus, err);
@@ -211,6 +275,39 @@ $(()=>{
 
 function printData(data){
 	var fs = data.foodStockList;
+	var html = "<thead><tr class='sec_bg'>";
+	html += "<th width='110'>상품코드</th>";
+	html += "<th width='504'>상품명</th>";
+	html += "<th width='80'>재고 수량</th>";
+	html += "<th width='100'>발주 가격</th>";
+	html += "<th width='90'>발주 수량</th>";
+	html += "<th width='60'>발주</th>";
+	html += "</tr></thead><tbody>";
+	if(fs.length>0){
+		var stockAmount = 0;
+		for(var i in fs){
+			if(fs[i].STOCK_AMOUNT!=null){
+				stockAmount=fs[i].STOCK_AMOUNT;
+			}
+			html += "<tr>";
+			html += "<td rel='foodNo'>"+fs[i].FOOD_NO+"</td>";
+			html += "<td rel='foodName'>"+fs[i].FOOD_NAME+"</td>";
+			html += "<td rel='foodStockAmount'>"+stockAmount+"</td>";
+			html += "<td rel='foodMarketPrice'>"+comma(fs[i].FOOD_MARKET_PRICE)+"원</td>";
+			html += "<td rel='marketOrderAmount'><input type='number' name='marketOrderDetailAmount' style='width:70px;' min='0' onkeypress='onlyNumber();' /></td>";
+			html += "<td><input type='button' value='+' class='btn orderBtn' style='width:40px;' /></td>";
+			html += "</tr>";
+		}
+	} else {
+		html += "<tr><td colspan='6'>조회된 데이터가 없습니다.</td></tr>";
+	}
+	html += "</tbody>";
+	$("#stockList .tbl").html(html);
+	$("#stockList .pageBar").html(data.pageBar);
+}
+
+function printNewData(data){
+	var fs = data.foodStockList;
 	var html = "<tr class='sec_bg'>";
 	html += "<th width='110'>상품코드</th>";
 	html += "<th width='504'>상품명</th>";
@@ -220,22 +317,35 @@ function printData(data){
 	html += "<th width='60'>발주</th>";
 	html += "</tr>";
 	if(fs.length>0){
+		var stockAmount = 0;
+		var stockList = $("#stockList .tbl tbody tr");
+		var stockListArr = [];
+		for(var j=0; j<stockList.length; j++){
+			stockListArr.push(stockList.children("td[rel=foodNo]").text());
+		}
+		
 		for(var i in fs){
-			html += "<tr>";
-			html += "<td rel='foodNo'>"+fs[i].FOOD_NO+"</td>";
-			html += "<td rel='foodName'>"+fs[i].FOOD_NAME+"</td>";
-			html += "<td rel='foodStockAmount'>"+fs[i].STOCK_AMOUNT+"</td>";
-			html += "<td rel='foodMarketPrice'>"+comma(fs[i].FOOD_MARKET_PRICE)+"원</td>";
-			html += "<td rel='marketOrderAmount'><input type='number' name='marketOrderDetailAmount' style='width:70px;' min='0' onkeypress='onlyNumber();' /></td>";
-			html += "<td><input type='button' value='+' class='btn orderBtn' style='width:40px;' /></td>";
-			html += "</tr>";
+			if(fs[i].STOCK_AMOUNT!=null){
+				stockAmount=fs[i].STOCK_AMOUNT;
+			}
+			
+			if (stockListArr.indexOf(fs[i].FOOD_NO) == -1) {
+				html += "<tr>";
+				html += "<td rel='foodNo'>"+fs[i].FOOD_NO+"</td>";
+				html += "<td rel='foodName'>"+fs[i].FOOD_NAME+"</td>";
+				html += "<td rel='foodStockAmount'>"+stockAmount+"</td>";
+				html += "<td rel='foodMarketPrice'>"+comma(fs[i].FOOD_MARKET_PRICE)+"원</td>";
+				html += "<td rel='marketOrderAmount'><input type='number' name='marketOrderDetailAmount' style='width:70px;' min='0' onkeypress='onlyNumber();' /></td>";
+				html += "<td><input type='button' value='+' class='btn orderBtn' style='width:40px;' /></td>";
+				html += "</tr>";
+			}
 		}
 	} else {
 		html += "<tr><td colspan='6'>조회된 데이터가 없습니다.</td></tr>";
 	}
 	
-	$("#stockList .tbl").html(html);
-	$("#stockList .pageBar").html(data.pageBar);
+	$("#newStockList .tbl").html(html);
+	$("#newStockList .pageBar").html(data.pageBar);
 }
 
 function printCartData(data){
@@ -340,6 +450,7 @@ function goRequestList(){
 	<article class="subPage inner asda">
 	    <ul class="marketStockTab txt_center">
 	    	<li rel="stockList" class="ac_tab">재고 관리</li>
+	    	<li rel="newStockList">신규 발주</li>
 	    	<li rel="orderList">발주 요청</li>
 	    </ul>
 	    <div class="list_wrap">
@@ -361,6 +472,25 @@ function goRequestList(){
 		    	</div>
 	    		<table class="tbl txt_center"></table>
 		        <div class="pageBar"></div>
+	    	</div>
+	    	<div id="newStockList">
+	    		<h3 class="sub_tit">신규 발주</h3>
+	    		<div class="searchFrm" style="width:450px;">
+	    			<select name="foodDivision" id="foodDivision" class="dp_ib" style="width:117px;">
+		    			<option value="">전체분류</option>
+		    			<c:forEach items="${foodDivisionList }" var="fd">
+		    			<option value="${fd.foodDivisionNo }">${fd.foodDivisionName }</option>
+		    			</c:forEach>
+		    		</select>
+	    			<select name="foodOrderSearchType" id="foodOrderSearchType" class="dp_ib" style="width:117px;">
+		    			<option value="food_name">상품명</option>
+		    			<option value="food_no">상품코드</option>
+		    		</select>
+		    		<input type="text" name="foodOrderSearchKeyword" id="foodOrderSearchKeyword" class="dp_ib" style="width:209px; padding-right:40px;" />
+		    		<input type="button" value="검색" class="dp_ib txt_center" />
+		    	</div>
+	    		<table class="tbl txt_center"></table>
+	    		<div class="pageBar"></div>
 	    	</div>
 	    	<div id="orderList">
 	    		<h3 class="sub_tit">발주 요청 예정 품목</h3>

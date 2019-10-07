@@ -82,4 +82,8 @@ public interface MarketOwnerService {
 
 	int selectTotalPayDetail(String marketNo);
 
+	List<Map<String, String>> selectFoodStockListAll(int cPage, Map<String, String> param);
+
+	int selectTotalContentsAll(Map<String, String> param);
+
 }

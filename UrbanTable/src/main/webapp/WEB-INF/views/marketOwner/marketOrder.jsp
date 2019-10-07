@@ -156,6 +156,8 @@ function printData(data){
 			var paymentway = "";
 			if(mo[i].PAYMENT_WAY=='card'){
 				paymentway = "신용카드";
+			} else if(mo[i].PAYMENT_WAY==null){
+				paymentway = "확인 불가";
 			} else {
 				paymentway = mo[i].PAYMENT_WAY;
 			}
