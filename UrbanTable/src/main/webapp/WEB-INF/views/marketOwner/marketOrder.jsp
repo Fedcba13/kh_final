@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/marketOwner.css">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="${pageContext.request.contextPath }/resources/js/jquery.fileDownload.js"></script>
 <script>
 var marketNo = '${marketNo}';
 var cPage = '${cPage}';
@@ -73,11 +74,8 @@ $(()=>{
 			}
 		});
 	});
-
-	document.getElementById("orderDate1").valueAsDate = new Date();
 	
 	$("#orderDate2").change(()=>{
-		
 		var start = $("#orderDate1").val();
 		var end = $("#orderDate2");
 		
@@ -85,12 +83,35 @@ $(()=>{
 			alert("검색일자가 유효하지 않습니다.");
 			end.val(start);
 		}
-		
 	});
 	
 	$(".eventDate").flatpickr({
 	  enableTime: false,
 	  dateFormat: "Y-m-d",
+	});
+	
+	$("#downloadExcel").on('click', function(){
+		var param = {
+			marketNo: marketNo,
+			cPage: $(".pageBar span.cPage").text(),
+			orderSearchType: $("#orderSearchType option:selected").val(),
+			orderSearchKeyword: $("input[name=orderSearchKeyword]").val(),
+			payFlag: $("input[name=payFlag]:checked").val(),
+			deliverType: $("input[name=deliverType]:checked").val(),
+			payStartDate: $("#orderDate1").val(),
+			payEndDate: $("#orderDate2").val()
+		}
+		
+		$.fileDownload("${pageContext.request.contextPath}/market/excelDown.do",{
+			httpMethod: "GET",
+			data: param,
+			successCallback: function (url) {
+				alert("다운로드 성공!");
+		  	},
+		  	failCallback: function(responesHtml, url) {
+		    	alert('관리자에게 문의 주세요.');
+		  	}
+		});
 	});
 	
 });
@@ -249,6 +270,7 @@ function comma(str) {
 	    		</div>
 	    	</div>
 	    </div>
+	    <div class="txt_right mb10"><input type="button" value="Excel 저장" id="downloadExcel" class="txt_center btn btn3" /></div>
 	    <table class="tbl txt_center"></table>
         <div class="pageBar" style="margin:20px 0 0;"></div>
     </article>

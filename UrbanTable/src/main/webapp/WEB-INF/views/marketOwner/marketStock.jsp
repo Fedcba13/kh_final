@@ -226,7 +226,7 @@ function printData(data){
 			html += "<td rel='foodName'>"+fs[i].FOOD_NAME+"</td>";
 			html += "<td rel='foodStockAmount'>"+fs[i].STOCK_AMOUNT+"</td>";
 			html += "<td rel='foodMarketPrice'>"+comma(fs[i].FOOD_MARKET_PRICE)+"원</td>";
-			html += "<td rel='marketOrderAmount'><input type='number' name='marketOrderDetailAmount' style='width:70px;' /></td>";
+			html += "<td rel='marketOrderAmount'><input type='number' name='marketOrderDetailAmount' style='width:70px;' min='0' onkeypress='onlyNumber();' /></td>";
 			html += "<td><input type='button' value='+' class='btn orderBtn' style='width:40px;' /></td>";
 			html += "</tr>";
 		}
@@ -276,6 +276,11 @@ function printCartData(data){
 function comma(str) {
     str = String(str);
     return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+}
+
+function onlyNumber() {
+	if((event.keyCode<48)||(event.keyCode>57))
+        event.returnValue=false;
 }
 
 function amountUpdate(param){

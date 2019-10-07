@@ -280,6 +280,11 @@
 				and (P.pay_date between to_date(#{payStartDate}, 'yy/MM/dd') and (to_date(#{payEndDate}, 'yy/MM/dd')+1))
 				</if>
 			</if>
+			<if test="payStartDate==''">
+				<if test="payEndDate!=null and payEndDate!=''">
+				and (to_date(#{payEndDate}, 'yy/MM/dd')+1) >= P.pay_date
+				</if>
+			</if>
 		</trim>
 		order by P.pay_date desc
 	</select>
@@ -316,6 +321,11 @@
 				</if>
 				<if test="payEndDate!=null and payEndDate!=''">
 				and (P.pay_date between to_date(#{payStartDate}, 'yy/MM/dd') and (to_date(#{payEndDate}, 'yy/MM/dd')+1))
+				</if>
+			</if>
+			<if test="payStartDate==''">
+				<if test="payEndDate!=null and payEndDate!=''">
+				and (to_date(#{payEndDate}, 'yy/MM/dd')+1) >= P.pay_date
 				</if>
 			</if>
 		</trim>
