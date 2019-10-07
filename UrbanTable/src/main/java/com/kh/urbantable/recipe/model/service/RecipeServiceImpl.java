@@ -5,12 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.recipe.model.dao.RecipeDAO;
 import com.kh.urbantable.recipe.model.vo.Blame;
 import com.kh.urbantable.recipe.model.vo.BoardComment;
 import com.kh.urbantable.recipe.model.vo.Material;
 import com.kh.urbantable.recipe.model.vo.MaterialWithSection;
+import com.kh.urbantable.recipe.model.vo.Paging;
 import com.kh.urbantable.recipe.model.vo.Recipe;
 import com.kh.urbantable.recipe.model.vo.RecipeSequence;
 import com.kh.urbantable.recipe.model.vo.RecipeVO;
@@ -22,8 +24,8 @@ public class RecipeServiceImpl implements RecipeService {
 	RecipeDAO recipeDAO;
 
 	@Override
-	public List<Recipe> selectRecipeList() {
-		return recipeDAO.selectRecipeList();
+	public List<Recipe> selectRecipeList(Paging paging) {
+		return recipeDAO.selectRecipeList(paging);
 	}
 
 	@Override
@@ -109,5 +111,30 @@ public class RecipeServiceImpl implements RecipeService {
 	@Override
 	public int boardCommentBlame(Blame blame) {
 		return recipeDAO.boardCommentBlame(blame);
+	}
+
+	@Override
+	public int selectRecipeListCnt() {
+		return recipeDAO.selectRecipeListCnt();
+	}
+
+	@Override
+	public List<Food> foodSearchList(String searchName) {
+		return recipeDAO.foodSearchList(searchName);
+	}
+
+	@Override
+	public String searchFoodNo(String searchResult) {
+		return recipeDAO.searchFoodNo(searchResult);
+	}
+
+	@Override
+	public int recipeDelete(String recipeNo) {
+		return recipeDAO.recipeDelete(recipeNo);
+	}
+
+	@Override
+	public String selectLastImage(String recipeNo) {
+		return recipeDAO.selectLastImage(recipeNo);
 	}
 }

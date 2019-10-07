@@ -10,6 +10,14 @@
 var index = 2;
 var material_i = 1;
 $(()=> {
+	index = $(".tab>li").length+1;
+	material_i = $("#material_list>li").length;
+	
+	for(var i=1; i<=$(".tab>li").length; i++) {
+		$("#recipe_content_div" + i).css("display", "none");
+	}
+	
+	$("#recipe_content_div1").css("display", "");
 	
 	$("#food_division").change(function() {
 		var fr = this.value;
@@ -118,7 +126,7 @@ $(()=> {
 		$("#material_list").append(html);
 		
 		var materialSet = $("#materialSet").val();
-		var searchSet = $("#searchSet").val();
+		var materialOldSet = $("#materialOldSet").val();
 		
 		$.ajax({
 			url: "${pageContext.request.contextPath}/recipe/materialInsert/" + section,
@@ -241,9 +249,9 @@ var pic_index = $("#tab_remove").val();
 
 function setChildValue(searchResult){
 	
- 	if(searchResult.length > 9) {
+/* 	if(searchResult.length > 9) {
 		searchResult = searchResult.substring(0, 8) + "...";
-	}
+	} */
 
     $("#searchResult").val(searchResult);
 
@@ -257,13 +265,13 @@ function setChildNoValue(searchResultNo){
 </script>
 <section class=""> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
-	    <h3 class="sub_tit">레시피 만들기</h3>
-	    <form action="${pageContext.request.contextPath}/recipe/recipeInsertEnd.do" method="post" enctype="multipart/form-data">
+	    <h3 class="sub_tit">레시피 수정</h3>
+	    <form action="${pageContext.request.contextPath}/recipe/recipeUpdateEnd.do" method="post" enctype="multipart/form-data">
 		    <table class="tbl tbl_view recipe_insert_tbl"> <!--가운데 정렬 아니면 txt_center 빼셔도 됩니다.
 		                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->
 	            <tr>
 	                <th style="width:200px">이름</th>
-	                <td><input type="text" id="recipe_title" name="recipeTitle" style="width:720px;" /></td>
+	                <td><input type="text" value="${recipe.recipeTitle}" id="recipe_title" name="recipeTitle" style="width:720px;" /></td>
 	            </tr>
 	            <tr>
 	            	<th>재료</th>
@@ -295,21 +303,32 @@ function setChildNoValue(searchResultNo){
 	            		<button type="button" class="btn search_btn" style="width:50px;">검색</button>
 	                	<button type="button" class="btn btn_material">추가</button>
 	                	<br />
-	                	<ol id="material_list"></ol>
+	                	<ol id="material_list">
+	                		<c:forEach items="${material}" var="m" varStatus="vs">
+	                			<li class='mate_li' value="${vs.count}">${m.foodDivisionName}>${m.foodSectionName}</li>
+								<button type='button' class='mate_li_delete' value="${vs.count}">x</button>
+	                		</c:forEach>
+	                	</ol>
 	                </td>
 	            </tr>
 	            <tr>
 	            	<th>레시피</th>
 	                <td>
 	                	<div id="recipe_content_div">
-	                		<ul class="tab">
-			                	<li><button type="button" class="btn btn_content" value="1">1</button></li>
-	                		</ul>
-		                	<div id="recipe_content_div1">
-		                		<input type="hidden" name="recipeSequenceList[0].recipeOrder" id="recipeOrder1" value="1" />
-			                	<textarea name="recipeSequenceList[0].recipeContent" id="recipe_content1" class="recipe_content" cols="100" rows="5" placeholder="레시피 내용&#13;&#10;ex)중약불로 달군 팬에 올리브유를 두르고 앞뒤로 노릇하게 구워주세요." style="border: 1px solid #e9e9e9; border-radius: 5px; color: #555; resize: none;"></textarea> <br /><br />
-			                	<input type="text" class="upload_name" id="upload_name1" disabled /><input type="file" name="recipePic" id="upload_file1" style="display:none;" /> <button class="btn btn_upload" id="btn_upload1" type="button">사진 가져오기</button> <br /><br />
-		                	</div>	                	
+	                		<c:if test="${not empty recipe.recipeSequenceList}">
+			                	<ul class="tab">
+			                		<c:forEach items="${recipe.recipeSequenceList}" var="rec" varStatus="vs">
+					               		<li><button type="button" class="btn btn_content" value="${vs.count}">${vs.count}</button></li>
+			                		</c:forEach>
+			                	</ul>
+		                		<c:forEach items="${recipe.recipeSequenceList}" var="rec" varStatus="vs">
+				                	<div id="recipe_content_div${vs.count}">
+				                		<input type="hidden" value="${rec.recipeOrder}" name="recipeSequenceList[${vs.index}].recipeOrder" id="recipeOrder${vs.count}" value="${vs.count}" />
+					                	<textarea name="recipeSequenceList[${vs.index}].recipeContent" id="recipe_content${vs.count}" class="recipe_content" cols="100" rows="5" placeholder="레시피 내용&#13;&#10;ex)중약불로 달군 팬에 올리브유를 두르고 앞뒤로 노릇하게 구워주세요." style="border: 1px solid #e9e9e9; border-radius: 5px; color: #555; resize: none;">${rec.recipeContent}</textarea> <br /><br />
+					                	<input type="text" class="upload_name" id="upload_name${vs.count}" value="${rec.originalRecipePic}" disabled /><input type="file" name="recipePic" id="upload_file${vs.count}" style="display:none;" /> <button class="btn btn_upload" id="btn_upload${vs.count}" type="button">사진 가져오기</button> <br /><br />
+				                	</div>    		                		
+		                		</c:forEach>	                		
+	                		</c:if>
 	                	</div><br />
 	                	<p>
 	                		*레시피 순서에 따라 하나씩 넣어주세요<br />
@@ -323,8 +342,13 @@ function setChildNoValue(searchResultNo){
 	                </td>
 	            </tr>
 	        </table>
+	       	<c:set var="set">
+	      		<c:forEach items="${material}" var="m" varStatus="vs">
+	        		${m.foodSectionName}-${m.foodNo}<c:if test="${!vs.last}">,</c:if>
+	        	</c:forEach>
+	       	</c:set>
 	        <input type="hidden" id="materialSet" name="materialSet" />
-	        <input type="hidden" name="memberId" value="${memberLoggedIn.memberId}" />
+	        <input type="hidden" id="materialOldSet" name="materialOldSet" value="${set}" />
 	        <div class="btn_submit">
 	        	<input type="submit" class="btn btn_insert" value="글 등록하기" />	        
 	        </div>

@@ -197,3 +197,28 @@
 	position: relative;
 	top: -25px;
 }
+
+.recomList {
+	margin-top: 50px;
+}
+
+.recomOl>li {
+	width: 150px;
+	height: 250px;
+	border: 1px solid #c0c0c0;
+	float: left;
+	margin-right: 10px;
+}
+
+.update_div {
+	text-align: right;
+}
+
+.update_div>button {
+	width: 50px;
+	margin-bottom: 20px;
+}
+
+hr {
+	margin-top: 50px;
+}

@@ -6,11 +6,13 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.recipe.model.vo.Blame;
 import com.kh.urbantable.recipe.model.vo.BoardComment;
 import com.kh.urbantable.recipe.model.vo.Material;
 import com.kh.urbantable.recipe.model.vo.MaterialWithSection;
+import com.kh.urbantable.recipe.model.vo.Paging;
 import com.kh.urbantable.recipe.model.vo.Recipe;
 import com.kh.urbantable.recipe.model.vo.RecipeSequence;
 import com.kh.urbantable.recipe.model.vo.RecipeVO;
@@ -22,8 +24,8 @@ public class RecipeDAOImpl implements RecipeDAO {
 	SqlSessionTemplate sqlSession;
 
 	@Override
-	public List<Recipe> selectRecipeList() {
-		return sqlSession.selectList("recipe.selectRecipeList");
+	public List<Recipe> selectRecipeList(Paging paging) {
+		return sqlSession.selectList("recipe.selectRecipeList", paging);
 	}
 
 	@Override
@@ -109,5 +111,31 @@ public class RecipeDAOImpl implements RecipeDAO {
 	@Override
 	public int boardCommentBlame(Blame blame) {
 		return sqlSession.insert("recipe.boardCommentBlame", blame);
+	}
+
+	@Override
+	public int selectRecipeListCnt() {
+		return sqlSession.selectOne("recipe.selectRecipeListCnt");
+				
+	}
+
+	@Override
+	public List<Food> foodSearchList(String searchName) {
+		return sqlSession.selectList("recipe.foodSearchList", searchName);
+	}
+
+	@Override
+	public String searchFoodNo(String searchResult) {
+		return sqlSession.selectOne("recipe.searchFoodNo", searchResult);
+	}
+
+	@Override
+	public int recipeDelete(String recipeNo) {
+		return sqlSession.update("recipe.recipeDelete", recipeNo);
+	}
+
+	@Override
+	public String selectLastImage(String recipeNo) {
+		return sqlSession.selectOne("recipe.selectLastImage", recipeNo);
 	}
 }

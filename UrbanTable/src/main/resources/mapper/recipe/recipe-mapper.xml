@@ -4,8 +4,7 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="recipe">
 	<select id="selectRecipeList" resultMap="recipeMap">
-		select * from recipe
-		order by recipe_date desc
+		select * from recipe A where recipe_enabled = 1 order by recipe_date desc
 	</select>
 	<resultMap type="recipe" id="recipeMap">
 		<result column="recipe_no" property="recipeNo" />
@@ -43,6 +42,9 @@
 	<select id="selectMaterial" resultMap="materialSectionMap">
 		select * from recipe_ingredient i left join food_section s
 		on i.food_section_no = s.food_section_no
+		left join food f on i.food_no = f.food_no
+		left join food_upper u on s.food_upper_no = u.food_upper_no
+		left join food_division d on u.food_division_no = d.food_division_no
 		where recipe_no = #{recipeNo}
 	</select>
 	
@@ -54,6 +56,14 @@
 		<result column="food_division_no" property="foodDivisionNo" />
 		<result column="food_section_name" property="foodSectionName" />
 		<result column="food_section_upper" property="foodSectionUpper" />
+		<result column="food_name" property="foodName" />
+		<result column="food_company" property="foodCompany" />
+		<result column="food_market_price" property="foodMarketPrice" />
+		<result column="food_user_price" property="foodUserPrice" />
+		<result column="food_enabled" property="foodEnabled" />
+		<result column="food_division_name" property="foodDivisionName" />
+		<result column="food_upper_no" property="foodUpperNo" />
+		<result column="food_upper_name" property="foodUpperName" />
 	</resultMap>
 	
 	<resultMap type="material" id="materialMap">
@@ -115,7 +125,10 @@
 	</select>
 	
 	<select id="selectFoodSectionList" resultMap="foodSectionMap">
-		select * from food_section where food_division_no = #{foodDivisionNo}
+		SELECT food_section_no, food_section_name
+		FROM FOOD_SECTION s LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+					LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
+					where d.food_division_no = #{foodDivisionNo}
 	</select>
 	
 	<resultMap type="foodSection" id="foodSectionMap">
@@ -177,4 +190,41 @@
 		insert into blame(blame_id, member_id, bla_content, blme_target_id, target_type, blame_date, blame_action)
 		values('bla' || lpad(blame_seq.nextval, 5, '0'), #{memberId}, #{blameContent}, #{blameTargetId}, 4, default, default)
 	</insert>
+	
+	<select id="selectRecipeListCnt" resultType="int">
+		select count(*) from recipe
+		where recipe_enabled = 1
+	</select>
+	
+	<select id="foodSearchList" resultMap="foodMap">
+		select * from food
+		where food_name like '%' || #{searchName} || '%'
+	</select>
+	
+	<resultMap type="food" id="foodMap">
+		<result column="food_no" property="foodNo" />
+		<result column="food_name" property="foodName" />
+		<result column="food_section_no" property="foodSectionNo" />
+		<result column="food_company" property="foodCompany" />
+		<result column="food_market_price" property="foodMarketPrice" />
+		<result column="food_user_price" property="foodUserPrice" />
+		<result column="food_enabled" property="foodEnabled" />
+	</resultMap>
+	
+	<select id="searchFoodNo" resultType="string">
+		select food_no from food
+		where food_name = #{searchResult}
+	</select>
+	
+	<update id="recipeDelete">
+		update recipe
+		<set>
+			recipe_enabled = 0
+		</set>
+		where recipe_no = #{recipeNo}
+	</update>
+	
+	<select id="selectLastImage" resultType="string">
+		SELECT renamed_recipe_pic FROM (SELECT * FROM recipe_sequence where recipe_no = #{recipeNo} ORDER BY recipe_order desc) WHERE rownum = 1
+	</select>
 </mapper>
