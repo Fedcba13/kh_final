@@ -195,10 +195,13 @@ public class PayController {
 	@ResponseBody
 	@RequestMapping(value="/updatePoint.do", method=RequestMethod.POST)
 	public int updatePoint(@RequestParam String memberId,
-						   @RequestParam int memberPoint) {
+						   @RequestParam int memberPoint,
+						   @RequestParam int addPoint) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("memberId", memberId);
 		map.put("memberPoint", memberPoint);
+		map.put("addPoint", addPoint);
+		logger.debug("map={}", map);
 		int result = payService.updatePoint(map);
 		
 		return result;

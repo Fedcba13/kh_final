@@ -20,6 +20,7 @@ import com.kh.urbantable.cart.model.vo.Cart;
 import com.kh.urbantable.common.util.Utils;
 import com.kh.urbantable.marketOwner.model.service.MarketOwnerService;
 import com.kh.urbantable.marketOwner.model.vo.Market;
+import com.kh.urbantable.member.model.service.MemberService;
 import com.kh.urbantable.payment.model.service.PayService;
 
 @Controller
@@ -33,6 +34,9 @@ public class CartController {
 	
 	@Autowired
 	PayService payService;
+	
+	@Autowired
+	MemberService memberService;
 	
 	@Autowired
 	MarketOwnerService marketOwnerService; 
@@ -198,6 +202,15 @@ HashMap<String, String> result = new HashMap<String, String>();
 		int result = cartService.deleteCartAll(memberId);
 		
 		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/getAddress.do", method=RequestMethod.POST)
+	public List<Map<String, String>> getAddressList(@RequestParam String memberId){
+		List<Map<String, String>> list = memberService.selectAddress(memberId); 
+		logger.debug("list={}", list);
+		
+		return list;
 	}
 
 }

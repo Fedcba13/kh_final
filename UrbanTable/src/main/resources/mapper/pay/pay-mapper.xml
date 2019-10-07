@@ -73,7 +73,7 @@
 		update coupon set coupon_enabled = 0 where coupon_id=#{couponId} and member_id=#{memberId}
 	</update>
 	<update id="updatePoint">
-		update member set member_point = member_point - #{memberPoint} where member_id = #{memberId}
+		update member set member_point = member_point - #{memberPoint} + #{addPoint} where member_id = #{memberId}
 	</update>
 	
 	<select id="getAllCoupons" resultType="map">

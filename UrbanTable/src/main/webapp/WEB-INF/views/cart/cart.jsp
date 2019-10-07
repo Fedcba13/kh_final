@@ -5,6 +5,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script>
 	var length = ${fn:length(list)};
 	$(()=>{
@@ -15,7 +16,20 @@
 		deliveryCost("n");
 		discountCost();
 		finalPrice();
-		totalPayment();		
+		totalPayment();
+		getAddressList();
+		
+		$("#userAddressField").val("${memberLoggedIn.memberAddress}");
+		$("#userAddressDetailField").val("${memberLoggedIn.memberAddress2}");
+		
+		$("#deliveryAddress").on("click", ()=>{
+			new daum.Postcode({
+				oncomplete: function(data) {		            
+		           $("#userAddressField").val(data.roadAddress);
+		           $("#userAddressDetailField").removeAttr("readonly");
+		        }
+			}).open()
+		});
 		
 		$("#searchMarket").on("click", function(){
 			getClosestMarket();
@@ -47,6 +61,8 @@
 					cartInfo.payDetailAmount = root.find($("input:text[name='amount']")).val();
 					var marketAddress = $("#market").val().substring(0, $("#market").val().indexOf("(")-1);
 					cartInfo.market = marketAddress;
+					cartInfo.deliveryAddress = $("#userAddressField").val();
+					cartInfo.detailAddress = $("#userAddressDetailField").val();
 					$.ajax({
 						url: "${pageContext.request.contextPath}/cart/checkstock.do",
 						type: "post",
@@ -83,6 +99,10 @@
 				}
 				alert("선택된 매장에 재고가 부족합니다. 매장을 변경하거나 상품을 변경해주세요\n" + str);				
 			}
+		});
+					
+		$("#addressList").on("click", ()=>{
+			$("#selectAddressModal").css("display", "block");
 		});
 		
 	});
@@ -290,7 +310,7 @@
 	
 	function getClosestMarket(){
 		if(confirm("매장을 변경할 경우 일부상품의 재고가 없거나 할인에 변동이 있을 수 있습니다.\n 계속하시겠습니까?")){
-			var popup = window.open("${pageContext.request.contextPath}/cart/searchMarket.do","매장찾기", "width=750, height=550");
+			var popup = window.open("${pageContext.request.contextPath}/cart/searchMarket.do?addr="+$("#userAddressField").val(),"매장찾기", "width=750, height=550");
 			popup.focus();
 			popup.opener = self;	
 		}
@@ -324,6 +344,32 @@
 			success: function(data){
 				console.log(data);				
 				$("#marketNo").val(data.marketNo);
+			},
+			error: function(xhr, txtStatus, err){
+				console.log("ajax처리실패!", xhr, txtStatus, err);
+			}
+		});
+	}
+	
+	function getAddressList(){
+		$.ajax({
+			url: "${pageContext.request.contextPath}/cart/getAddress.do",
+			type: "post",
+			data: {
+				memberId: "${memberLoggedIn.memberId}"
+			},
+			success: function(data){				
+				var addr = "";
+				for(var i = 0; i < data.length; i++){
+					if(data[i].ADDRESS_NO == null){
+						addr += "<option value='"+data[i].MEMBER_ADDRESS+"|"+data[i].MEMBER_ADDRESS2+"'>";
+						addr += "기본주소 (" + data[i].MEMBER_ADDRESS + ")";
+					} else {
+						addr += "<option value='"+data[i].MEMBER_ADDRESS+"|"+data[i].MEMBER_ADDRESS2+"'>";
+						addr += data[i].ADDRESS_NAME + " (" + data[i].MEMBER_ADDRESS + ")";
+					}					
+				}				
+				$("#addressListModal").append(addr);
 			},
 			error: function(xhr, txtStatus, err){
 				console.log("ajax처리실패!", xhr, txtStatus, err);
@@ -381,6 +427,21 @@
 		});
 		checkAll($("#checkAll"));
 	}
+	
+	function submitAddress(){
+		$("#selectAddressModal").css("display", "none");
+		var address = $("#addressListModal option:selected").val();
+		var addressDetail = address.substring(address.indexOf("|")+1);
+		if (addressDetail=="null"){
+			addressDetail = "";
+		}		
+		$("#userAddressField").val(address.substring(0,address.indexOf("|")));
+		$("#userAddressDetailField").val(addressDetail);
+	}
+	
+	function closeModal(){
+		$("#selectAddressModal").css("display", "none");
+	}
 
 </script>
 
@@ -432,6 +493,23 @@
             		<input type="hidden" id="marketNo" />
             	</td>
             </tr>
+            <tr>
+            	<td>
+            		<input type="button" class="btn" id="deliveryAddress" value="배송지변경" />
+            		<input type="button" class="btn" id="addressList" value="배송지목록" />
+            	</td>
+            	<td colspan="3">
+            		<input type="text" id="userAddressField" size="80" readonly/>    		            	
+            	</td>
+            </tr>
+            <tr>
+	            <td>
+	            	상세주소
+	            </td>
+	           	<td colspan="3">
+	            	<input type="text" id="userAddressDetailField" size="80" readonly/>
+	           	</td>
+            </tr>
         </table>
         <table class="tbl tbl_view">
             <tr>
@@ -462,7 +540,20 @@
 		        <button type="button" class="btn" id="order"><h2>주문하기</h2></button>
 		    </div>        
         </form>
-    </article>    
+    </article>
+    <div class="modal txt_center" id="selectAddressModal">
+		<form class="modal-content animate">
+			<div class="container txt_center">
+				<span>배송지를 선택하세요(새 배송지 등록은 마이페이지에서 가능합니다.)</span><br />
+				<select class="select" name="address" id="addressListModal">
+				</select>
+			</div>
+			<div class="container txt_center" style="background-color:#f4f4f0;">
+				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" onclick="closeModal();">취소</button>
+				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" onclick="submitAddress();">선택</button>
+		    </div>
+		</form>
+	</div>
 </section>
 
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

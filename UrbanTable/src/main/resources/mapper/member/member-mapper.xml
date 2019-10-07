@@ -53,10 +53,10 @@
 	</select>
 	
 	<select id="selectAddress" resultType="map">
-		select address_no, member_id, member_address, address.member_address2, address_name, 0 as flag from address where member_id = #{memberId}
+		select address_no, member_id, member_address, address.member_address2, address_name from address where member_id = #{memberId}
         union
-        select '' as address_no, member_id, member_address, member_address2, null, 1 from member where member_id = #{memberId}
-        order by flag desc
+        select '' as address_no, member_id, member_address, member_address2, null from member where member_id = #{memberId}
+        order by address_no desc
 	</select>
 	
 	<!-- 자동로그인 구현 부분 -->
