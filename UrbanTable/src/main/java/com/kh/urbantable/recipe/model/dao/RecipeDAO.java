@@ -61,4 +61,6 @@ public interface RecipeDAO {
 
 	String selectLastImage(String recipeNo);
 
+	List<Recipe> selectRecipeIndexList();
+
 }

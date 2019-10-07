@@ -138,4 +138,9 @@ public class RecipeDAOImpl implements RecipeDAO {
 	public String selectLastImage(String recipeNo) {
 		return sqlSession.selectOne("recipe.selectLastImage", recipeNo);
 	}
+
+	@Override
+	public List<Recipe> selectRecipeIndexList() {
+		return sqlSession.selectList("recipe.selectRecipeIndexList");
+	}
 }

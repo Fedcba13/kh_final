@@ -224,6 +224,46 @@
 				console.log("ajax 처리실패!", xhr, txtStatus, err);
 			}
 		});
+	
+	// recipe
+		$.ajax({
+			 url: "${pageContext.request.contextPath}/recipe/selectRecipeList", 
+			 dataType: "json",
+			 type: "POST",
+			 success: (data)=> {
+					html = '';
+				for(var i=0; i<3; i++){
+					html += '<li><a href="${pageContext.request.contextPath}/recipe/recipeView.do?recipeNo=' + data[i].recipeNo + '&memberId=${memberLoggedIn.memberId}" class="dp_block">'
+					html += '<div class="event_img_area" value="' + i + '">';
+					html += '</div>';
+					html += '<div class="event_info_area">';
+					html += '<p>' + data[i].recipeTitle + '</p>';
+					html += '</div></a></li>'
+				}
+				
+				$('.main_receipe').html(html);
+			},
+			error: (xhr, txtStatus, err)=> {
+				console.log("ajax 처리실패!", xhr, txtStatus, err);
+			}
+		});
+	
+	// recipeImage
+		$.ajax({
+			 url: "${pageContext.request.contextPath}/recipe/selectImageList", 
+			 dataType: "json",
+			 type: "POST",
+			 success: (data)=> {
+					html = '';
+				for(var i=0; i<3; i++){
+					html = '<img src="${pageContext.request.contextPath}/resources/upload/recipe/' + data[i] + '" alt="이벤트 사진">'
+					$('.event_img_area[value="' + i + '"]').html(html);
+				}
+			},
+			error: (xhr, txtStatus, err)=> {
+				console.log("ajax 처리실패!", xhr, txtStatus, err);
+			}
+		});
 
 	
 }); 
@@ -268,36 +308,7 @@ function bannerSlide(){
     <article class="inner">
         <h3 class="main_tit txt_center">Urban의 레시피</h3>
         <ul class="main_event_list main_receipe txt_center clearfix">
-            <li>
-                <a href="" class="dp_block">
-                    <div class="event_img_area">
-                        <img src="${pageContext.request.contextPath }/resources/images/example2.PNG" alt="이벤트 사진">
-                    </div>
-                    <div class="event_info_area">
-                        <p>레시피명</p>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="" class="dp_block">
-                    <div class="event_img_area">
-                        <img src="${pageContext.request.contextPath }/resources/images/example2.PNG" alt="이벤트 사진">
-                    </div>
-                    <div class="event_info_area">
-                        <p>레시피명</p>
-                    </div>
-                </a>
-            </li>
-            <li>
-                <a href="" class="dp_block">
-                    <div class="event_img_area">
-                        <img src="${pageContext.request.contextPath }/resources/images/example2.PNG" alt="이벤트 사진">
-                    </div>
-                    <div class="event_info_area">
-                        <p>레시피명</p>
-                    </div>
-                </a>
-            </li>
+            
         </ul>
     </article>
 </section>

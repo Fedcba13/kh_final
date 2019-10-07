@@ -144,9 +144,16 @@ $(()=> {
 		});
 		
 		$(".mate_li_delete").on("click", function() {
+			var text = $(".mate_li[value='" + this.value + "']").text();
 			$(".mate_li[value='" + this.value + "']").remove();
 			var text = $(".mate_li[value='" + this.value + "']").text();
 			this.remove();
+			
+			var arr = text.split(">");
+			
+			if($("#materialSet").value.contains(arr[2])) {
+				alert("dd");
+			}
 			
 			$.ajax({
 				url: "${pageContext.request.contextPath}/recipe/materialDelete/" + this.value,

@@ -189,8 +189,17 @@
 	margin-top: 20px;
 }
 
+.comment_decla_div {
+	margin-top: 20px;
+}
+
 .comment_update_div {
 	margin-top: 20px;
+}
+
+.comment_blame_btn {
+	position: relative;
+	top: -25px;
 }
 
 .comment_update_btn {
@@ -202,12 +211,19 @@
 	margin-top: 50px;
 }
 
+.recomOl {
+	overflow:hidden;
+	display: inline-block;
+}
+
 .recomOl>li {
 	width: 150px;
-	height: 250px;
+	height: 300px;
 	border: 1px solid #c0c0c0;
 	float: left;
 	margin-right: 10px;
+	text-align: center;
+	display: inline-block;
 }
 
 .update_div {
@@ -221,4 +237,58 @@
 
 hr {
 	margin-top: 50px;
+}
+
+#recipeRecomImage {
+	width: 400px;
+	height: 400px;
+}
+
+.recipeList {
+	display: inline-block;
+}
+
+.recipeList>a>li {
+	border: 1px solid #c0c0c0;
+	width: 400px;
+	text-align: center;
+	font-size: 25px;
+	float: left;
+	margin-right: 20px;
+	margin-bottom: 20px;
+}
+
+.recipeListDiv {
+	overflow: hidden;
+	text-align: center;
+}
+
+#recomOlDiv {
+	text-align: center;
+}
+
+.foodImg {
+	width: 148px;
+	height: 200px;
+}
+
+#recipeImg {
+	width: 200px;
+	height: 200px;
+	diplay: block;
+}
+
+.recipeContentTd {
+	width: 400px;
+	height: 300px;
+	padding-left: 100px;
+}
+
+.recipeImgTd {
+	width: 250px;
+	text-align: center;
+}
+
+.recipe_sequence_table {
+	margin-top: 20px;
 }

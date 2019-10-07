@@ -58,11 +58,14 @@ public class RecipeController {
         paging.setTotalCount(totalCount);
         
         List<Recipe> list = recipeService.selectRecipeList(paging);
-        List<String> imageList = null;
+        List<String> imageList = new ArrayList<String>();
         for(int i=0; i<list.size(); i++) {
         	String renamedFileName = recipeService.selectLastImage(list.get(i).getRecipeNo());
         	
-        	imageList.add(renamedFileName);
+        	if(renamedFileName != null && renamedFileName != "") {
+        		imageList.add(renamedFileName);        		
+        	}
+        	
         }
 		
 		request.setAttribute("list", list);
@@ -70,6 +73,32 @@ public class RecipeController {
 		request.setAttribute("image", imageList);
 //		logger.debug("list=" + list);
 		return "/recipe/recipe";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/selectRecipeList")
+	public List<Recipe> selectRecipeList() {
+        
+        List<Recipe> list = recipeService.selectRecipeIndexList();
+		
+		return list;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/selectImageList")
+	public List<String> selectImageIndexList() {
+		
+		List<Recipe> list = recipeService.selectRecipeIndexList();
+        List<String> imageList = new ArrayList<String>();
+        for(int i=0; i<list.size(); i++) {
+        	String renamedFileName = recipeService.selectLastImage(list.get(i).getRecipeNo());
+        	
+        	if(renamedFileName != null && renamedFileName != "") {
+        		imageList.add(renamedFileName);        		
+        	}
+        	
+        }
+		return imageList;
 	}
 	
 	@RequestMapping("/recipeView.do")

@@ -6,6 +6,9 @@
 	<select id="selectRecipeList" resultMap="recipeMap">
 		select * from recipe A where recipe_enabled = 1 order by recipe_date desc
 	</select>
+	<select id="selectRecipeIndexList" resultMap="recipeMap">
+		select * from recipe A where recipe_enabled = 1 order by recipe_date desc
+	</select>
 	<resultMap type="recipe" id="recipeMap">
 		<result column="recipe_no" property="recipeNo" />
 		<result column="member_id" property="memberId" />
@@ -188,7 +191,7 @@
 	
 	<insert id="boardCommentBlame">
 		insert into blame(blame_id, member_id, bla_content, blme_target_id, target_type, blame_date, blame_action)
-		values('bla' || lpad(blame_seq.nextval, 5, '0'), #{memberId}, #{blameContent}, #{blameTargetId}, 4, default, default)
+		values('bla' || lpad(blame_seq.nextval, 5, '0'), #{memberId}, #{blameContent}, #{blameTargetId}, ${targetType}, default, default)
 	</insert>
 	
 	<select id="selectRecipeListCnt" resultType="int">
@@ -209,6 +212,9 @@
 		<result column="food_market_price" property="foodMarketPrice" />
 		<result column="food_user_price" property="foodUserPrice" />
 		<result column="food_enabled" property="foodEnabled" />
+		<result column="food_img" property="foodImg" />
+		<result column="food_original_file_name" property="foodOriginalFileName" />
+		<result column="food_renamed_file_name" property="foodRenamedFileName" />
 	</resultMap>
 	
 	<select id="searchFoodNo" resultType="string">
