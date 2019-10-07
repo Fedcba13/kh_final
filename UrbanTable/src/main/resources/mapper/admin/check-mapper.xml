@@ -12,6 +12,7 @@
 		    join market m on mo.market_no = m.market_no
 		    join food f on mod.food_no = f.food_no
 		where market_order_flag = 0 and market_order_enabled=1 and market_order_detail_enabled = 1
+		order by mo.market_order_date
 	</select>
 
 	<select id="selectFoodNo" resultType="_int">
@@ -31,7 +32,7 @@
 	</update>
 	
 	<insert id="insertFood">
-		insert stock values(
+		insert into stock values(
 		#{marketNo},
 		#{food},
 		#{amount}		
@@ -39,11 +40,32 @@
 	</insert>
 	
 	<select id="selectMODList" resultType="MarketOrderDetail">
-		select * from market_order_detail where market_order_no = #{orderNo}
+		select * from market_order_detail where market_order_no = #{orderNo} and market_order_detail_enabled = 1
 	</select>
 	
-	<select id="selectBlameList" resultType="blame">
+	<select id="selectBlameList" resultMap="blameMap">
 		select * from blame where blame_action = 1
 	</select>
+	
+		<resultMap type="blame" id="blameMap">
+		<result column="blame_id" property="blameId" />
+		<result column="member_id" property="memberId" />
+		<result column="bla_content" property="blameContent" />
+		<result column="blme_target_id" property="blameTargetId" />
+		<result column="target_type" property="targetType" />
+		<result column="blame_date" property="blameDate" />
+		<result column="blame_action" property="blameAction" />
+		</resultMap>
 
+	<select id="selectBlame" resultMap="blameMap">
+		select * from blame where blame_id = #{blameId}
+	</select>
+	
+	<update id="blameActionChk">
+		update blame set blame_action = 0 where blame_id = #{blameId}
+	</update>
+	
+	<update id="updateComment">
+		update board_comment set board_comment_enabled = 0 where board_comment_no = #{blameTargetId}
+	</update>
 </mapper>

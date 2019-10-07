@@ -61,5 +61,22 @@ public class CheckServiceImpl implements CheckService{
 		return checkDAO.selectBlameList();
 	}
 
+	@Override
+	public Blame selectBlame(String blameId) {
+		
+		return checkDAO.selectBlame(blameId);
+	}
+
+	@Override
+	public int blameActionChk(Blame b) {
+		
+		int result = checkDAO.blameActionChk(b);
+		
+		if(result > 0) {
+			 result = checkDAO.updateComment(b);
+		}
+		return result;
+	}
+
 	
 }

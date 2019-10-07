@@ -34,6 +34,6 @@
 	</update>
 	
 	<select id="mainBannerList" resultType="banner">
-		select * from banner where banner_enabled = 1 order by banner_end_date desc
+		select * from banner where banner_enabled = 1 and banner_end_date > sysdate order by banner_end_date desc
 	</select>
 </mapper>

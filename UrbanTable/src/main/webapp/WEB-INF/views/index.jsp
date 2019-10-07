@@ -25,7 +25,7 @@
 				html += "</a></div>";
 				$(".main_banner").append(html); 
 			}
-			$(".main_banner").html(html);
+
 			bannerSlide();
 		},
 		error: (xhr, txtStatus, err)=> {
@@ -207,6 +207,8 @@
 			 dataType: "json",
 			type: "POST",
 			success: (data)=> {
+				
+				console.log(data);
 					html = '';
 				for(var i in data){
 					html += '<li><a href="" class="dp_block">'

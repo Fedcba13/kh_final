@@ -57,6 +57,24 @@ public class CheckDAOImpl implements CheckDAO{
 		
 		return sqlSession.selectList("check.selectBlameList");
 	}
+
+	@Override
+	public Blame selectBlame(String blameId) {
+		
+		return sqlSession.selectOne("check.selectBlame", blameId);
+	}
+
+	@Override
+	public int blameActionChk(Blame b) {
+		
+		return sqlSession.update("check.blameActionChk", b);
+	}
+
+	@Override
+	public int updateComment(Blame b) {
+		
+		return sqlSession.update("check.updateComment", b);
+	}
 	
 	
 }

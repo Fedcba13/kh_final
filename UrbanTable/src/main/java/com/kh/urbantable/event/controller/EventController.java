@@ -28,7 +28,6 @@ import com.kh.urbantable.member.model.vo.Member;
 
 @Controller
 @RequestMapping("/event")
-@ResponseBody
 public class EventController {
 
 	@Autowired
@@ -147,6 +146,7 @@ public class EventController {
 	}
 
 	@RequestMapping("/mainEventList.do")
+	@ResponseBody
 	public List<Event> mailList(Model model) {
 		
 		List<Event> list = eventService.selectEventAllList();

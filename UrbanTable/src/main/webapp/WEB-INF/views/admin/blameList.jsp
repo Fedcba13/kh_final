@@ -8,7 +8,13 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/marketOwner.css">
 
 <script>
-
+function blameChk(no){
+	var blameId = $("#blameId"+no).val()
+	
+	console.log(blameId);
+	location.href="${pageContext.request.contextPath}/check/blameCheck.do?blameId="+blameId;
+	
+}
 </script>
 <section>
 	<article class="subPage inner asda">
@@ -25,10 +31,26 @@
 	    				<th>신고 분류</th>
 	    				<th>신고한 회원</th>
 	    				<th>신고 내용</th>
-	    				<th>신고ID</th>
+	    				<th>신고 게시글</th>
 	    				<th>신고일자</th>
 	    				<th style="width:70px;"></th>
 	    			</tr>
+	    		<c:forEach items="${list }" var="b" varStatus="vs">
+	    			<tr>
+	    			<c:if test="${b.targetType eq 4}">
+	    			<td>댓글</td>
+	    			</c:if>
+	    			<c:if test="${b.targetType eq 3}">
+	    			<td>레시피</td>
+	    			</c:if>
+	    			<td>${b.memberId }</td>
+	    			<td>${b.blameContent }</td>
+	    			<td>${b.blameTargetId }</td>
+	    			<td>${b.blameDate}</td>
+	    			<input type="hidden" id="blameId${vs.index }" value="${b.blameId }"/>
+	    			<td><input type="button" value="ㅡ" class="btn" style="width:50px;" onclick="blameChk(${vs.index})"/></td>
+	    			</tr>
+	    		</c:forEach>
 
 
 	    		</table>

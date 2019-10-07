@@ -49,7 +49,7 @@
 				success: (data)=>{
 						console.log(data);
   					var html = "<table class='tbl txt_center'>";
-	                html+="<tr><th>아이디</th><th>점주명</th><th>지점명</th><th style='width: 150px;'>등록번호</th><th style='width: 200px;'>매장주소</th><th>연락처</th><th> </th></tr>"; 
+	                html+="<tr class='sec_bg'><th>아이디</th><th>점주명</th><th>지점명</th><th style='width: 150px;'>등록번호</th><th style='width: 200px;'>매장주소</th><th>연락처</th><th> </th></tr>"; 
 	                for(var i in data){
 	                	
 	                 	console.log(data.memberId); 
@@ -110,7 +110,7 @@ input.button{
 		</div>
 		<div class="marketList">
 		<table class="tbl txt_center">
-			<tr>
+			<tr class="sec_bg">
 				<th>신청 아이디</th>
 				<th>점주명</th>
 				<th >지점명</th>
@@ -152,7 +152,7 @@ input.button{
 			</c:forEach>
 		</table>
 		</div>
-		<div class="pageBar txt_center" style="margin:20px 0 0;">페이징할 것</div>
+		
  
 	</article>
 </section>
