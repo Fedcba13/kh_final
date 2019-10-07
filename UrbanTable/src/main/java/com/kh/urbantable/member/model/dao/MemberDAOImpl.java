@@ -113,6 +113,16 @@ public class MemberDAOImpl implements MemberDAO {
 	public int deleteAddr(Map<String, Object> param) {
 		return sqlSession.delete("member.deleteAddr", param);
 	}
+
+	@Override
+	public int insertStockNotice(Map<String, Object> param) {
+		return sqlSession.insert("member.insertStockNotice", param);
+	}
+
+	@Override
+	public int selectStockNotice(Map<String, Object> param) {
+		return sqlSession.selectOne("member.selectStockNotice", param);
+	}
 	
 
 }

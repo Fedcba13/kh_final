@@ -134,4 +134,14 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.deleteAddr(param);
 	}
 
+	@Override
+	public int insertStockNotice(Map<String, Object> param) {
+		return memberDAO.insertStockNotice(param);
+	}
+
+	@Override
+	public int selectStockNotice(Map<String, Object> param) {
+		return memberDAO.selectStockNotice(param);
+	}
+
 }

@@ -44,4 +44,8 @@ public interface MemberService {
 
 	int deleteAddr(Map<String, Object> param);
 
+	int insertStockNotice(Map<String, Object> param);
+
+	int selectStockNotice(Map<String, Object> param);
+
 }

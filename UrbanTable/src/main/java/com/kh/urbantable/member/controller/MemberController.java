@@ -569,6 +569,37 @@ public class MemberController {
 			result.put("msg", msg);
 			
 			return result;
+	}
+	
+	@RequestMapping("/stockNotice")
+	@ResponseBody
+	public HashMap<String, Object> stockNotice(HttpSession session,
+			@RequestParam(defaultValue="") String marketNo,
+			@RequestParam(defaultValue="") String foodNo) {
+
+			HashMap<String, Object> result = new HashMap<String, Object>();
+			
+			String msg = "알림 등록 실패";
+			Map<String, Object> param = new HashMap<String, Object>();
+			
+			String memberId = ((Member)session.getAttribute("memberLoggedIn")).getMemberId();
+			param.put("marketNo", marketNo);
+			param.put("foodNo", foodNo);
+			param.put("memberId", memberId);
+			
+			logger.debug(param.toString());
+			
+			int selectResult = memberService.selectStockNotice(param);
+			
+			if(selectResult == 0) {
+				msg = memberService.insertStockNotice(param) > 0 ? "알림 등록  성공" : "알림 등록 실패";				
+			}else {
+				msg = "이미 알림 신청 된 상품입니다.";
 			}
+			
+			result.put("msg", msg);
+			
+			return result;
+	}
 	
 }

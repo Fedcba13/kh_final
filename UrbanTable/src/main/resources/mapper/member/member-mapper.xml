@@ -114,4 +114,32 @@
 		delete from address where member_id = #{memberId} and address_no = #{addressNo}
 	</delete>
 
+	<insert id="insertStockNotice">
+		insert into stock_notice
+		values(#{memberId}, #{foodNo}, sysdate)
+	</insert>
+	
+	<select id="selectStockNotice" resultType="_int">
+		select count(*) cnt from stock_notice
+		where member_id = #{memberId} and food_no = #{foodNo}
+	</select>
+	
+	<select id="sendMsgStockNotice" resultType="_int">
+		select * from (select sn.notice_date, m.member_phone, fs.food_section_name,
+		 		( select count(*)
+					from market_order m
+						left join market_order_detail mod
+							on m.market_order_no = mod.market_order_no
+					where m.market_order_date > sn.notice_date
+								and sn.food_no = mod.food_no) flag
+			from stock_notice sn
+				left join member m
+				   on sn.member_id = m.member_id
+				left join food f
+				    on sn.food_no = f.food_no
+				left join food_section fs
+				    on f.food_section_no = fs.food_section_no)
+		where flag > 0
+	</select>
+
 </mapper>
