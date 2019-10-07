@@ -25,7 +25,6 @@ table.eventTBL {
 <section>
 	<article class="subPage inner">
 		<h3 class="sub_tit">지점 이벤트 관리</h3>
-		${list }
 		<div class="txt_right">
 			<a
 				href="${pageContext.request.contextPath }/event/marketEventEnroll.do?memberId=${memberLoggedIn.memberId}"

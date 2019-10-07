@@ -18,7 +18,7 @@ function validate(){
 }
 
 </script>
-<section class="sec_bg">
+<section>
 	<!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 		<h3 class="sub_tit">공지사항 작성</h3>

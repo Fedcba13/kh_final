@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.kh.urbantable.admin.model.service.CheckService;
 import com.kh.urbantable.foodOrder.model.vo.MarketOrderDetail;
@@ -18,6 +19,7 @@ import com.kh.urbantable.recipe.model.vo.Blame;
 
 @Controller
 @RequestMapping("/check")
+
 public class CheckController {
 
 	@Autowired
@@ -35,6 +37,15 @@ public class CheckController {
 		model.addAttribute("list", list);
 				
 		return "/admin/marketOrderCheck";
+	}
+	
+	@RequestMapping("/marketOrderCheckList1.do")
+	@ResponseBody
+	private List<Map<String, Object>> marketOrderCheckList1(Model model) {
+		
+		List<Map<String, Object>> list = checkService.selectAllList();
+				
+		return list;
 	}
 	
 	@RequestMapping("/updateOrder.do")
@@ -73,10 +84,7 @@ public class CheckController {
 				checkService.insertFood(param);
 			}
 			
-			// param 초기화
-			param.remove("food", food);
-			param.remove("amount", amount);
-			
+		
 		}
 		
 			// update완료 후 flag값 변경
@@ -107,6 +115,22 @@ public class CheckController {
 	public String blameList(Model model) {
 		
 		List<Blame> list = checkService.selectBlameList();
+		model.addAttribute("list", list);
+		
+		return "/admin/blameList";
+	}
+	
+	@RequestMapping("/blameCheck.do")
+	public String blameCheck(String blameId, Model model) {
+		
+		// 해당 blame찾기
+		Blame b = checkService.selectBlame(blameId);
+	
+		// blame신고액션변경및 댓글 비노출
+		int result = checkService.blameActionChk(b);
+		
+		List<Blame> list = checkService.selectBlameList();
+		
 		model.addAttribute("list", list);
 		
 		return "/admin/blameList";

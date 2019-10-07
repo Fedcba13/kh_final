@@ -68,12 +68,12 @@ function insertBanner(){
 	font-size: 14px;
 	font-weight: 600;
 	color: #fff;
-	background: #374818;
 	cursor: pointer;
 	transition: all .25s linear;
 }
+
 </style>
-<section class="sec_bg">
+<section>
 	<article class="subPage inner">
 
 		<h3 class="sub_tit">배너 리스트</h3>
@@ -84,8 +84,8 @@ function insertBanner(){
 					style="width: 60px;" onclick="insertBanner();" />
 			</div>
 			<br />
-			<table class="tbl txt_center">
-				<tr>
+			<table class="tbl txt_center banner_tbl">
+				<tr class="sec_bg">
 					<th>배너 제목</th>
 					<th>시작 일자</th>
 					<th>종료 일자</th>
@@ -94,7 +94,7 @@ function insertBanner(){
 					
 
 				</tr>
-				<tr>
+				<tr class="sec_bg">
 					<th colspan="3">배너 내용</th>
 					<th></th>
 				</tr>
@@ -108,10 +108,10 @@ function insertBanner(){
 							<td><input type="text" class="view txt_center"
 								name="bannerTitle" value="${b.bannerTitle}" /></td>
 							<td><input type="date" class="start${vs.index } bannerDate"
-								name="bannerStartDate" value="${b.bannerStartDate}" /></td>
+								name="bannerStartDate" value="${b.bannerStartDate}" style="background:none; border:0;"/></td>
 							<td>
 							<input type="date" class="end${vs.index } bannerDate" name="bannerEndDate" 
-									onchange="test(${vs.index });" value="${b.bannerEndDate }" />
+									onchange="test(${vs.index });" value="${b.bannerEndDate }" style="background:none; border:0;"/>
 								</td>
 							<td rowspan="2">
 							<img src="${pageContext.request.contextPath}/resources/images/banner/${b.bannerFileRenamed}"

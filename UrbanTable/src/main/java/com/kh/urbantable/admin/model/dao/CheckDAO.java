@@ -22,4 +22,10 @@ public interface CheckDAO {
 
 	List<Blame> selectBlameList();
 
+	Blame selectBlame(String blameId);
+
+	int blameActionChk(Blame b);
+
+	int updateComment(Blame b);
+
 }
