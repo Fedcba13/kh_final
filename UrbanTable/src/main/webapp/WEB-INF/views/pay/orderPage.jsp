@@ -13,7 +13,7 @@
 	}
 </style>
 <script>
-	var cartInfoArr = JSON.parse('${cartInfo}');	
+	var cartInfoArr = JSON.parse('${cartInfo}');
 	$(()=>{		
 		var IMP = window.IMP; 
 		IMP.init('imp69002758');
@@ -28,7 +28,7 @@
 			    amount : 100,//parseInt($("#totalPaymentCost").val()),			    
 			    buyer_name : "${memberLoggedIn.memberName}",
 			    buyer_tel : '${memberLoggedIn.memberPhone}',
-			    buyer_addr : '${memberLoggedIn.memberAddress}',
+			    buyer_addr : $("#userAddressField").val() + " " + $("#userAddressDetaiField").val(),
 			    m_redirect_url : 'https://www.yourdomain.com/payments/complete'
 			}, function(rsp) {
 			    if ( rsp.success ) {	//결제 성공시
@@ -102,13 +102,14 @@
 			});
 		});
 		
-		$("#deliveryAddress").on("click", ()=>{
+	 	/*$("#deliveryAddress").on("click", ()=>{
 			new daum.Postcode({
 				oncomplete: function(data) {		            
 		           $("#userAddressField").val(data.roadAddress);
+		           $("#userAddressDetailField").removeAttr("readonly");
 		        }
 			}).open()
-		});
+		}); */
 		
 		$("#marketAddress").on("click", ()=>{
 			//var popup = window.open("${pageContext.request.contextPath}/cart/searchMarket.do?addr=" + $("#userAddressField").val(),"매장찾기", "width=750, height=550");
@@ -191,7 +192,8 @@
 			$("#totalPrice").val((cartInfoArr[0].payPrice - 30000) + " 원");
 		}
 		//$("#orderInfo td").eq(0).append(cartInfoArr[0].payPrice + " 원");
-		$("#userAddressField").val("${memberLoggedIn.memberAddress}");
+		$("#userAddressField").val(cartInfoArr[0].deliveryAddress);
+		$("#userAddressDetailField").val(cartInfoArr[0].detailAddress);
 		$("#marketAddressField").val(cartInfoArr[0].market);
 		getMarketNo();
 		if(cartInfoArr[0].deliverType == "d"){
@@ -256,7 +258,7 @@
 	}
 	
 	function submitPoint(){
-		if($("#usePoint").val() < 1000){
+		if($("#usePoint").val() < 1000 && $("#usePoint").val() != 0){
 			alert("최소 1000포인트부터 사용하실수 있습니다");
 			return ;
 		}
@@ -431,11 +433,17 @@
 	}
 	
 	function updatePoint(){
+		var point = parseInt($("#totalPrice").val());
+		var usingPoint = parseInt($("#memberPoint").val());
+		if(isNaN(usingPoint)){
+			usingPoint = 0;
+		}
 		$.ajax({
 			url: "${pageContext.request.contextPath}/pay/updatePoint.do",
 			data: {
 				memberId: "${memberLoggedIn.memberId}",
-				memberPoint: parseInt($("#memberPoint").val())
+				memberPoint: usingPoint,
+				addPoint: Math.floor(point*0.01)
 			},
 			type: "post",
 			success: function(data){
@@ -489,8 +497,15 @@
                 	<input type="text" id="userAddressField" size="50" readonly/>             	
                 </td>
                 <td>
-                	&nbsp;&nbsp;<input type="button" id="deliveryAddress" class="btn" value="배송지 변경"/>
+                	<!-- &nbsp;&nbsp;<input type="button" id="deliveryAddress" class="btn" value="배송지 변경"/>
+                	&nbsp;&nbsp;<input type="button" id="addressList" class="btn" value="배송지 목록"/> -->
                 </td>
+            </tr>
+            <tr>
+            	<th>배송지 상세주소</th>
+            	<td>
+            		<input type="text" id="userAddressDetailField" size="50" value="" readonly/>
+            	</td>
             </tr>
             <tr>
                 <th>배송매장 주소</th>
