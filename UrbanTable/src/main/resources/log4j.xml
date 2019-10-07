@@ -40,7 +40,7 @@
 	
 	<!-- Application Loggers -->
 	<logger name="com.kh.urbantable">
-		<level value="debug" />
+		<level value="info" />
 	</logger>
 	
 	<!-- 3rdparty Loggers -->
