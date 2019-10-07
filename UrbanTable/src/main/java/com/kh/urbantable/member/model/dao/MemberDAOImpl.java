@@ -89,4 +89,30 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectList("pay.getAllCoupons", param);
 	}
 
+	@Override
+	public List<Map<String, Object>> getMemberPayList(Map<String, Object> param) {
+		return sqlSession.selectList("pay.getMemberPayList", param);
+	}
+
+	@Override
+	public List<Map<String, Object>> getMemberPayDetail(Map<String, Object> param) {
+		return sqlSession.selectList("pay.getMemberPayDetail", param);
+	}
+
+	@Override
+	public int modifyAddr(Map<String, Object> param) {
+		return sqlSession.update("member.modifyAddr", param);
+	}
+
+	@Override
+	public int insertAddr(Map<String, Object> param) {
+		return sqlSession.insert("member.insertAddr", param);
+	}
+
+	@Override
+	public int deleteAddr(Map<String, Object> param) {
+		return sqlSession.delete("member.deleteAddr", param);
+	}
+	
+
 }

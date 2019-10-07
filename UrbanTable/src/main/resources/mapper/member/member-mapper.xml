@@ -53,9 +53,9 @@
 	</select>
 	
 	<select id="selectAddress" resultType="map">
-		 select member_id, member_address, address.member_address2, address_name, 0 as flag from address where member_id = #{memberId}
+		select address_no, member_id, member_address, address.member_address2, address_name, 0 as flag from address where member_id = #{memberId}
         union
-        select member_id, member_address, member_address2, null, 1 from member where member_id = #{memberId}
+        select '' as address_no, member_id, member_address, member_address2, null, 1 from member where member_id = #{memberId}
         order by flag desc
 	</select>
 	
@@ -96,5 +96,22 @@
 		</trim>
 		where member_id = #{memberId}
 	</update>
+	
+	<update id="modifyAddr">
+		update address
+		set member_address = #{memberAddress},
+			member_address2 = #{memberAddress2}
+		where member_id = #{memberId}
+			and address_no = #{addressNo}
+	</update>
+	
+	<insert id="insertAddr">
+		insert into address
+		values ('ADDR' || lpad(SEQ_ADDRESS_ID.nextval, 4, '0'), #{memberId}, #{memberAddress}, #{memberAddress2}, #{addressName})
+	</insert>
+	
+	<delete id="deleteAddr">
+		delete from address where member_id = #{memberId} and address_no = #{addressNo}
+	</delete>
 
 </mapper>

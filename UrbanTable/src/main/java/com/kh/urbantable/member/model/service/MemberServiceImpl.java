@@ -109,4 +109,29 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.selectCouponList(param);
 	}
 
+	@Override
+	public List<Map<String, Object>> getMemberPayList(Map<String, Object> param) {
+		return memberDAO.getMemberPayList(param);
+	}
+
+	@Override
+	public List<Map<String, Object>> getMemberPayDetail(Map<String, Object> param) {
+		return memberDAO.getMemberPayDetail(param);
+	}
+
+	@Override
+	public int modifyAddr(Map<String, Object> param) {
+		return memberDAO.modifyAddr(param);
+	}
+
+	@Override
+	public int insertAddr(Map<String, Object> param) {
+		return memberDAO.insertAddr(param);
+	}
+
+	@Override
+	public int deleteAddr(Map<String, Object> param) {
+		return memberDAO.deleteAddr(param);
+	}
+
 }

@@ -38,4 +38,14 @@ public interface MemberDAO {
 
 	List<HashMap<String, Object>> selectCouponList(HashMap<String, Object> param);
 
+	List<Map<String, Object>> getMemberPayList(Map<String, Object> param);
+
+	List<Map<String, Object>> getMemberPayDetail(Map<String, Object> param);
+
+	int modifyAddr(Map<String, Object> param);
+
+	int insertAddr(Map<String, Object> param);
+
+	int deleteAddr(Map<String, Object> param);
+
 }

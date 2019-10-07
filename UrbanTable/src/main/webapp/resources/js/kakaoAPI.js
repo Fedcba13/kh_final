@@ -41,10 +41,11 @@ function sample6_execDaumPostcode() {
 			$(".tbl_addr1 input").val(addr);
 			
 			// 커서를 상세주소 필드로 이동한다.
+			$(".tbl_addr2 input").val('');
 			$(".tbl_addr2 input").focus();
 			
 			$.ajax({
-				url: "${pageContext.request.contextPath}/member/nearMarket.do",
+				url: contextPath+"/member/nearMarket.do",
 				data : {address: $("[name=memberAddress]").val()},
 				success: (data)=>{
 					alert(data.msg);
