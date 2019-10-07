@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="check">
+
+	<select id="selectAllList" resultType="map">
+        select mo.market_no, to_char(mo.market_order_date,'yyyy-mm-dd') order_date, mod.*, 
+        		m.market_name marketName, f.food_name foodName
+		from market_order_detail mod 
+		    join market_order mo on mod.market_order_no = mo.market_order_no 
+		    join market m on mo.market_no = m.market_no
+		    join food f on mod.food_no = f.food_no
+		where market_order_flag = 0 and market_order_enabled=1 and market_order_detail_enabled = 1
+	</select>
+
+	<select id="selectFoodNo" resultType="_int">
+		select count(*) 
+		from stock 
+		where market_no = #{marketNo} 
+				and food_no = #{food}
+	</select>
+
+	<update id="updateAmount">
+		update stock set stock_amount = stock_amount + #{amount}
+		where market_no = #{marketNo} and food_no = #{food}
+	</update>
+	
+	<update id="updateFlag">
+		update market_order set market_order_flag = 1 where market_order_no = #{orderNo}
+	</update>
+	
+	<insert id="insertFood">
+		insert stock values(
+		#{marketNo},
+		#{food},
+		#{amount}		
+		)
+	</insert>
+	
+	<select id="selectMODList" resultType="MarketOrderDetail">
+		select * from market_order_detail where market_order_no = #{orderNo}
+	</select>
+	
+	<select id="selectBlameList" resultType="blame">
+		select * from blame where blame_action = 1
+	</select>
+
+</mapper>

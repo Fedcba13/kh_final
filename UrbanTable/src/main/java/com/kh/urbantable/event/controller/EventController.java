@@ -64,6 +64,7 @@ public class EventController {
 		model.addAttribute("loc", "/event/eventList.do");
 
 		return "/common/msg";
+		
 	}
 
 	@RequestMapping("/marketEventEnroll.do")
