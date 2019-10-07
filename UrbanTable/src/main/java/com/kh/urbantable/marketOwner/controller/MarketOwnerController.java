@@ -565,6 +565,68 @@ public class MarketOwnerController {
 		return result;
 	}
 	
+	@ResponseBody
+	@RequestMapping("/marketNewStockPage.do")
+	public Map<String, Object> marketNewStockPage(@RequestParam(value="cPage", defaultValue="1", required=false) int cPage,
+			@RequestParam String memberId,
+			@RequestParam String foodDivision,
+			@RequestParam String foodOrderSearchType, 
+			@RequestParam String foodOrderSearchKeyword, HttpServletRequest request){
+		
+		String marketNo = marketOwnerService.selectMarketNoByMemberId(memberId);
+		
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("marketNo", marketNo);
+		param.put("foodDivision", foodDivision);
+		param.put("foodOrderSearchType", foodOrderSearchType);
+		param.put("foodOrderSearchKeyword", foodOrderSearchKeyword);
+		
+		Map<String, Object> result = new HashMap<String, Object>();
+		
+		List<Map<String, String>> foodStockList = marketOwnerService.selectFoodStockListAll(cPage, param);
+		int totalContents = marketOwnerService.selectTotalContentsAll(param);
+		
+		int totalPage = (int)Math.ceil((double)totalContents/marketOwnerService.NUM_PER_PAGE);
+		
+		final int pageBarSize = 10;
+		String pageBar = "";
+		
+		int pageStart = ((cPage-1)/pageBarSize)*pageBarSize+1;
+		int pageEnd = pageStart+pageBarSize-1;
+		
+		int pageNo = pageStart;
+		
+		//이전
+		if(pageNo==1) { //첫번째 페이지일 경우
+			//pageBar += "<span><</span>";
+		} else {
+			pageBar += "<a href='#' rel='"+(pageNo-1)+"'><</a>";
+		}
+		
+		//page
+		while(pageNo<=pageEnd && pageNo<=totalPage) {
+			if(pageNo==cPage) {
+				pageBar+="<span class='cPage'>"+pageNo+"</span>";
+			} else {
+				pageBar+="<a href='#' rel='"+pageNo+"'>"+pageNo+"</a>";
+			}
+			pageNo++;
+		}
+		
+		//다음
+		if(pageNo>totalPage) {
+			//pageBar += "<span>></span>";
+		} else {
+			pageBar += "<a href='#' rel='"+pageNo+"'>></a>";
+		}
+		
+		result.put("marketNo", marketNo);
+		result.put("pageBar", pageBar);
+		result.put("foodStockList", foodStockList);
+		
+		return result;
+	}
+	
 	@RequestMapping("/marketChart.do")
 	public String marketChart(@RequestParam String memberId, Model model) {
 		String marketNo = marketOwnerService.selectMarketNoByMemberId(memberId);

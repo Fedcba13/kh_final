@@ -238,11 +238,18 @@ function showMarket(flag, marketNo, marketAddress){
 				}
 				$("#marketHoliday .mInfo").html(holiday);
 				$("#marketTel .mInfo").html(marketList[i].marketTelephone);
+				
 				for(var j in data.eventList){
-					if(j!=data.eventList.length-1){
-						$("#marketEvent .mInfo").append(data.eventList[j].eventTitle+"<br>");
-					} else {
-						$("#marketEvent .mInfo").append(data.eventList[j].eventTitle);
+					if(marketList[i].flag==2){
+						if(data.eventList[j].marketNo == null) {
+							$("#marketEvent .mInfo").append(data.eventList[j].eventTitle);
+						} else if(data.eventList[j].marketNo == marketList[i].marketNo){
+							$("#marketEvent .mInfo").append(data.eventList[j].eventTitle);
+						} 
+						
+						if(j!=data.eventList.length-1){
+							$("#marketEvent .mInfo").append("<br>");
+						}
 					}
 				}
 				

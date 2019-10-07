@@ -163,8 +163,8 @@
 		left join food_division D on F.food_section_no=D.food_section_no -->
 		select *
        	from food F left join stock S on F.food_no=S.food_no
-       	LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
-       	LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+       	LEFT JOIN FOOD_SECTION SC ON F.FOOD_SECTION_NO = SC.FOOD_SECTION_NO
+       	LEFT JOIN FOOD_UPPER U ON SC.FOOD_UPPER_NO = U.FOOD_UPPER_NO
        	LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
 		<trim prefix="where" suffixOverrides="and">
 			S.market_no=#{marketNo}
@@ -394,6 +394,24 @@
 		select sum(pay_detail_amount) 
 		from pay_detail PD left join pay P on PD.pay_no=P.pay_no
 		where P.market_no=#{marketNo}
+	</select>
+	
+	<select id="selectFoodStockListAll" resultType="map">
+		select *
+		from food F
+		LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+		LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+		LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
+		order by F.food_no desc
+	</select>
+	
+	<select id="selectTotalContentsAll" resultType="_int">
+		select count(*)
+		from food F
+		LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+		LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+		LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
+		order by F.food_no desc
 	</select>
 	
 </mapper>
