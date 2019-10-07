@@ -137,4 +137,9 @@ public class RecipeServiceImpl implements RecipeService {
 	public String selectLastImage(String recipeNo) {
 		return recipeDAO.selectLastImage(recipeNo);
 	}
+
+	@Override
+	public List<Recipe> selectRecipeIndexList() {
+		return recipeDAO.selectRecipeIndexList();
+	}
 }

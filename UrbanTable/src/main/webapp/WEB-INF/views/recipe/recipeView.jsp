@@ -104,8 +104,38 @@ $(()=> {
 			return false;
 		}
 		
-		location.href = "${pageContext.request.contextPath}/recipe/blameComment?blameTargetId=" + this.value + "&memberId="
-				+ $(this).attr("memberId") + "&blameContent=" + $(this).attr("boardCommentContent") + "&recipeNo=" + $(this).attr("recipeNo");		
+		var html = "";
+		
+		$(".reply_add").remove();
+		$(".comment_update_div").remove();
+		$(".comment_decla_div").remove();
+		$(".reply_btn").prop("disabled", false);
+		$(".comment_update").prop("disabled", false);
+		$(".comment_blame_btn").prop("disabled", false);
+		
+		var comment = $(".comment_content_span[value='" + this.value + "']").text();
+		
+		html += "<div class='comment_decla_div'>";
+		html += "<form action='${pageContext.request.contextPath}/recipe/blameComment'>"
+		html += "<textarea name='blameContent' id='blameContent' cols='70' rows='3'></textarea> ";
+		html += "<button class='btn comment_blame_btn'>신고</button>";
+		html += "<input type='hidden' name='blameTargetId' value='" + this.value + "' />";
+		html += "<input type='hidden' name='memberId' value='${memberLoggedIn.memberId}' />";
+		html += "<input type='hidden' name='recipeNo' value='${recipe.recipeNo}' />";
+		html += "<input type='hidden' name='targetType' value='4' />";
+		html += "</form>";
+		html += "</div>";
+		
+		$(".comment_td[value='" + this.value + "']").append(html);
+		
+		$(this).prop("disabled", true);
+		
+		$(".comment_blame_btn").on("click", function() {
+			if($("#blameContent").val() == null || $("#blameContent").val() == "") {
+				alert("내용을 입력해주세요");
+				return false;
+			}
+		});		
 	});
 	
 	$(".recipe_delete_btn").on("click", function() {
@@ -168,23 +198,31 @@ $(()=> {
         	</c:if>
         </div>
         <h3 class="recipe_view_h3">레시피</h3>
-        <ol class="recipeOl">
+        <table class="recipe_sequence_table">
         	<c:forEach items="${recipe.recipeSequenceList}" var="rec">
-	        	<li>${rec.recipeContent}</li>
+        		<tr>
+	        		<td class="recipeImgTd"><img id="recipeImg" src="${pageContext.request.contextPath}/resources/upload/recipe/${rec.renamedRecipePic}" alt="" /></td>
+		        	<td class="recipeContentTd">${rec.recipeContent}</td>        		
+        		</tr>
         	</c:forEach>
-        </ol>
+        </table>
         <div class="recomList">
-		    <ol class="recomOl">
-	        	<c:if test="${not empty material}">
-			        <c:forEach items="${material}" var="m">
-			        	<c:if test="${m.foodNo != null}">
-			        			<li>
-			        				${m.foodName}
-			        			</li>
-			        	</c:if>
-			        </c:forEach>                	
-	        	</c:if>
-    		</ol>
+        	<hr width="20px" style="border:2px solid black; display:inline-block; text-align:left; margin-bottom:0px;" />
+        	<h5 style="margin-bottom: 10px;">RECIPE ITEMS</h5>
+        	<div id="recomOlDiv">
+			    <ol class="recomOl">
+		        	<c:if test="${not empty material}">
+				        <c:forEach items="${material}" var="m">
+				        	<c:if test="${m.foodNo != null}">
+				        			<li>
+				        				<img class="foodImg" src="${m.foodImg}" alt="" />
+				        				${m.foodName}
+				        			</li>
+				        	</c:if>
+				        </c:forEach>                	
+		        	</c:if>
+	    		</ol>        	
+        	</div>
         </div>
     </article>
     <hr width="97%" />
@@ -204,8 +242,7 @@ $(()=> {
 			    					<button class="comment_update" value="${com.boardCommentNo}"><sub>수정</sub></button>
 			    				</c:if>	
 			    				<c:if test="${memberLoggedIn.memberId ne com.boardCommentWriter}">
-			    					<button class="comment_decla" value="${com.boardCommentWriter}" memberId=${memberLoggedIn.memberId}
-			    						boardCommentContent=${com.boardCommentContent} recipeNo=${recipe.recipeNo}><sub>신고</sub></button>
+			    					<button class="comment_decla" value="${com.boardCommentNo}"><sub>신고</sub></button>
 			    				</c:if>
 		    				</td>
 		    				<td style="text-align:right; vertical-align:top;">
@@ -235,8 +272,7 @@ $(()=> {
 			    					<button class="comment_update" value="${com.boardCommentNo}"><sub>수정</sub></button>
 			    				</c:if>
 			    				<c:if test="${memberLoggedIn.memberId ne com.boardCommentWriter}">
-			    					<button class="comment_decla" value="${com.boardCommentWriter}" memberId=${memberLoggedIn.memberId}
-			    						boardCommentContent=${com.boardCommentContent} recipeNo=${recipe.recipeNo}><sub>신고</sub></button>
+			    					<button class="comment_decla" value="${com.boardCommentNo}"><sub>신고</sub></button>
 			    				</c:if>
 		    				</td>
 		    				<td style="text-align:right; vertical-align:top;">

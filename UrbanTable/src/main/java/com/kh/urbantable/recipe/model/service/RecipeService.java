@@ -61,4 +61,6 @@ public interface RecipeService {
 
 	String selectLastImage(String recipeNo);
 
+	List<Recipe> selectRecipeIndexList();
+
 }
