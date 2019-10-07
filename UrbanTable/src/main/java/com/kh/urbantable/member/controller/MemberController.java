@@ -329,9 +329,11 @@ public class MemberController {
 	}
 	
 	@RequestMapping("/memberAddress")
-	public void memberAddress(@RequestParam String memberId,
+	public void memberAddress(HttpSession session,
 							  Model model) {
-		logger.debug(memberId);
+		
+		String memberId = ((Member)session.getAttribute("memberLoggedIn")).getMemberId();
+		
 		List<Map<String, String>> list = memberService.selectAddress(memberId);
 		model.addAttribute("addressList",list);
 	}
@@ -428,10 +430,10 @@ public class MemberController {
 	@RequestMapping("/myCoupon.do")
 	@ResponseBody
 	public List<HashMap<String, Object>> myCouponEnd(HttpSession session, @RequestParam(defaultValue = "") String enabled){
+		
+		logger.debug("쿠폰 불러오기");
 
 		String memberId = ((Member)session.getAttribute("memberLoggedIn")).getMemberId();
-
-		logger.debug("memberId : " + memberId);
 		
 		HashMap<String, Object> param = new HashMap<String, Object>();
 		
@@ -439,16 +441,165 @@ public class MemberController {
 		param.put("enabled", enabled);
 
 		List<HashMap<String, Object>> couponList = memberService.selectCouponList(param);
-		
-		logger.debug("couponList = {}", couponList);
 
 		return couponList;
 	}
 	
 	@RequestMapping("/payList")
 	public String myPayList() {
-		
+		logger.debug("결제 리스트 페이지");
 		return "/member/memberPayList";
+	}
+	
+	@RequestMapping("/payList.do")
+	@ResponseBody
+	public List<Map<String, Object>> myPayListEnd(HttpSession session,
+											@RequestParam(defaultValue = "") String payFlag,
+											@RequestParam(defaultValue = "") String payEnabled){
+		
+		logger.debug("결제 내역 불러오기");
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		String memberId = ((Member)session.getAttribute("memberLoggedIn")).getMemberId();
+		
+		param.put("memberId", memberId);
+		param.put("payFlag", payFlag);
+		param.put("payEnabled", payEnabled);
+		
+		List<Map<String, Object>> list = memberService.getMemberPayList(param); 
+				
+		return list;
+	}
+	
+	@RequestMapping("/payDetail")
+	public String myPayDetail(HttpSession session,
+								Model model,
+							  @RequestParam String payNo) {
+		logger.debug("결제 디테일 페이지");
+		
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		String memberId = ((Member)session.getAttribute("memberLoggedIn")).getMemberId();
+		
+		param.put("memberId", memberId);
+		param.put("payNo", payNo);
+		
+		List<Map<String, Object>> list = memberService.getMemberPayDetail(param);
+		
+		model.addAttribute("list", list);
+		
+		return "/member/memberPayDetail";
+	}
+	
+	@RequestMapping("/modifyAddr")
+	@ResponseBody
+	public HashMap<String, Object> modifyAddr(HttpSession session,
+							@RequestParam(value="addressNo", defaultValue="") String addressNo,
+							@RequestParam(value="memberAddress", defaultValue = "") String memberAddress,
+							@RequestParam(value="memberAddress2", defaultValue = "") String memberAddress2) {
+		
+		HashMap<String, Object> result = new HashMap<String, Object>();
+		
+		String msg = "변경 실패";
+		logger.debug(memberAddress);
+		Map<String, Object> param = new HashMap<String, Object>();
+		
+		String memberId = ((Member)session.getAttribute("memberLoggedIn")).getMemberId();
+		param.put("memberId", memberId);
+		param.put("addressNo", addressNo);
+		param.put("memberAddress", memberAddress);
+		param.put("memberAddress2", memberAddress2);
+		
+		logger.debug(param.toString());
+		
+		msg = memberService.modifyAddr(param) > 0 ? "변경 성공" : "변경 실패";
+		
+		result.put("msg", msg);
+		
+		return result;
+	}
+	
+	@RequestMapping("/insertAddr")
+	@ResponseBody
+	public HashMap<String, Object> insertAddr(HttpSession session,
+						@RequestParam(defaultValue="") String addressName,
+						@RequestParam(value="memberAddress", defaultValue = "") String memberAddress,
+						@RequestParam(value="memberAddress2", defaultValue = "") String memberAddress2) {
+
+			HashMap<String, Object> result = new HashMap<String, Object>();
+			
+			String msg = "추가 실패";
+			logger.debug(memberAddress);
+			Map<String, Object> param = new HashMap<String, Object>();
+			
+			String memberId = ((Member)session.getAttribute("memberLoggedIn")).getMemberId();
+			param.put("addressName", addressName);
+			param.put("memberId", memberId);
+			param.put("memberAddress", memberAddress);
+			param.put("memberAddress2", memberAddress2);
+			
+			logger.debug(param.toString());
+			
+			msg = memberService.insertAddr(param) > 0 ? "추가 성공" : "추가 실패";
+			
+			result.put("msg", msg);
+			
+			return result;
+	}
+	
+	@RequestMapping("/deleteAddr")
+	@ResponseBody
+	public HashMap<String, Object> deleteAddr(HttpSession session,
+			@RequestParam(defaultValue="") String addressNo) {
+
+			HashMap<String, Object> result = new HashMap<String, Object>();
+			
+			String msg = "삭제 실패";
+			Map<String, Object> param = new HashMap<String, Object>();
+			
+			String memberId = ((Member)session.getAttribute("memberLoggedIn")).getMemberId();
+			param.put("addressNo", addressNo);
+			param.put("memberId", memberId);
+			
+			logger.debug(param.toString());
+			
+			msg = memberService.deleteAddr(param) > 0 ? "삭제 성공" : "삭제 실패";
+			
+			result.put("msg", msg);
+			
+			return result;
+	}
+	
+	@RequestMapping("/stockNotice")
+	@ResponseBody
+	public HashMap<String, Object> stockNotice(HttpSession session,
+			@RequestParam(defaultValue="") String marketNo,
+			@RequestParam(defaultValue="") String foodNo) {
+
+			HashMap<String, Object> result = new HashMap<String, Object>();
+			
+			String msg = "알림 등록 실패";
+			Map<String, Object> param = new HashMap<String, Object>();
+			
+			String memberId = ((Member)session.getAttribute("memberLoggedIn")).getMemberId();
+			param.put("marketNo", marketNo);
+			param.put("foodNo", foodNo);
+			param.put("memberId", memberId);
+			
+			logger.debug(param.toString());
+			
+			int selectResult = memberService.selectStockNotice(param);
+			
+			if(selectResult == 0) {
+				msg = memberService.insertStockNotice(param) > 0 ? "알림 등록  성공" : "알림 등록 실패";				
+			}else {
+				msg = "이미 알림 신청 된 상품입니다.";
+			}
+			
+			result.put("msg", msg);
+			
+			return result;
 	}
 	
 }

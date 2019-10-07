@@ -89,4 +89,50 @@ public class MemberDAOImpl implements MemberDAO {
 		return sqlSession.selectList("pay.getAllCoupons", param);
 	}
 
+	@Override
+	public List<Map<String, Object>> getMemberPayList(Map<String, Object> param) {
+		return sqlSession.selectList("pay.getMemberPayList", param);
+	}
+
+	@Override
+	public List<Map<String, Object>> getMemberPayDetail(Map<String, Object> param) {
+		return sqlSession.selectList("pay.getMemberPayDetail", param);
+	}
+
+	@Override
+	public int modifyAddr(Map<String, Object> param) {
+		return sqlSession.update("member.modifyAddr", param);
+	}
+
+	@Override
+	public int insertAddr(Map<String, Object> param) {
+		return sqlSession.insert("member.insertAddr", param);
+	}
+
+	@Override
+	public int deleteAddr(Map<String, Object> param) {
+		return sqlSession.delete("member.deleteAddr", param);
+	}
+
+	@Override
+	public int insertStockNotice(Map<String, Object> param) {
+		return sqlSession.insert("member.insertStockNotice", param);
+	}
+
+	@Override
+	public int selectStockNotice(Map<String, Object> param) {
+		return sqlSession.selectOne("member.selectStockNotice", param);
+	}
+
+	@Override
+	public List<HashMap<String, Object>> selectSendMsg() {
+		return sqlSession.selectList("member.sendMsgStockNotice");
+	}
+
+	@Override
+	public int deleteSendMsg(HashMap<String, Object> param) {
+		return sqlSession.delete("member.deleteSendMsg", param);
+	}
+	
+
 }

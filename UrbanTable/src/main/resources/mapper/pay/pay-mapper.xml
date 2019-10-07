@@ -92,4 +92,38 @@
 				where flag = #{enabled}
 			</if>
 	</select>
+	
+	<select id="getMemberPayList" resultType="map">
+		select PAY_NO, PAY_PRICE, PAY_FLAG, PAY_ENABLED, PAY_DATE, MARKET_NAME, food_name|| '외 ' || cnt || '건' as TXT, food_img
+		from (select p.PAY_NO, PAY_PRICE, PAY_FLAG, PAY_ENABLED, PAY_DATE, MARKET_NAME, max(food_no) as food_no, count(p.pay_no) as cnt
+		from pay p
+		    left join market m
+		    on p.market_no = m.market_no
+		    left join pay_detail pd
+		    on p.pay_no = pd.pay_no
+		where p.member_id=#{memberId}
+		<if test='payFlag != null and payFlag != ""'>
+			and pay_flag = #{payFlag}
+		</if>
+		<if test='payEnabled != null and payEnabled != ""'>
+			and pay_enabled = #{payEnabled}
+		</if>
+		group by p.PAY_NO, PAY_PRICE, PAY_FLAG, PAY_ENABLED, PAY_DATE, MARKET_NAME
+		order by pay_flag, pay_date) pay1
+		left join food
+		    on pay1.food_no = food.food_no
+	</select>
+		
+	<select id="getMemberPayDetail" resultType="map">
+	select P.PAY_NO, PAY_DATE, PAY_PRICE, PAY_FLAG, DELIVER_TYPE, MARKET_NAME, PAY_DETAIL_AMOUNT, FOOD_NAME, FOOD_IMG
+	from pay p
+	    left join market m
+	        on p.market_no = m.market_no
+	    left join pay_detail pd
+	        on p.pay_no = pd.pay_no
+	    left join food f
+	        on pd.food_no = f.food_no
+	where p.member_id=#{memberId} and p.pay_no = #{payNo}
+	order by pay_flag, pay_date
+	</select>
 </mapper>

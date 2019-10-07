@@ -109,4 +109,49 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.selectCouponList(param);
 	}
 
+	@Override
+	public List<Map<String, Object>> getMemberPayList(Map<String, Object> param) {
+		return memberDAO.getMemberPayList(param);
+	}
+
+	@Override
+	public List<Map<String, Object>> getMemberPayDetail(Map<String, Object> param) {
+		return memberDAO.getMemberPayDetail(param);
+	}
+
+	@Override
+	public int modifyAddr(Map<String, Object> param) {
+		return memberDAO.modifyAddr(param);
+	}
+
+	@Override
+	public int insertAddr(Map<String, Object> param) {
+		return memberDAO.insertAddr(param);
+	}
+
+	@Override
+	public int deleteAddr(Map<String, Object> param) {
+		return memberDAO.deleteAddr(param);
+	}
+
+	@Override
+	public int insertStockNotice(Map<String, Object> param) {
+		return memberDAO.insertStockNotice(param);
+	}
+
+	@Override
+	public int selectStockNotice(Map<String, Object> param) {
+		return memberDAO.selectStockNotice(param);
+	}
+
+	@Override
+	public List<HashMap<String, Object>> selectSendMsg() {
+		return memberDAO.selectSendMsg();
+	}
+
+	@Override
+	public int deleteSendMsg(HashMap<String, Object> param) {
+		return memberDAO.deleteSendMsg(param);
+	}
+
 }

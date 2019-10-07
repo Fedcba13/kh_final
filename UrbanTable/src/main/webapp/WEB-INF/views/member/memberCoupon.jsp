@@ -98,7 +98,11 @@ function getCoupon(){
 				if(data[i].FLAG == 1){
 					html += '<div class="flag">사용가능</div>';
 				}else{					
-					html += '<div class="flag">사용불가</div>';
+					if(data[i].COUPON_ENABLED == 1){
+						html += '<div class="flag">사용불가</div>';
+					}else{
+						html += '<div class="flag">사용완료</div>';
+					}
 				}
 	    		html += '<div class="date">사용기간 : '+startDate+' ~ '+endDate+'</div>';
 	    		html += '<div class="minPrice">최소주문금액 : '+data[i].COUPON_MIN_PRICE+'</div>';

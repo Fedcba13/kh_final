@@ -14,6 +14,35 @@
 	font-size: 2em;
 }
 </style>
+<script>
+$(()=>{
+	
+	var marketNo = '${food.marketNo}';
+	var foodNo = '${food.foodNo}';
+	
+	$("#noticeStock").click(()=>{
+		
+		var param = {
+				marketNo: marketNo,
+				foodNo : foodNo
+		}
+		
+		$.ajax({
+			url: contextPath + "/member/stockNotice",
+			data: param,
+			type: "POST",
+			success: (data)=>{
+				alert(data.msg);
+				location.reload();
+			},
+			error: (xhr, txtStatus, err)=> {
+				console.log("ajax 처리실패!", xhr, txtStatus, err);
+			}
+		})
+		
+	});
+});
+</script>
 	<article class="subPage inner">
 	    <h3 class="sub_tit">상품정보</h3>
 		 <div id="foodExpression">
@@ -77,7 +106,7 @@
 					<button>장바구니 담기</button>
 					<button>늘 사는 것</button>
 					<button>상품 문의</button>
-					<button>재고알림</button>
+					<button id="noticeStock">재고알림</button>
 					</div>
 			</div>
 			</div>
