@@ -39,33 +39,11 @@ public class FoodController {
 	@Autowired
 	private FoodService foodService;
 
-	public FoodWithStockAndEvent calculateEventPrice(FoodWithStockAndEvent food) {
-		int eventPercent = 0;
-		try {
-			eventPercent = foodService.selectEventPercent(food);
-		}catch(NullPointerException e) {
-			eventPercent = 0;
-		}
-		double M3 = eventPercent * 0.01; // M3는 %를 소수점으로 변환한 값이다 즉 20%를 0.2로 변환한다
-		double yourmoney = food.getFoodMemberPrice() * M3; // 할인되는 가격
-		double actually = food.getFoodMemberPrice() - yourmoney; // 실제 가격
-
-		if (eventPercent != 0) {
-			food.setAfterEventPrice((int) actually);
-			food.setEventPercent(eventPercent);
-			logger.debug(String.valueOf(eventPercent));
-		}
-		return food;
-	}	
-
 	@RequestMapping(value = "/selectFoodInMain1.do")
 	@ResponseBody
 	public List<FoodWithStockAndEvent> selectFoodInMain1() {
 
 		List<FoodWithStockAndEvent> foodList = foodService.selectFoodInMain1();
-		for (FoodWithStockAndEvent food : foodList) {
-			food = calculateEventPrice(food);
-		}
 
 		return foodList;
 	}
@@ -75,9 +53,6 @@ public class FoodController {
 	public List<FoodWithStockAndEvent> selectFoodInMain2() {
 
 		List<FoodWithStockAndEvent> foodList = foodService.selectFoodInMain2();
-		for (FoodWithStockAndEvent food : foodList) {
-			food = calculateEventPrice(food);
-		}
 
 		return foodList;
 	}
@@ -87,9 +62,6 @@ public class FoodController {
 	public List<FoodWithStockAndEvent> selectFoodInMain3(@RequestParam String foodDivisionNo) {
 
 		List<FoodWithStockAndEvent> foodList = foodService.selectFoodInMain3(foodDivisionNo);
-		for (FoodWithStockAndEvent food : foodList) {
-			food = calculateEventPrice(food);
-		}
 
 		return foodList;
 	}
@@ -100,9 +72,6 @@ public class FoodController {
 		
 		String marketNo = "mar00012";
 		List<FoodWithStockAndEvent> foodList = foodService.selectSaleFoodList(marketNo);
-		for (FoodWithStockAndEvent food : foodList) {
-			food = calculateEventPrice(food);
-		}
 
 		return foodList;
 	}
@@ -112,9 +81,6 @@ public class FoodController {
 		
 		List<FoodWithStockAndEvent> foodList = foodService.selectNewFoodList(marketNo);
 		List<Market> marketList = foodService.selectMarketList();
-		for (FoodWithStockAndEvent food : foodList) {
-			food = calculateEventPrice(food);
-		}
 		model.addAttribute("foodList", foodList);
 		model.addAttribute("marketList", marketList);
 		model.addAttribute("marketNo", marketNo);
@@ -131,9 +97,6 @@ public class FoodController {
 		
 		List<FoodWithStockAndEvent> foodList = foodService.selectBestFoodList(param);
 		List<Market> marketList = foodService.selectMarketList();
-		for (FoodWithStockAndEvent food : foodList) {
-			food = calculateEventPrice(food);
-		}
 		model.addAttribute("foodList", foodList);
 		model.addAttribute("marketList", marketList);
 		model.addAttribute("marketNo", marketNo);
@@ -157,9 +120,6 @@ public class FoodController {
 		List<FoodWithStockAndEvent> foodList = foodService.selectSaleFoodList(marketNo);
 		
 		List<Market> marketList = foodService.selectMarketList();
-		for (FoodWithStockAndEvent food : foodList) {
-			food = calculateEventPrice(food);
-		}
 		
 		model.addAttribute("foodList", foodList);
 		model.addAttribute("marketList", marketList);
@@ -203,9 +163,6 @@ public class FoodController {
 		
 		List<Market> marketList = foodService.selectMarketList();
 
-		for (FoodWithStockAndEvent food : foodList) {
-			food = calculateEventPrice(food);
-		}
 		
 		
 		model.addAttribute("searchKeyword", searchKeyword);
@@ -235,10 +192,6 @@ public class FoodController {
 		
 		List<Market> marketList = foodService.selectMarketList();
 		
-		for (FoodWithStockAndEvent food : foodList) {
-			food = calculateEventPrice(food);
-		}
-		
 		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("marketNo", marketNo);
 		model.addAttribute("marketList", marketList);
@@ -258,8 +211,6 @@ public class FoodController {
 
 		FoodWithStockAndEvent food = foodService.selectFood(param);
 
-		food = calculateEventPrice(food);
-		logger.debug(food.toString());
 		model.addAttribute("food", food);
 
 		return "food/foodView";
@@ -309,6 +260,20 @@ public class FoodController {
 		param.put("memberId", memberId);
 		
 		Good good = foodService.selectGoodOne(param);
+		Good good1 = foodService.selectGoodTotal(foodNo);
+		int totalGood = 0;
+		int totalBad = 0;
+		
+		try {
+			totalGood = good1.getGood();
+		}catch(NullPointerException e) {
+		}
+		try {
+			totalBad = good1.getBad();
+		}catch(NullPointerException e) {
+		}
+		good.setTotalGood(totalGood);
+		good.setTotalBad(totalBad);
 		
 		return good;
 		
@@ -352,6 +317,18 @@ public class FoodController {
 		int result = foodService.updateGood(param);
 		Good good = foodService.selectGoodTotal(foodNo);
 		return good;
+		
+	}
+	@RequestMapping(value = "/insertGood.do")
+	@ResponseBody
+	public void insertGood(String foodNo, String memberId, String column) {
+		
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("foodNo", foodNo);
+		param.put("memberId", memberId);
+		param.put("column", column);
+		
+		int result = foodService.insertGood(param);
 		
 	}
 

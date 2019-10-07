@@ -31,9 +31,6 @@ public interface FoodService {
 	// foodList view markeList 표시
 	List<Market> selectMarketList();
 	
-	//food의 이벤트 최대 할인율 호출
-	int selectEventPercent(FoodWithStockAndEvent food);
-
 	FoodWithStockAndEvent selectFood(HashMap<String, String> param);
 
 	List<FoodSection> getFoodSectionList();
@@ -73,6 +70,8 @@ public interface FoodService {
 	Good selectGoodTotal(String foodNo);
 
 	List<FoodWithStockAndEvent> selectSaleFoodList(String marketNo);
+
+	int insertGood(Map<String, String> param);
 
 
 }

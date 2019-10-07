@@ -199,5 +199,21 @@ HashMap<String, String> result = new HashMap<String, String>();
 		
 		return result;
 	}
+	@ResponseBody
+	@RequestMapping("/insertToCartByUser.do")
+	public int insertToCartByUser(@RequestParam  String memberId,
+			@RequestParam  String foodNo,
+			@RequestParam  String cartAmount) {
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("memberId", memberId);
+		param.put("foodNo", foodNo);
+		param.put("cartAmount", cartAmount);
+		
+		int result = cartService.insertCartByUser(param);
+		
+		return result; 
+		
+	}
+	
 
 }

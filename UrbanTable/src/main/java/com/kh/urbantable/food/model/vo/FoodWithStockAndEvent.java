@@ -12,7 +12,6 @@ public class FoodWithStockAndEvent extends Food {
 	private String marketName;
 	private String marketHoliday;
 	private String marketTime;
-	private int afterEventPrice;
 	private int eventPercent;
 	private int good;
 	private int bad;
@@ -216,13 +215,6 @@ public class FoodWithStockAndEvent extends Food {
 		this.marketTime = marketTime;
 	}
 
-	public int getAfterEventPrice() {
-		return afterEventPrice;
-	}
-
-	public void setAfterEventPrice(int afterEventPrice) {
-		this.afterEventPrice = afterEventPrice;
-	}
 
 	public int getEventPercent() {
 		return eventPercent;
@@ -240,13 +232,13 @@ public class FoodWithStockAndEvent extends Food {
 		return "FoodWithStockAndEvent [marketNo=" + marketNo + ", stockAmount=" + stockAmount + ", memberId=" + memberId
 				+ ", marketResident=" + marketResident + ", marketAddress=" + marketAddress + ", marketEnabled="
 				+ marketEnabled + ", flag=" + flag + ", marketName=" + marketName + ", marketHoliday=" + marketHoliday
-				+ ", marketTime=" + marketTime + ", afterEventPrice=" + afterEventPrice + ", eventPercent="
+				+ ", marketTime=" + marketTime + ", eventPercent="
 				+ eventPercent + ", good=" + good + ", bad=" + bad + ", marketTelephone=" + marketTelephone
 				+ ", toString()=" + super.toString() + "]";
 	}
 	public FoodWithStockAndEvent(String marketNo, int stockAmount, String memberId, String marketResident,
 			String marketAddress, int marketEnabled, int flag, String marketName, String marketHoliday,
-			String marketTime, int afterEventPrice, int eventPercent, int good, int bad, String marketTelephone) {
+			String marketTime, int eventPercent, int good, int bad, String marketTelephone) {
 		super();
 		this.marketNo = marketNo;
 		this.stockAmount = stockAmount;
@@ -258,7 +250,6 @@ public class FoodWithStockAndEvent extends Food {
 		this.marketName = marketName;
 		this.marketHoliday = marketHoliday;
 		this.marketTime = marketTime;
-		this.afterEventPrice = afterEventPrice;
 		this.eventPercent = eventPercent;
 		this.good = good;
 		this.bad = bad;

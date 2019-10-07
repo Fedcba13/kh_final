@@ -26,4 +26,6 @@ public interface CartService {
 
 	int deleteCartAll(String memberId);
 
+	int insertCartByUser(Map<String, String> param);
+
 }

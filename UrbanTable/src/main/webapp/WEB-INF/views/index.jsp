@@ -52,7 +52,7 @@
 				html += '</div>';
 				html += '<div class="prd_info_area"><h4>'+data[i].foodName+'</h4>';
 				if(data[i].eventPercent != 0){
-					html += ' <p class="prd_price fw600">'+data[i].afterEventPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
+					html += ' <p class="prd_price fw600">'+data[i].eventPercent.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
 					html += '<p class="prd_price2">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
 				}else{
 					html += ' <p class="prd_price fw600">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
@@ -87,7 +87,7 @@
 				}
 				html += ' </div><div class="prd_info_area"> <h4>'+data[i].foodName+'</h4> ';
 				if(data[i].eventPercent != 0){
-					html += ' <p class="prd_price fw600">'+data[i].afterEventPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
+					html += ' <p class="prd_price fw600">'+data[i].eventPercent.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
 					html += '<p class="prd_price2">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
 				}else{
 					html += ' <p class="prd_price fw600">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
@@ -144,7 +144,7 @@
    				}
    				html += ' </div><div class="prd_info_area"> <h4>'+data[i].foodName+'</h4> ';
    				if(data[i].eventPercent != 0){
-   					html += ' <p class="prd_price fw600">'+data[i].afterEventPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
+   					html += ' <p class="prd_price fw600">'+data[i].eventPercent.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
    					html += '<p class="prd_price2">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
    				}else{
    					html += ' <p class="prd_price fw600">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
@@ -184,7 +184,7 @@
 					html += '</div>';
 					html += '<div class="prd_info_area"><h4>'+data[i].foodName+'</h4>';
 					if(data[i].eventPercent != 0){
-						html += ' <p class="prd_price fw600">'+data[i].afterEventPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
+						html += ' <p class="prd_price fw600">'+data[i].eventPercent.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
 						html += '<p class="prd_price2">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
 					}else{
 						/* html += ' <p class="prd_price fw600">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>'; */

@@ -72,11 +72,6 @@ public class FoodServiceImpl implements FoodService {
 
 
 	@Override
-	public int selectEventPercent(FoodWithStockAndEvent food) {
-		return foodDAO.selectEventPercent(food);
-	}
-
-	@Override
 	public FoodWithStockAndEvent selectFood(HashMap<String, String> param) {
 		return foodDAO.selectFood(param);
 	}
@@ -175,6 +170,11 @@ public class FoodServiceImpl implements FoodService {
 	@Override
 	public List<FoodWithStockAndEvent> selectSaleFoodList(String marketNo) {
 		return foodDAO.selectSaleFoodList(marketNo);
+	}
+
+	@Override
+	public int insertGood(Map<String, String> param) {
+		return foodDAO.insertGood(param);
 	}
 
 

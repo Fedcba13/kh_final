@@ -45,11 +45,10 @@
 								<h4>${f.foodName }</h4>
 								<c:if test="${f.eventPercent ne 0}">
 									<p class="prd_price fw600">할인가</p>
-									<p class="prd_price2"><fmt:formatNumber value="${f.afterEventPrice }"
-								pattern="#,###.##" />원 </p>
+									<p class="prd_price"><fmt:formatNumber value="${ f.foodMemberPrice-f.foodMemberPrice*(f.eventPercent/100) } " pattern="#,###" />원 </p>
+								<p class="prd_price2"><fmt:formatNumber value="${f.foodMemberPrice }"
+								pattern="#,###" />원 </p>
 								</c:if>
-								<p class="prd_price"><fmt:formatNumber value="${f.foodMemberPrice }"
-								pattern="#,###.##" />원 </p>
 							</div>
 					</a></li>
            
@@ -60,9 +59,11 @@
     	<input type="hidden" id ="foodDivisionNameGo"  name="foodDivisionName" value="${empty foodDivisionName? '%' :foodDivisionName}" />
 </section>
 <script>
+
 function changeMarket() {
 	var marketNo = $("#marketList option:selected").val();
 	location.href = "${pageContext.request.contextPath}/food/selectSaleFoodList.do?"
+			
 		+"marketNo="+marketNo;
  }
 

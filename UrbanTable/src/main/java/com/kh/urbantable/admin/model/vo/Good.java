@@ -16,4 +16,7 @@ public class Good {
 	private String memberId;
 	private int good;
 	private int bad;
+	private int totalGood;
+	private int totalBad;
+	
 }
