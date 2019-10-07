@@ -43,20 +43,19 @@
 								</c:if>
 								<c:if test="${not empty f.foodRenamedFileName }">
 									<img
-										src="${pageContext.request.contextPath}/resources/images/food/${f.foodRenamedFileName}"
+										src="${pageContext.request.contextPath}/resources/upload/food/${f.foodRenamedFileName}"
 										alt="상품 사진">
 								</c:if>
 							</div>
 							<div class="prd_info_area">
 								<h4>${f.foodName }</h4>
 								<c:if test="${f.eventPercent ne 0 }">
-								
 									<p class="prd_price fw600">할인가</p>
 									<p class="prd_price"><fmt:formatNumber value="${ f.foodMemberPrice-f.foodMemberPrice*(f.eventPercent/100) }"
-								pattern="#,###.##" />원 </p>
+								pattern="#,###" />원 </p>
 								</c:if>
 								<p class="prd_price"><fmt:formatNumber value="${f.foodMemberPrice }"
-								pattern="#,###.##" />원 </p>
+								pattern="#,###" />원 </p>
 							</div>
 					</a></li>
            
@@ -66,7 +65,7 @@
          <ul class="main_prd_list clearfix">
         <c:forEach items="${needToOrderList }" var="f">
             <li>
-                <a href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo=${f.foodNo }&marketNo=${f.marketNo}" class="dp_block">
+                <a href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo=${f.foodNo }&marketNo=${marketNo}" class="dp_block">
 						<div class="prd_img_area">
 							<c:if test="${not empty f.foodImg }">
 								<img src="${f.foodImg }" alt="상품 사진">

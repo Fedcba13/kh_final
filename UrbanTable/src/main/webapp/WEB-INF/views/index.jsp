@@ -47,13 +47,15 @@
 				if(data[i].foodImg != null){
 					html += '<img src="'+data[i].foodImg+'" alt="상품 사진">';
 				}else if(data[i].foodOriginalFileName != null){
-					html += ' <img src="${pageContext.request.contextPath}/resources/images/food/'+data[i].foodRenamedFileName+'" alt="상품 사진">';
+					html += ' <img src="${pageContext.request.contextPath}/resources/upload/food/'+data[i].foodRenamedFileName+'" alt="상품 사진">';
 				}
 				html += '</div>';
 				html += '<div class="prd_info_area"><h4>'+data[i].foodName+'</h4>';
 				if(data[i].eventPercent != 0){
-					html += ' <p class="prd_price fw600">'+data[i].eventPercent.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
-					html += '<p class="prd_price2">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
+					var afterEventPrice = Math.floor(data[i].foodMemberPrice-data[i].foodMemberPrice*(data[i].eventPercent/100));
+					
+					html += ' <p class="prd_price fw600">'+afterEventPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원</p>';
+					html += '<p class="prd_price2">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원 </p>';
 				}else{
 					html += ' <p class="prd_price fw600">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
 				}
@@ -83,12 +85,14 @@
 				if(data[i].foodImg != null){
 					html += '<img src="'+data[i].foodImg+'" alt="상품 사진">';
 				}else if(data[i].foodOriginalFileName != null){
-					html += ' <img src="${pageContext.request.contextPath}/resources/images/food/'+data[i].foodRenamedFileName+'" alt="상품 사진">';
+					html += ' <img src="${pageContext.request.contextPath}/resources/upload/food/'+data[i].foodRenamedFileName+'" alt="상품 사진">';
 				}
 				html += ' </div><div class="prd_info_area"> <h4>'+data[i].foodName+'</h4> ';
 				if(data[i].eventPercent != 0){
-					html += ' <p class="prd_price fw600">'+data[i].eventPercent.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
-					html += '<p class="prd_price2">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
+					var afterEventPrice = Math.floor(data[i].foodMemberPrice-data[i].foodMemberPrice*(data[i].eventPercent/100));
+					
+					html += ' <p class="prd_price fw600">'+afterEventPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원</p>';
+					html += '<p class="prd_price2">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원 </p>';
 				}else{
 					html += ' <p class="prd_price fw600">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
 				}
@@ -140,12 +144,14 @@
    				if(data[i].foodImg != null){
    					html += '<img src="'+data[i].foodImg+'" alt="상품 사진">';
    				}else if(data[i].foodOriginalFileName != null){
-   					html += ' <img src="${pageContext.request.contextPath}/resources/images/food/'+data[i].foodRenamedFileName+'" alt="상품 사진">';
+   					html += ' <img src="${pageContext.request.contextPath}/resources/upload/food/'+data[i].foodRenamedFileName+'" alt="상품 사진">';
    				}
    				html += ' </div><div class="prd_info_area"> <h4>'+data[i].foodName+'</h4> ';
    				if(data[i].eventPercent != 0){
-   					html += ' <p class="prd_price fw600">'+data[i].eventPercent.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
-   					html += '<p class="prd_price2">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
+   					var afterEventPrice = Math.floor(data[i].foodMemberPrice-data[i].foodMemberPrice*(data[i].eventPercent/100));
+					
+					html += ' <p class="prd_price fw600">'+afterEventPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원</p>';
+					html += '<p class="prd_price2">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원 </p>';
    				}else{
    					html += ' <p class="prd_price fw600">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
    				}
@@ -179,15 +185,16 @@
 					if(data[i].foodImg != null){
 						html += '<img src="'+data[i].foodImg+'" alt="상품 사진">';
 					}else if(data[i].foodOriginalFileName != null){
-						html += ' <img src="${pageContext.request.contextPath}/resources/images/food/'+data[i].foodRenamedFileName+'" alt="상품 사진">';
+						html += ' <img src="${pageContext.request.contextPath}/resources/upload/food/'+data[i].foodRenamedFileName+'" alt="상품 사진">';
 					}
 					html += '</div>';
 					html += '<div class="prd_info_area"><h4>'+data[i].foodName+'</h4>';
 					if(data[i].eventPercent != 0){
-						html += ' <p class="prd_price fw600">'+data[i].eventPercent.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
-						html += '<p class="prd_price2">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
+						var afterEventPrice = Math.floor(data[i].foodMemberPrice-data[i].foodMemberPrice*(data[i].eventPercent/100));
+						
+						html += ' <p class="prd_price fw600">'+afterEventPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원</p>';
+						html += '<p class="prd_price2">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원 </p>';
 					}else{
-						/* html += ' <p class="prd_price fw600">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>'; */
 						html += ' <p class="prd_price fw600">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
 					}
 					

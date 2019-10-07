@@ -71,10 +71,16 @@ $(()=>{
 					<tr>
 						<th>판매가</th>
 						<td id="foodPrice">
-						<fmt:formatNumber value="${food.afterEventPrice eq 0? food.foodMemberPrice :food.afterEventPrice }"
-								pattern="#,###.##" />원 
-						<input type="hidden" id="hiddenPrice" value="${food.afterEventPrice eq 0? food.foodMemberPrice :food.afterEventPrice }" /></td>
-								
+						<c:if test="${ food.eventPercent ne 0}">
+								<p class="prd_price"><fmt:formatNumber value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) } "
+								pattern="#,###" />원 </p>
+							<p class="prd_price2"><fmt:formatNumber value="${food.foodMemberPrice }" pattern="#,###" />원 </p>
+						</c:if>
+						<c:if test="${ food.eventPercent eq 0}">
+							<p class="prd_price"><fmt:formatNumber value="${food.foodMemberPrice }" pattern="#,###" />원 </p>
+						</c:if>
+							<input type="hidden" id="hiddenPrice" value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) }" />
+						</td>
 					</tr>
 					<tr>
 						<th>배송구분</th>
@@ -97,14 +103,20 @@ $(()=>{
 				</table>
 					<br />
 					<div style="float: right;">
-						<p id="finalPrice">총 상품금액 : <fmt:formatNumber value="${food.afterEventPrice eq 0? food.foodMemberPrice :food.afterEventPrice }"
-								pattern="#,###.##" />원</p>
+						<p id="finalPrice">총 상품금액 : 
+						<c:if test="${food.eventPercent ne 0}">
+								<fmt:formatNumber value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) } "
+								pattern="#,###" />원 
+						</c:if>
+						<c:if test="${food.eventPercent eq 0}">
+							<fmt:formatNumber value="${food.foodMemberPrice }" pattern="#,###" />원 
+						</c:if>
+						</p>
 					</div>
 					<br />
 					<div id="buttons">
 					<img src="${pageContext.request.contextPath }/resources/images/cart.png" alt="" onclick="cartValidate();"/>
 					<button>늘 사는 것</button>
-					<button>상품 문의</button>
 					<button id="noticeStock">재고알림</button>
 					</div>
 			</div>
@@ -186,18 +198,15 @@ $(()=>{
 				 data: param,
 				type: "POST",
 				success: (data)=> {
-					var bool  = confirm("장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?");
-					if(bool){
-						goCart();
-					}
 				},
 				error: (xhr, txtStatus, err)=> {
 					console.log("ajax 처리실패!", xhr, txtStatus, err);
 				}
 			});
-			
-			
-			location.href="${pageContext.request.contextPath }/cart/insertToCartByUser.do?memberId="+memberId+"&foodNo="+foodNo+"&cartAmount="+cartAmount;
+			var bool  = confirm("장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?");
+			if(bool){
+				location.href = "${pageContext.request.contextPath}/cart/cartList.do?memberId="+memberId+"&memberCheck="+memberCheck;
+			}
 		} 
 		
 		
@@ -209,6 +218,7 @@ $(()=>{
 		
 		var foodNo = $("#foodNoToRe").val();
 		var memberId = $("#memberLoggedInView").val();
+		var memberCheck = '${memberLoggedIn.memberCheck}';
 		var param = {
 				foodNo : foodNo,
 				memberId : memberId
@@ -261,7 +271,7 @@ $(()=>{
 		   		}
 		   	}); 
 		}
-		if(memberId.trim().length != 0 ){
+		if((memberId.trim().length != 0)){
 			getGoodInView();
 		}
 		

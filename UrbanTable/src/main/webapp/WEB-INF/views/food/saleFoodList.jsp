@@ -23,10 +23,9 @@
 	    </select>
        <ul class="main_prd_list clearfix">
         <c:forEach items="${foodList }" var="f">
-        	<c:if test="${f.eventPercent ne 0}">
-<%--             <li onclick="goFoodView('${f.foodNo}');"> --%>
+        	<c:if test="${f.eventPercent ne 0 }">
 					<li><a
-						href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo=${f.foodNo }&marketNo=${f.marketNo}"
+						href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo=${f.foodNo }&marketNo=${marketNo}"
 						class="dp_block">
 							<div class="prd_img_area">
 								<c:if test="${f.eventPercent ne 0}">
@@ -37,7 +36,7 @@
 								</c:if>
 								<c:if test="${not empty f.foodRenamedFileName }">
 									<img
-										src="${pageContext.request.contextPath}/resources/images/food/${f.foodRenamedFileName}"
+										src="${pageContext.request.contextPath}/resources/upload/food/${f.foodRenamedFileName}"
 										alt="상품 사진">
 								</c:if>
 							</div>
@@ -51,8 +50,7 @@
 								</c:if>
 							</div>
 					</a></li>
-           
-        	</c:if>
+					</c:if>
         </c:forEach>
         </ul>
     </article>
