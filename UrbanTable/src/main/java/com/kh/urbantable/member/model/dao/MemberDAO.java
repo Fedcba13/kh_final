@@ -52,4 +52,8 @@ public interface MemberDAO {
 
 	int selectStockNotice(Map<String, Object> param);
 
+	List<HashMap<String, Object>> selectSendMsg();
+
+	int deleteSendMsg(HashMap<String, Object> param);
+
 }

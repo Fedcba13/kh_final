@@ -124,22 +124,27 @@
 		where member_id = #{memberId} and food_no = #{foodNo}
 	</select>
 	
-	<select id="sendMsgStockNotice" resultType="_int">
-		select * from (select sn.notice_date, m.member_phone, fs.food_section_name,
-		 		( select count(*)
-					from market_order m
-						left join market_order_detail mod
-							on m.market_order_no = mod.market_order_no
-					where m.market_order_date > sn.notice_date
-								and sn.food_no = mod.food_no) flag
-			from stock_notice sn
-				left join member m
-				   on sn.member_id = m.member_id
-				left join food f
-				    on sn.food_no = f.food_no
-				left join food_section fs
-				    on f.food_section_no = fs.food_section_no)
-		where flag > 0
+	<select id="sendMsgStockNotice" resultType="map">
+		select * from(  
+        select sn.member_id, sn.food_no, m.member_phone, fs.food_section_name, (select count(*) from market_order mo
+                                                                    left join market_order_detail mod
+                                                                        on mo.market_order_no = mod.market_order_no
+                                                                    where mod.food_no = sn.food_no
+                                                                    	and mo.market_order_date > sn.notice_date
+                                                                    	 and mo.market_order_flag = 1) flag
+        from stock_notice sn
+            left join member m
+                on sn.member_id = m.member_id
+            left join food f
+                on sn.food_no = f.food_no
+            left join food_section fs
+                on f.food_section_no = fs.food_section_no) where flag > 0
 	</select>
+	
+	<delete id="deleteSendMsg">
+		delete from stock_notice
+			where member_id = #{memberId}
+				and food_no = #{foodNo}
+	</delete>
 
 </mapper>

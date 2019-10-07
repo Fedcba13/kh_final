@@ -123,6 +123,16 @@ public class MemberDAOImpl implements MemberDAO {
 	public int selectStockNotice(Map<String, Object> param) {
 		return sqlSession.selectOne("member.selectStockNotice", param);
 	}
+
+	@Override
+	public List<HashMap<String, Object>> selectSendMsg() {
+		return sqlSession.selectList("member.sendMsgStockNotice");
+	}
+
+	@Override
+	public int deleteSendMsg(HashMap<String, Object> param) {
+		return sqlSession.delete("member.deleteSendMsg", param);
+	}
 	
 
 }

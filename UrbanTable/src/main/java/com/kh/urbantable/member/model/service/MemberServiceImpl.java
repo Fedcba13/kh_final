@@ -144,4 +144,14 @@ public class MemberServiceImpl implements MemberService {
 		return memberDAO.selectStockNotice(param);
 	}
 
+	@Override
+	public List<HashMap<String, Object>> selectSendMsg() {
+		return memberDAO.selectSendMsg();
+	}
+
+	@Override
+	public int deleteSendMsg(HashMap<String, Object> param) {
+		return memberDAO.deleteSendMsg(param);
+	}
+
 }
