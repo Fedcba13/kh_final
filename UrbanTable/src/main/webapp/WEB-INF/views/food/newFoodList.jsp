@@ -45,9 +45,11 @@
 								<h4>${f.foodName }</h4>
 								<c:if test="${f.eventPercent ne 0 }">
 									<p class="prd_price fw600">할인가</p>
-									<p class="prd_price">${f.afterEventPrice } 원</p>
+									<p class="prd_price"><fmt:formatNumber value="${f.afterEventPrice }"
+								pattern="#,###.##" />원 </p>
 								</c:if>
-								<p class="prd_price">${f.foodMemberPrice } 원</p>
+								<p class="prd_price"><fmt:formatNumber value="${f.foodMemberPrice }"
+								pattern="#,###.##" />원 </p>
 							</div>
 					</a></li>
 				</c:if>

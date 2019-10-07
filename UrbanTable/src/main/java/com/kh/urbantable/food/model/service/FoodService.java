@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.kh.urbantable.admin.model.vo.Good;
 import com.kh.urbantable.event.model.vo.Event;
 import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodSection;
@@ -53,11 +54,25 @@ public interface FoodService {
 
 	List<FoodWithStockAndEvent> selectNewFoodList(String marketNo);
 
-	List<FoodWithStockAndEvent> selectBestFoodList(String marketNo);
+	List<FoodWithStockAndEvent> selectBestFoodList(Map<String, String> param);
 
 	List<RelatedRecipe> selectRelatedRecipe(String foodNo);
 
 	List<FoodWithStockAndEvent> selectNeedToOrderListListByCat(Map<String, String> param);
+
+	List<FoodWithStockAndEvent> selectFoodBySearchKeyword(Map<String, String> param);
+
+	Good selectGoodOne(Map<String, String> param);
+
+	int cancelGood(Map<String, String> param);
+
+	int changeGood(Map<String, String> param);
+
+	int updateGood(Map<String, String> param);
+
+	Good selectGoodTotal(String foodNo);
+
+	List<FoodWithStockAndEvent> selectSaleFoodList(String marketNo);
 
 
 }
