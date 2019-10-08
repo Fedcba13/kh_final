@@ -11,7 +11,7 @@
 <style>
 .did ~ p{
 	font-weight: bold;
-	font-size: 2em;
+	color: #374818;
 }
 </style>
 <script>
@@ -223,9 +223,11 @@ $(()=>{
 				foodNo : foodNo,
 				memberId : memberId
 		}
+			console.log(memberId);
 		
 		
 		var getGoodInView = function(){
+			console.log("보내기전에 memberId 확인!", memberId);
 			$.ajax({
 		    	url: "${pageContext.request.contextPath}/food/goodOrBad.do",
 		    	type: "get",
@@ -234,34 +236,40 @@ $(()=>{
 		   			var htmlInLike = '';
 		   			var htmlInBad= ' ';
 		   			
-		   			
-		   			//좋아요 싫어요를 했다면
-		   			if(data && ((data.good == 1) || data.bad == 1)){
-		   					
-		   				//좋아요
-		   				if(data.good == 1 ){
-		   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png" class="did" id="goodImg" alt="좋아요" name="GOOD"/> <br /> <p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
-		   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png" class="didnt" id="badImg" alt="싫어요" name="BAD"/><br /> <p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
-		   					
-		   						
-		   				}//싫어요
-		   				else if (data.bad == 1){
-		   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png" class="didnt"  id="goodImg" alt="좋아요" name="GOOD"/> <br /> <p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
-		   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png" class="did"  id="badImg" alt="싫어요" name="BAD"/><br /> <p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
-		   				
+	   				//좋아요 싫어요를 아예 못할 사람
+	   				if(memberCheck != 1){
+			   				htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png"  id="goodImg" alt="좋아요" name="GOOD"/> <br /> <p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
+			   				htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png"  id="badImg" alt="싫어요" name="BAD"/><br /> <p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
+	   				}
+	   				//좋아요 싫어요 가능할
+	   				else{
+	   					//좋아요 싫어요를 했다면
+			   			if(data && ((data.good == 1) || data.bad == 1)){
+			   				
+			   				//좋아요
+			   				if(data.good == 1 ){
+			   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/liked.png" class="did" id="goodImg" alt="좋아요" name="GOOD"/> <br /> <p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
+			   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png" class="didnt" id="badImg" alt="싫어요" name="BAD"/><br /> <p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
+			   						
+			   				}//싫어요
+			   				else if (data.bad == 1){
+			   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png" class="didnt"  id="goodImg" alt="좋아요" name="GOOD"/> <br /> <p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
+			   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/disliked.png" class="did"  id="badImg" alt="싫어요" name="BAD"/><br /> <p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
+			   				
+			   				}
+			   			}
+			   			//한적만 있음.
+		   				else if((data.good==0) && (data.good==0)){
+		   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png"  class="didntX"  id="goodImg" alt="좋아요" name="GOOD"/> <br /> <p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
+		   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png" class="didntX" id="badImg" alt="싫어요" name="BAD"/><br /> <p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
 		   				}
-		   			}
-		   			//한적만 있음.
-	   				else if((data.good==0) && (data.good==0)){
-	   					
-	   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png"  class="didntX"  id="goodImg" alt="좋아요" name="GOOD"/> <br /> <p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
-	   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png" class="didntX" id="badImg" alt="싫어요" name="BAD"/><br /> <p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
+			   			//좋아요 싫어요 한번도 안함
+		   				else if(!data ){
+		   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png" class="didntXX" id="goodImg" alt="좋아요" name="GOOD"/> <br /> <p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
+		   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png" class="didntXX" id="badImg" alt="싫어요" name="BAD"/><br /> <p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
+		   				}
 	   				}
-		   			//좋아요 싫어요 한번도 안함
-	   				else if(!data ){
-	   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png" class="didntXX" id="goodImg" alt="좋아요" name="GOOD"/> <br /> <p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
-	   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png" class="didntXX" id="badImg" alt="싫어요" name="BAD"/><br /> <p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
-	   				}
+		   			
 		   			$("#like").html(htmlInLike);
 		   			$("#dislike").html(htmlInBad);
 	
@@ -271,9 +279,17 @@ $(()=>{
 		   		}
 		   	}); 
 		}
-		if((memberId.trim().length != 0)){
+		
+		
+		/* 1. 좋아요 싫어요 출력
+			2. 멤버 체크 확인  => 일반회원이면 did, didnt 먹이기
+		 */
+		 
+		 
+/* 		if((memberId.trim().length != 0)){
 			getGoodInView();
-		}
+		} */
+			getGoodInView();
 		
 		$(document).on('click', '.did', function(){
 			console.log("did이벤트핸들러");

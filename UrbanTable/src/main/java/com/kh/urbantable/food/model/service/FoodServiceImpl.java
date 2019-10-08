@@ -73,7 +73,14 @@ public class FoodServiceImpl implements FoodService {
 
 	@Override
 	public FoodWithStockAndEvent selectFood(HashMap<String, String> param) {
-		return foodDAO.selectFood(param);
+		FoodWithStockAndEvent foodToReturn = null;
+		foodToReturn = foodDAO.selectFood(param);
+		
+		if(foodToReturn != null) {
+			return foodToReturn;
+		}else {
+			return foodDAO.selectNoStockFood(param);
+		}
 	}
 
 	@Override
