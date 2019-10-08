@@ -6,6 +6,16 @@
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<style>
+	input[name='totalDiscountPrice']{
+		border: 0px;
+		background-color: white;
+	}
+	table#cartList{
+		border-spacing: 15px;
+		padding-left: 10px;
+	}
+</style>
 <script>
 	var length = ${fn:length(list)};
 	$(()=>{
@@ -382,9 +392,10 @@
 	}
 	
 	function deleteSel(){
-		for(var i = 1; i <= $("input:checkbox[name='list']").length; i++){
-			if($("#item"+i).find("input:checkbox[name='list']").is(":checked")==true){
-				var foodNo = $("#item"+i).find("input:hidden[name='foodNo']").val();
+		for(var i = 0; i <= $("input:checkbox[name='list']").length; i++){
+			var id = $($("input:checkbox[name='list']")[i]).parents("tr").prop("id");
+			if($("#"+id).find("input:checkbox[name='list']").is(":checked")==true){
+				var foodNo = $("#"+id).find("input:hidden[name='foodNo']").val();
 				$.ajax({
 					url: "${pageContext.request.contextPath}/cart/deleteCart.do",
 					data: {
@@ -393,8 +404,9 @@
 					},
 					async: false,
 					success: function(data){
-						$("#item"+i).remove();						
+						$("#"+id).remove();						
 						//console.log(data);
+						//location.reload();
 					},
 					error: function(xhr, txtStatus, err){
 						console.log("ajax처리실패!", xhr, txtStatus, err);
@@ -472,16 +484,16 @@
                 	<label for="checkAll"></label>
             	</td>	
             	<td>
-            		<button type="button" class="btn" onclick="deleteSel()">선택삭제</button>
-            		<button type="button" class="btn" onclick="deleteAll()">전체삭제</button>
+            		<button type="button" class="btn btn2" onclick="deleteSel()">선택삭제</button>
+            		<button type="button" class="btn btn2" onclick="deleteAll()">전체삭제</button>
             	</td>	
             	<td colspan="2">
             		<input type="radio" name="delivery" id="dawn" value="d" onchange="deliveryCost(this.value)"/>
-            		<label for="dawn">샛별배송</label>
+            		<label for="dawn">샛별배송</label>&nbsp;
             		<input type="radio" name="delivery" id="nomal" value="n" onchange="deliveryCost(this.value)" checked/>
-            		<label for="nomal">일반배송</label>
+            		<label for="nomal">일반배송</label>&nbsp;
             		<input type="radio" name="delivery" id="regular" value="r" onchange="deliveryCost(this.value)"/>
-            		<label for="regular">정기배송</label>
+            		<label for="regular">정기배송</label>&nbsp;
             	</td>	
             </tr>
             <tr>
@@ -536,7 +548,7 @@
         <hr />
         <form action="${pageContext.request.contextPath}/pay/order.do" method="post" id="doOrder">
         	<input type="hidden" name="cartInfo" />        	
-	        <div class="btn">
+	        <div class="container txt_center" >
 		        <button type="button" class="btn" id="order"><h2>주문하기</h2></button>
 		    </div>        
         </form>
