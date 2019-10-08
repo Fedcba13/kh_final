@@ -28,4 +28,6 @@ public interface CheckDAO {
 
 	int updateComment(Blame b);
 
+	int updateRecipe(Blame b);
+
 }

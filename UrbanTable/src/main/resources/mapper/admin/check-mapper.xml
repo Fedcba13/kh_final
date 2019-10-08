@@ -68,4 +68,8 @@
 	<update id="updateComment">
 		update board_comment set board_comment_enabled = 0 where board_comment_no = #{blameTargetId}
 	</update>
+	
+	<update id="updateRecipe">
+		update recipe set recipe_enabled = 0 where recipe_no = #{blameTargetId}
+	</update>
 </mapper>

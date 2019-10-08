@@ -7,16 +7,22 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <style>
 img.eventImg{
-	width:950px;
-	height:200px;
+	width:100%;
 }
+a{
+	display:block;
+}
+li.event_item{
+	margin: 20px 0;
+}
+
 </style>
 
 <script>
 
 
 </script>
-<section class="sec_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
+<section> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 	    <h3 class="sub_tit">이벤트</h3>
 	    <div class="event_list_wrapper">
