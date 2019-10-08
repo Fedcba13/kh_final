@@ -392,11 +392,16 @@ form[name=orderSearchFrm2] input[type=submit] {
 	margin-top:-1px;
 	cursor:pointer;
 	border:1px solid #d6d6d6;
+	border-left:none;
 	border-bottom:none;
 	background:#f8f8f8;;
     color: #777;
     font-size: 15px;
     padding:10px 0;
+}
+
+.marketStockTab li:first-child {
+	border-left:1px solid #d6d6d6;
 }
 
 .marketStockTab li.ac_tab {

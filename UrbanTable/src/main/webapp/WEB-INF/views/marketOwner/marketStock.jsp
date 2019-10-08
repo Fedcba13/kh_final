@@ -107,9 +107,9 @@ $(()=>{
 		var param = {
 			memberId: "${memberLoggedIn.memberId}",
 			cPage: $(e.target).attr("rel"),
-			foodDivision: $("#newStockList #foodDivision option:selected").val(),
-			foodOrderSearchType: $("#newStockList #foodOrderSearchType option:selected").val(),
-			foodOrderSearchKeyword: $("#newStockList #foodOrderSearchKeyword").val()
+			foodDivision: $("#newStockList #newFoodDivision option:selected").val(),
+			foodOrderSearchType: $("#newStockList #newFoodOrderSearchType option:selected").val(),
+			foodOrderSearchKeyword: $("#newStockList #newFoodOrderSearchKeyword").val()
 		}
 		
 		console.log(param);
@@ -157,9 +157,9 @@ $(()=>{
 		var param = {
 			memberId: "${memberLoggedIn.memberId}",
 			cPage: cPage,
-			foodDivision: $("#newStockList #foodDivision option:selected").val(),
-			foodOrderSearchType: $("#newStockList #foodOrderSearchType option:selected").val(),
-			foodOrderSearchKeyword: $("#newStockList #foodOrderSearchKeyword").val()
+			foodDivision: $("#newStockList #newFoodDivision option:selected").val(),
+			foodOrderSearchType: $("#newStockList #newFoodOrderSearchType option:selected").val(),
+			foodOrderSearchKeyword: $("#newStockList #newFoodOrderSearchKeyword").val()
 		}
 		
 		console.log(param);
@@ -476,17 +476,17 @@ function goRequestList(){
 	    	<div id="newStockList">
 	    		<h3 class="sub_tit">신규 발주</h3>
 	    		<div class="searchFrm" style="width:450px;">
-	    			<select name="foodDivision" id="foodDivision" class="dp_ib" style="width:117px;">
+	    			<select name="newFoodDivision" id="newFoodDivision" class="dp_ib" style="width:117px;">
 		    			<option value="">전체분류</option>
 		    			<c:forEach items="${foodDivisionList }" var="fd">
 		    			<option value="${fd.foodDivisionNo }">${fd.foodDivisionName }</option>
 		    			</c:forEach>
 		    		</select>
-	    			<select name="foodOrderSearchType" id="foodOrderSearchType" class="dp_ib" style="width:117px;">
+	    			<select name="newFoodOrderSearchType" id="newFoodOrderSearchType" class="dp_ib" style="width:117px;">
 		    			<option value="food_name">상품명</option>
 		    			<option value="food_no">상품코드</option>
 		    		</select>
-		    		<input type="text" name="foodOrderSearchKeyword" id="foodOrderSearchKeyword" class="dp_ib" style="width:209px; padding-right:40px;" />
+		    		<input type="text" name="newFoodOrderSearchKeyword" id="newFoodOrderSearchKeyword" class="dp_ib" style="width:209px; padding-right:40px;" />
 		    		<input type="button" value="검색" class="dp_ib txt_center" />
 		    	</div>
 	    		<table class="tbl txt_center"></table>
