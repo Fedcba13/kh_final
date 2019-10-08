@@ -142,4 +142,19 @@ public class RecipeServiceImpl implements RecipeService {
 	public List<Recipe> selectRecipeIndexList() {
 		return recipeDAO.selectRecipeIndexList();
 	}
+
+	@Override
+	public int materialOldDelete(String materialNo) {
+		return recipeDAO.MaterialOldDelete(materialNo);
+	}
+
+	@Override
+	public String selectMaterialNo(String materialName) {
+		return recipeDAO.selectMaterialNo(materialName);
+	}
+
+	@Override
+	public int updateRecipe(RecipeVO recipeVo) {
+		return recipeDAO.updateRecipe(recipeVo);
+	}
 }

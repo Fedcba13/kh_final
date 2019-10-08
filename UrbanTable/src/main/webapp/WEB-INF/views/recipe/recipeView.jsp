@@ -151,6 +151,12 @@ $(()=> {
 	$(".recipe_update_btn").on("click", function() {
 		location.href = "${pageContext.request.contextPath}/recipe/recipeUpdate?recipeNo=" + this.value;
 	});
+	
+	$(".recipe_declare_btn").on("click", function() {
+		var loc = "${pageContext.request.contextPath}/recipe/recipeBlame?recipeNo=" + this.value;
+		
+		window.open(loc,'신고','width=430,height=500,location=no,status=no,scrollbars=no');
+	});
 });
 </script>
 <c:if test="${recipe.recipeEnabled != 1}">
@@ -162,8 +168,13 @@ $(()=> {
 <section class=""> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 		<div class="update_div">
+		<c:if test="${memberLoggedIn != null && memberLoggedIn.memberId eq recipe.memberId}">
 			<button class="btn recipe_update_btn" value="${recipe.recipeNo}">수정</button>
-			<button class="btn recipe_delete_btn" value="${recipe.recipeNo}">삭제</button>		
+			<button class="btn recipe_delete_btn" value="${recipe.recipeNo}">삭제</button>
+		</c:if>		
+		<c:if test="${memberLoggedIn != null && memberLoggedIn.memberId ne recipe.memberId}">
+			<button class="btn recipe_declare_btn" value="${recipe.recipeNo}">신고</button>
+		</c:if>		
 		</div>
         <table class="tbl tbl_view">
             <c:if test="${not empty recipe}">
