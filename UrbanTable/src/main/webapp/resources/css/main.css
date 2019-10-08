@@ -151,7 +151,7 @@
 
 .recom_tab li {
     display: inline-block;
-    margin: 0 5px;
+    margin: 0px 5px 5px 0px;
     padding: 5px 10px;
     background: #f4f4f0;
     font-size: 15px;

@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -202,7 +201,7 @@ public class FoodController {
 		HashMap<String, String> param = new HashMap<String, String>();
 		param.put("foodNo", foodNo);
 		param.put("marketNo", marketNo);
-
+		
 		FoodWithStockAndEvent food = foodService.selectFood(param);
 
 		model.addAttribute("food", food);
@@ -246,30 +245,25 @@ public class FoodController {
 
 	@RequestMapping(value = "/goodOrBad.do")
 	@ResponseBody
-	public Good goodOrBad(String foodNo, String memberId) {
+	public Good goodOrBad(String foodNo
+			, @RequestParam(value="memberId", defaultValue = "all")  String memberId) {
 		
 		
 		Map<String, String> param = new HashMap<String, String>();
+		logger.debug("*****************");
+		logger.debug("*****************");
+		logger.debug("*****************");
+		logger.debug("*****************");
+		logger.debug(foodNo);
+		logger.debug(memberId);
+		logger.debug("*****************");
+		logger.debug("*****************");
+		logger.debug("*****************");
+		logger.debug("*****************");
 		param.put("foodNo", foodNo);
 		param.put("memberId", memberId);
 
 		Good good = foodService.selectGoodOne(param);
-		Good good1 = foodService.selectGoodTotal(foodNo);
-		int totalGood = 0;
-		int totalBad = 0;
-		
-		try {
-			totalGood = good1.getGood();
-		} catch (NullPointerException e) {
-			
-		}
-		try {
-			totalBad = good1.getBad();
-		} catch (NullPointerException e) {
-			
-		}
-		good.setTotalGood(totalGood);
-		good.setTotalBad(totalBad);
 		
 		return good;
 

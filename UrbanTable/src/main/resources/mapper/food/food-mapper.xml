@@ -147,6 +147,23 @@
                              	GROUP BY TARGET_ID) G ON F.FOOD_NO = G.TARGET_ID
 		WHERE F.FOOD_NO = #{foodNo} AND M.MARKET_NO = #{marketNo}			
 	</select>
+	<select id="selectNoStockFood" resultType="FoodWithStockAndEvent">
+		SELECT * 
+		FROM FOOD
+		WHERE FOOD_NO = #{foodNo}
+		
+	
+<!-- 		SELECT  F.*,M.*, <![CDATA[(SELECT MAX(EVENT_PRICE)
+                     FROM EVENT
+                     WHERE (EVENT_CATEGORY = F.FOOD_SECTION_NO OR EVENT_CATEGORY IS NULL)
+                         AND (MARKET_NO = M.MARKET_NO OR MARKET_NO IS NULL) AND (EVENT_DATE_START < SYSDATE)
+                         AND (EVENT_DATE_END > SYSDATE))AS EVENT_PERCENT]]>
+		FROM FOOD F LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
+                  	LEFT JOIN  (SELECT TARGET_ID, COUNT(GOOD) AS GOOD, COUNT(BAD) AS BAD
+                             	FROM GOOD
+                             	GROUP BY TARGET_ID) G ON F.FOOD_NO = G.TARGET_ID
+		WHERE F.FOOD_NO = #{foodNo} AND M.MARKET_NO = #{marketNo} -->
+	</select>
 	<select id="getFoodSectionList" resultType="foodSection">
 		SELECT *
 		FROM FOOD_SECTION
@@ -305,9 +322,44 @@
 	    AND ROWNUM <= 4]]>
 	</select> 
 	<select id="selectGoodOne" resultType="good">
-		SELECT *
-		FROM GOOD
-		WHERE TARGET_ID = #{foodNo} AND MEMBER_ID = #{memberId}
+		<choose>
+			<when test="memberId !=null and memberId == 'all'">
+				SELECT COUNT(GOOD) TOTAL_GOOD, COUNT(BAD) TOTAL_BAD
+				FROM GOOD
+				WHERE TARGET_ID = #{foodNo}
+			</when>
+			<otherwise>
+				SELECT G.*, (SELECT  COUNT(GOOD) GTOTAL
+							FROM GOOD
+							WHERE TARGET_ID = #{foodNo}
+							GROUP BY TARGET_ID )AS TOTAL_GOOD
+							,(SELECT  COUNT(BAD) BTOTAL
+							FROM GOOD
+							WHERE TARGET_ID = #{foodNo}
+							GROUP BY TARGET_ID) AS TOTAL_BAD
+				FROM GOOD G
+				WHERE MEMBER_ID = #{memberId} AND TARGET_ID = #{foodNo}
+			</otherwise>
+		</choose>
+
+<!-- 
+
+
+	SELECT DISTINCT GOOD, BAD, (SELECT COUNT(GOOD) GTOTAL
+	FROM GOOD
+	WHERE TARGET_ID = #{foodNo}
+	GROUP BY TARGET_ID )AS TOTAL_GOOD
+	,(SELECT COUNT(BAD) BTOTAL
+	FROM GOOD
+	WHERE TARGET_ID = #{foodNo}
+	GROUP BY TARGET_ID) AS TOTAL_BAD
+	FROM GOOD 
+		<trim prefix="WHERE" suffixOverrides="AND">
+			TARGET_ID = #{foodNo}
+			<if test="memberId !=null and memberId !=''">
+				AND MEMBER_ID = #{memberId} 
+			</if>
+		</trim> -->
 	</select>
 	<update id="cancelGood">
 		UPDATE GOOD
