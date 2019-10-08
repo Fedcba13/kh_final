@@ -63,4 +63,10 @@ public interface RecipeService {
 
 	List<Recipe> selectRecipeIndexList();
 
+	int materialOldDelete(String materialNo);
+
+	String selectMaterialNo(String materialName);
+
+	int updateRecipe(RecipeVO recipeVo);
+
 }
