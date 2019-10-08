@@ -22,7 +22,7 @@
 	}
 	
 	table.pay_detail_tbl tr td.food_info{
-		width: 400px;
+		width: 350px;
 		padding: 0 30px;
 	}
 	
@@ -31,11 +31,28 @@
 	}
 	
 	table.pay_detail_tbl tr td.food_review{
-		width: 100px;
+		width: 150px;
 	}
 	
 	table.pay_market_tbl{
 		margin-top: 30px;
+	}
+	
+	table.pay_detail_tbl .modify_btn, table.pay_detail_tbl .delete_btn{
+		width: 50px;	
+	}
+	
+	table.pay_detail_tbl .review > td:nth-child(1){
+		 text-align: left;
+		 padding-left: 30px;
+	}
+	
+	table.pay_detail_tbl input[type=button][value='리뷰 완료']{
+		cursor: default;
+	}
+	
+	table.pay_detail_tbl .review_content{
+		width: 80%;
 	}
 	
 </style>
@@ -43,14 +60,14 @@
 <script>
 $(()=>{
 	$(".write_review").on('click', writeReview);
-	
+	$(".modify_btn").on('click', modify_btn);
 });	
 
 function writeReview(e){
 	if($(e.target).parents("tr").next().hasClass('review')){
 		alert('이미 리뷰 작성중입니다.')
 	}else{
-		$(e.target).parents("tr").after("<tr class='review'><td colspan='3'><input type='text' placeholder='리뷰 내용을 작성해주세요.' style='width: 80%;'></td><td><input type='button' value='리뷰 쓰기' class='btn review_btn'></td></tr>");
+		$(e.target).parents("tr").after("<tr class='review sec_bg'><td colspan='3'><input type='text' placeholder='리뷰 내용을 작성해주세요.' class='review_content'></td><td><input type='button' value='리뷰 쓰기' class='btn review_btn'></td></tr>");
 	}
 	
 	$(e.target).addClass('cancle_review').removeClass('write_review').addClass('btn2').val('취소하기');
@@ -61,8 +78,41 @@ function writeReview(e){
 		cancleReview(e);
 	});
 	
-	$(e.target).parents("tr").next().find('.review_btn').off().click(()=>{
-		alert('a');
+	$(e.target).parents("tr").next().find('.review_btn').off().click((e)=>{
+		var $txt = $(e.target).parents(".review").find('input[type=text]');
+		
+		if($txt.val().length == 0){
+			alert('리뷰를 써주세요.');
+			$txt.focus();
+			return;
+		}
+		
+		var detail_no = $(e.target).parents("tr").prev().find('.order_detail_no').val();
+		
+		var param = {
+				detailNo : detail_no,
+				content : $txt.val()
+		}
+		
+		$.ajax({
+			url: contextPath + "/member/writeReview",
+			data: param,
+			type: "POST",
+			success: function(data){
+				console.log(data);
+				alert(data.msg);
+				
+				var $tr = $(e.target).parents("tr").prev();
+				$tr.next().remove();
+				$tr.after('<tr class="review sec_bg"><td colspan="3">'+param.content+'</td><td><input type="button" value="수정" class="btn modify_btn"><input type="button" value="삭제" class="btn btn2 delete_btn"></td></tr>');
+				
+				
+			},
+			error: function(xhr, txtStatus, err){
+				console.log("ajax 처리 실패", xhr, txtStatus, err);
+			}
+		});
+		
 	});
 }
 
@@ -80,6 +130,11 @@ function cancleReview(e){
 	
 }
 
+function modify_btn(e){
+	var txt = $(e.target).parents("tr").children().eq(0).text();
+	$(e.target).parents("tr").children().eq(0).html('<input type="text" value="'+txt+'" class="review_content">');
+}
+
 </script>
 
 <section>
@@ -88,7 +143,7 @@ function cancleReview(e){
 		    <jsp:include page="/WEB-INF/views/member/memberNav.jsp" />
 		    <div class="payDetail">
 		    	<h3 class="sub_tit" style="background-color: white;">구매 상세</h3>
-		    	<table class="tbl txt_center pay_detail_tbl" style="width: 700px">
+	    	<table class="tbl txt_center pay_detail_tbl" style="width: 700px">
 		            <tr>
 		                <th>상품 사진</th>
 		                <th>상품 정보</th>
@@ -97,18 +152,27 @@ function cancleReview(e){
 		            </tr>
 		            <c:forEach items="${list }" var="food">
 			            <tr>
-			                <td class="food_img"><img src='${food.FOOD_IMG }' width="100px" height="130px"></td>
+			                <td class="food_img"><img src='${food.FOOD_IMG }' width="100px" height="130px"><input type="hidden" class="order_detail_no" value="${food.PAY_DETAIL_NO }"></td>
 			                <td class="food_info">${food.FOOD_NAME }</td>
 			                <td class="food_amount">${food.PAY_DETAIL_AMOUNT}</td>
 			                <td class="food_review">
-			                	<c:if test="${food.FLAG == 0}">
+			                	<c:if test='${empty food.REVIEW or food.REVIEW == ""}'>
 				                	<input type="button" class="btn write_review" value="리뷰 쓰기">
 			                	</c:if>
-			                	<c:if test="${food.FLAG != 0}">
+			                	<c:if test='${not empty food.REVIEW and food.REVIEW != ""}'>
 			                		<input type="button" class="btn btn2" value="리뷰 완료" >
 			                	</c:if>
 			                </td>
 			            </tr>
+			            <c:if test='${not empty food.REVIEW and food.REVIEW != ""}'>
+			            <tr class='review sec_bg'>
+			            	<td colspan="3">${food.REVIEW }</td>
+			            	<td>
+				            	<input type="button" value="수정" class="btn modify_btn">
+				            	<input type="button" value="삭제" class="btn btn2 delete_btn">
+				            </td>
+			            </tr>
+			            </c:if>
 		            </c:forEach>
 		        </table>
 		        
