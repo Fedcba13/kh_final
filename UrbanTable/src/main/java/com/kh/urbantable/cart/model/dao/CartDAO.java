@@ -25,6 +25,8 @@ public interface CartDAO {
 	int deleteCart(Map<String, String> map);
 
 	int deleteCartAll(String memberId);
+
+	int insertCartByUser(Map<String, String> param);
 	
 
 }

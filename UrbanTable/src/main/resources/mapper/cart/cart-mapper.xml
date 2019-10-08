@@ -30,5 +30,9 @@
 	<delete id="deleteCartAll">
 		delete cart where member_id=#{memberId}
 	</delete>
+	<insert id="insertCartByUser">
+		INSERT INTO CART(MEMBER_ID, FOOD_NO, CART_AMOUNT, FLAG)
+		VALUES(#{memberId}, #{foodNo}, #{cartAmount}, 1)
+	</insert>
 
 </mapper>

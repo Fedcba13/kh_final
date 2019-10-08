@@ -67,11 +67,6 @@ public class FoodDAOImpl implements FoodDAO {
 	}
 
 	@Override
-	public int selectEventPercent(FoodWithStockAndEvent food) {
-		return sqlSession.selectOne("food.selectEventPercent", food);
-	}
-
-	@Override
 	public FoodWithStockAndEvent selectFood(HashMap<String, String> param) {
 		return sqlSession.selectOne("food.selectFood", param);
 	}
@@ -169,6 +164,11 @@ public class FoodDAOImpl implements FoodDAO {
 	@Override
 	public List<FoodWithStockAndEvent> selectSaleFoodList(String marketNo) {
 		return sqlSession.selectList("food.selectSaleFoodList", marketNo);
+	}
+
+	@Override
+	public int insertGood(Map<String, String> param) {
+		return sqlSession.insert("food.insertGood", param);
 	}
 
 

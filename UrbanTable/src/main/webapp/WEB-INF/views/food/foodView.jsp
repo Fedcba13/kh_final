@@ -57,7 +57,7 @@ $(()=>{
 				</div>
 				<div id="like">
 					<img
-						src="${pageContext.request.contextPath }/resources/images/food/like.png" id="goodImg" alt='좋아요' name="GOOD"/>
+						src="${pageContext.request.contextPath }/resources/images/food/like.png" id="goodImg" alt="좋아요" name="GOOD"/>
 						<br />
 						<p id="goodText">&lpar;${food.good }&rpar;</p>
 				</div>
@@ -70,12 +70,17 @@ $(()=>{
 	                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->
 					<tr>
 						<th>판매가</th>
-						<%--                 <td><fmt:formatNumber value="${food.afterEventPrice}" pattern="\#,###.##"/>원</td> --%>
 						<td id="foodPrice">
-						<fmt:formatNumber value="${food.afterEventPrice eq 0? food.foodMemberPrice :food.afterEventPrice }"
-								pattern="#,###.##" />원 
-						<input type="hidden" id="hiddenPrice" value="${food.afterEventPrice eq 0? food.foodMemberPrice :food.afterEventPrice }" /></td>
-								
+						<c:if test="${ food.eventPercent ne 0}">
+								<p class="prd_price"><fmt:formatNumber value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) } "
+								pattern="#,###" />원 </p>
+							<p class="prd_price2"><fmt:formatNumber value="${food.foodMemberPrice }" pattern="#,###" />원 </p>
+						</c:if>
+						<c:if test="${ food.eventPercent eq 0}">
+							<p class="prd_price"><fmt:formatNumber value="${food.foodMemberPrice }" pattern="#,###" />원 </p>
+						</c:if>
+							<input type="hidden" id="hiddenPrice" value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) }" />
+						</td>
 					</tr>
 					<tr>
 						<th>배송구분</th>
@@ -98,14 +103,20 @@ $(()=>{
 				</table>
 					<br />
 					<div style="float: right;">
-						<p id="finalPrice">총 상품금액 : <fmt:formatNumber value="${food.afterEventPrice eq 0? food.foodMemberPrice :food.afterEventPrice }"
-								pattern="#,###.##" />원</p>
+						<p id="finalPrice">총 상품금액 : 
+						<c:if test="${food.eventPercent ne 0}">
+								<fmt:formatNumber value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) } "
+								pattern="#,###" />원 
+						</c:if>
+						<c:if test="${food.eventPercent eq 0}">
+							<fmt:formatNumber value="${food.foodMemberPrice }" pattern="#,###" />원 
+						</c:if>
+						</p>
 					</div>
 					<br />
 					<div id="buttons">
-					<button>장바구니 담기</button>
+					<img src="${pageContext.request.contextPath }/resources/images/cart.png" alt="" onclick="cartValidate();"/>
 					<button>늘 사는 것</button>
-					<button>상품 문의</button>
 					<button id="noticeStock">재고알림</button>
 					</div>
 			</div>
@@ -138,41 +149,147 @@ $(()=>{
 		}else{
 		var finalPrice = $("#hiddenPrice").val()*amount;
 		var ppp =  finalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-		 html = "총 상품금액 : "+ppp+"원" 
+		html = "총 상품금액 : "+ppp+"원" 
 			
 		}
 		 $("#finalPrice").html(html);  
 	}); 
 	
 	
-	
-	
-/* 	var foodNo = $("#foodNoToRe").val();
-	var memberId = $("#memberLoggedInView").val();
-	var param = {
-			foodNo : foodNo,
-			memberId : memberId
+	function cartValidate(){
+		var foodNo = $("#foodNoToRe").val();
+		var memberId = $("#memberLoggedInView").val();
+		var cartAmount = $("#amount").val()
+		var memberCheck = '${memberLoggedIn.memberCheck}';
+		
+		var goCart = function(){
+			var pram = {
+					memberId : memberId,
+					memberCheck : memberCheck
+			}
+			$.ajax({
+				 url: "${pageContext.request.contextPath}/cart/cartList.do",
+				 dataType: "json",
+				type: "POST",
+				success: (data)=> {
+				},
+				error: (xhr, txtStatus, err)=> {
+					console.log("ajax 처리실패!", xhr, txtStatus, err);
+				}
+			});
+		}
+		
+		if(memberId.trim().length == 0 ){
+			alert("로그인 후 이용가능합니다!");
+		}else if(cartAmount == 0){
+			alert("구매수량을 입력해주세요!");
+		} else if(memberCheck != 1){
+			alert("접근하실 수 없는 권한이십니다.");
+		}
+		else{
+			var param = {
+					foodNo : foodNo,
+					memberId : memberId,
+					cartAmount : cartAmount
+			}
+			$.ajax({
+				 url: "${pageContext.request.contextPath}/cart/insertToCartByUser.do", 
+				 dataType: "json",
+				 data: param,
+				type: "POST",
+				success: (data)=> {
+				},
+				error: (xhr, txtStatus, err)=> {
+					console.log("ajax 처리실패!", xhr, txtStatus, err);
+				}
+			});
+			var bool  = confirm("장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?");
+			if(bool){
+				location.href = "${pageContext.request.contextPath}/cart/cartList.do?memberId="+memberId+"&memberCheck="+memberCheck;
+			}
+		} 
+		
+		
 	}
 	
 	
-	$(".did").on('click', function(event){
+	$(()=>{
+
+		
+		var foodNo = $("#foodNoToRe").val();
+		var memberId = $("#memberLoggedInView").val();
+		var memberCheck = '${memberLoggedIn.memberCheck}';
+		var param = {
+				foodNo : foodNo,
+				memberId : memberId
+		}
+		
+		
+		var getGoodInView = function(){
+			$.ajax({
+		    	url: "${pageContext.request.contextPath}/food/goodOrBad.do",
+		    	type: "get",
+				data: param,
+		   		success: (data)=> {
+		   			var htmlInLike = '';
+		   			var htmlInBad= ' ';
+		   			
+		   			
+		   			//좋아요 싫어요를 했다면
+		   			if(data && ((data.good == 1) || data.bad == 1)){
+		   					
+		   				//좋아요
+		   				if(data.good == 1 ){
+		   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png" class="did" id="goodImg" alt="좋아요" name="GOOD"/> <br /> <p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
+		   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png" class="didnt" id="badImg" alt="싫어요" name="BAD"/><br /> <p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
+		   					
+		   						
+		   				}//싫어요
+		   				else if (data.bad == 1){
+		   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png" class="didnt"  id="goodImg" alt="좋아요" name="GOOD"/> <br /> <p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
+		   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png" class="did"  id="badImg" alt="싫어요" name="BAD"/><br /> <p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
+		   				
+		   				}
+		   			}
+		   			//한적만 있음.
+	   				else if((data.good==0) && (data.good==0)){
+	   					
+	   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png"  class="didntX"  id="goodImg" alt="좋아요" name="GOOD"/> <br /> <p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
+	   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png" class="didntX" id="badImg" alt="싫어요" name="BAD"/><br /> <p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
+	   				}
+		   			//좋아요 싫어요 한번도 안함
+	   				else if(!data ){
+	   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png" class="didntXX" id="goodImg" alt="좋아요" name="GOOD"/> <br /> <p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
+	   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png" class="didntXX" id="badImg" alt="싫어요" name="BAD"/><br /> <p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
+	   				}
+		   			$("#like").html(htmlInLike);
+		   			$("#dislike").html(htmlInBad);
+	
+		   		},
+		   		error: (xhr, txtStatus, err)=> {
+		   			console.log("ajax 처리실패!", xhr, txtStatus, err);
+		   		}
+		   	}); 
+		}
+		if((memberId.trim().length != 0)){
+			getGoodInView();
+		}
+		
+		$(document).on('click', '.did', function(){
 			console.log("did이벤트핸들러");
 			$.ajax({
 		    	url: "${pageContext.request.contextPath}/food/cancelGood.do",
 		    	type: "get",
 				data: param,
 		   		success: (data)=> {
-		   			goodValidate();
-		   			$("#badText").html('('+data.bad+')');
-		   			$("#goodText").html('('+data.good+')');
+		   			getGoodInView();
 		   		},
 		   		error: (xhr, txtStatus, err)=> {
 		   			console.log("ajax 처리실패!", xhr, txtStatus, err);
 		   		}
-		   	}); 
-			
+			});
 		});
-		$(".didnt").on('click', function(event){
+		$(document).on('click', '.didnt', function(){
 			console.log("didnt이벤트핸들러");
 			console.log($(this).attr('id'));
 			 $.ajax({
@@ -180,19 +297,14 @@ $(()=>{
 		    	type: "get",
 				data: param,
 		   		success: (data)=> {
-		   			goodValidate();
-		   			$("#badText").html('('+data.bad+')');
-		   			$("#goodText").html('('+data.good+')');
-		   	
+		   			getGoodInView();
 		   		},
 		   		error: (xhr, txtStatus, err)=> {
 		   			console.log("ajax 처리실패!", xhr, txtStatus, err);
 		   		}
 		   	});  
-		
 		});
-		
-		$(".didntToUp").on('click', function(event){
+		$(document).on('click', '.didntX', function(){
 			console.log("didntToUp이벤트핸들러");
 			var column = $(this).attr('name')
 			
@@ -207,83 +319,36 @@ $(()=>{
 		    	type: "get",
 				data: params,
 		   		success: (data)=> {
-		   			goodValidate();
-		   			$("#badText").html('('+data.bad+')');
-		   			$("#goodText").html('('+data.good+')');
+		   			getGoodInView();
 		   		},
 		   		error: (xhr, txtStatus, err)=> {
 		   			console.log("ajax 처리실패!", xhr, txtStatus, err);
 		   		}
 		   	}); 
 		});
-		
-	//좋아요/ 싫어요 했는지 검사 함수
-	var goodValidate = function(){
+		$(document).on('click', '.didntXX', function(){
+			console.log("didntXX이벤트핸들러");
+			var column = $(this).attr('name')
+			var params = {
+				foodNo : foodNo,
+				memberId : memberId,
+				column : column
+			}
+			
 			$.ajax({
-		    	url: "${pageContext.request.contextPath}/food/goodOrBad.do",
+		    	url: "${pageContext.request.contextPath}/food/insertGood.do",
 		    	type: "get",
-				data: param,
+				data: params,
 		   		success: (data)=> {
-		   			//좋아요 싫어요를 했다면
-		   			if(data && ((data.good == 1) || data.bad == 1)){
-		   					
-		   				//좋아요
-		   				if(data.good == 1 ){
-		   					$("#goodImg").removeClass();
-		   					$("#badImg").removeClass();
-		   					
-		   					$("#goodImg").addClass("did");
-		   					$("#badImg").addClass("didnt");	
-		   				}//싫어요
-		   				else if (data.bad == 1){
-		   					 $("#goodImg").removeClass();
-		   					$("#badImg").removeClass(); 
-		   					
- 		   					$("#badImg").addClass("did");
-		   					$("#goodImg").addClass("didnt");
-		   				
-		   				}
-		   			}
-		   			//한적만 있음.
-	   				else if((data.good==0) && (data.good==0)){
-	   					$("#goodImg").removeClass();
-	   					$("#badImg").removeClass();
-	   					 
-	   					$("#goodImg").addClass("didntToUp");
-	   					$("#badImg").addClass("didntToUp");
-	   				}
-		   			//좋아요 싫어요 한번도 안함
-	   				else if(!data ){
-	   					 $("#goodImg").removeClass();
-	   					$("#badImg").removeClass();
-	   					 
-	   					$("#goodImg").addClass("didntX");
-	   					$("#badImg").addClass("didntX");
-	   				}
-
+		   			getGoodInView();
 		   		},
 		   		error: (xhr, txtStatus, err)=> {
 		   			console.log("ajax 처리실패!", xhr, txtStatus, err);
 		   		}
 		   	}); 
-		}
-	 */
-
-	
-	$(()=>{
-
-		
-		var foodNo = $("#foodNoToRe").val();
-		var memberId = $("#memberLoggedInView").val();
-		var param = {
-				foodNo : foodNo,
-				memberId : memberId
-		}//로그인한 사용자라면
-		if(memberId.trim().length != 0 ){
-			goodValidate();
-		}
-		
-		
+			
+		});
+			
 		
 		// 관련 레시피 출력
 	 	$.ajax({
@@ -294,7 +359,6 @@ $(()=>{
 	   		success: (data)=> {
 	   			var html = ' ';
 	   			for(var i in data){
-	   				console.log(data[i].recipeNo);
 	   				html += '<li>  <a href="${pageContext.request.contextPath}/recipe/recipeView.do?recipeNo='+data[i].recipeNo+'&memberId='+memberId+'" class="dp_block"><div class="event_img_area">';
 	   				html += '<img src="${pageContext.request.contextPath }/resources/upload/recipe/'+data[i].renamedRecipePic+'">';
 	   				console.log('<img src="${pageContext.request.contextPath }/resources/upload/recipe/'+data[i].renamedRecipePic+'">');
@@ -308,7 +372,6 @@ $(()=>{
 	   		}
 	   	}); 
 	});
-	
 	
 	</script>
 <jsp:include page="/WEB-INF/views/common/footer.jsp"></jsp:include>

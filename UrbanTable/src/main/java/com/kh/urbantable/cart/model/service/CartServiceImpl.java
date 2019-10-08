@@ -63,6 +63,11 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public int deleteCartAll(String memberId) {
 		return cartDAO.deleteCartAll(memberId);
+	}
+
+	@Override
+	public int insertCartByUser(Map<String, String> param) {
+		return cartDAO.insertCartByUser(param);
 	} 
 	
 

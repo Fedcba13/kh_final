@@ -65,4 +65,9 @@ public class CartDAOImpl implements CartDAO{
 		return sqlSession.delete("cart.deleteCartAll", memberId);
 	}
 
+	@Override
+	public int insertCartByUser(Map<String, String> param) {
+		return sqlSession.insert("cart.insertCartByUser", param);
+	}
+
 }

@@ -20,7 +20,11 @@
 		ORDER BY MARKET_NAME
 	</select>
 	<select id="selectFoodListByCat" resultType="foodWithStockAndEvent" parameterType="map">
-		SELECT *
+		SELECT F.*, <![CDATA[(SELECT MAX(EVENT_PRICE)
+                     FROM EVENT
+                     WHERE (EVENT_CATEGORY = F.FOOD_SECTION_NO OR EVENT_CATEGORY IS NULL)
+                         AND (MARKET_NO = M.MARKET_NO OR MARKET_NO IS NULL) AND (EVENT_DATE_START < SYSDATE)
+                         AND (EVENT_DATE_END > SYSDATE))AS EVENT_PERCENT]]>
 		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
 					LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
 					LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
@@ -41,7 +45,11 @@
 		</trim>
 	</select>
 	<select id="selectFoodBySearchKeyword" resultType="foodWithStockAndEvent" parameterType="map">
-		SELECT *
+		SELECT F.*, <![CDATA[(SELECT MAX(EVENT_PRICE)
+                     FROM EVENT
+                     WHERE (EVENT_CATEGORY = F.FOOD_SECTION_NO OR EVENT_CATEGORY IS NULL)
+                         AND (MARKET_NO = M.MARKET_NO OR MARKET_NO IS NULL) AND (EVENT_DATE_START < SYSDATE)
+                         AND (EVENT_DATE_END > SYSDATE))AS EVENT_PERCENT]]>
 		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
 					LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
 					LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
@@ -126,17 +134,12 @@
 		WHERE FOOD_UPPER_NO = #{upperNo}
 		ORDER BY FOOD_SECTION_NAME
 	</select>
-	<select id="selectEventPercent" resultType="int">
-	<![CDATA[
-		SELECT MAX(EVENT_PRICE)
-		FROM EVENT
-		WHERE (EVENT_CATEGORY = #{foodSectionNo} OR EVENT_CATEGORY IS NULL)
-			AND (MARKET_NO = #{marketNo} OR MARKET_NO IS NULL) AND (EVENT_DATE_START < SYSDATE)
-			AND (EVENT_DATE_END > SYSDATE)
-	]]>
-	</select>
 	<select id="selectFood" resultType="FoodWithStockAndEvent">
-        SELECT *
+        SELECT  F.*,M.*, <![CDATA[(SELECT MAX(EVENT_PRICE)
+                     FROM EVENT
+                     WHERE (EVENT_CATEGORY = F.FOOD_SECTION_NO OR EVENT_CATEGORY IS NULL)
+                         AND (MARKET_NO = M.MARKET_NO OR MARKET_NO IS NULL) AND (EVENT_DATE_START < SYSDATE)
+                         AND (EVENT_DATE_END > SYSDATE))AS EVENT_PERCENT]]>
 		FROM FOOD F LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
 					LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
                   	LEFT JOIN  (SELECT TARGET_ID, COUNT(GOOD) AS GOOD, COUNT(BAD) AS BAD
@@ -171,24 +174,28 @@
 	</insert>
 	<select id="selectFoodInMain1" resultType="FoodWithStockAndEvent">
 	<![CDATA[
-	SELECT *
-	FROM 
-		(SELECT *
+		SELECT F.*, (SELECT MAX(EVENT_PRICE)
+                     FROM EVENT
+                     WHERE (EVENT_CATEGORY = F.FOOD_SECTION_NO OR EVENT_CATEGORY IS NULL)
+                         AND (MARKET_NO = M.MARKET_NO OR MARKET_NO IS NULL) AND (EVENT_DATE_START < SYSDATE)
+                         AND (EVENT_DATE_END > SYSDATE))AS EVENT_PERCENT
 		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
 		            LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
 		            LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
 		            LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
 		            LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
-		            WHERE M.MARKET_NO =  'mar00012' 
-		            ORDER BY T.STOCK_AMOUNT DESC)
-	WHERE ROWNUM<=4
+		            WHERE M.MARKET_NO =  'mar00012' AND ROWNUM <= 4
+		            ORDER BY T.STOCK_AMOUNT DESC
+	
 	]]>
 	</select>
 	<select id="selectFoodInMain2" resultType="FoodWithStockAndEvent">
 	<![CDATA[
-		SELECT *
-		FROM 
-		(SELECT *
+		SELECT F.*, (SELECT MAX(EVENT_PRICE)
+                     FROM EVENT
+                     WHERE (EVENT_CATEGORY = F.FOOD_SECTION_NO OR EVENT_CATEGORY IS NULL)
+                         AND (MARKET_NO = M.MARKET_NO OR MARKET_NO IS NULL) AND (EVENT_DATE_START < SYSDATE)
+                         AND (EVENT_DATE_END > SYSDATE))AS EVENT_PERCENT
 		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
 	            LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
 	            LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
@@ -197,16 +204,17 @@
                 LEFT JOIN (SELECT TARGET_ID, COUNT(GOOD) AS GOOD, COUNT(BAD) AS BAD
                                FROM GOOD
                                GROUP BY TARGET_ID) G ON F.FOOD_NO = G.TARGET_ID
-	            WHERE M.MARKET_NO =  'mar00012' 
-	            ORDER BY  (GOOD-BAD) DESC)
-		WHERE ROWNUM<=4
+	            WHERE M.MARKET_NO =  'mar00012' AND ROWNUM<=4
+	            ORDER BY  (GOOD-BAD) DESC
 	]]>
 	</select>
 	<select id="selectFoodInMain3" resultType="FoodWithStockAndEvent">
 	<![CDATA[
-		SELECT *
-		FROM 
-		(SELECT *
+		 SELECT F.*, (SELECT MAX(EVENT_PRICE)
+                     FROM EVENT
+                     WHERE (EVENT_CATEGORY = F.FOOD_SECTION_NO OR EVENT_CATEGORY IS NULL)
+                         AND (MARKET_NO = M.MARKET_NO OR MARKET_NO IS NULL) AND (EVENT_DATE_START < SYSDATE)
+                         AND (EVENT_DATE_END > SYSDATE))AS EVENT_PERCENT
 		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
 	            LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
 	            LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
@@ -215,33 +223,37 @@
                 LEFT JOIN (SELECT TARGET_ID, COUNT(GOOD) AS GOOD, COUNT(BAD) AS BAD
                                FROM GOOD
                                GROUP BY TARGET_ID) G ON F.FOOD_NO = G.TARGET_ID
-	            WHERE M.MARKET_NO =  'mar00012' AND D.FOOD_DIVISION_NO = #{foodDivisionNo}
-	            ORDER BY  (GOOD-BAD) DESC)
-		WHERE ROWNUM<=4
+	            WHERE M.MARKET_NO =  'mar00012' AND D.FOOD_DIVISION_NO = #{foodDivisionNo} AND ROWNUM<=4
+	            ORDER BY  (GOOD-BAD) DESC
 	]]>
 	</select>
 	<select id="selectFoodInMain4" resultType="FoodWithStockAndEvent">
 	<![CDATA[
-	SELECT *
-		FROM 
-		(SELECT *
+		SELECT F.*, (SELECT MAX(EVENT_PRICE)
+                     FROM EVENT
+                     WHERE (EVENT_CATEGORY = F.FOOD_SECTION_NO OR EVENT_CATEGORY IS NULL)
+                         AND (MARKET_NO = M.MARKET_NO OR MARKET_NO IS NULL) AND (EVENT_DATE_START < SYSDATE)
+                         AND (EVENT_DATE_END > SYSDATE))AS EVENT_PERCENT
 			FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
 	            LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
 	            LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
 	            LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
 	            LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
 	            LEFT JOIN EVENT E ON S.FOOD_SECTION_NO = E.EVENT_CATEGORY
-	            WHERE ((E.MARKET_NO ='mar00012' AND  E.MARKET_NO IS NULL) 
+	            WHERE ((E.MARKET_NO = #{marketNo} AND  E.EVENT_CATEGORY IS NULL) 
                         OR (E.MARKET_NO IS NULL AND E.EVENT_CATEGORY IS NULL)
-                        OR (E.MARKET_NO IS NULL AND E.EVENT_CATEGORY IS NOT NULL))
+                        OR (E.MARKET_NO = #{marketNo} AND E.EVENT_CATEGORY IS NOT NULL))
                         AND E.EVENT_DATE_START < SYSDATE AND E.EVENT_DATE_END > SYSDATE
-                        AND T.STOCK_AMOUNT > 0
-	            ORDER BY E.EVENT_PRICE DESC)
-		WHERE ROWNUM<=4
+                        AND T.STOCK_AMOUNT > 0 AND ROWNUM<=4
+	            ORDER BY E.EVENT_PRICE DESC
 		]]>
 	</select>
 	<select id="selectNewFoodList" resultType="FoodWithStockAndEvent">
-		SELECT *
+		SELECT  F.*, <![CDATA[(SELECT MAX(EVENT_PRICE)
+                     FROM EVENT
+                     WHERE (EVENT_CATEGORY = F.FOOD_SECTION_NO OR EVENT_CATEGORY IS NULL)
+                         AND (MARKET_NO = M.MARKET_NO OR MARKET_NO IS NULL) AND (EVENT_DATE_START < SYSDATE)
+                         AND (EVENT_DATE_END > SYSDATE))AS EVENT_PERCENT]]>
 		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
 					LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
 					LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
@@ -253,9 +265,12 @@
 		ORDER BY F.FOOD_NO DESC
 	</select>
 	<select id="selectBestFoodList" resultType="FoodWithStockAndEvent">
-		<![CDATA[
-		SELECT *
-		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
+		SELECT F.*, (SELECT MAX(EVENT_PRICE)
+                     FROM EVENT
+                    <![CDATA[ WHERE (EVENT_CATEGORY = F.FOOD_SECTION_NO OR EVENT_CATEGORY IS NULL)
+                         AND (MARKET_NO = M.MARKET_NO OR MARKET_NO IS NULL) AND (EVENT_DATE_START < SYSDATE)
+                         AND (EVENT_DATE_END > SYSDATE))AS EVENT_PERCENT
+		FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO]]>
 	            LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
 	            LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
 	            LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
@@ -263,7 +278,16 @@
                 LEFT JOIN (SELECT TARGET_ID, COUNT(GOOD) AS GOOD, COUNT(BAD) AS BAD
                                FROM GOOD
                                GROUP BY TARGET_ID) G ON F.FOOD_NO = G.TARGET_ID
-	            WHERE M.MARKET_NO =  #{marketNo} AND D.FOOD_DIVISION_NAME LIKE #{foodDivisionName} 
+	            WHERE M.MARKET_NO =  #{marketNo} AND D.FOOD_DIVISION_NAME
+	            <choose>
+		            <when test="foodDivisionName !=null and foodDivisionName.equals('all')" >
+			            like '%'
+		            </when>
+		            <otherwise>
+			            = #{foodDivisionName} 
+		            </otherwise>
+	            </choose> 
+	           <![CDATA[ AND T.STOCK_AMOUNT > 0 
 	            ORDER BY  (GOOD-BAD) DESC
 	]]>
 	</select>
@@ -285,12 +309,12 @@
 		FROM GOOD
 		WHERE TARGET_ID = #{foodNo} AND MEMBER_ID = #{memberId}
 	</select>
-	<select id="cancelGood" resultType="int">
+	<update id="cancelGood">
 		UPDATE GOOD
         SET GOOD = NULL, BAD = NULL 
         WHERE MEMBER_ID = #{memberId} AND TARGET_ID = #{foodNo} 
-	</select>
-	<select id="changeGood" resultType="int">
+	</update>
+	<update id="changeGood" >
 		UPDATE GOOD
 	    SET 
 	    	GOOD = CASE
@@ -300,12 +324,24 @@
 	   		WHEN BAD IS NULL THEN 1
 	    	WHEN BAD = 1 THEN NULL END
 	    WHERE MEMBER_ID = #{memberId}  AND TARGET_ID = #{foodNo}
-	</select>
-	<select id="updateGood" resultType="int">
+	</update>
+	<update id="updateGood">
 		UPDATE GOOD
         SET ${column} = 1
         WHERE MEMBER_ID = #{memberId} AND TARGET_ID = #{foodNo} 
-	</select>
+	</update>
+	<insert id="insertGood" >
+		INSERT INTO GOOD(TARGERT_ID, MAMEBER_ID, GOOD, BAD)
+		VALUES(#{foodNo}, #{memberId}, 
+		
+		<if test="column !=null and column.equals('GOOD')">
+			1, NULL
+		</if>
+		<if test="column !=null and column.equals('BAD')">
+			NULL, 1
+		</if>
+		  )
+	</insert>
 	<select id="selectGoodTotal" resultType="good">
 		SELECT  TARGET_ID, COUNT(GOOD) GOOD, COUNT(BAD) BAD
 		FROM GOOD
@@ -313,13 +349,22 @@
 		GROUP BY TARGET_ID
 	</select>
 	<select id="selectSaleFoodList" resultType="FoodWithStockAndEvent">
-		<![CDATA[ SELECT *
+		<![CDATA[SELECT F.*, (SELECT MAX(EVENT_PRICE)
+                  			   FROM EVENT
+                   			  WHERE (EVENT_CATEGORY = F.FOOD_SECTION_NO OR EVENT_CATEGORY IS NULL)
+                        		 AND (MARKET_NO = M.MARKET_NO OR MARKET_NO IS NULL) AND (EVENT_DATE_START < SYSDATE)
+                         		AND (EVENT_DATE_END > SYSDATE))AS EVENT_PERCENT
 			FROM FOOD F LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
 	            LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
 	            LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
 	            LEFT JOIN STOCK T ON F.FOOD_NO = T.FOOD_NO
 	            LEFT JOIN MARKET M ON T.MARKET_NO = M.MARKET_NO
-	            WHERE M.MARKET_NO = #{marketNo} AND T.STOCK_AMOUNT > 0
-	            ORDER BY F.FOOD_NAME]]>
+	            LEFT JOIN EVENT E ON S.FOOD_SECTION_NO = E.EVENT_CATEGORY
+	              WHERE ((E.MARKET_NO = #{marketNo} AND  E.EVENT_CATEGORY IS NULL) 
+                        OR (E.MARKET_NO IS NULL AND E.EVENT_CATEGORY IS NULL)
+                        OR (E.MARKET_NO = #{marketNo} AND E.EVENT_CATEGORY IS NOT NULL))
+                        AND E.EVENT_DATE_START < SYSDATE AND E.EVENT_DATE_END > SYSDATE
+                        AND T.STOCK_AMOUNT > 0
+	            ORDER BY E.EVENT_PRICE DESC]]>
 	</select>
 </mapper>

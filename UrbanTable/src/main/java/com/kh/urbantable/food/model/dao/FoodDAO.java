@@ -31,8 +31,6 @@ public interface FoodDAO {
 
 	List<FoodSection> selectBrotherSectList(String upperNo);
 
-	int selectEventPercent(FoodWithStockAndEvent food);
-
 	FoodWithStockAndEvent selectFood(HashMap<String, String> param);
 
 	List<FoodSection> getFoodSectionList();
@@ -72,5 +70,7 @@ public interface FoodDAO {
 	Good selectGoodTotal(String foodNo);
 
 	List<FoodWithStockAndEvent> selectSaleFoodList(String marketNo);
+
+	int insertGood(Map<String, String> param);
 
 }
