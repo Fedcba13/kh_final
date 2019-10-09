@@ -40,6 +40,7 @@ public class Scheduler {
 			HashMap<String, Object> param = new HashMap<String, Object>();
 			param.put("memberId", list.get(i).get("MEMBER_ID"));
 			param.put("foodNo", list.get(i).get("FOOD_NO"));
+			param.put("foodNo", list.get(i).get("MARKET_NO"));
 			
 			memberService.deleteSendMsg(param);
 			
