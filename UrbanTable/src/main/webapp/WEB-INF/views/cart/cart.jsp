@@ -15,6 +15,9 @@
 		border-spacing: 15px;
 		padding: 8px;
 	}
+	td input[type="checkbox"]{
+		vertical-align: 43px;
+	}
 </style>
 <script>
 	var length = ${fn:length(list)};
@@ -462,8 +465,8 @@
 	    <h2 class="sub_tit">장바구니</h2>
 	    <table class="tbl txt_center" id="cartList"> 
             <tr id="head">
-                <th style="width: 180px;">
-                	<input type="checkbox" name="listAll" id="checkAll" checked="true" onchange="checkAll(this);"/>                
+                <th style="width: 30px;">
+                	<input type="checkbox" name="listAll" id="checkAll" checked="true" onchange="checkAll(this);"/>             
                 	<label for="checkAll"></label>
                 </th>
                 <th>

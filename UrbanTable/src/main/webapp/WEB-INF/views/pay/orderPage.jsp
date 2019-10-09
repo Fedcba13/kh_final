@@ -100,7 +100,7 @@
 		getCartList();
 		getCouponList();
 		$("#open").on("click", ()=>{
-			$("#list").slideToggle(100, function(){
+			$("#list").slideToggle(300, function(){
 				if($("#list").css("display") == "none"){
 					$("#open").text("펼치기");
 				} else {
@@ -494,12 +494,12 @@
 	                <th id="totalCost"></th>                
 	            </tr>
             </thead>
-            <tbody id="list" style="display: none;">
+            <tbody id="list" style="display: block;">
             	
             </tbody>
             <tfoot>
 	            <tr>
-	                <td colspan="4" id="open">펼치기</td>
+	                <td colspan="4" id="open">접기</td>
 	                
 	            </tr>
             </tfoot>
