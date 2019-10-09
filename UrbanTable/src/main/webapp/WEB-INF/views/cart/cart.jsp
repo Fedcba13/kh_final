@@ -11,9 +11,9 @@
 		border: 0px;
 		background-color: white;
 	}
-	table#cartList{
+	table#cartList td{
 		border-spacing: 15px;
-		padding-left: 10px;
+		padding: 8px;
 	}
 </style>
 <script>
@@ -148,7 +148,7 @@
 							foodInfo += "<td><input type='checkbox' name='list' id='check"+${vs.count}+"' checked='true' onclick='checkManage(this)'/>&nbsp;&nbsp;&nbsp;";
 							foodInfo += "<img src='"+data.FOOD_IMG+"' width='92px' height='130px'/></td>";
 							foodInfo += "<td name='foodName'>[" + data.FOOD_COMPANY + "] " + data.FOOD_NAME + "</td>";
-							foodInfo += "<td> <input type='button' value='-' onclick='del(this);'>&nbsp;<input type='text' name='amount' value='" + ${l.cartAmount} + "' size='5' style='text-align:center;' onchange='change(this);'>&nbsp;<input type='button' value='+' onclick='add(this);'></td>";
+							foodInfo += "<td> <input type='button' class='btn btn3' style='width:30px; background-color:#ccffff; color: black; border:0;' value='-' onclick='del(this);'>&nbsp;<input type='text' name='amount' value='" + ${l.cartAmount} + "' size='5' style='text-align:center;' onchange='change(this);'>&nbsp;<input type='button' class='btn btn3' style='width:30px; background-color:#ccffff; color: black; border:0;' value='+' onclick='add(this);'></td>";
 							foodInfo += "<td><input type='text' name='totalDiscountPrice' value='"+Math.floor((data.FOOD_MEMBER_PRICE * (1-dc/100))/10)*10 * ${l.cartAmount}+"' size='11' style='text-align:center;' readonly></td>";
 							foodInfo += "<input type='hidden' name='totalPrice' value='" + data.FOOD_MEMBER_PRICE * ${l.cartAmount} + "' size='11' style='text-align:center;' readonly>"
 							foodInfo += "</tr>";
@@ -457,13 +457,12 @@
 
 </script>
 
-<section class="sub_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
+<section class="sub_bg"> 
 	<article class="subPage inner">
 	    <h2 class="sub_tit">장바구니</h2>
-	    <table class="tbl txt_center" id="cartList"> <!--가운데 정렬 아니면 txt_center 빼셔도 됩니다.
-	                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->
+	    <table class="tbl txt_center" id="cartList"> 
             <tr id="head">
-                <th>
+                <th style="width: 180px;">
                 	<input type="checkbox" name="listAll" id="checkAll" checked="true" onchange="checkAll(this);"/>                
                 	<label for="checkAll"></label>
                 </th>
@@ -498,7 +497,7 @@
             </tr>
             <tr>
             	<td>
-            		<input type="button" class="btn" id="searchMarket" value="매장찾기"/>
+            		<input type="button" class="btn btn2" style="border-radius:0px; width:164px" id="searchMarket" value="매장찾기"/>
             	</td>
             	<td colspan="3">
             		<input type="text" id="market" size="80" readonly/>
@@ -507,8 +506,8 @@
             </tr>
             <tr>
             	<td>
-            		<input type="button" class="btn" id="deliveryAddress" value="배송지변경" />
-            		<input type="button" class="btn" id="addressList" value="배송지목록" />
+            		<input type="button" class="btn btn2" style="border-radius:0px; width:80px;" id="deliveryAddress" value="배송지변경" />
+            		<input type="button" class="btn btn2" style="border-radius:0px; width:80px;" id="addressList" value="배송지목록" />
             	</td>
             	<td colspan="3">
             		<input type="text" id="userAddressField" size="80" readonly/>    		            	
@@ -523,6 +522,7 @@
 	           	</td>
             </tr>
         </table>
+        <br />
         <table class="tbl tbl_view">
             <tr>
                 <th>총 상품금액</th>
@@ -549,20 +549,20 @@
         <form action="${pageContext.request.contextPath}/pay/order.do" method="post" id="doOrder">
         	<input type="hidden" name="cartInfo" />        	
 	        <div class="container txt_center" >
-		        <button type="button" class="btn" id="order"><h2>주문하기</h2></button>
+		        <button type="button" class="btn" style="font-size:14px; font-family: 'NanumBarunGothic', sans-serif;" id="order"><h2>주문하기</h2></button>
 		    </div>        
         </form>
     </article>
     <div class="modal txt_center" id="selectAddressModal">
 		<form class="modal-content animate">
 			<div class="container txt_center">
-				<span>배송지를 선택하세요(새 배송지 등록은 마이페이지에서 가능합니다.)</span><br />
+				<span>배송지를 선택하세요(새 배송지 등록은 마이페이지에서 가능합니다.)</span><br /><hr />
 				<select class="select" name="address" id="addressListModal">
 				</select>
 			</div>
 			<div class="container txt_center" style="background-color:#f4f4f0;">
 				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" onclick="closeModal();">취소</button>
-				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" onclick="submitAddress();">선택</button>
+				<button type="button" class="btn btn2" style="float:right; margin-right: 10px; background-color:#374818; color:white;" onclick="submitAddress();">선택</button>
 		    </div>
 		</form>
 	</div>
