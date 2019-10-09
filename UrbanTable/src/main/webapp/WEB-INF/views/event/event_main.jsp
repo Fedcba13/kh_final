@@ -28,33 +28,28 @@ li.event_item{
 	    <div class="event_list_wrapper">
 	    	<ul id="event-list" style="position: relative; ">  		
 	    		<li class="event_item" style="">
-	    			<a href='${pageContext.request.contextPath}/event/insertCoupon.do?couponDiscount=10'>
-	    				<img src="${pageContext.request.contextPath }/resources/images/banner/20190926_154703374_893.jpg" alt="" class="eventImg"/>
+	    			<a href='${pageContext.request.contextPath}/food/selectFoodByCat.do?searchNo=UPPER125&searchKeyword=불고기용ㆍ양념육'>
+	    				<img src="${pageContext.request.contextPath }/resources/images/event/20191007_785641246_215.PNG" alt="" class="eventImg"/>
 	    			</a>
 	    		</li>	    		
 	    		<li class="event_item" style="">
-	    			<a href='${pageContext.request.contextPath}/event/insertCoupon.do?couponDiscount=10'>
-	    				<img src="${pageContext.request.contextPath }/resources/images/banner/20190926_154703374_893.jpg" alt="" class="eventImg"/>
+	    			<a href='${pageContext.request.contextPath}/food/selectFoodBySearchKeyword.do?searchKeyword=감&marketNo=mar00006'>
+	    				<img src="${pageContext.request.contextPath }/resources/images/event/20191007_785658746_215.PNG" alt="" class="eventImg"/>
 	    			</a>
 	    		</li>	    		
 	    		<li class="event_item" style="">
-	    			<a href='${pageContext.request.contextPath}/event/insertCoupon.do?couponDiscount=10'>
-	    				<img src="${pageContext.request.contextPath }/resources/images/banner/20190926_154703374_893.jpg" alt="" class="eventImg"/>
+	    			<a href='${pageContext.request.contextPath}/event/insertCoupon.do?couponDiscount=30'>
+	    				<img src="${pageContext.request.contextPath }/resources/images/event/20191007_132148147_231.png" alt="" class="eventImg"/>
 	    			</a>
 	    		</li>	    		
 	    		<li class="event_item" style="">
-	    			<a href='${pageContext.request.contextPath}/event/insertCoupon.do?couponDiscount=10'>
-	    				<img src="${pageContext.request.contextPath }/resources/images/banner/20190926_154703374_893.jpg" alt="" class="eventImg"/>
+	    			<a href='${pageContext.request.contextPath}/food/selectFoodByCat.do?searchNo=UPPER138&searchKeyword=연어'>
+	    				<img src="${pageContext.request.contextPath }/resources/images/event/20191007_154448147_231.PNG" alt="" class="eventImg"/>
 	    			</a>
 	    		</li>	    		
 	    		<li class="event_item" style="">
-	    			<a href='${pageContext.request.contextPath}/event/insertCoupon.do?couponDiscount=10'>
-	    				<img src="${pageContext.request.contextPath }/resources/images/banner/20190926_154703374_893.jpg" alt="" class="eventImg"/>
-	    			</a>
-	    		</li>	    		
-	    		<li class="event_item" style="">
-	    			<a href='${pageContext.request.contextPath}/event/insertCoupon.do?couponDiscount=10'>
-	    				<img src="${pageContext.request.contextPath }/resources/images/banner/20190926_154703374_893.jpg" alt="" class="eventImg"/>
+	    			<a href='#'>
+	    				<img src="${pageContext.request.contextPath }/resources/images/event/20191007_195148147_231.PNG" alt="" class="eventImg"/>
 	    			</a>
 	    		</li>	    		
 	    	</ul>

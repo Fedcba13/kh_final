@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -42,7 +44,7 @@ public class EventController {
 
 		logger.info("event={}", list);
 		model.addAttribute("list", list);
-		
+
 		return "/marketOwner/eventList";
 	}
 
@@ -59,11 +61,11 @@ public class EventController {
 
 		String msg = "";
 		String loc = "";
-		model.addAttribute("msg", result > 0 ? "쿠폰발급이 완료되었습니다" : "관리자에게 문의하세요");
-		model.addAttribute("loc", "/event/eventList.do");
+		model.addAttribute("msg", result > 0 ? "쿠폰발급이 완료되었습니다" : "이미 쿠폰이 지급되었습니다.");
+		model.addAttribute("loc", "/event/eventMain.do");
 
 		return "/common/msg";
-		
+
 	}
 
 	@RequestMapping("/marketEventEnroll.do")
@@ -102,7 +104,7 @@ public class EventController {
 
 	@PostMapping("/marketEventEnrollEnd.do")
 	public String marketEventEnrollEnd(Event event, @RequestParam("eventCategory1") String eventCategory1,
-										@RequestParam("eventFile1") MultipartFile eventFile, HttpServletRequest request) {
+			@RequestParam("eventFile1") MultipartFile eventFile, HttpServletRequest request) {
 
 		logger.info("event={}", event);
 		logger.info("event={}", eventCategory1);
@@ -131,34 +133,34 @@ public class EventController {
 
 		return "marketOwner/marketEventEnroll";
 	}
-	
+
 	@RequestMapping("/deleteEvent.do")
 	public String deleteEvent(@RequestParam("eventId") String eventId, Model model) {
-		
+
 		eventService.deleteEvent(eventId);
-		
+
 		List<EventWithFoodSection> list = eventService.selectEventList();
 
 		logger.info("event={}", list);
 		model.addAttribute("list", list);
-		
+
 		return "/marketOwner/eventList";
 	}
 
 	@RequestMapping("/mainEventList.do")
 	@ResponseBody
 	public List<Event> mailList(Model model) {
-		
+
 		List<Event> list = eventService.selectEventAllList();
-		
+
 		logger.info("list={}", list);
 		return list;
 	}
-	
+
 	@RequestMapping("/eventMain.do")
 	public String eventMail() {
-		
+
 		return "/event/event_main";
 	}
-	
+
 }

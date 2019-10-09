@@ -87,7 +87,11 @@
 	</update>
 	
 	<select id="selectEventAllList" resultType="event">
-		select * from event where event_enabled = 1 and event_file is not null
+		select * from event where event_enabled = 1 and event_file is not null and event_date_start = '2019/10/04'
+	</select>
+	
+	<select id="selectAllCoupon" resultType="coupon">
+		select * from coupon where coupon_enabled = 1
 	</select>
 	
 </mapper>
