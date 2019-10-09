@@ -1,5 +1,5 @@
 //카카오 주소찾기 api
-function sample6_execDaumPostcode(onClose) {
+function execDaumPostcode(onClose) {
 	
 	console.log(onClose);
 	

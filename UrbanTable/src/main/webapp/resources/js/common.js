@@ -94,7 +94,7 @@ $(document).ready(function(){
 	
 	//배송지역 검색
 	$("#header .srch_delivery").click(()=>{
-		sample6_execDaumPostcode('on');
+		execDaumPostcode('on');
 	});
 	
 });

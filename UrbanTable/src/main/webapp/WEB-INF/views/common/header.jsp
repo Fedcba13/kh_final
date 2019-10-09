@@ -22,6 +22,8 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/slick.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/common.js" charset="UTF-8"></script>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/kakaoAPI.js" charset="UTF-8"></script>
 </head>
 <script>
 	function mainSrchValidate(){

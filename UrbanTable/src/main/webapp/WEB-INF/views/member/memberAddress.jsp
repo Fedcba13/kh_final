@@ -5,8 +5,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
-<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/kakaoAPI.js" charset="UTF-8"></script>
 
 <style>
 
@@ -99,7 +97,7 @@ $(()=>{
 			});
 			
 			$(".srchAddr").click(()=>{
-				sample6_execDaumPostcode();	
+				execDaumPostcode();	
 			});
 			
 			$(".confirmAddr").off();
@@ -149,7 +147,7 @@ $(()=>{
 		$tbl.find('[name=address]').prop('name', 'memberAddress');
 		$tbl.find('[name=address2]').prop('name', 'memberAddress2').prop("readonly", false);
 		
-		sample6_execDaumPostcode();
+		execDaumPostcode();
 		
 		//모든 함수 제거
 		$(".confirmAddr").off();
