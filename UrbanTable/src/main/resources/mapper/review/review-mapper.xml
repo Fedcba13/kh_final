@@ -8,5 +8,21 @@
 		insert into review(pay_detail_no, review_content)
 		values(#{detailNo}, #{content})
 	</insert>
+	
+	<update id="updateReview">
+		update review set
+			review_content = #{content}
+		where
+			pay_detail_no = #{detailNo}
+			and review_enabled = 1
+	</update>
+	
+	<update id="deleteReview">
+		update review set
+			review_enabled = 0
+		where
+			pay_detail_no = #{detailNo}
+			and review_enabled = 1
+	</update>
 
 </mapper>
