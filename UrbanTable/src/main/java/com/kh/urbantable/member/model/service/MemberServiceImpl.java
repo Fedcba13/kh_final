@@ -35,7 +35,6 @@ public class MemberServiceImpl implements MemberService {
 		memberDAO.deletePhoneAuth(param);
 		
 		//인증번호, 전화번호 추가
-		System.out.println(param.toString());
 		return memberDAO.insertPhoneAuth(param);
 	}
 

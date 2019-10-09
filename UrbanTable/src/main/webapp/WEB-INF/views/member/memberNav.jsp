@@ -54,10 +54,10 @@ $(()=>{
 	var url = $(location).attr('href').split('/');
 	url = url[url.length-1]
 	
-	if($(".myPage-nav ul li[rel="+url+"]").length != 0){
-		$(".myPage-nav ul li[rel="+url+"]").css("background", "#f4f4f0");		
+	if($(".myPage-nav ul li[rel='"+url+"']").length != 0){
+		$(".myPage-nav ul li[rel='"+url+"']").css("background", "#f4f4f0");		
 	}else{
-		$(".myPage-nav ul li[rel=paytList]").css("background", "#f4f4f0");
+		$(".myPage-nav ul li[rel=payList]").css("background", "#f4f4f0");
 	}
 	
 	
