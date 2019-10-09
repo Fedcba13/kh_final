@@ -65,4 +65,9 @@ public class EventDAOImple implements EventDAO{
 		
 		return sqlSession.selectList("event.selectAllCoupon");
 	}
+	
+	@Override
+	public List<EventWithFoodSection> selectEventListMarketOwner(String marketNo) {
+		return sqlSession.selectList("event.selectEventListMarketOwner", marketNo);
+	}
 }

@@ -3,11 +3,10 @@
 <style>
 
 	.myPage{
-		overflow: hiddden;
+		overflow: hidden;
 	}
 
 	.myPage > div{
-		display: inline-block;
 		vertical-align: top;
 		overflow: hidden;
 	}

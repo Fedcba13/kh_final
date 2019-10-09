@@ -1,5 +1,6 @@
 package com.kh.urbantable.event.model.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -64,6 +65,16 @@ public class EventServiceImpl implements EventService{
 	public List<Coupon> selectAllCoupon() {
 
 		return eventDAO.selectAllCoupon();
+	}
+	
+	@Override
+	public List<EventWithFoodSection> selectEventListMarketOwner(String memberId) {
+		String marketNo = eventDAO.selectMarketNoByMemberId(memberId);
+		List<EventWithFoodSection> list = new ArrayList<EventWithFoodSection>();
+		if(marketNo!=null) {
+			list = eventDAO.selectEventListMarketOwner(marketNo);
+		}
+		return list;
 	}
 	
 	

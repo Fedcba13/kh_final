@@ -14,7 +14,7 @@
 	}
 	
 	.pay_list_tbl > tr:hover {
-		background-color: #e9e9e9;
+		background-color: #f4f4f0;
 	}
 	
 	.pay_list_tbl > tr > td:nth-child(1) {

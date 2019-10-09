@@ -25,5 +25,7 @@ public interface EventDAO {
 	List<Event> selectEventAllList();
 
 	List<Coupon> selectAllCoupon();
+	
+	List<EventWithFoodSection> selectEventListMarketOwner(String marketNo);
 
 }

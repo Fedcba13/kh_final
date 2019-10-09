@@ -80,6 +80,7 @@
 			<mapping path="/pay/order.do" />
 			<mapping path="/market/marketOrder.do" />
 			<mapping path="/market/marketStock.do" />
+			<mapping path="/event/eventList.do" />
 			<beans:bean id="LoginInterceptor" class="com.kh.urbantable.common.interceptor.LoginInterceptor" />
 		</interceptor>
  		<interceptor>

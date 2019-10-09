@@ -684,14 +684,14 @@ public class MarketOwnerController {
 	    
 	    logger.info("@controller="+marketOrderList);
 	    
-	    // 워크북 생성
-	    Workbook wb = new HSSFWorkbook();
-	    Sheet sheet = wb.createSheet("게시판");
+	    //워크북 생성
+	    Workbook wb = new HSSFWorkbook(); //새 엑셀 파일 생성
+	    Sheet sheet = wb.createSheet("게시판"); //이름이 게시판인 시트 생성
 	    Row row = null;
 	    Cell cell = null;
 	    int rowNo = 0;
 
-	    // 테이블 헤더용 스타일
+	    //테이블 헤더용 스타일
 	    CellStyle headStyle = wb.createCellStyle();
 	    headStyle.setBorderTop(BorderStyle.THIN);
 	    headStyle.setBorderBottom(BorderStyle.THIN);
@@ -701,14 +701,14 @@ public class MarketOwnerController {
 	    headStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 	    headStyle.setAlignment(HorizontalAlignment.CENTER);
 
-	    // 데이터용 경계 스타일 테두리만 지정
+	    //데이터용 경계 스타일 테두리만 지정
 	    CellStyle bodyStyle = wb.createCellStyle();
 	    bodyStyle.setBorderTop(BorderStyle.THIN);
 	    bodyStyle.setBorderBottom(BorderStyle.THIN);
 	    bodyStyle.setBorderLeft(BorderStyle.THIN);
 	    bodyStyle.setBorderRight(BorderStyle.THIN);
 
-	    // 헤더 생성
+	    //헤더 생성
 	    row = sheet.createRow(rowNo++);
 	    cell = row.createCell(0);
 	    cell.setCellStyle(headStyle);
