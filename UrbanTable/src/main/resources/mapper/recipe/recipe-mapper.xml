@@ -249,4 +249,92 @@
 		</set>
 		where recipe_no = #{recipeNo}
 	</update>
+	
+	<update id="updateRecipeSequence">
+		<foreach collection="list" item="rs" index="index" separator=";" open="DECLARE BEGIN" close="; END;">
+			update recipe_sequence
+			set
+			recipe_content = #{rs.recipeContent},
+			original_recipe_pic = #{rs.originalRecipePic},
+			renamed_recipe_pic = #{rs.renamedRecipePic}
+			where recipe_no = #{rs.recipeNo} and recipe_order = #{rs.recipeOrder}
+		</foreach>
+	</update>
+	
+	<delete id="deleteRecipeSequence">
+		delete from recipe_sequence
+		where recipe_no = #{recipeNo} and recipe_order => #{recipeOrder}
+	</delete>
+	
+	<select id="selectRenamedFileName" resultType="string">
+		select renamed_recipe_pic from recipe_sequence
+		where recipe_no = #{recipeNo} and recipe_order = #{recipeOrder}
+	</select>
+	
+	<select id="selectGood" resultType="string">
+		select good from good
+		where target_id = #{recipeNo} and member_id = #{memberId}
+	</select>
+	
+	<select id="selectBad" resultType="string">
+		select bad from good
+		where target_id = #{recipeNo} and member_id = #{memberId}
+	</select>
+	
+	<insert id="insertGood">
+		insert into good(target_id, member_id, good, bad)
+		values(#{targetId}, #{memberId}, 1, null)
+	</insert>
+	
+	<insert id="insertBad">
+		insert into good(target_id, member_id, good, bad)
+		values(#{targetId}, #{memberId}, null, 1)
+	</insert>
+	
+	<select id="selectOneGood" resultType="com.kh.urbantable.admin.model.vo.Good">
+		select * from good
+		where target_id = #{targetId} and member_id = #{memberId}
+	</select>
+	
+	<update id="updateGood">
+		update good
+		<set>
+			good =
+			<choose>
+				<when test="good == 0">
+					1
+				</when>
+				<otherwise>
+					null
+				</otherwise>
+			</choose>
+		</set>
+		where target_id = #{targetId} and member_id = #{memberId}
+	</update>
+	
+	<update id="updateBad">
+		update good
+		<set>
+			bad =
+			<choose>
+				<when test="bad == 0">
+					1
+				</when>
+				<otherwise>
+					null
+				</otherwise>
+			</choose>
+		</set>
+		where target_id = #{targetId} and member_id = #{memberId}
+	</update>
+	
+	<select id="goodCount" resultType="int">
+		select count(*) from good
+		where target_id = #{recipeNo} and good = 1
+	</select>
+	
+	<select id="badCount" resultType="int">
+		select count(*) from good
+		where target_id = #{recipeNo} and bad = 1
+	</select>
 </mapper>

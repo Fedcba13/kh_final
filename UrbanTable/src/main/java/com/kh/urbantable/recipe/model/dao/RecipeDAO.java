@@ -2,6 +2,7 @@ package com.kh.urbantable.recipe.model.dao;
 
 import java.util.List;
 
+import com.kh.urbantable.admin.model.vo.Good;
 import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.recipe.model.vo.Blame;
@@ -68,5 +69,29 @@ public interface RecipeDAO {
 	String selectMaterialNo(String materialName);
 
 	int updateRecipe(RecipeVO recipeVo);
+
+	int updateRecipeSequence(List<RecipeSequence> updateSequenceList);
+
+	int deleteRecipeSequence(RecipeSequence deleteSequence);
+
+	String selectRenamedFileName(RecipeSequence rs);
+
+	String selectGood(Recipe r);
+
+	String selectBad(Recipe r);
+
+	int insertGood(Good good);
+
+	int insertBad(Good good);
+
+	Good selectOneGood(Good good);
+
+	int updateGood(Good good);
+
+	int updateBad(Good good);
+
+	int goodCount(String recipeNo);
+
+	int badCount(String recipeNo);
 
 }

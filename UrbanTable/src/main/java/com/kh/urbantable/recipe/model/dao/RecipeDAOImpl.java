@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.urbantable.admin.model.vo.Good;
 import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.recipe.model.vo.Blame;
@@ -157,5 +158,65 @@ public class RecipeDAOImpl implements RecipeDAO {
 	@Override
 	public int updateRecipe(RecipeVO recipeVo) {
 		return sqlSession.update("recipe.updateRecipe", recipeVo);
+	}
+
+	@Override
+	public int updateRecipeSequence(List<RecipeSequence> updateSequenceList) {
+		return sqlSession.update("recipe.updateRecipeSequence", updateSequenceList);
+	}
+
+	@Override
+	public int deleteRecipeSequence(RecipeSequence deleteSequence) {
+		return sqlSession.delete("recipe.deleteRecipeSequence", deleteSequence);
+	}
+
+	@Override
+	public String selectRenamedFileName(RecipeSequence rs) {
+		return sqlSession.selectOne("recipe.selectRenamedFileName", rs);
+	}
+
+	@Override
+	public String selectGood(Recipe r) {
+		return sqlSession.selectOne("recipe.selectGood", r);
+	}
+
+	@Override
+	public String selectBad(Recipe r) {
+		return sqlSession.selectOne("recipe.selectBad", r);
+	}
+
+	@Override
+	public int insertGood(Good good) {
+		return sqlSession.insert("recipe.insertGood", good);
+	}
+
+	@Override
+	public int insertBad(Good good) {
+		return sqlSession.insert("recipe.insertBad", good);
+	}
+
+	@Override
+	public Good selectOneGood(Good good) {
+		return sqlSession.selectOne("recipe.selectOneGood", good);
+	}
+
+	@Override
+	public int updateGood(Good good) {
+		return sqlSession.update("recipe.updateGood", good);
+	}
+
+	@Override
+	public int updateBad(Good good) {
+		return sqlSession.update("recipe.updateBad", good);
+	}
+
+	@Override
+	public int goodCount(String recipeNo) {
+		return sqlSession.selectOne("recipe.goodCount", recipeNo);
+	}
+
+	@Override
+	public int badCount(String recipeNo) {
+		return sqlSession.selectOne("recipe.badCount", recipeNo);
 	}
 }
