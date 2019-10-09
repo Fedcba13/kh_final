@@ -194,7 +194,6 @@ function confirmReview(e){
 		data: param,
 		type: "POST",
 		success: function(data){
-			console.log(data);
 			alert(data.msg);
 			
 			var $tr = $(e.target).parents("tr").prev();

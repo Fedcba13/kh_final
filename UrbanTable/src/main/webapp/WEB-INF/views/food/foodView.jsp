@@ -13,19 +13,59 @@
 	font-weight: bold;
 	color: #374818;
 }
+
+.review_tbl{
+	margin-top: 30px;
+}
+
+.review_tbl tr th{
+	padding: 20px 0;
+}
+
+.review_tbl .btn{
+	width: 50px;
+}
+
+.review_tbl tr > td:nth-child(1){
+	width: 130px;
+}
+
+.review_tbl tr > td:nth-child(2) {
+	text-align: left;
+	padding: 20px 0px 20px 30px;
+}
+
+.review_tbl tr > td:nth-child(3) {
+	width: 250px;
+}
+
+.review_tbl tr > td:nth-child(4) {
+	width: 150px;
+}
+
+.review_tbl tr > td:nth-child(4) > p {
+	display: inline-block;
+	cursor: pointer;
+}
+
+.review_tbl .review_content{
+		width: 80%;
+	}
+
 </style>
+
 <script>
 $(()=>{
-	
-	var marketNo = '${food.marketNo}';
+	var memberId = '${memberLoggedIn.memberId}';
+	var marketNo = '${marketNo}';
 	var foodNo = '${food.foodNo}';
+	var param = {
+			marketNo: marketNo,
+			foodNo : foodNo
+	}
 	
+	console.log(param);
 	$("#noticeStock").click(()=>{
-		
-		var param = {
-				marketNo: marketNo,
-				foodNo : foodNo
-		}
 		
 		$.ajax({
 			url: contextPath + "/member/stockNotice",
@@ -41,7 +81,131 @@ $(()=>{
 		})
 		
 	});
+	
+	$.ajax({
+		url: contextPath + "/member/selectReview",
+		data: param,
+		type: "POST",
+		success: (data)=>{
+			console.log(data.length);
+			console.log(data[0]);
+			for(var i=0; i<data.length; i++){
+				
+				var reviewDate = toDate(data[i].REVIEW_DATE);
+				
+				var html = '';
+				html += '<tr>';
+				html += '	<td>'+data[i].MEMBER_ID+'<input type="hidden" class="pay_detail_no" value="'+data[i].PAY_DETAIL_NO+'"></td>';
+				html += '	<td>'+data[i].REVIEW_CONTENT+'</td>';
+				html += '	<td>'+reviewDate+'</td>';
+				if(data[i].MEMBER_ID == memberId){
+					html += '	<td><p class="modify">수정</p>&nbsp;&nbsp;&nbsp;<p class="delete">삭제</p></td>';
+				}else{
+					html += '	<td><p class="report">신고</p></td>';
+				}
+				html += '</tr>';
+				
+				$(".review_tbl").append(html);
+			}
+			
+			$(".review_tbl .modify").on('click', modifyReview);
+			$(".review_tbl .delete").on('click', deleteReview);
+			
+		},
+		error: (xhr, txtStatus, err)=> {
+			console.log("ajax 처리실패!", xhr, txtStatus, err);
+		}
+	});
+
+	
 });
+
+function modifyReview(e){
+	var txt = $(e.target).parents("tr").children().eq(1).text();
+	$(e.target).parents("tr").children().eq(1).html('<input type="text" value="'+txt+'" class="review_content">');
+	
+	$(e.target).parents("tr").find('.modify').addClass('confirm').removeClass('modify').text('확인').off().click((e)=>{
+		confirmReview(e);
+	});
+	
+	$(e.target).parents("tr").find('.delete').addClass('cancle').removeClass('.delete').text('취소').off().click((e)=>{
+		cancleModify(e);
+	});
+	
+}
+
+function deleteReview(e){
+	var detail_no = $(e.target).parents("tr").find('.pay_detail_no').val();
+	$.ajax({
+		url: contextPath + "/member/deleteReview",
+		data: {detailNo : detail_no},
+		type: "POST",
+		success: function(data){
+			console.log(data);
+			alert(data.msg);
+			
+			$(e.target).parents("tr").remove();
+			
+		},
+		error: function(xhr, txtStatus, err){
+			console.log("ajax 처리 실패", xhr, txtStatus, err);
+		}
+	});
+}
+
+function confirmReview(e){
+	
+	var detail_no = $(e.target).parents("tr").find('.pay_detail_no').val();
+	var txt = $(e.target).parents("tr").find(".review_content").val();
+	
+	var param = {
+			detailNo : detail_no,
+			content : txt
+	}
+	
+	$.ajax({
+		url: contextPath + "/member/modifyReview",
+		data: param,
+		type: "POST",
+		success: function(data){
+			console.log(data);
+			alert(data.msg);
+			
+			var txt = $(e.target).parents("tr").find(".review_content").val();
+			
+			$(e.target).parents("tr").children().eq(1).html(txt);
+			
+			$(e.target).parents("tr").find('.confirm').removeClass('confirm').addClass('modify').text('수정').off().click((e)=>{
+				modifyReview(e);
+			});
+			
+			$(e.target).parents("tr").find('.cancle').removeClass('cancle').addClass('.delete').text('삭제').off().click((e)=>{
+				deleteReview(e);
+			});
+			
+		},
+		error: function(xhr, txtStatus, err){
+			console.log("ajax 처리 실패", xhr, txtStatus, err);
+		}
+	});
+}
+
+function cancleModify(e){
+	
+	var txt = $(e.target).parents("tr").find(".review_content").val()
+	
+	$(e.target).parents("tr").children().eq(1).html(txt);
+	
+	$(e.target).parents("tr").find('.confirm').removeClass('confirm').addClass('modify').text('수정').off().click((e)=>{
+		modifyReview(e);
+	});
+	
+	$(e.target).parents("tr").find('.cancle').removeClass('cancle').addClass('.delete').text('삭제').off().click((e)=>{
+		deleteReview(e);
+	});
+	
+}
+
 </script>
 	<article class="subPage inner">
 	    <h3 class="sub_tit">상품정보</h3>
@@ -135,6 +299,16 @@ $(()=>{
                 </a>
             </li> 
         </ul>
+        
+        <table class="tbl txt_center review_tbl">
+            <tr>
+                <th>작성자</th>
+                <th>한줄평</th>
+                <th>작성일</th>
+                <th></th>
+            </tr>
+        </table>
+        
         <input type="hidden" name="" id="foodNoToRe" value="${food.foodNo }" />
         <input type="hidden" name="" id="memberLoggedInView" value="${memberLoggedIn.memberId }" />
         

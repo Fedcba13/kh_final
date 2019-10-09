@@ -1,6 +1,7 @@
 package com.kh.urbantable.review.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpSession;
@@ -73,5 +74,19 @@ public class ReviewController {
 		resultMap.put("msg", result>0 ? "삭제 성공" : "삭제 실패");
 		
 		return resultMap;
+	}
+	
+	@RequestMapping("/selectReview")
+	public List<Map<String, Object>> selectReview(@RequestParam String marketNo,
+											@RequestParam String foodNo,
+											HttpSession session){
+		
+		Map<String,Object> param = new HashMap<String, Object>();
+		param.put("marketNo", marketNo);
+		param.put("foodNo", foodNo);
+		
+		List<Map<String, Object>> list = reviewService.selectReview(param);
+		
+		return list;
 	}
 }
