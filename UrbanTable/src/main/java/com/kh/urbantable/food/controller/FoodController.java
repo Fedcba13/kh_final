@@ -197,15 +197,15 @@ public class FoodController {
 	@RequestMapping(value = "/goFoodView.do", method = RequestMethod.GET)
 	public String goFoodView(Model model, @RequestParam(value = "foodNo") String foodNo,
 			@RequestParam(value = "marketNo") String marketNo) {
-
+		Market market = foodService.getMarket(marketNo);
 		HashMap<String, String> param = new HashMap<String, String>();
 		param.put("foodNo", foodNo);
 		param.put("marketNo", marketNo);
 		
 		FoodWithStockAndEvent food = foodService.selectFood(param);
-
 		model.addAttribute("food", food);
 		model.addAttribute("marketNo", marketNo);
+		model.addAttribute("market", market);
 
 		return "food/foodView";
 	}
@@ -251,16 +251,6 @@ public class FoodController {
 		
 		
 		Map<String, String> param = new HashMap<String, String>();
-		logger.debug("*****************");
-		logger.debug("*****************");
-		logger.debug("*****************");
-		logger.debug("*****************");
-		logger.debug(foodNo);
-		logger.debug(memberId);
-		logger.debug("*****************");
-		logger.debug("*****************");
-		logger.debug("*****************");
-		logger.debug("*****************");
 		param.put("foodNo", foodNo);
 		param.put("memberId", memberId);
 

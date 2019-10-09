@@ -211,7 +211,14 @@ function cancleModify(e){
 	    <h3 class="sub_tit">상품정보</h3>
 		 <div id="foodExpression">
 		<div id="foodExpressionImg">
-			<img src="${food.foodImg }" alt="상품사진" />
+			<c:if test="${not empty food.foodImg }">
+				<img src="${food.foodImg }" alt="상품 사진">
+			</c:if>
+			<c:if test="${not empty food.foodRenamedFileName }">
+				<img
+					src="${pageContext.request.contextPath}/resources/upload/food/${food.foodRenamedFileName}"
+					alt="상품 사진">
+			</c:if>
 			<div id="good">
 				<div id="dislike">
 					<img
@@ -252,39 +259,72 @@ function cancleModify(e){
 					</tr>
 					<tr>
 						<th>지점</th>
-						<td>${food.marketName }</td>
+						<td>
+							${market.marketName }
+						</td>
 					</tr>
 					<tr>
 						<th>전화번호</th>
-						<td>${food.marketTelephone }</td>
+						<td>
+							${market.marketTelephone }
+						</td>
 					</tr>
 					<tr>
 						<th>구매수량</th>
 						<td>
-							<input id="amount" type="number" placeholder="1">
+						<c:if test="${empty food.marketName }">
+							<p>준비중인 상품입니다!</p>						
+						</c:if>
+						<c:if test="${not empty food.marketName }">
+							<input id="amount" type="number" value="1">
+						</c:if>
+						
 						</td>
 					</tr>
 				</table>
 					<br />
 					<div style="float: right;">
-						<p id="finalPrice">총 상품금액 : 
-						<c:if test="${food.eventPercent ne 0}">
-								<fmt:formatNumber value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) } "
-								pattern="#,###" />원 
+						<c:if test="${empty food.marketName }">
+							<input type="button" id="noticeStock" value="재고 알림" class="btn btn2" >
 						</c:if>
-						<c:if test="${food.eventPercent eq 0}">
-							<fmt:formatNumber value="${food.foodMemberPrice }" pattern="#,###" />원 
+						<c:if test="${not empty food.marketName }">
+							<p id="finalPrice">주문금액 : 
+							<c:if test="${food.eventPercent ne 0}">
+									<fmt:formatNumber value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) } "
+									pattern="#,###" />원 
+							</c:if>
+							<c:if test="${food.eventPercent eq 0}">
+								<fmt:formatNumber value="${food.foodMemberPrice }" pattern="#,###" />원 
+							</c:if>
 						</c:if>
 						</p>
 					</div>
 					<br />
 					<div id="buttons">
-					<img src="${pageContext.request.contextPath }/resources/images/cart.png" alt="" onclick="cartValidate();"/>
-					<button>늘 사는 것</button>
-					<button id="noticeStock">재고알림</button>
+						<c:if test="${not empty food.marketName }">
+							<input type="button" id="noticeStock" value="재고 알림" class="btn btn2" >
+							<input type="button" value="장바구니 담기" class="btn btn" onclick="cartValidate();"/>
+						</c:if>
+						<!-- <button id="noticeStock">재고알림</button> -->
 					</div>
 			</div>
 			</div>
+			<hr>
+			 <section class="sec_bg">
+			 <br />
+			 <h3 class="main_tit txt_center">상품 이미지</h3>
+			 <div id="detailView">
+					 <c:if test="${not empty food.foodImg }">
+						<img src="${food.foodImg }" alt="상품 사진">
+					</c:if>
+					<c:if test="${not empty food.foodRenamedFileName }">
+						<img
+							src="${pageContext.request.contextPath}/resources/upload/food/${food.foodRenamedFileName}"
+							alt="상품 사진">
+					</c:if>
+			 </div>
+			 <br />
+			 </section>
 			<hr>
 			        <h3 class="main_tit txt_center">관련 레시피</h3>
         <ul class="main_event_list main_receipe txt_center clearfix" id="toAppend">
@@ -393,15 +433,16 @@ function cancleModify(e){
 		var foodNo = $("#foodNoToRe").val();
 		var memberId = $("#memberLoggedInView").val();
 		var memberCheck = '${memberLoggedIn.memberCheck}';
+		if(memberCheck != 1){
+			memberId = 'all';
+		}
 		var param = {
 				foodNo : foodNo,
 				memberId : memberId
 		}
-			console.log(memberId);
 		
 		
 		var getGoodInView = function(){
-			console.log("보내기전에 memberId 확인!", memberId);
 			$.ajax({
 		    	url: "${pageContext.request.contextPath}/food/goodOrBad.do",
 		    	type: "get",
@@ -466,7 +507,6 @@ function cancleModify(e){
 			getGoodInView();
 		
 		$(document).on('click', '.did', function(){
-			console.log("did이벤트핸들러");
 			$.ajax({
 		    	url: "${pageContext.request.contextPath}/food/cancelGood.do",
 		    	type: "get",
@@ -480,8 +520,6 @@ function cancleModify(e){
 			});
 		});
 		$(document).on('click', '.didnt', function(){
-			console.log("didnt이벤트핸들러");
-			console.log($(this).attr('id'));
 			 $.ajax({
 		    	url: "${pageContext.request.contextPath}/food/changeGood.do",
 		    	type: "get",
@@ -495,7 +533,6 @@ function cancleModify(e){
 		   	});  
 		});
 		$(document).on('click', '.didntX', function(){
-			console.log("didntToUp이벤트핸들러");
 			var column = $(this).attr('name')
 			
 			var params = {
@@ -517,8 +554,7 @@ function cancleModify(e){
 		   	}); 
 		});
 		$(document).on('click', '.didntXX', function(){
-			console.log("didntXX이벤트핸들러");
-			var column = $(this).attr('name')
+y			var column = $(this).attr('name')
 			var params = {
 				foodNo : foodNo,
 				memberId : memberId,
@@ -551,7 +587,6 @@ function cancleModify(e){
 	   			for(var i in data){
 	   				html += '<li>  <a href="${pageContext.request.contextPath}/recipe/recipeView.do?recipeNo='+data[i].recipeNo+'&memberId='+memberId+'" class="dp_block"><div class="event_img_area">';
 	   				html += '<img src="${pageContext.request.contextPath }/resources/upload/recipe/'+data[i].renamedRecipePic+'">';
-	   				console.log('<img src="${pageContext.request.contextPath }/resources/upload/recipe/'+data[i].renamedRecipePic+'">');
 	   				html += '</div><div class="event_info_area">  <p>'+data[i].recipeTitle+'</p>';
 	   				html += '</div> </a> </li> ';
 	   			} 

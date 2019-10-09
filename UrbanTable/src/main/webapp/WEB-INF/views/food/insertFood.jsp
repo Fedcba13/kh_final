@@ -16,10 +16,10 @@
 	<article class="subPage inner">
 	    <h3 class="sub_tit">서브페이지 제목</h3>
         <form action="${pageContext.request.contextPath}/food/admin/foodInsert.do" id="foodInsertFrm"  method="post" enctype="multipart/form-data">
-	    <table class="tbl txt_center"> <!--가운데 정렬 아니면 txt_center 빼셔도 됩니다.
+	    <table class="tbl" id="insertFoodTb"> <!--가운데 정렬 아니면 txt_center 빼셔도 됩니다.
 	                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->
             <tr>
-                <th>상품명</th>
+                <th >상품명</th>
                 <td><input type="text" name="foodName" id="foodName"/></td>
             <tr>
                 <th>상품 등록자</th>
@@ -47,7 +47,7 @@
 			</select></td>
 		</tr>
 		<tr>
-                <th>납품 업체명</th>
+                <th class="sec_bg">납품 업체명</th>
                 <td><input type="text" name="foodCompany" id="foodCompany"/></td>
             </tr>
             <tr>
@@ -63,8 +63,11 @@
                 <td><input type="file" name="foodImgFile" /></td>
             </tr>
         </table>
+        <br />
 		<div>
-       	<input type="submit" value="등록" onsubmit="return validate();" />
+		<div style="text-align: right">
+       	<input type="submit" class="btn btn2" value="등록" onsubmit="return validate();" />
+		</div>
        	
         </form>
        
@@ -111,7 +114,6 @@
     		url: "${pageContext.request.contextPath}/food/admin/getUpperListToInsertFood.do",
     		data: param,
     		success: (data)=> {
-    			console.log(data);
     			html = "<option selected>중분류</option>";
     			for(var i in data){
     			html += "<option value='"+data[i].foodUpperNo+"'>"+data[i].foodUpperName+"</option>";
@@ -136,7 +138,6 @@
     		url: "${pageContext.request.contextPath}/food/admin/getSectionListToInsertFood.do",
     		data: param,
     		success: (data)=> {
-    			console.log(data);
     			html = "<option selected>소분류</option>";
     			for(var i in data){
     			html += "<option value='"+data[i].foodSectionNo+"'>"+data[i].foodSectionName+"</option>";

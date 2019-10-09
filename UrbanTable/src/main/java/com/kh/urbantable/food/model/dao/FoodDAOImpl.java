@@ -176,6 +176,11 @@ public class FoodDAOImpl implements FoodDAO {
 		return sqlSession.selectOne("food.selectNoStockFood", param);
 	}
 
+	@Override
+	public Market getmarket(String marketNo) {
+		return sqlSession.selectOne("food.getmarket", marketNo);
+	}
+
 
 
 }

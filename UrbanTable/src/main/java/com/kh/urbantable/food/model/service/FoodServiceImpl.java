@@ -184,5 +184,10 @@ public class FoodServiceImpl implements FoodService {
 		return foodDAO.insertGood(param);
 	}
 
+	@Override
+	public Market getMarket(String marketNo) {
+		return foodDAO.getmarket(marketNo);
+	}
+
 
 }

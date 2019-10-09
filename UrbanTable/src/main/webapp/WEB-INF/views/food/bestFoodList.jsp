@@ -15,7 +15,7 @@
 
 <section class="main_sec">
 	<article class="inner">
-	    <h3 class="sub_tit">${empty foodDivisionName? '베스트 전체보기' : foodDivisionName }의 검색결과</h3>
+	    <h3 class="sub_tit">${foodDivisionName=='all'? '베스트 전체보기' : foodDivisionName }의 검색결과</h3>
 	    <select name="marketList" id="marketList" onchange="changeMarket()">
 			<c:forEach items="${marketList}" var="m">
 				<option value="${m.marketNo }" ${m.marketNo eq marketNo? 'selected':' ' }>${m.marketName }</option>

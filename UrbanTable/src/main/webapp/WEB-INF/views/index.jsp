@@ -113,8 +113,7 @@
 	 getUrbanRecFoods();
 	 
 	 $('#allRecFood').click(function(){
-		 console.log("zzzzzzz");
-		 getUrbanRecFoods();
+		 
 	  });
 	 
 	 
@@ -140,10 +139,8 @@
     	url: "${pageContext.request.contextPath}/food/selectFoodInMain3.do",
     	type: "get",
 		data: param,
-		dataType:"json",
    		success: (data)=> {
    			var html = '<ul class="main_prd_list clearfix">';
-   			console.log(data);
    			if(data.length != 0){
 	   			for(var i in data){
 	   				
