@@ -223,22 +223,18 @@ function cancleModify(e){
 				<div id="dislike">
 					<img
 						src="${pageContext.request.contextPath }/resources/images/food/dislike.png" alt="싫어요" id="badImg" name="BAD" />
-						<br />
 						<p id="badText">&lpar;${food.bad }&rpar;</p>
 				</div>
 				<div id="like">
 					<img
 						src="${pageContext.request.contextPath }/resources/images/food/like.png" id="goodImg" alt="좋아요" name="GOOD"/>
-						<br />
 						<p id="goodText">&lpar;${food.good }&rpar;</p>
 				</div>
 			</div>
 		</div>
 		<div id="foodExpressionTb">
 				<p> ${food.foodName }</p>
-				<table class="tbl txt_center">
-					<!--가운데 정렬 아니면 txt_center 빼셔도 됩니다.
-	                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->
+				<table class="tbl">
 					<tr>
 						<th>판매가</th>
 						<td id="foodPrice">
@@ -453,8 +449,8 @@ function cancleModify(e){
 		   			
 	   				//좋아요 싫어요를 아예 못할 사람
 	   				if(memberCheck != 1){
-			   				htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png"  id="goodImg" alt="좋아요" name="GOOD"/> <br /> <p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
-			   				htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png"  id="badImg" alt="싫어요" name="BAD"/><br /> <p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
+			   				htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png"  id="goodImg" alt="좋아요" name="GOOD"/><p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
+			   				htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png"  id="badImg" alt="싫어요" name="BAD"/><p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
 	   				}
 	   				//좋아요 싫어요 가능할
 	   				else{

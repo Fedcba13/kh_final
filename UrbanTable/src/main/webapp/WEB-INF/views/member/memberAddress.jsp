@@ -13,7 +13,7 @@
 	}
 	
 	.address_content{
-   		width: 600px;
+   		/*width: 600px;*/
    		margin-bottom: 30px;
    	}
    
@@ -50,7 +50,7 @@
 	}
 	
 	.addr_tbl td.red{
-		font-size: 12px;
+		font-size: 13px;
 	}
 
 </style>

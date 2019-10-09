@@ -12,10 +12,7 @@
 	}
 	table#cartList td{
 		border-spacing: 15px;
-		padding: 8px;
-	}
-	td input[type="checkbox"]{
-		vertical-align: 43px;
+		padding: 15px 8px;
 	}
 </style>
 <script>
@@ -499,7 +496,7 @@
             </tr>
             <tr>
             	<td>
-            		<input type="button" class="btn btn2" style="border-radius:0px; width:164px" id="searchMarket" value="매장찾기"/>
+            		<input type="button" class="btn btn2" style="border-radius:0px; width:164px; font-size:14px;" id="searchMarket" value="매장찾기"/>
             	</td>
             	<td colspan="3">
             		<input type="text" id="market" size="80" readonly/>
@@ -524,8 +521,7 @@
 	           	</td>
             </tr>
         </table>
-        <br />
-        <table class="tbl tbl_view">
+        <table class="tbl tbl_view" style="margin:30px 0;">
             <tr>
                 <th>총 상품금액</th>
                 <td id="priceSum"></td>
@@ -547,11 +543,10 @@
                 <td id="totalPayment"></td>
             </tr>
         </table>
-        <hr />
         <form action="${pageContext.request.contextPath}/pay/order.do" method="post" id="doOrder">
         	<input type="hidden" name="cartInfo" />        	
 	        <div class="container txt_center" >
-		        <button type="button" class="btn" style="font-size:14px; font-family: 'NanumBarunGothic', sans-serif;" id="order"><h2>주문하기</h2></button>
+		        <button type="button" class="btn" id="order"><h2 style="font-size:17px;">주문하기</h2></button>
 		    </div>        
         </form>
     </article>
@@ -562,7 +557,7 @@
 				<select class="select" name="address" id="addressListModal">
 				</select>
 			</div>
-			<div class="container txt_center" style="background-color:#f4f4f0;">
+			<div class="container txt_center clearfix" style="background-color:#f4f4f0;">
 				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" onclick="closeModal();">취소</button>
 				<button type="button" class="btn btn2" style="float:right; margin-right: 10px; background-color:#374818; color:white;" onclick="submitAddress();">선택</button>
 		    </div>

@@ -1,13 +1,12 @@
 package com.kh.urbantable.event.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -37,14 +36,32 @@ public class EventController {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
+	/*
+	 * @RequestMapping("/eventList.do") public String eventList(Model model) {
+	 * 
+	 * List<EventWithFoodSection> list = eventService.selectEventList();
+	 * 
+	 * logger.info("event={}", list); model.addAttribute("list", list);
+	 * 
+	 * return "/marketOwner/eventList"; }
+	 */
+	
 	@RequestMapping("/eventList.do")
-	public String eventList(Model model) {
-
-		List<EventWithFoodSection> list = eventService.selectEventList();
+	public String eventList(Model model, HttpSession session) {
+		Member memberLoggedIn = (Member) session.getAttribute("memberLoggedIn");
+		logger.info("memberLoggedIn="+memberLoggedIn);
+		
+		int memberChk = memberLoggedIn.getMemberCheck();
+		List<EventWithFoodSection> list = new ArrayList<EventWithFoodSection>();
+		if(memberChk==9) {
+			list = eventService.selectEventList();
+		} else if(memberChk==3) {
+			list = eventService.selectEventListMarketOwner(memberLoggedIn.getMemberId());
+		}
 
 		logger.info("event={}", list);
 		model.addAttribute("list", list);
-
+		
 		return "/marketOwner/eventList";
 	}
 

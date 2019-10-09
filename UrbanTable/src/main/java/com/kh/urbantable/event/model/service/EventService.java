@@ -25,5 +25,7 @@ public interface EventService {
 	List<Event> selectEventAllList();
 
 	List<Coupon> selectAllCoupon();
+	
+	List<EventWithFoodSection> selectEventListMarketOwner(String memberId);
 
 }
