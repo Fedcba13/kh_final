@@ -39,7 +39,7 @@ $(document).ready(function(){
     });
     
     //modal창이 열려 있을 경우, 바탕 클릭시 모달 닫기
-	$(window).click(function(e){
+	$(window).mousedown(function(e){
 		if (e.target == login_modal[0]) {
 			login_modal.css("display", "none");
 	    }
