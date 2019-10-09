@@ -26,7 +26,6 @@
 <script>
 	function mainSrchValidate(){
 		var searchKeyword = $("#searchKeyword").val();
-		console.log(searchKeyword);
 		if(searchKeyword.trim().length == 0){
 			return false;
 		}

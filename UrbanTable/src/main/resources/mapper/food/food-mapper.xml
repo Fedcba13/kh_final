@@ -341,25 +341,6 @@
 				WHERE MEMBER_ID = #{memberId} AND TARGET_ID = #{foodNo}
 			</otherwise>
 		</choose>
-
-<!-- 
-
-
-	SELECT DISTINCT GOOD, BAD, (SELECT COUNT(GOOD) GTOTAL
-	FROM GOOD
-	WHERE TARGET_ID = #{foodNo}
-	GROUP BY TARGET_ID )AS TOTAL_GOOD
-	,(SELECT COUNT(BAD) BTOTAL
-	FROM GOOD
-	WHERE TARGET_ID = #{foodNo}
-	GROUP BY TARGET_ID) AS TOTAL_BAD
-	FROM GOOD 
-		<trim prefix="WHERE" suffixOverrides="AND">
-			TARGET_ID = #{foodNo}
-			<if test="memberId !=null and memberId !=''">
-				AND MEMBER_ID = #{memberId} 
-			</if>
-		</trim> -->
 	</select>
 	<update id="cancelGood">
 		UPDATE GOOD
@@ -418,5 +399,10 @@
                         AND E.EVENT_DATE_START < SYSDATE AND E.EVENT_DATE_END > SYSDATE
                         AND T.STOCK_AMOUNT > 0
 	            ORDER BY E.EVENT_PRICE DESC]]>
+	</select>
+	<select id="getmarket" resultType="market">
+		SELECT *
+		FROM MARKET
+		WHERE MARKET_NO = #{marketNo}
 	</select>
 </mapper>

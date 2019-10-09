@@ -75,4 +75,6 @@ public interface FoodDAO {
 
 	FoodWithStockAndEvent selectNoStockFood(HashMap<String, String> param);
 
+	Market getmarket(String marketNo);
+
 }
