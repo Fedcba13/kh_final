@@ -554,7 +554,7 @@ function cancleModify(e){
 		   	}); 
 		});
 		$(document).on('click', '.didntXX', function(){
-y			var column = $(this).attr('name')
+			var column = $(this).attr('name')
 			var params = {
 				foodNo : foodNo,
 				memberId : memberId,

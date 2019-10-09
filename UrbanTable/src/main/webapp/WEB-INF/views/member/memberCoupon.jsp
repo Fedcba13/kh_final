@@ -18,7 +18,7 @@
 }
 
 .coupon .coupon-card{
-	width: 350px;
+	width: calc(50% - 20px);
 	border: 1px solid black;
 	display: inline-block;
 	margin: 10px;
@@ -57,7 +57,7 @@
 
 .coupon{
 	float: right;
-	width: 760px;
+	width: 730px;
 }
 </style>
 
@@ -105,7 +105,7 @@ function getCoupon(){
 					}
 				}
 	    		html += '<div class="date">사용기간 : '+startDate+' ~ '+endDate+'</div>';
-	    		html += '<div class="minPrice">최소주문금액 : '+data[i].COUPON_MIN_PRICE+'</div>';
+                html += '<div class="minPrice">최소주문금액 : '+comma(data[i].COUPON_MIN_PRICE)+'원</div>';
 	    		html += '</div>';
 	    		
 	    		$(".couponPage .coupon").append(html);
@@ -124,9 +124,9 @@ function getCoupon(){
 		    <jsp:include page="/WEB-INF/views/member/memberNav.jsp" />
 		    <div class="coupon">
 		    	<h3 class="sub_tit" style="background-color: white;">쿠폰 관리</h3>
-		    	<input type="radio" value="" id="couponAll" checked="checked" name="coupon"><label for="couponAll">전체보기</label>
-		    	<input type="radio" value="1" id="couponY" name="coupon"><label for="couponY">사용가능쿠폰</label>		    	
-		    	<input type="radio" value="0" id="couponN" name="coupon"><label for="couponN">사용불가쿠폰</label>		    	
+		    	<input type="radio" value="" id="couponAll" checked="checked" name="coupon">&nbsp;&nbsp;<label for="couponAll">전체보기</label>
+		    	<input type="radio" value="1" id="couponY" name="coupon">&nbsp;&nbsp;<label for="couponY">사용가능쿠폰</label>		    	
+		    	<input type="radio" value="0" id="couponN" name="coupon">&nbsp;&nbsp;<label for="couponN">사용불가쿠폰</label>		    	
 		    	<br>
 	        </div>
         </div>
