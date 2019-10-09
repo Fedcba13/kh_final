@@ -116,7 +116,7 @@
 		
 	<select id="getMemberPayDetail" resultType="map">
 	select P.PAY_NO,PAY_DETAIL_NO, PAY_DATE, PAY_PRICE, PAY_FLAG, DELIVER_TYPE, MARKET_NAME, PAY_DETAIL_AMOUNT,
-			FOOD_NAME, FOOD_IMG, (select r.review_content from review r where r.PAY_DETAIL_NO = pd.PAY_DETAIL_NO) review
+			FOOD_NAME, FOOD_IMG, (select r.review_content from review r where r.PAY_DETAIL_NO = pd.PAY_DETAIL_NO and r.review_enabled = 1) review
 	from pay p
 	    left join market m
 	        on p.market_no = m.market_no

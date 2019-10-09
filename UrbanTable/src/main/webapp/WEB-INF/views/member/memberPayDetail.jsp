@@ -38,7 +38,7 @@
 		margin-top: 30px;
 	}
 	
-	table.pay_detail_tbl .modify_btn, table.pay_detail_tbl .delete_btn{
+	table.pay_detail_tbl .modify_btn, table.pay_detail_tbl .delete_btn, table.pay_detail_tbl .confirm_btn{
 		width: 50px;	
 	}
 	
@@ -60,7 +60,8 @@
 <script>
 $(()=>{
 	$(".write_review").on('click', writeReview);
-	$(".modify_btn").on('click', modify_btn);
+	$(".modify_btn").on('click', modifyReview);
+	$(".delete_btn").on('click', deleteReview);
 });	
 
 function writeReview(e){
@@ -104,8 +105,16 @@ function writeReview(e){
 				
 				var $tr = $(e.target).parents("tr").prev();
 				$tr.next().remove();
-				$tr.after('<tr class="review sec_bg"><td colspan="3">'+param.content+'</td><td><input type="button" value="수정" class="btn modify_btn"><input type="button" value="삭제" class="btn btn2 delete_btn"></td></tr>');
+				$tr.after('<tr class="review sec_bg"><td colspan="3">'+param.content+'</td><td><input type="button" value="수정" class="btn modify_btn"> <input type="button" value="삭제" class="btn btn2 delete_btn"></td></tr>');
+				$tr.find('.cancle_review').removeClass('cancle_review').off().val('리뷰 완료');
+
+				$tr.next().find('.modify_btn').click((e)=>{
+					modifyReview(e);
+				});
 				
+				$tr.next().find('.delete_btn').click((e)=>{
+					deleteReview(e);
+				});
 				
 			},
 			error: function(xhr, txtStatus, err){
@@ -130,9 +139,96 @@ function cancleReview(e){
 	
 }
 
-function modify_btn(e){
+function modifyReview(e){
 	var txt = $(e.target).parents("tr").children().eq(0).text();
 	$(e.target).parents("tr").children().eq(0).html('<input type="text" value="'+txt+'" class="review_content">');
+	
+	$(e.target).parents("tr").find('.modify_btn').addClass('confirm_btn').removeClass('modify_btn').val('확인').off().click((e)=>{
+		confirmReview(e);
+	});
+	
+	$(e.target).parents("tr").find('.delete_btn').addClass('cancle_btn').removeClass('.delete_btn').val('취소').off().click((e)=>{
+		cancleModify(e);
+	});
+	
+}
+
+function deleteReview(e){
+	var detail_no = $(e.target).parents("tr").prev().find('.order_detail_no').val();
+	$.ajax({
+		url: contextPath + "/member/deleteReview",
+		data: {detailNo : detail_no},
+		type: "POST",
+		success: function(data){
+			console.log(data);
+			alert(data.msg);
+			
+			var $tr = $(e.target).parents("tr").prev();
+			$tr.next().remove();
+			
+			$tr.find("input[type=button][value='리뷰 완료']").addClass('write_review').removeClass('btn2').val('리뷰 쓰기');
+			
+			$tr.find(".write_review").off().click((e)=>{
+				writeReview(e);
+			});
+			
+		},
+		error: function(xhr, txtStatus, err){
+			console.log("ajax 처리 실패", xhr, txtStatus, err);
+		}
+	});
+}
+
+function confirmReview(e){
+	
+	var detail_no = $(e.target).parents("tr").prev().find('.order_detail_no').val();
+	var txt = $(e.target).parents("tr").find(".review_content").val();
+	
+	var param = {
+			detailNo : detail_no,
+			content : txt
+	}
+	
+	$.ajax({
+		url: contextPath + "/member/modifyReview",
+		data: param,
+		type: "POST",
+		success: function(data){
+			alert(data.msg);
+			
+			var $tr = $(e.target).parents("tr").prev();
+			$tr.next().remove();
+			$tr.after('<tr class="review sec_bg"><td colspan="3">'+param.content+'</td><td><input type="button" value="수정" class="btn modify_btn"> <input type="button" value="삭제" class="btn btn2 delete_btn"></td></tr>');
+			
+			$tr.next().find('.modify_btn').click((e)=>{
+				modifyReview(e);
+			});
+			
+			$tr.next().find('.delete_btn').click((e)=>{
+				deleteReview(e);
+			});
+			
+		},
+		error: function(xhr, txtStatus, err){
+			console.log("ajax 처리 실패", xhr, txtStatus, err);
+		}
+	});
+}
+
+function cancleModify(e){
+	
+	var txt = $(e.target).parents("tr").find(".review_content").val()
+	
+	$(e.target).parents("tr").children().eq(0).html(txt);
+	
+	$(e.target).parents("tr").find('.confirm_btn').removeClass('confirm_btn').addClass('modify_btn').val('수정').off().click((e)=>{
+		modifyReview(e);
+	});
+	
+	$(e.target).parents("tr").find('.cancle_btn').removeClass('cancle_btn').addClass('.delete_btn').val('삭제').off().click((e)=>{
+		deleteReview(e);
+	});
+	
 }
 
 </script>

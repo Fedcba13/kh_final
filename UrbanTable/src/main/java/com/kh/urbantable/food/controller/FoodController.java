@@ -205,6 +205,7 @@ public class FoodController {
 		FoodWithStockAndEvent food = foodService.selectFood(param);
 
 		model.addAttribute("food", food);
+		model.addAttribute("marketNo", marketNo);
 
 		return "food/foodView";
 	}

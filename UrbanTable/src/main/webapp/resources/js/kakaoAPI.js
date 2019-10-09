@@ -1,5 +1,7 @@
 //카카오 주소찾기 api
-function sample6_execDaumPostcode() {
+function sample6_execDaumPostcode(onClose) {
+	
+	console.log(onClose);
 	
 	var width = 500; //팝업의 너비
 	var height = 600; //팝업의 높이
@@ -20,33 +22,36 @@ function sample6_execDaumPostcode() {
 				addr = data.jibunAddress;
 			}
 			
-			//table 속성을 추가한다.
-			$(".tbl_addr>th").attr("rowspan", "3");
-			if($(".tbl_addr1").length == 0){
-				var html = '';
-					html += '<tr class="tbl_addr1">';
-					html += '<td><input type="text" value="" name="memberAddress"></td>';
-					html += '</tr>';
-					html += '<tr class="tbl_addr2">';
-					html += '<td><input type="text" value="" placeholder="세부주소를 입력해주세요." maxlength="35" name="memberAddress2">';
-					html += '<p>';
-					html += '<span class="txt"></span>';
-					html += '</p>';
-					html += '</td>';
-					html += '</tr>';
-				$(".member_register").append(html);
+			if(onClose == 'on'){
+				
+			}else{
+				//table 속성을 추가한다.
+				$(".tbl_addr>th").attr("rowspan", "3");
+				if($(".tbl_addr1").length == 0){
+					var html = '';
+						html += '<tr class="tbl_addr1">';
+						html += '<td><input type="text" value="" name="memberAddress"></td>';
+						html += '</tr>';
+						html += '<tr class="tbl_addr2">';
+						html += '<td><input type="text" value="" placeholder="세부주소를 입력해주세요." maxlength="35" name="memberAddress2">';
+						html += '<p>';
+						html += '<span class="txt"></span>';
+						html += '</p>';
+						html += '</td>';
+						html += '</tr>';
+					$(".member_register").append(html);
+				}
+				
+				//주소 정보를 해당 필드에 넣는다.
+				$(".tbl_addr1 input").val(addr);
+				
+				// 커서를 상세주소 필드로 이동한다.
+				$(".tbl_addr2 input").val('');
+				$(".tbl_addr2 input").focus();
 			}
-			
-			//주소 정보를 해당 필드에 넣는다.
-			$(".tbl_addr1 input").val(addr);
-			
-			// 커서를 상세주소 필드로 이동한다.
-			$(".tbl_addr2 input").val('');
-			$(".tbl_addr2 input").focus();
-			
 			$.ajax({
 				url: contextPath+"/member/nearMarket.do",
-				data : {address: $("[name=memberAddress]").val()},
+				data : {address: addr},
 				success: (data)=>{
 					alert(data.msg);
 				},

@@ -116,22 +116,23 @@
 
 	<insert id="insertStockNotice">
 		insert into stock_notice
-		values(#{memberId}, #{foodNo}, sysdate)
+		values(#{memberId}, #{foodNo}, sysdate, #{marketNo})
 	</insert>
 	
 	<select id="selectStockNotice" resultType="_int">
 		select count(*) cnt from stock_notice
-		where member_id = #{memberId} and food_no = #{foodNo}
+		where member_id = #{memberId} and food_no = #{foodNo} and market_no = #{marketNo}
 	</select>
 	
 	<select id="sendMsgStockNotice" resultType="map">
 		select * from(  
-        select sn.member_id, sn.food_no, m.member_phone, fs.food_section_name, (select count(*) from market_order mo
+        select sn.market_no, sn.member_id, sn.food_no, m.member_phone, fs.food_section_name, (select count(*) from market_order mo
                                                                     left join market_order_detail mod
                                                                         on mo.market_order_no = mod.market_order_no
                                                                     where mod.food_no = sn.food_no
                                                                     	and mo.market_order_date > sn.notice_date
-                                                                    	 and mo.market_order_flag = 1) flag
+                                                                    	 and mo.market_order_flag = 1
+                                                                    	 and mo.market_no = #{marketNo}) flag
         from stock_notice sn
             left join member m
                 on sn.member_id = m.member_id
@@ -145,6 +146,7 @@
 		delete from stock_notice
 			where member_id = #{memberId}
 				and food_no = #{foodNo}
+				and market_no = #{marketNo}
 	</delete>
 
 </mapper>

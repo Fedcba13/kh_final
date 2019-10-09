@@ -92,6 +92,11 @@ $(document).ready(function(){
 		$(".login-modal [name=autoLogin]").prop("disabled", !$(".login-modal [name=saveId]").prop("checked"));
 	}
 	
+	//배송지역 검색
+	$("#header .srch_delivery").click(()=>{
+		sample6_execDaumPostcode('on');
+	});
+	
 });
 
 var toDate = function(prevDate){
