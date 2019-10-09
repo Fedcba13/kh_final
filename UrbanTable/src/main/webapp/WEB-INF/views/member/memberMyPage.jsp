@@ -5,9 +5,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
-<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/kakaoAPI.js" charset="UTF-8"></script>
-
 
 <style>
 .myPage .good{
@@ -48,6 +45,10 @@ color: #0f851a;
 
 .myPage input[type="text"].disabled{
 	color: #555;
+}
+
+.myPage .myPage_content{
+	width: 700px;
 }
 
 </style>
@@ -177,7 +178,7 @@ $(()=>{
 <section>
 	<article class="subPage inner myPage">
 	    <jsp:include page="/WEB-INF/views/member/memberNav.jsp" />
-	    <div class="sec_bg">
+	    <div class="myPage_content">
 	    	<h3 class="sub_tit" style="background-color: white;">개인정보수정</h3>
 	    	<form id="form_myPage">
 			    <table class="tbl tbl_view member_mypage">
@@ -217,12 +218,9 @@ $(()=>{
 						<th>휴대폰</th>
 						<td><input type="text" name="memberPhone" maxlength="11" readonly="readonly" value="${memberLoggedIn.memberPhone }"></td>
 					</tr>
-					<tr class="tbl_addr">
-						<th rowspan="3">배송주소</th>
-						<td><input type="button" value="주소 변경" class="btn btn3" onclick="sample6_execDaumPostcode()"></td>
-					</tr>
 					<tr class="tbl_addr1">
-						<td><input type="text" name="memberAddress" readonly="readonly" value="${memberLoggedIn.memberAddress }"></td>
+						<th rowspan="2">배송주소</th>
+						<td><input type="text" name="memberAddress" readonly="readonly" value="${memberLoggedIn.memberAddress }"><input type="button" value="주소 변경" class="btn btn3" onclick="execDaumPostcode()"></td>
 					</tr>
 					<tr class="tbl_addr2">
 						<td><input type="text" placeholder="세부주소를 입력해주세요." maxlength="35" name="memberAddress2" value="${memberLoggedIn.memberAddress2 }"></td>

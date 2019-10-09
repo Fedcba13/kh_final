@@ -48,7 +48,12 @@ function blameChk(no){
 	    			<td>${b.blameTargetId }</td>
 	    			<td>${b.blameDate}</td>
 	    			<input type="hidden" id="blameId${vs.index }" value="${b.blameId }"/>
+	    			<c:if test="${b.blameAction eq 0 }">
+	    				<td><input type="button" value="처리완료" class="btn btn2" disable/></td>
+	    			</c:if>
+	    			<c:if test="${b.blameAction eq 1 }">
 	    			<td><input type="button" value="ㅡ" class="btn" style="width:50px;" onclick="blameChk(${vs.index})"/></td>
+	    			</c:if>
 	    			</tr>
 	    		</c:forEach>
 
@@ -58,7 +63,6 @@ function blameChk(no){
 	    		<div id="orderTotal"></div>
 	    	</div>
 	    </div>
-	    ${list }
 	    <div class="popupWrap"></div>
     </article>
 

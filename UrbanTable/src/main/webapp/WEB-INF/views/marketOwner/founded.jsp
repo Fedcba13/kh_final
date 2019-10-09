@@ -6,7 +6,6 @@
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/marketOwner.css">
-<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="${pageContext.request.contextPath }/resources/js/founded.js"></script>
 
 <section>

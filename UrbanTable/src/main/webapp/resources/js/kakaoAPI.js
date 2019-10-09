@@ -1,5 +1,5 @@
 //카카오 주소찾기 api
-function sample6_execDaumPostcode(onClose) {
+function execDaumPostcode(onClose) {
 	
 	console.log(onClose);
 	
@@ -43,11 +43,11 @@ function sample6_execDaumPostcode(onClose) {
 				}
 				
 				//주소 정보를 해당 필드에 넣는다.
-				$(".tbl_addr1 input").val(addr);
+				$(".tbl_addr1 input[type='text']").val(addr);
 				
 				// 커서를 상세주소 필드로 이동한다.
-				$(".tbl_addr2 input").val('');
-				$(".tbl_addr2 input").focus();
+				$(".tbl_addr2 input[type='text']").val('');
+				$(".tbl_addr2 input[type='text']").focus();
 			}
 			$.ajax({
 				url: contextPath+"/member/nearMarket.do",

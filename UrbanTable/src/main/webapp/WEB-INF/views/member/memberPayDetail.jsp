@@ -44,7 +44,7 @@
 	
 	table.pay_detail_tbl .review > td:nth-child(1){
 		 text-align: left;
-		 padding-left: 30px;
+		 padding-left: 10px;
 	}
 	
 	table.pay_detail_tbl input[type=button][value='리뷰 완료']{
@@ -52,7 +52,7 @@
 	}
 	
 	table.pay_detail_tbl .review_content{
-		width: 80%;
+		width: 460px;
 	}
 	
 </style>

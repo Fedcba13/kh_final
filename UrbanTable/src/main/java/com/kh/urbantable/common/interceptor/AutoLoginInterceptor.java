@@ -1,7 +1,5 @@
 package com.kh.urbantable.common.interceptor;
 
-import java.io.PrintWriter;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,9 +25,7 @@ public class AutoLoginInterceptor extends HandlerInterceptorAdapter {
 		//자동로그인 처리
 		boolean isMember = request.getSession().getAttribute("memberLoggedIn") == null;
 		
-		//자동로그인시
 		if(isMember) {
-			//자동 로그인
 			String cookieKey = Utils.getCookies(request, "autoLoginCookie");
 			
 			if(cookieKey != null) {
@@ -42,8 +38,6 @@ public class AutoLoginInterceptor extends HandlerInterceptorAdapter {
 				if(member != null) {
 					//세션 추가
 					request.getSession().setAttribute("memberLoggedIn", member);
-					
-					System.out.println(member.toString());
 					
 					//쿠키 재설정
 					Cookie cookie = new Cookie("autoLoginCookie", cookieKey);

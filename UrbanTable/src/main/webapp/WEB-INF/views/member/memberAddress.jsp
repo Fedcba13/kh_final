@@ -5,8 +5,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
-<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/kakaoAPI.js" charset="UTF-8"></script>
 
 <style>
 
@@ -15,9 +13,7 @@
 	}
 	
 	.address_content{
-   		border-top: 2px solid #374818;
-   		border-bottom: 2px solid #374818;
-   		width: 600px;
+   		/*width: 600px;*/
    		margin-bottom: 30px;
    	}
    
@@ -26,12 +22,17 @@
    	}
    	
    	.address-card{
-   		padding: 10px;
-   		border: 1px solid #e9e9e9;
+   		border-width: 0 1px;
+   		border-style: solid;
+   		border-color: #e9e9e9;
    	}
    	
    	.address .insertAddr, .address .confirmAddr{
    		margin-right: 30px;
+   	}
+   	
+   	.addr_tbl{
+   		margin-bottom: 15px;
    	}
    	
    	.addr_tbl .modifyAddr, .addr_tbl .confirmAddr{
@@ -46,6 +47,10 @@
 	.addr_tbl tr > td input:not([type="button"]){
 		width: 300px;
 		margin-right: 15px;
+	}
+	
+	.addr_tbl td.red{
+		font-size: 13px;
 	}
 
 </style>
@@ -92,7 +97,7 @@ $(()=>{
 			});
 			
 			$(".srchAddr").click(()=>{
-				sample6_execDaumPostcode();	
+				execDaumPostcode();	
 			});
 			
 			$(".confirmAddr").off();
@@ -142,7 +147,7 @@ $(()=>{
 		$tbl.find('[name=address]').prop('name', 'memberAddress');
 		$tbl.find('[name=address2]').prop('name', 'memberAddress2').prop("readonly", false);
 		
-		sample6_execDaumPostcode();
+		execDaumPostcode();
 		
 		//모든 함수 제거
 		$(".confirmAddr").off();
@@ -205,7 +210,7 @@ $(()=>{
 			    		<div class="address-card">
 			    				<table class="tbl tbl_view addr_tbl">
 			    					<tr>
-			    						<td>
+			    						<td class="sec_bg">
 			    							<input type="hidden" id="addr_id" value="${address.ADDRESS_NO }">
 			    							<c:if test="${vs.count == 1 }">
 						    					기본 주소
@@ -222,18 +227,20 @@ $(()=>{
 										<td><input type="text" name="address" readonly="readonly" value="${address.MEMBER_ADDRESS }"></td>
 									</tr>
 									<tr class="addr2">
-										<td><input type="text" placeholder="세부주소를 입력해주세요." maxlength="35" name="address2" readonly="readonly" value="${address.MEMBER_ADDRESS2 }"></td>
-									</tr>
-									<tr>
 										<td>
-											<c:if test="${vs.count == 1 }">
-												기본배송지는 수정 불가합니다.
-											</c:if>
+											<input type="text" placeholder="세부주소를 입력해주세요." maxlength="35" name="address2" readonly="readonly" value="${address.MEMBER_ADDRESS2 }">
 											<c:if test="${vs.count != 1 }">
 												<input type="button" class="btn modifyAddr" value="주소 수정">
 												<input type="button" class="btn btn2 deleteAddr" value="삭제">
 											</c:if>
 										</td>
+									</tr>
+									<tr>
+										<c:if test="${vs.count == 1 }">
+											<td class="red">
+												기본배송지는 수정 불가합니다.
+											</td>
+										</c:if>
 									</tr>
 			    				</table>
 			    		</div>

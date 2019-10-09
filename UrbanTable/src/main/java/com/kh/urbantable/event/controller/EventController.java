@@ -1,6 +1,7 @@
 package com.kh.urbantable.event.controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,10 +36,28 @@ public class EventController {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
 
+	/*
+	 * @RequestMapping("/eventList.do") public String eventList(Model model) {
+	 * 
+	 * List<EventWithFoodSection> list = eventService.selectEventList();
+	 * 
+	 * logger.info("event={}", list); model.addAttribute("list", list);
+	 * 
+	 * return "/marketOwner/eventList"; }
+	 */
+	
 	@RequestMapping("/eventList.do")
-	public String eventList(Model model) {
-
-		List<EventWithFoodSection> list = eventService.selectEventList();
+	public String eventList(Model model, HttpSession session) {
+		Member memberLoggedIn = (Member) session.getAttribute("memberLoggedIn");
+		logger.info("memberLoggedIn="+memberLoggedIn);
+		
+		int memberChk = memberLoggedIn.getMemberCheck();
+		List<EventWithFoodSection> list = new ArrayList<EventWithFoodSection>();
+		if(memberChk==9) {
+			list = eventService.selectEventList();
+		} else if(memberChk==3) {
+			list = eventService.selectEventListMarketOwner(memberLoggedIn.getMemberId());
+		}
 
 		logger.info("event={}", list);
 		model.addAttribute("list", list);
@@ -50,7 +69,9 @@ public class EventController {
 	public String insertCoupun1(Member memberLoggedIn, Model model, HttpSession session, Coupon coupon) {
 
 		memberLoggedIn = (Member) session.getAttribute("memberLoggedIn");
-
+		
+		if(memberLoggedIn != null) {
+			
 		Map<String, String> event = new HashMap();
 		event.put("memberId", memberLoggedIn.getMemberId());
 		event.put("couponDiscount", coupon.getCouponDiscount());
@@ -59,11 +80,15 @@ public class EventController {
 
 		String msg = "";
 		String loc = "";
-		model.addAttribute("msg", result > 0 ? "쿠폰발급이 완료되었습니다" : "관리자에게 문의하세요");
-		model.addAttribute("loc", "/event/eventList.do");
+		model.addAttribute("msg", result > 0 ? "쿠폰발급이 완료되었습니다" : "이미 쿠폰이 지급되었습니다.");
+		model.addAttribute("loc", "/event/eventMain.do");
+		}else {
+			model.addAttribute("msg", "로그인 후 이용해주세요");
+			model.addAttribute("loc", "/");
+		}
 
 		return "/common/msg";
-		
+
 	}
 
 	@RequestMapping("/marketEventEnroll.do")
@@ -102,7 +127,7 @@ public class EventController {
 
 	@PostMapping("/marketEventEnrollEnd.do")
 	public String marketEventEnrollEnd(Event event, @RequestParam("eventCategory1") String eventCategory1,
-										@RequestParam("eventFile1") MultipartFile eventFile, HttpServletRequest request) {
+			@RequestParam("eventFile1") MultipartFile eventFile, HttpServletRequest request) {
 
 		logger.info("event={}", event);
 		logger.info("event={}", eventCategory1);
@@ -131,34 +156,34 @@ public class EventController {
 
 		return "marketOwner/marketEventEnroll";
 	}
-	
+
 	@RequestMapping("/deleteEvent.do")
 	public String deleteEvent(@RequestParam("eventId") String eventId, Model model) {
-		
+
 		eventService.deleteEvent(eventId);
-		
+
 		List<EventWithFoodSection> list = eventService.selectEventList();
 
 		logger.info("event={}", list);
 		model.addAttribute("list", list);
-		
+
 		return "/marketOwner/eventList";
 	}
 
 	@RequestMapping("/mainEventList.do")
 	@ResponseBody
 	public List<Event> mailList(Model model) {
-		
+
 		List<Event> list = eventService.selectEventAllList();
-		
+
 		logger.info("list={}", list);
 		return list;
 	}
-	
+
 	@RequestMapping("/eventMain.do")
 	public String eventMail() {
-		
+
 		return "/event/event_main";
 	}
-	
+
 }

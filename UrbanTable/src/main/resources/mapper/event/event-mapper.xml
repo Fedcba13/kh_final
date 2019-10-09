@@ -87,7 +87,18 @@
 	</update>
 	
 	<select id="selectEventAllList" resultType="event">
-		select * from event where event_enabled = 1 and event_file is not null
+		select * from event where event_enabled = 1 and event_file is not null and event_date_start = '2019/10/04'
+	</select>
+	
+	<select id="selectAllCoupon" resultType="coupon">
+		select * from coupon where coupon_enabled = 1
+	</select>
+	
+	<select id="selectEventListMarketOwner" resultType="eventWithFoodSection">
+		select e.*, food_section_name,market_name
+		from event e left join food_section on event_category = food_section_no
+        	    left join market m on e.market_no = m.market_no
+       	where event_enabled = 1 and e.market_no=#{marketNo}
 	</select>
 	
 </mapper>
