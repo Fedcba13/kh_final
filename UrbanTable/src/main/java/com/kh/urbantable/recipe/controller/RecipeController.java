@@ -134,6 +134,8 @@ public class RecipeController {
 		
 		set.add(section + "-" + searchResult);
 		
+		logger.info("a" + set.toString());
+		
 		return set;
 	}
 	
@@ -141,7 +143,15 @@ public class RecipeController {
 	@GetMapping("/materialDelete/{index}")
 	public List<String> materialDelete(@PathVariable("index") String index, @RequestParam("materialSet") String materialSet) {
 		
-		set.remove(Integer.parseInt(index) - 1);
+		logger.info("a" + set.toString());
+		logger.info(index);
+		
+		int removeIndex = set.indexOf(index);
+		if(removeIndex != -1) {
+			set.remove(removeIndex);
+		}
+		
+		logger.info("a" + set.toString());
 		
 		return set;
 	}

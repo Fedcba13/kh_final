@@ -196,21 +196,23 @@ function materialInsert(){
 
 function materialDeleteEvent(e) {
 	var $this = $(e.target);
-	console.log($this);
+	console.log('1');
 	
 	var text = $(".mate_li[value='" + $this.val() + "']").text();
+	console.log('2');
 	
-		console.log(".mate_li[value='" + $this.val() + "']");
-		$(".mate_li[value='" + $this.val() + "']").remove();
-		$this.remove(); 
-		$this.remove();
-		$this.prev().remove();
+	$(".mate_li[value='" + $this.val() + "']").remove();
+	console.log('3');
+	$this.remove();
+	console.log('4');
+	$this.prev().remove();
+	console.log('5');
 		
 		
 		var arr = text.split(">");
 		var materialName = arr[1];
-		
-		console.log(materialName);
+		console.log('6');
+		console.log('7');
 
 		if($("#materialOldSet").val().indexOf(materialName) != -1) {
 			$.ajax({
@@ -230,22 +232,21 @@ function materialDeleteEvent(e) {
 				}
 			});
 		} else {
-			$.ajax({
-				url: "${pageContext.request.contextPath}/recipe/materialDelete/" + materialName,
-				data: {materialSet: materialSet},
-				dataType: "json",
+			 $.ajax({
+	            url: "${pageContext.request.contextPath}/recipe/materialDelete/" + materialName,
+                data: {materialSet: $("#materialSet").val()},
 				type: "GET",
 				success: (data)=>{
 					console.log(data);
 					//$("#materialSet").val(data);
-					
+					console.log('9');
 				},
 				error: (xhr, txtStatus, err)=> {
 					console.log("ajax 처리실패!", xhr, txtStatus, err);
 				}
-			});	
+			});	  
 		}
-		$this.off();
+		console.log('10');
 }
 
 function tabEvent() {
