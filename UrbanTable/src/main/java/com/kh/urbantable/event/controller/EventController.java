@@ -52,7 +52,9 @@ public class EventController {
 	public String insertCoupun1(Member memberLoggedIn, Model model, HttpSession session, Coupon coupon) {
 
 		memberLoggedIn = (Member) session.getAttribute("memberLoggedIn");
-
+		
+		if(memberLoggedIn != null) {
+			
 		Map<String, String> event = new HashMap();
 		event.put("memberId", memberLoggedIn.getMemberId());
 		event.put("couponDiscount", coupon.getCouponDiscount());
@@ -63,6 +65,10 @@ public class EventController {
 		String loc = "";
 		model.addAttribute("msg", result > 0 ? "쿠폰발급이 완료되었습니다" : "이미 쿠폰이 지급되었습니다.");
 		model.addAttribute("loc", "/event/eventMain.do");
+		}else {
+			model.addAttribute("msg", "로그인 후 이용해주세요");
+			model.addAttribute("loc", "/");
+		}
 
 		return "/common/msg";
 
