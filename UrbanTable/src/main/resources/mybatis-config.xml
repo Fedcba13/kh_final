@@ -10,6 +10,8 @@
 		<setting name="callSettersOnNulls" value="true"/>
 	</settings>
 	<typeAliases>
+		<typeAlias type="com.kh.urbantable.faq.model.vo.Faq"
+			alias="faq"/>
 		<typeAlias type="com.kh.urbantable.recipe.model.vo.Blame"
 			alias="blame" />
 		<typeAlias type="com.kh.urbantable.event.model.vo.EventWithFoodSection"
