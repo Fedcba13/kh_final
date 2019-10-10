@@ -78,32 +78,34 @@ $(()=> {
 							$(this).val(0);
 						}
 					}
-					alert($(this).val());
+					alert("a" + $(this).val());
 				}
 			},
 			error: (xhr, txtStatus, err)=> {
 				console.log("ajax 처리실패!", xhr, txtStatus, err);
+			},complete: ()=>{
+				$.ajax({
+					url: "${pageContext.request.contextPath}/recipe/countGoodorBad",
+					data: {type: type, targetId: targetId},
+					dataType: "json",
+					type: "GET",
+					success: (data)=>{
+						if(type == "good") {
+							console.log(data);
+							alert(type);
+							$("#good>p").html(data);
+						} else {
+							$("#bad>p").html(data);
+						}
+					},
+					error: (xhr, txtStatus, err)=> {
+						console.log("ajax 처리실패!", xhr, txtStatus, err);
+					}
+				});
 			}
 		});
 		
-		$.ajax({
-			url: "${pageContext.request.contextPath}/recipe/countGoodorBad",
-			data: {type: type, targetId: targetId},
-			dataType: "json",
-			type: "GET",
-			success: (data)=>{
-				console.log(data);
-				alert(data);
-				if(type == "good") {
-					$("#good>p").html(data);
-				} else {
-					$("#bad>p").html(data);
-				}
-			},
-			error: (xhr, txtStatus, err)=> {
-				console.log("ajax 처리실패!", xhr, txtStatus, err);
-			}
-		});
+		
 	});
 	
 	$(".reply_btn").on("click", function(e) {
@@ -309,7 +311,14 @@ $(()=> {
         <table class="recipe_sequence_table">
         	<c:forEach items="${recipe.recipeSequenceList}" var="rec">
         		<tr>
-	        		<td class="recipeImgTd"><img id="recipeImg" src="${pageContext.request.contextPath}/resources/upload/recipe/${rec.renamedRecipePic}" alt="" /></td>
+	        		<td class="recipeImgTd">
+	        		<c:if test="${rec.renamedRecipePic != null }">
+		        		<img id="recipeImg" src="${pageContext.request.contextPath}/resources/upload/recipe/${rec.renamedRecipePic}" alt="" />	        		
+	        		</c:if>
+	        		<c:if test="${rec.renamedRecipePic == null}">
+				        <img class="recipeImg" src="${pageContext.request.contextPath}/resources/images/recipe/noImage.png" alt="" />
+				    </c:if>
+	        		</td>
 		        	<td class="recipeContentTd">${rec.recipeContent}</td>        		
         		</tr>
         	</c:forEach>

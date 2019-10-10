@@ -94,4 +94,6 @@ public interface RecipeDAO {
 
 	int badCount(String recipeNo);
 
+	List<Recipe> selectRecipeSearchList(String searchName);
+
 }

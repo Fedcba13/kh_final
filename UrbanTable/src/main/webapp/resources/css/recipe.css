@@ -240,8 +240,8 @@ hr {
 }
 
 #recipeRecomImage {
-	width: 400px;
-	height: 400px;
+	width: 450px;
+	height: 450px;
 }
 
 .recipeList {
@@ -250,7 +250,7 @@ hr {
 
 .recipeList>a>li {
 	border: 1px solid #c0c0c0;
-	width: 400px;
+	width: 450px;
 	text-align: center;
 	font-size: 25px;
 	float: left;
@@ -258,9 +258,13 @@ hr {
 	margin-bottom: 20px;
 }
 
+.recipeList li:nth-child(2n) {
+	background: red;
+	margin-right: 0px;
+}
+
 .recipeListDiv {
 	overflow: hidden;
-	text-align: center;
 }
 
 #recomOlDiv {
@@ -321,4 +325,13 @@ hr {
 #bad {
 	border: 1px solid #5383D6;
 	color: #5383D6;
+}
+
+.best {
+	color: #ff8080;
+	font-style: italic;
+}
+
+.searchDiv {
+	text-align: right;
 }

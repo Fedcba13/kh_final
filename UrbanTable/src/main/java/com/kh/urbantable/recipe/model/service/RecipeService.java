@@ -94,4 +94,6 @@ public interface RecipeService {
 
 	int badCount(String recipeNo);
 
+	List<Recipe> selectRecipeSearchList(String searchName);
+
 }

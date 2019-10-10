@@ -219,4 +219,9 @@ public class RecipeDAOImpl implements RecipeDAO {
 	public int badCount(String recipeNo) {
 		return sqlSession.selectOne("recipe.badCount", recipeNo);
 	}
+
+	@Override
+	public List<Recipe> selectRecipeSearchList(String searchName) {
+		return sqlSession.selectList("recipe.selectRecipeSearchList", searchName);
+	}
 }

@@ -165,6 +165,16 @@ $(()=> {
 	pic_Event();
 	
 	$(".btn_insert").on("click", function() {
+		if($("#recipe_title").val() == null || $("#recipe_title").val() == "") {
+			alert("레시피 제목을 입력해주세요!");
+			return false;
+		}
+		
+		if($(".recipe_content").val() == null || $(".recipe_content").val() == "") {
+			alert("레시피를 입력해주세요!");
+			return false;
+		}
+		
 		if(index != 2) {
 			if($("#upload_name" + (index-1)).val() == null || $("#upload_name" + (index-1)).val() == "") {
 				alert("마지막 탭에 사진을 첨부해주세요!");

@@ -218,4 +218,9 @@ public class RecipeServiceImpl implements RecipeService {
 	public int badCount(String recipeNo) {
 		return recipeDAO.badCount(recipeNo);
 	}
+
+	@Override
+	public List<Recipe> selectRecipeSearchList(String searchName) {
+		return recipeDAO.selectRecipeSearchList(searchName);
+	}
 }

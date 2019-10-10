@@ -4,11 +4,19 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="recipe">
 	<select id="selectRecipeList" resultMap="recipeMap">
-		select * from recipe A where recipe_enabled = 1 order by recipe_date desc
+		select r.*, (select count(*) from good g where g.target_id = r.recipe_no and good = 1) goodCount from recipe r where recipe_enabled = 1 order by goodCount, recipe_date desc
 	</select>
+	
 	<select id="selectRecipeIndexList" resultMap="recipeMap">
-		select * from recipe A where recipe_enabled = 1 order by recipe_date desc
+		select r.*, (select count(*) from good g where g.target_id = r.recipe_no and good = 1) goodCount from recipe r where recipe_enabled = 1 order by goodCount, recipe_date desc
 	</select>
+	
+	<select id="selectRecipeSearchList" resultMap="recipeMap">
+		select r.*, (select count(*) from good g where g.target_id = r.recipe_no and good = 1)
+		 goodCount from recipe r where recipe_enabled = 1 and recipe_title like '%' || #{searchName} || '%'
+		  order by goodCount, recipe_date desc
+	</select>
+	
 	<resultMap type="recipe" id="recipeMap">
 		<result column="recipe_no" property="recipeNo" />
 		<result column="member_id" property="memberId" />
@@ -263,7 +271,7 @@
 	
 	<delete id="deleteRecipeSequence">
 		delete from recipe_sequence
-		where recipe_no = #{recipeNo} and recipe_order => #{recipeOrder}
+		where recipe_no = #{recipeNo} and recipe_order >= #{recipeOrder}
 	</delete>
 	
 	<select id="selectRenamedFileName" resultType="string">

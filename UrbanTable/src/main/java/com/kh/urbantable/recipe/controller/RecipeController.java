@@ -1,6 +1,7 @@
 package com.kh.urbantable.recipe.controller;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -258,11 +259,14 @@ public class RecipeController {
 	}
 	
 	@RequestMapping("/recipeUpdateEnd.do")
-	public String recipeUpdateEnd(RecipeVO recipeVo, MultipartFile[] recipePic,
-			@RequestParam("materialSet") String materialSet,// @RequestParam(value="uploadNames") String[] uploadNames,
+	public String recipeUpdateEnd(RecipeVO recipeVo, 
+			MultipartFile[] recipePic,
+			@RequestParam("materialSet") String materialSet,
 			@RequestParam("updateLastOrder") int updateLastOrder, @RequestParam("sequenceLast") int sequenceLast,
 			Model model, HttpServletRequest request) {
 		logger.debug(materialSet);
+		String[] uploadNames = request.getParameterValues("upload_name_origin");
+		logger.info(Arrays.toString(uploadNames));
 		
 		int recipe_result = recipeService.updateRecipe(recipeVo);
 		
@@ -302,13 +306,13 @@ public class RecipeController {
 						e.printStackTrace();
 					}
 				} else {
-//					if(!uploadNames[i].equals("")) {
-//						RecipeSequence rs = new RecipeSequence();
-//						originalFileName = uploadNames[i];
-//						rs.setRecipeNo(recipeNo);
-//						rs.setRecipeOrder(i+1);
-//						renamedFileName = recipeService.selectRenamedFileName(rs);
-//					}
+					if(!uploadNames[i].equals("")) {
+						RecipeSequence rs = new RecipeSequence();
+						originalFileName = uploadNames[i];
+						rs.setRecipeNo(recipeNo);
+						rs.setRecipeOrder(i+1);
+						renamedFileName = recipeService.selectRenamedFileName(rs);
+					}
 				}
 				
 				RecipeSequence recipeSequence = new RecipeSequence();
@@ -321,10 +325,8 @@ public class RecipeController {
 				
 				if(recipeVo.getRecipeSequenceList().get(i).getRecipeOrder() <= sequenceLast) {
 					updateSequenceList.add(recipeSequence);
-					logger.info(recipeVo.getRecipeSequenceList().get(i).getRecipeOrder() + "업뎃");
 				} else {
 					sequenceList.add(recipeSequence);
-					logger.info(recipeVo.getRecipeSequenceList().get(i).getRecipeOrder() + "인설트");
 				}
 				
 				i++;
@@ -375,11 +377,7 @@ public class RecipeController {
 				msg = ingredient_result>0?"레시피 수정 성공!":"레시피 수정 실패!";
 			}
 			
-			if(sequence_update_result>0) {
-				msg = "레시피 수정 성공!";
-			} else {
-				msg = "레시피 수정 실패!";
-			}
+			msg = "레시피 수정 성공!";
 			
 			model.addAttribute("msg", msg);
 			model.addAttribute("loc", "/recipe/recipe");
@@ -636,6 +634,35 @@ public class RecipeController {
 		}
 		
 		return result;
+	}
+	
+	@RequestMapping("/recipeSearch")
+	public String recipeSearch(@RequestParam("searchName") String searchName, HttpServletRequest request) {
+
+		int totalCount = recipeService.selectRecipeListCnt();
+
+        Paging paging = new Paging();
+        paging.setPageNo(1);
+        paging.setPageSize(10);
+        paging.setTotalCount(totalCount);
+        
+        List<Recipe> list = recipeService.selectRecipeSearchList(searchName);
+        List<String> imageList = new ArrayList<String>();
+        for(int i=0; i<list.size(); i++) {
+        	String renamedFileName = recipeService.selectLastImage(list.get(i).getRecipeNo());
+        	
+        	if(renamedFileName != null && renamedFileName != "") {
+        		imageList.add(renamedFileName);        		
+        	}
+        	
+        }
+		
+		request.setAttribute("list", list);
+		request.setAttribute("paging", paging);
+		request.setAttribute("image", imageList);
+//		logger.debug("list=" + list);
+		
+		return "recipe/search";
 	}
 
 }

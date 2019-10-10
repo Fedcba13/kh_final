@@ -41,6 +41,19 @@ table>tr {
 	cursor: pointer;
 	cursor: hand;
 }
+
+.searchFoodImg {
+	width: 200px;
+}
+
+.foodTable {
+	margin-top: 50px;
+}
+
+.image {
+	width: 250px;
+	height: 250px;
+}
 </style>
 <script>
 $(()=> {
@@ -64,7 +77,7 @@ $(()=> {
 				} else {
 					for(var i=0; i<data.length; i++) {
 						html += "<tr foodName='" + data[i].foodName + "' foodNo='" + data[i].foodNo + "'>";
-						html += "<td class='image'></td>";
+						html += "<td class='image'><img class='searchFoodImg' src='" + data[i].foodImg + "' alt='' /></td>";
 						html += "<td class='foodName'>" + data[i].foodName + "</td>";
 						html += "</tr>";
 					}
@@ -90,6 +103,6 @@ $(()=> {
 		<input type="text" id="searchName" />
 		<button class="btn">검색</button>	
 	</div>
-		<table></table>
+		<table class="foodTable"></table>
 </body>
 </html>
