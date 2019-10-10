@@ -277,7 +277,7 @@
 				and P.pay_date >= to_date(#{payStartDate}, 'yy/MM/dd')
 				</if>
 				<if test="payEndDate!=null and payEndDate!=''">
-				and (P.pay_date between to_date(#{payStartDate}, 'yy/MM/dd') and (to_date(#{payEndDate}, 'yy/MM/dd')+1))
+				and (P.pay_date between to_date(#{payStartDate}, 'yyyy-MM-dd') and (to_date(#{payEndDate}, 'yyyy-MM-dd')+1))
 				</if>
 			</if>
 			<if test="payStartDate==''">

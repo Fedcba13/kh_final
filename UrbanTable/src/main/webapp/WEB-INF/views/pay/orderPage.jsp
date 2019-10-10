@@ -7,12 +7,22 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <script src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js" type="text/javascript"></script>
 <style>
+	#open {
+		padding: 0 0 40px;
+	}
+	#open span {
+		padding:7px 20px;
+		background:#374818;
+		border-radius:0 0 5px 5px;
+		color:#fff;
+	}
+	
 	#open:hover{
 		cursor: pointer;
 	}
-	.tbl_view tr th{
+	/* .tbl_view tr th{
 		background: white;
-	}
+	} */
 	input[type='text'] {
 		border:0px;
 		background: white;
@@ -106,9 +116,9 @@
 		$("#open").on("click", ()=>{
 			$("#list").slideToggle(300, function(){
 				if($("#list").css("display") == "none"){
-					$("#open").text("펼치기");
+					$("#open span").text("펼치기");
 				} else {
-					$("#open").text("접기");					
+					$("#open span").text("접기");					
 				}
 			});
 		});
@@ -493,7 +503,7 @@
 	    <table class="tbl txt_center"> <!--가운데 정렬 아니면 txt_center 빼셔도 됩니다.
 	                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->
             <thead>
-	            <tr>
+	            <tr class="sec_bg">
 	                <th colspan="3" id="totalList"></th>
 	                <th id="totalCost"></th>                
 	            </tr>
@@ -503,7 +513,7 @@
             </tbody>
             <tfoot>
 	            <tr>
-	                <td colspan="4" id="open">접기</td>
+	                <td colspan="4" id="open"><span class="dp_ib">접기</span></td>
 	                
 	            </tr>
             </tfoot>
@@ -525,7 +535,7 @@
             </tr>
             <tr>
             	<th>배송지 상세주소</th>
-            	<td>
+            	<td colspan="2">
             		<input type="text" id="userAddressDetailField" size="50" value="" readonly/>
             	</td>
             </tr>
@@ -535,8 +545,8 @@
                 	<input type="text" id="marketAddressField" size="50" readonly/>
                 	<input type="hidden" id="marketNo" />
                 </td>
-                <td>
-                	&nbsp;&nbsp;<input type="button" id="marketAddress" class="btn" style="border-radius:0px;" value="매장변경" />
+                <td class="txt_right">
+                	&nbsp;&nbsp;<input type="button" id="marketAddress" class="btn btn2 txt_center" style="border-radius:0px; width:120px;" value="매장변경" />
                 </td>
             </tr>
             <tr>
@@ -554,23 +564,22 @@
                 	<input type="hidden" id="couponId" value=""/>
                 	<input type="hidden" id="couponDiscount" value=""/>
                 </td>
-                <td>&nbsp;&nbsp;<input type="button" id="selectCoupon" class="btn" style="border-radius:0px;" value="쿠폰사용" /></td>
+                <td class="txt_right">&nbsp;&nbsp;<input type="button" id="selectCoupon" class="btn txt_center btn2" style="border-radius:0px; width:120px;" value="쿠폰사용" /></td>
             </tr>
             <tr>
             	<th>포인트 사용</th>
             	<td>
             		<input type="text" id="memberPoint" size="50" placeholder="1000포인트 이상 보유시 사용할수 있습니다" readonly/>
             	</td>
-            	<td>&nbsp;&nbsp;<input type="button" id="showPoint" class="btn" style="border-radius:0px;" value="포인트 보기"/></td>
+            	<td class="txt_right">&nbsp;&nbsp;<input type="button" id="showPoint" class="btn txt_center btn2" style="border-radius:0px; width:120px;" value="포인트 보기"/></td>
             </tr>
             <tr>
                 <th>총 결제금액</th>
                 <td colspan="2"><input type="text" id="totalPaymentCost" size="50" readonly/></td>
             </tr>
-            <tr>
-                <th colspan="2"><span class="red" style="font-size: 20px; font-weigth: bold;">※결제를 진행하기 전에 결제정보를 꼼꼼히 확인해 주세요</span></th>                
-            </tr>
         </table>
+        
+        <p class="red" style="font-size:15px; padding:7px 0 40px;">※결제를 진행하기 전에 결제정보를 꼼꼼히 확인해 주세요</p>
   
         <table class="tbl tbl_view" >
             <tr>

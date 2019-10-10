@@ -6,6 +6,10 @@
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <style>
+	input[name='list']{
+	        vertical-align: 44px;
+	}
+	
 	input[name='totalDiscountPrice']{
 		border: 0px;
 		background-color: white;
@@ -150,7 +154,7 @@
 							foodInfo += "<td><input type='checkbox' name='list' id='check"+${vs.count}+"' checked='true' onclick='checkManage(this)'/>&nbsp;&nbsp;&nbsp;";
 							foodInfo += "<img src='"+data.FOOD_IMG+"' width='92px' height='130px'/></td>";
 							foodInfo += "<td name='foodName'>[" + data.FOOD_COMPANY + "] " + data.FOOD_NAME + "</td>";
-							foodInfo += "<td> <input type='button' class='btn btn3' style='width:30px; background-color:#ccffff; color: black; border:0;' value='-' onclick='del(this);'>&nbsp;<input type='text' name='amount' value='" + ${l.cartAmount} + "' size='5' style='text-align:center;' onchange='change(this);'>&nbsp;<input type='button' class='btn btn3' style='width:30px; background-color:#ccffff; color: black; border:0;' value='+' onclick='add(this);'></td>";
+							foodInfo += "<td> <input type='button' class='btn' style='width:30px; border-radius:0;' value='-' onclick='del(this);'>&nbsp;<input type='text' name='amount' value='" + ${l.cartAmount} + "' size='5' style='text-align:center;' onchange='change(this);'>&nbsp;<input type='button' class='btn' style='width:30px; border-radius:0;' value='+' onclick='add(this);'></td>";
 							foodInfo += "<td><input type='text' name='totalDiscountPrice' value='"+Math.floor((data.FOOD_MEMBER_PRICE * (1-dc/100))/10)*10 * ${l.cartAmount}+"' size='11' style='text-align:center;' readonly></td>";
 							foodInfo += "<input type='hidden' name='totalPrice' value='" + data.FOOD_MEMBER_PRICE * ${l.cartAmount} + "' size='11' style='text-align:center;' readonly>"
 							foodInfo += "</tr>";
@@ -497,31 +501,20 @@
             		<label for="regular">정기배송</label>&nbsp;
             	</td>	
             </tr>
-            <tr>
-            	<td>
-            		<input type="button" class="btn btn2" style="border-radius:0px; width:164px; font-size:14px;" id="searchMarket" value="매장찾기"/>
-            	</td>
-            	<td colspan="3">
-            		<input type="text" id="market" size="80" readonly/>
+            <tr class="txt_left">
+            	<td colspan="4">
+            		<input type="text" id="market" size="80" style="width:600px;" readonly/>
             		<input type="hidden" id="marketNo" />
+            		<input type="button" class="btn" style="margin-left:10px; border-radius:0px; width:183px; font-size:14px;" id="searchMarket" value="매장찾기"/>
             	</td>
             </tr>
-            <tr>
-            	<td>
-            		<input type="button" class="btn btn2" style="border-radius:0px; width:80px;" id="deliveryAddress" value="배송지변경" />
-            		<input type="button" class="btn btn2" style="border-radius:0px; width:80px;" id="addressList" value="배송지목록" />
+            <tr class="txt_left">
+            	<td colspan="4">
+            		<input type="text" id="userAddressField" style="width:600px;" size="80" readonly/>    
+            		<input type="button" class="btn btn2" style="margin-left:10px; border-radius:0px; width:90px;" id="deliveryAddress" value="배송지변경" />
+            		<input type="button" class="btn btn2" style="border-radius:0px; width:90px;" id="addressList" value="배송지목록" />
+            		<input type="text" id="userAddressDetailField" size="80" style="width:600px; margin-top:10px;" readonly/>	            	
             	</td>
-            	<td colspan="3">
-            		<input type="text" id="userAddressField" size="80" readonly/>    		            	
-            	</td>
-            </tr>
-            <tr>
-	            <td>
-	            	상세주소
-	            </td>
-	           	<td colspan="3">
-	            	<input type="text" id="userAddressDetailField" size="80" readonly/>
-	           	</td>
             </tr>
         </table>
         <table class="tbl tbl_view" style="margin:30px 0;">
