@@ -5,11 +5,17 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
-<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js" type="text/javascript"></script>
 <style>
 	#open:hover{
 		cursor: pointer;
+	}
+	.tbl_view tr th{
+		background: white;
+	}
+	input[type='text'] {
+		border:0px;
+		background: white;
 	}
 </style>
 <script>
@@ -93,7 +99,7 @@
 		getCartList();
 		getCouponList();
 		$("#open").on("click", ()=>{
-			$("#list").slideToggle(100, "swing", function(){
+			$("#list").slideToggle(300, function(){
 				if($("#list").css("display") == "none"){
 					$("#open").text("펼치기");
 				} else {
@@ -258,8 +264,12 @@
 	}
 	
 	function submitPoint(){
+		var maxPoint = ${memberLoggedIn.memberPoint}
 		if($("#usePoint").val() < 1000 && $("#usePoint").val() != 0){
 			alert("최소 1000포인트부터 사용하실수 있습니다");
+			return ;
+		} else if($("#usePoint").val() > maxPoint && $("#usePoint").val() != 0){
+			alert("보유하신 포인트 이상을 사용할수 없습니다.");
 			return ;
 		}
 		$("#showPointModal").css("display", "none");
@@ -463,9 +473,16 @@
 		$("#showPointModal").css("display", "none");
 	}
 	
+	function enterKey(e){
+		if(e.keyCode == 13){
+			submitPoint();
+			return false;
+		}
+	}
+	
 </script>
 
-<section class="sec_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
+<section> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 	    <h3 class="sub_tit">주문하기</h3>
 	    <table class="tbl txt_center"> <!--가운데 정렬 아니면 txt_center 빼셔도 됩니다.
@@ -476,12 +493,12 @@
 	                <th id="totalCost"></th>                
 	            </tr>
             </thead>
-            <tbody id="list" style="display: none;">
+            <tbody id="list" style="display: block;">
             	
             </tbody>
             <tfoot>
 	            <tr>
-	                <td colspan="4" id="open">펼치기</td>
+	                <td colspan="4" id="open">접기</td>
 	                
 	            </tr>
             </tfoot>
@@ -514,7 +531,7 @@
                 	<input type="hidden" id="marketNo" />
                 </td>
                 <td>
-                	&nbsp;&nbsp;<input type="button" id="marketAddress" class="btn" value="매장변경" />
+                	&nbsp;&nbsp;<input type="button" id="marketAddress" class="btn" style="border-radius:0px;" value="매장변경" />
                 </td>
             </tr>
             <tr>
@@ -532,63 +549,65 @@
                 	<input type="hidden" id="couponId" value=""/>
                 	<input type="hidden" id="couponDiscount" value=""/>
                 </td>
-                <td>&nbsp;&nbsp;<input type="button" id="selectCoupon" class="btn" value="쿠폰사용" /></td>
+                <td>&nbsp;&nbsp;<input type="button" id="selectCoupon" class="btn" style="border-radius:0px;" value="쿠폰사용" /></td>
             </tr>
             <tr>
             	<th>포인트 사용</th>
             	<td>
             		<input type="text" id="memberPoint" size="50" placeholder="1000포인트 이상 보유시 사용할수 있습니다" readonly/>
             	</td>
-            	<td>&nbsp;&nbsp;<input type="button" id="showPoint" class="btn" value="포인트 보기"/></td>
+            	<td>&nbsp;&nbsp;<input type="button" id="showPoint" class="btn" style="border-radius:0px;" value="포인트 보기"/></td>
             </tr>
             <tr>
                 <th>총 결제금액</th>
                 <td colspan="2"><input type="text" id="totalPaymentCost" size="50" readonly/></td>
             </tr>
             <tr>
-                <th colspan="2">※결제를 진행하기 전에 결제정보를 꼼꼼히 확인해 주세요</th>                
+                <th colspan="2"><span class="red" style="font-size: 20px; font-weigth: bold;">※결제를 진행하기 전에 결제정보를 꼼꼼히 확인해 주세요</span></th>                
             </tr>
         </table>
-        <hr />
+  
         <table class="tbl tbl_view" >
             <tr>
                 <th>결제방식</th>
                 <td>
                 	<input type="radio" name="paymentWay" id="card" value="card" checked/>
-                	<label for="card">카드</label>
+                	<label for="card">카드</label>&nbsp;&nbsp;&nbsp;&nbsp;
                 	<input type="radio" name="paymentWay" id="bank" value="vbank"/>
-                	<label for="bank">무통장입금</label>
+                	<label for="bank">무통장입금</label>&nbsp;&nbsp;&nbsp;&nbsp;
                 	<input type="radio" name="paymentWay" id="mobile" value="phone"/>
-                	<label for="mobile">휴대폰</label>
+                	<label for="mobile">휴대폰</label>&nbsp;&nbsp;&nbsp;&nbsp;
                 </td>
             </tr>
         </table>
-        <input type="hidden" id="payNo" />
-        <input type="button" class="btn" value="결제하기" id="pay-btn"/>
+        <br />
+        <div class="container txt_center">
+	        <input type="hidden" id="payNo" />
+	        <input type="button" class="btn" style="border-radius:0px;" value="결제하기" id="pay-btn"/>        
+        </div>
     </article>
     <div class="modal txt_center" id="selectCouponModal">
 		<form class="modal-content animate">
 			<div class="container txt_center">
-				<span>쿠폰을 선택하세요(유효기간이 지난 쿠폰은 자동으로 삭제됩니다)</span><br />
+				<span>쿠폰을 선택하세요(유효기간이 지난 쿠폰은 자동으로 삭제됩니다)</span><br /><hr />
 				<select class="select" name="coupons" id="couponList">
 				</select>
 			</div>
 			<div class="container txt_center" style="background-color:#f4f4f0;">
 				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" onclick="closeModal();">취소</button>
-				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" onclick="submitCoupon();">쿠폰선택</button>
+				<button type="button" class="btn btn2" style="float:right; margin-right: 10px; background-color:#374818; color:white;" onclick="submitCoupon();">쿠폰선택</button>
 		    </div>
 		</form>
 	</div>
     <div class="modal txt_center" id="showPointModal">
 		<form class="modal-content animate">
 			<div class="container txt_center">
-				<span>${memberLoggedIn.memberId}님이 보유하고 있는 포인트는 총 ${memberLoggedIn.memberPoint}점 입니다</span><br />
-				<input type="number" id="usePoint" style="width: 100px;" value=0 max="${memberLoggedIn.memberPoint}" min="1000"/> 포인트 사용
-				</select>
+				<span><span style="color: blue; font-weight:bold;">${memberLoggedIn.memberId}님</span>이 보유하고 있는 포인트는 총 <span style="color:red; font-weight:bold;">${memberLoggedIn.memberPoint}점 </span>입니다.</span><br /><hr />
+				<input type="number" id="usePoint" style="width: 100px;" value=0 max="${memberLoggedIn.memberPoint}" min="1000" onkeypress="return enterKey(event);"/> 포인트 사용
 			</div>
 			<div class="container txt_center" style="background-color:#f4f4f0;">
 				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" onclick="closePoint();">취소</button>
-				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" onclick="submitPoint();">포인트사용</button>
+				<button type="button" class="btn btn2" style="float:right; margin-right: 10px; background-color:#374818; color:white;" onclick="submitPoint();">포인트사용</button>
 		    </div>
 		</form>
 	</div>

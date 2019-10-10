@@ -134,6 +134,8 @@ public class RecipeController {
 		
 		set.add(section + "-" + searchResult);
 		
+		logger.info("a" + set.toString());
+		
 		return set;
 	}
 	
@@ -141,7 +143,15 @@ public class RecipeController {
 	@GetMapping("/materialDelete/{index}")
 	public List<String> materialDelete(@PathVariable("index") String index, @RequestParam("materialSet") String materialSet) {
 		
-		set.remove(Integer.parseInt(index) - 1);
+		logger.info("a" + set.toString());
+		logger.info(index);
+		
+		int removeIndex = set.indexOf(index);
+		if(removeIndex != -1) {
+			set.remove(removeIndex);
+		}
+		
+		logger.info("a" + set.toString());
 		
 		return set;
 	}
@@ -234,6 +244,105 @@ public class RecipeController {
 				msg = "레시피 등록 성공!";
 			} else {
 				msg = "레시피 등록 실패!";
+			}
+			
+			model.addAttribute("msg", msg);
+			model.addAttribute("loc", "/recipe/recipe");
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return "common/msg";
+	}
+	
+	@RequestMapping("/recipeUpdateEnd.do")
+	public String recipeUpdateEnd(RecipeVO recipeVo, MultipartFile[] recipePic,
+			@RequestParam("materialSet") String materialSet, @RequestParam("memberId") String memberId,
+			Model model, HttpServletRequest request) {
+		logger.debug(materialSet);
+		recipeVo.setMemberId(memberId);
+		
+		int recipe_result = recipeService.updateRecipe(recipeVo);
+		
+		String msg = "";
+		String recipeNo = recipeVo.getRecipeNo();
+
+		if(recipe_result>0) {
+			
+		} else {
+			msg = "레시피 수정 실패!";
+			model.addAttribute("msg", msg);
+			model.addAttribute("loc", "/recipe/recipe");
+			return "common/msg";
+		}
+		
+		try {
+			String saveDirectory = request.getSession().getServletContext().getRealPath("/resources/upload/recipe");
+			
+			List<RecipeSequence> sequenceList = new ArrayList<RecipeSequence>();
+			String originalFileName = "";
+			String renamedFileName = "";
+			int i = 0;
+			
+			for(MultipartFile f : recipePic) {
+				if(!f.isEmpty()) {
+					originalFileName = f.getOriginalFilename();
+					String ext = originalFileName.substring(originalFileName.lastIndexOf(".")+1);
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
+					int rndNum = new Random().nextInt(1000);
+					renamedFileName = sdf.format(new Date()) + "_" + rndNum + "." + ext;
+					
+					try {
+						f.transferTo(new File(saveDirectory + "/" + renamedFileName));
+					} catch(Exception e) {
+						e.printStackTrace();
+					}
+				}
+				
+				RecipeSequence recipeSequence = new RecipeSequence();
+				recipeSequence.setRecipeNo(recipeNo);
+				recipeSequence.setRecipeOrder(recipeVo.getRecipeSequenceList().get(i).getRecipeOrder());
+				recipeSequence.setRecipeContent(recipeVo.getRecipeSequenceList().get(i).getRecipeContent());
+				recipeSequence.setOriginalRecipePic(originalFileName);
+				recipeSequence.setRenamedRecipePic(renamedFileName);
+				sequenceList.add(recipeSequence);
+				
+				i++;
+			}
+			
+			logger.debug(sequenceList.toString());
+			
+			int sequence_result = recipeService.insertRecipeSequence(sequenceList);
+			
+			List<Material> materialList = new ArrayList<Material>();
+			
+			String[] materialArr = materialSet.split(",");
+			
+			
+			logger.debug(Arrays.toString(materialArr));
+			
+			for(int j = 0; j<materialArr.length; j++) {
+				logger.debug(materialArr[j]);
+				String[] ingreArray = materialArr[j].split("-");
+				logger.debug(Arrays.toString(ingreArray));
+				String foodSectionNo = recipeService.selectFoodSectionNo(ingreArray[0]);
+				
+				Material material = new Material();
+				material.setRecipeNo(recipeNo);
+				material.setFoodSectionNo(foodSectionNo);
+				if(ingreArray.length == 2) {
+					material.setFoodNo(ingreArray[1]);									
+					logger.debug(ingreArray[1]);
+				}
+				materialList.add(material);
+			}
+			
+			int ingredient_result = recipeService.insertRecipeIngredient(materialList);
+			
+			if(sequence_result>0 && ingredient_result>0) {
+				msg = "레시피 수정 성공!";
+			} else {
+				msg = "레시피 수정 실패!";
 			}
 			
 			model.addAttribute("msg", msg);
@@ -390,6 +499,29 @@ public class RecipeController {
 		}
 		
 		return "common/msg";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/materialOldDelete/{materialName}")
+	public int materialOldDelete(@PathVariable("materialName") String materialName) {
+		
+		int result = 0;
+		String materialNo = recipeService.selectMaterialNo(materialName);
+		
+		try {
+			result = recipeService.materialOldDelete(materialNo);
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+	
+	@RequestMapping("/recipeBlame")
+	public String recipeBlame(@RequestParam("recipeNo") String recipeNo, Model model) {
+		
+		model.addAttribute(recipeNo);
+		return "recipe/blame";
 	}
 
 }

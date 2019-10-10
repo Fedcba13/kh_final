@@ -73,5 +73,7 @@ public interface FoodService {
 
 	int insertGood(Map<String, String> param);
 
+	Market getMarket(String marketNo);
+
 
 }

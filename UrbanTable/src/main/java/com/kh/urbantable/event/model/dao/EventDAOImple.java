@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.kh.urbantable.event.model.vo.Coupon;
 import com.kh.urbantable.event.model.vo.Event;
 import com.kh.urbantable.event.model.vo.EventWithFoodSection;
 import com.kh.urbantable.member.model.vo.Member;
@@ -57,5 +58,16 @@ public class EventDAOImple implements EventDAO{
 	public List<Event> selectEventAllList() {
 		
 		return sqlSession.selectList("event.selectEventAllList");
+	}
+
+	@Override
+	public List<Coupon> selectAllCoupon() {
+		
+		return sqlSession.selectList("event.selectAllCoupon");
+	}
+	
+	@Override
+	public List<EventWithFoodSection> selectEventListMarketOwner(String marketNo) {
+		return sqlSession.selectList("event.selectEventListMarketOwner", marketNo);
 	}
 }

@@ -1,5 +1,6 @@
 package com.kh.urbantable.event.model.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kh.urbantable.event.model.dao.EventDAO;
+import com.kh.urbantable.event.model.vo.Coupon;
 import com.kh.urbantable.event.model.vo.Event;
 import com.kh.urbantable.event.model.vo.EventWithFoodSection;
 import com.kh.urbantable.member.model.vo.Member;
@@ -54,9 +56,25 @@ public class EventServiceImpl implements EventService{
 	}
 
 	@Override
-	public List<Event> selectEventAllList() {// TODO Auto-generated method stub
+	public List<Event> selectEventAllList() {
 		
 		return eventDAO.selectEventAllList();
+	}
+
+	@Override
+	public List<Coupon> selectAllCoupon() {
+
+		return eventDAO.selectAllCoupon();
+	}
+	
+	@Override
+	public List<EventWithFoodSection> selectEventListMarketOwner(String memberId) {
+		String marketNo = eventDAO.selectMarketNoByMemberId(memberId);
+		List<EventWithFoodSection> list = new ArrayList<EventWithFoodSection>();
+		if(marketNo!=null) {
+			list = eventDAO.selectEventListMarketOwner(marketNo);
+		}
+		return list;
 	}
 	
 	

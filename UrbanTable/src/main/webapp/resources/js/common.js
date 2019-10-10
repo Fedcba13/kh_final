@@ -39,7 +39,7 @@ $(document).ready(function(){
     });
     
     //modal창이 열려 있을 경우, 바탕 클릭시 모달 닫기
-	$(window).click(function(e){
+	$(window).mousedown(function(e){
 		if (e.target == login_modal[0]) {
 			login_modal.css("display", "none");
 	    }
@@ -92,6 +92,11 @@ $(document).ready(function(){
 		$(".login-modal [name=autoLogin]").prop("disabled", !$(".login-modal [name=saveId]").prop("checked"));
 	}
 	
+	//배송지역 검색
+	$("#header .srch_delivery").click(()=>{
+		execDaumPostcode('on');
+	});
+	
 });
 
 var toDate = function(prevDate){
@@ -109,4 +114,21 @@ var toDate = function(prevDate){
     date = year+'년 '+month+'월 '+day+'일';
     
 	return date;
+}
+
+function comma(num){
+    var len, point, str; 
+       
+    num = num + ""; 
+    point = num.length % 3 ;
+    len = num.length; 
+   
+    str = num.substring(0, point); 
+    while (point < len) { 
+        if (str != "") str += ","; 
+        str += num.substring(point, point + 3); 
+        point += 3; 
+    } 
+     
+    return str;
 }

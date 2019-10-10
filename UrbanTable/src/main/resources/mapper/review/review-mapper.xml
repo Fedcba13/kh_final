@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="review">
+
+	<insert id="insertReview">
+		insert into review(pay_detail_no, review_content)
+		values(#{detailNo}, #{content})
+	</insert>
+	
+	<update id="updateReview">
+		update review set
+			review_content = #{content}
+		where
+			pay_detail_no = #{detailNo}
+			and review_enabled = 1
+	</update>
+	
+	<update id="deleteReview">
+		update review set
+			review_enabled = 0
+		where
+			pay_detail_no = #{detailNo}
+			and review_enabled = 1
+	</update>
+	
+	<select id="selectReview" resultType="map">
+		select p.member_id, r.review_content, r.review_date, r.pay_detail_no
+		from review r
+		    left join pay_detail pd
+		        on r.pay_detail_no = pd.pay_detail_no
+		    left join pay p
+	        	on pd.pay_no = p.pay_no
+		where pd.food_no = #{foodNo}
+		    and market_no = #{marketNo}
+		    and r.review_enabled = 1
+	
+	</select>
+
+</mapper>

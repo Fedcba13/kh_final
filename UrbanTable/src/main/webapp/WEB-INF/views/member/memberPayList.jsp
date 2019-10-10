@@ -9,50 +9,21 @@
 
 <style>
 
-	.pay_card{
+	.pay_list_tbl > tr{
 		cursor: pointer;
-		border-width: 1px 1px 0;
-		border-style: solid;
-		border-color: #e9e9e9;
-	}	
-	
-	.pay_card:last-child{
-		border: 1px solid #e9e9e9;
 	}
 	
-	.pay_card:hover{
-		background: #f4f4f0;
+	.pay_list_tbl > tr:hover {
+		background-color: #f4f4f0;
 	}
-
-	.pay_card > div{
-		display: inline-block;
-		overflow: hidden;
-		padding: 10px;
-	}
-
-	.payList .pay_info{
-		float: left;
+	
+	.pay_list_tbl > tr > td:nth-child(1) {
 		width: 150px;
+		text-align: center;
 	}
 	
-	.pay_card > div > div:nth-child(2n-1){
-		margin-bottom: 20px;
-	}
-	
-	.payList .pay_content{
-		width: 480px;
-	}
-	
-	.payList .pay_content > div{
-		vertical-align: top;
-		display: inline-block;
-		width: 340px;
-		padding-left: 10px;
-	}
-	
-	.payList .pay_state{
-		float: right;
-		width: 120px;
+	.pay_list_tbl > tr > td:nth-child(4) {
+		width: 90px;
 	}
 
 </style>
@@ -77,7 +48,6 @@ function getMemberPayList(){
 		data: param,
 		type: "POST",
 		success: (data)=>{
-			$(".payList .pay_card").remove();
 			
 			for(var i = 0; i<data.length; i++){
 				
@@ -91,26 +61,30 @@ function getMemberPayList(){
 			
 				var html = '';
 				
-				html += '<div class="pay_card" id="'+data[i].PAY_NO+'">';
-				html += '<div class="pay_info"><div class="pay_date">'+date+'</div><div class="pay_price">'+data[i].PAY_PRICE+'원</div></div>';
-				html += '<div class="pay_content">';
+				html += '<tr id="'+data[i].PAY_NO+'">';
+				html += '<td>';
+				html += date+'<br>';
+				html += data[i].MARKET_NAME+'<br>';
+				html += '['+data[i].PAY_NO+']';
+				html += '</td>';
+				html += '<td>';
 				html += '<img src="'+data[i].FOOD_IMG+'" width="100px" height="140px">';
-				html += '<div>'+data[i].TXT+'</div>';
-				html += '</div>';
-				html += '<div class="pay_state"><div>'+data[i].MARKET_NAME+'</div><div>'+flag+'</div></div>';
-				html += '</div>';
-			
-				$(".payList").append(html);
+				html += '</td>';
+				html += '<td>';
+				html += data[i].TXT;
+				html += '<p style="text-align: right; padding-top: 20px;">'+comma(data[i].PAY_PRICE)+'원</p>';
+				html += '</td>';
+				html += '<td>';
+				html += flag;
+				html += '</td>';
+				html += '</tr>';
+				html += '';			
+				$(".pay_list_tbl").append(html);
 				
 			}
 			
-			$(".payList .pay_card").click((e)=>{
-				var pay_no = '';
-				if($(e.target).hasClass('pay_card')){
-					pay_no = $(e.target).prop('id');
-				}else{
-					pay_no = $(e.target).parents('.pay_card').prop('id');
-				}
+			$(".pay_list_tbl > tr").click((e)=>{
+				var pay_no = $(e.target).parents("tr").prop("id");
 				location.href = '${pageContext.request.contextPath}/member/payDetail?payNo='+pay_no;
 			});
 			
@@ -127,8 +101,10 @@ function getMemberPayList(){
 		<div class="payListPage">
 		    <jsp:include page="/WEB-INF/views/member/memberNav.jsp" />
 		    <div class="payList">
-		    	<h3 class="sub_tit" style="background-color: white;">구매 내역</h3>
-		    	
+			    <h3 class="sub_tit" style="background-color: white;">주문내역 확인</h3>
+			    <table class="tbl tbl_view pay_list_tbl">
+			    	
+			    </table>	
 	        </div>
         </div>
     </article>

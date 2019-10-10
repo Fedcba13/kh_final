@@ -12,17 +12,29 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/food.css">
 <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/main.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/foodList.js"></script>
-	<div>
-		<span style="padding: 0 10px;">${searchKeyword }</span>
-	</div>
-<div>
+<br />
+<div id= "foodListDiv">
 	<ul id="foodList_Cat">
-		<li><a href="">전체보기</a></li>
+		<c:if test="${not empty subUpperList }">
+			<c:forEach items="${subUpperList }" var="u">
+				<li><a href="${pageContext.request.contextPath }/food/selectFoodByCat.do?searchNo=${u.foodUpperNo }&searchKeyword=${u.foodUpperName}">${u.foodUpperName}</a></li>
+			</c:forEach>
+		</c:if>
+		<c:if test="${not empty subSectList }">
+			<c:forEach items="${subSectList }" var="s">
+				<li><a href="${pageContext.request.contextPath }/food/selectFoodByCat.do?searchNo=${s.foodSectionNo }&searchKeyword=${s.foodSectionName}">${s.foodSectionName }</a></li>
+			</c:forEach>
+		</c:if>
+		<c:if test="${not empty brotherSectList }">
+			<c:forEach items="${brotherSectList }" var="b">
+				<li><a href="${pageContext.request.contextPath }/food/selectFoodByCat.do?searchNo=${b.foodSectionNo }&searchKeyword=${b.foodSectionName}">${b.foodSectionName }</a></li>
+			</c:forEach>
+		</c:if>
 	</ul>
 </div>
 <section class="main_sec">
 	<article class="inner">
-	    <h3 class="sub_tit">서브페이지 제목</h3>
+	    <h3 class="sub_tit">${searchKeyword }의 검색결과</h3>
 	    <select name="marketList" id="marketList" onchange="changeMarket()">
 			<c:forEach items="${marketList}" var="m">
 				<option value="${m.marketNo }" ${m.marketNo eq marketNo? 'selected':' ' }>${m.marketName }</option>

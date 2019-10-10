@@ -44,7 +44,7 @@
 	</select>
 	
 	<select id="selectBlameList" resultMap="blameMap">
-		select * from blame where blame_action = 1
+		select * from blame order by blame_action desc
 	</select>
 	
 		<resultMap type="blame" id="blameMap">
@@ -67,5 +67,9 @@
 	
 	<update id="updateComment">
 		update board_comment set board_comment_enabled = 0 where board_comment_no = #{blameTargetId}
+	</update>
+	
+	<update id="updateRecipe">
+		update recipe set recipe_enabled = 0 where recipe_no = #{blameTargetId}
 	</update>
 </mapper>

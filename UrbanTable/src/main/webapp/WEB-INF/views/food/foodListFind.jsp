@@ -70,7 +70,8 @@
 								</div>
 							</c:if>
 							<c:if test="${not empty f.foodRenamedFileName }">
-								<img src="${f.foodImg }" alt="상품 사진">
+								<img src="${pageContext.request.contextPath}/resources/upload/food/${f.foodRenamedFileName}"
+										alt="상품 사진">
 								<div class="inner_box">
 									<h2>상품 준비중</h2>
 								</div>

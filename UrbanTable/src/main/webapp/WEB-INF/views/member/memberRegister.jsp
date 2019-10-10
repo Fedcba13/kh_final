@@ -5,8 +5,6 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
-<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/kakaoAPI.js" charset="UTF-8"></script>
 
 <style>
 
@@ -374,7 +372,7 @@ function use($input){
 					<tr>
 						<th>아이디*</th>
 						<td>
-							<input type="text" name="memberId" placeholder="예: UrbanTable"><input type="button" id="checkId" class="btn btn3" value="중복확인">
+							<input type="text" name="memberId" placeholder="예: UrbanTable" maxlength="12"><input type="button" id="checkId" class="btn btn3" value="중복확인">
 							<p class="txt_guide">
 								<span class="txt txt_case1">6자 이상의 영문 혹은 영문과 숫자를 조합해주세요.</span>
 								<span class="txt txt_case2">아이디 중복확인해주세요.</span>
@@ -413,7 +411,7 @@ function use($input){
 					</tr>
 					<tr class="tbl_addr">
 						<th>배송주소*</th>
-						<td><input type="button" value="주소 검색" class="btn btn3" onclick="sample6_execDaumPostcode()"></td>
+						<td><input type="button" value="주소 검색" class="btn btn3" onclick="execDaumPostcode()"></td>
 					</tr>
 				</table>
 				<p style="text-align: center; margin-top: 30px;">

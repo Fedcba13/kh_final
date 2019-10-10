@@ -402,6 +402,17 @@
 		LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
 		LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
 		LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
+		<trim prefix="where" prefixOverrides="and">
+			<if test="foodDivision!=null and foodDivision!=''">
+			D.food_division_no=#{foodDivision}
+			</if>
+			<if test="foodOrderSearchType=='food_name'">
+			and F.food_name like '%'||#{foodOrderSearchKeyword}||'%'
+			</if>
+			<if test="foodOrderSearchType=='food_no'">
+			and F.food_no like '%'||#{foodOrderSearchKeyword}||'%'
+			</if>
+		</trim>
 		order by F.food_no desc
 	</select>
 	
@@ -411,6 +422,17 @@
 		LEFT JOIN FOOD_SECTION S ON F.FOOD_SECTION_NO = S.FOOD_SECTION_NO
 		LEFT JOIN FOOD_UPPER U ON S.FOOD_UPPER_NO = U.FOOD_UPPER_NO
 		LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
+		<trim prefix="where" prefixOverrides="and">
+			<if test="foodDivision!=null and foodDivision!=''">
+			D.food_division_no=#{foodDivision}
+			</if>
+			<if test="foodOrderSearchType=='food_name'">
+			and F.food_name like '%'||#{foodOrderSearchKeyword}||'%'
+			</if>
+			<if test="foodOrderSearchType=='food_no'">
+			and F.food_no like '%'||#{foodOrderSearchKeyword}||'%'
+			</if>
+		</trim>
 		order by F.food_no desc
 	</select>
 	

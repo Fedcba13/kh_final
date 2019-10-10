@@ -143,4 +143,19 @@ public class RecipeDAOImpl implements RecipeDAO {
 	public List<Recipe> selectRecipeIndexList() {
 		return sqlSession.selectList("recipe.selectRecipeIndexList");
 	}
+
+	@Override
+	public int MaterialOldDelete(String materialNo) {
+		return sqlSession.delete("recipe.materialOldDelete", materialNo);
+	}
+
+	@Override
+	public String selectMaterialNo(String materialName) {
+		return sqlSession.selectOne("recipe.selectMaterialNo", materialName);
+	}
+
+	@Override
+	public int updateRecipe(RecipeVO recipeVo) {
+		return sqlSession.update("recipe.updateRecipe", recipeVo);
+	}
 }

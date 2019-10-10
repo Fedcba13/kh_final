@@ -25,7 +25,7 @@ public class Scheduler {
 	MemberService memberService;
 	
 	//9-18시 정각마다 알림
-	@Scheduled(cron="0 * 09-18 * * ?")
+	@Scheduled(cron="0 0 09-18 * * ?")
 	public void curTime() {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -34,12 +34,15 @@ public class Scheduler {
 		List<HashMap<String, Object>> list = memberService.selectSendMsg();
 		
 		for(int i=0; i<list.size(); i++) {
-			Message message = new Message(list.get(i).get("MEMBER_PHONE").toString(), "01040418769", "[" + list.get(i).get("FOOD_SECTION_NAME") + "] UrbanTable 신청하신 재고가 입고되었습니다.");
+			Message message = new Message(list.get(i).get("MEMBER_PHONE").toString(),
+					"01040418769", "[" + list.get(i).get("FOOD_SECTION_NAME") + "]"
+							+ " UrbanTable 신청하신 재고가 입고되었습니다.");
 			Utils.sendMessage(message);
 			
 			HashMap<String, Object> param = new HashMap<String, Object>();
 			param.put("memberId", list.get(i).get("MEMBER_ID"));
 			param.put("foodNo", list.get(i).get("FOOD_NO"));
+			param.put("foodNo", list.get(i).get("MARKET_NO"));
 			
 			memberService.deleteSendMsg(param);
 			

@@ -22,11 +22,12 @@
     <script type="text/javascript" src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/slick.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/common.js" charset="UTF-8"></script>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/kakaoAPI.js" charset="UTF-8"></script>
 </head>
 <script>
 	function mainSrchValidate(){
 		var searchKeyword = $("#searchKeyword").val();
-		console.log(searchKeyword);
 		if(searchKeyword.trim().length == 0){
 			return false;
 		}
@@ -82,7 +83,7 @@
 	                </li>
                 </c:if>
                 <li><a href="${pageContext.request.contextPath}/market/marketList.do" class="dp_block">매장 찾기</a></li>
-                <li><a href="" class="dp_block">배송지역 검색</a></li>
+                <li><a href="#" class="dp_block srch_delivery">배송지역 검색</a></li>
                 <c:if test="${memberLoggedIn.memberCheck eq 1 }">
                 	<li><a href="${pageContext.request.contextPath}/market/founded.do?memberId=${memberLoggedIn.memberId}" class="dp_block">창업 신청</a></li>
                 </c:if>

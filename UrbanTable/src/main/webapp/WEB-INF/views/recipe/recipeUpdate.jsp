@@ -11,7 +11,7 @@ var index = 2;
 var material_i = 1;
 $(()=> {
 	index = $(".tab>li").length+1;
-	material_i = $("#material_list>li").length;
+	material_i = $("#material_list>li").length+1;
 	
 	for(var i=1; i<=$(".tab>li").length; i++) {
 		$("#recipe_content_div" + i).css("display", "none");
@@ -84,6 +84,8 @@ $(()=> {
 		$("ul>li>button[value='"+ index +"']").css("background", "#fff");
 		$("ul>li>button[value='"+ index +"']").css("color", "#374818");
 		
+		$("#updateLastOrder").val(index);
+		
 		index ++;
 		
 		tabEvent();
@@ -103,79 +105,10 @@ $(()=> {
 		}
 		
 		index --;
+		$("#updateLastOrder").val(index-1);
 	});
 	
-	$(".btn_material").on("click", function() {
-		if($("#food_division").val() == "") {
-			alert("대분류를 선택하세요");
-			return false;
-		}
-		
-		if($("#food_section").val() == "") {
-			alert("소분류를 선택하세요");
-			return false;
-		}
-		
-		var html = "";
-		var section = $("#food_section").val();
-		var searchResult = $("#searchResultNo").val();
-		
-		html += "<li class='mate_li' value='" + material_i + "'>" + $("#food_division").val() + ">" + section + "</li>"
-		html += "<button type='button' class='mate_li_delete' value='" + material_i + "'>x</button>";
-		
-		$("#material_list").append(html);
-		
-		var materialSet = $("#materialSet").val();
-		var materialOldSet = $("#materialOldSet").val();
-		
-		$.ajax({
-			url: "${pageContext.request.contextPath}/recipe/materialInsert/" + section,
-			data: {materialSet: materialSet, searchResult: searchResult},
-			dataType: "json",
-			type: "GET",
-			success: (data)=>{
-				console.log(data);
-				$("#materialSet").val(data);
-				
-			},
-			error: (xhr, txtStatus, err)=> {
-				console.log("ajax 처리실패!", xhr, txtStatus, err);
-			}
-		});
-		
-		$(".mate_li_delete").on("click", function() {
-			var text = $(".mate_li[value='" + this.value + "']").text();
-			$(".mate_li[value='" + this.value + "']").remove();
-			var text = $(".mate_li[value='" + this.value + "']").text();
-			this.remove();
-			
-			var arr = text.split(">");
-			
-			if($("#materialSet").value.contains(arr[2])) {
-				alert("dd");
-			}
-			
-			$.ajax({
-				url: "${pageContext.request.contextPath}/recipe/materialDelete/" + this.value,
-				data: {materialSet: materialSet},
-				dataType: "json",
-				type: "GET",
-				success: (data)=>{
-					console.log(data);
-					$("#materialSet").val(data);
-					
-				},
-				error: (xhr, txtStatus, err)=> {
-					console.log("ajax 처리실패!", xhr, txtStatus, err);
-				}
-			});
-		});
-		
-		$("#searchResult").val("");
-		$("#searchResultNo").val("");
-		
-		material_i++;
-	});
+	$(".btn_material").on("click", materialInsert);
 	
 	pic_Event();
 	
@@ -206,7 +139,115 @@ $(()=> {
 		
 		window.open(loc,'추천 상품 선택','width=430,height=500,location=no,status=no,scrollbars=yes');
 	});
+	
+	$(".mate_li_delete").click((e)=>{
+		materialDeleteEvent(e);
+	});
 });
+
+function materialInsert(){
+	if($("#food_division").val() == "") {
+		alert("대분류를 선택하세요");
+		return false;
+	}
+	
+	if($("#food_section").val() == "") {
+		alert("소분류를 선택하세요");
+		return false;
+	}
+	
+	var html = "";
+	var section = $("#food_section").val();
+	var searchResult = $("#searchResultNo").val();
+	
+	html += "<li class='mate_li' value='" + material_i + "'>" + $("#food_division").val() + ">" + section + "</li>"
+	html += "<button type='button' class='mate_li_delete' value='" + material_i + "'>x</button>";
+	
+	$("#material_list").append(html);
+	
+	var materialSet = $("#materialSet").val();
+	var materialOldSet = $("#materialOldSet").val();
+	
+	$.ajax({
+		url: "${pageContext.request.contextPath}/recipe/materialInsert/" + section,
+		data: {materialSet: materialSet, searchResult: searchResult},
+		dataType: "json",
+		type: "GET",
+		success: (data)=>{
+			console.log(data);
+			$("#materialSet").val(data);	
+			console.log('a');
+		},
+		error: (xhr, txtStatus, err)=> {
+			console.log("ajax 처리실패!", xhr, txtStatus, err);
+		}
+	});
+	
+	$("#searchResult").val("");
+	$("#searchResultNo").val("");
+	
+	$(".mate_li_delete").off();
+	$(".mate_li_delete").click((e)=>{
+		materialDeleteEvent(e);
+	});
+	
+	material_i++;
+}
+
+function materialDeleteEvent(e) {
+	var $this = $(e.target);
+	console.log('1');
+	
+	var text = $(".mate_li[value='" + $this.val() + "']").text();
+	console.log('2');
+	
+	$(".mate_li[value='" + $this.val() + "']").remove();
+	console.log('3');
+	$this.remove();
+	console.log('4');
+	$this.prev().remove();
+	console.log('5');
+		
+		
+		var arr = text.split(">");
+		var materialName = arr[1];
+		console.log('6');
+		console.log('7');
+
+		if($("#materialOldSet").val().indexOf(materialName) != -1) {
+			$.ajax({
+				url: "${pageContext.request.contextPath}/recipe/materialOldDelete/" + materialName,
+				dataType: "json",
+				type: "GET",
+				success: (data)=>{
+					console.log(data);
+					if(data == 0) {
+						console.log("삭제 실패!");
+					} else {
+						console.log("삭제 성공!");
+					}
+				},
+				error: (xhr, txtStatus, err)=> {
+					console.log("ajax 처리실패!", xhr, txtStatus, err);
+				}
+			});
+		} else {
+			 $.ajax({
+	            url: "${pageContext.request.contextPath}/recipe/materialDelete/" + materialName,
+                data: {materialSet: $("#materialSet").val()},
+				type: "GET",
+				success: (data)=>{
+					console.log(data);
+					//$("#materialSet").val(data);
+					console.log('9');
+				},
+				error: (xhr, txtStatus, err)=> {
+					console.log("ajax 처리실패!", xhr, txtStatus, err);
+				}
+			});	  
+		}
+		console.log('10');
+}
 
 function tabEvent() {
 	$(".tab>li>button").on("click", function() {
@@ -333,8 +374,11 @@ function setChildNoValue(searchResultNo){
 				                		<input type="hidden" value="${rec.recipeOrder}" name="recipeSequenceList[${vs.index}].recipeOrder" id="recipeOrder${vs.count}" value="${vs.count}" />
 					                	<textarea name="recipeSequenceList[${vs.index}].recipeContent" id="recipe_content${vs.count}" class="recipe_content" cols="100" rows="5" placeholder="레시피 내용&#13;&#10;ex)중약불로 달군 팬에 올리브유를 두르고 앞뒤로 노릇하게 구워주세요." style="border: 1px solid #e9e9e9; border-radius: 5px; color: #555; resize: none;">${rec.recipeContent}</textarea> <br /><br />
 					                	<input type="text" class="upload_name" id="upload_name${vs.count}" value="${rec.originalRecipePic}" disabled /><input type="file" name="recipePic" id="upload_file${vs.count}" style="display:none;" /> <button class="btn btn_upload" id="btn_upload${vs.count}" type="button">사진 가져오기</button> <br /><br />
-				                	</div>    		                		
-		                		</c:forEach>	                		
+				                	</div>
+				                	<c:if test="${vs.last}">
+				                		<input type="hidden" name="sequenceLast" value="${rec.recipeOrder}" />
+				                	</c:if>            		
+		                		</c:forEach>              		
 	                		</c:if>
 	                	</div><br />
 	                	<p>
@@ -350,12 +394,12 @@ function setChildNoValue(searchResultNo){
 	            </tr>
 	        </table>
 	       	<c:set var="set">
-	      		<c:forEach items="${material}" var="m" varStatus="vs">
-	        		${m.foodSectionName}-${m.foodNo}<c:if test="${!vs.last}">,</c:if>
-	        	</c:forEach>
+	      		<c:forEach items="${material}" var="m" varStatus="vs">${m.foodSectionName}-${m.foodNo}<c:if test="${!vs.last}">,</c:if></c:forEach>
 	       	</c:set>
 	        <input type="hidden" id="materialSet" name="materialSet" />
 	        <input type="hidden" id="materialOldSet" name="materialOldSet" value="${set}" />
+	        <input type="hidden" id="recipeNo" name="recipeNo" value="${recipe.recipeNo}" />
+	        <input type="hidden" id="updateLastOrder" name="updateLastOrder" />
 	        <div class="btn_submit">
 	        	<input type="submit" class="btn btn_insert" value="글 등록하기" />	        
 	        </div>

@@ -22,7 +22,7 @@ function writeNotice(){
 	    
 	    <table class="tbl txt_center"> <!--가운데 정렬 아니면 txt_center 빼셔도 됩니다.
 	                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->
-            <tr>
+            <tr class='sec_bg'>
                 <th width="100">구분</th>
                 <th width="524">제목</th>
                 <th width="120">작성자</th>

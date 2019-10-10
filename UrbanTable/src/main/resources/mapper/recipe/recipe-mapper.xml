@@ -233,4 +233,20 @@
 	<select id="selectLastImage" resultType="string">
 		SELECT renamed_recipe_pic FROM (SELECT * FROM recipe_sequence where recipe_no = #{recipeNo} ORDER BY recipe_order desc) WHERE rownum = 1
 	</select>
+	
+	<delete id="materialOldDelete">
+		delete from recipe_ingredient where food_section_no = #{materialNo}
+	</delete>
+	
+	<select id="selectMaterialNo" resultType="string">
+		select food_section_no from food_section where food_section_name = #{materialName}
+	</select>
+	
+	<update id="updateRecipe">
+		update recipe
+		<set>
+			recipe_title = #{recipeTitle}
+		</set>
+		where recipe_no = #{recipeNo}
+	</update>
 </mapper>

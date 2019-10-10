@@ -15,7 +15,7 @@
 
 <section class="main_sec">
 	<article class="inner">
-	    <h3 class="sub_tit">${empty foodDivisionName? '베스트 전체보기' : foodDivisionName }의 검색결과</h3>
+	    <h3 class="sub_tit">${foodDivisionName=='all'? '베스트 전체보기' : foodDivisionName }의 검색결과</h3>
 	    <select name="marketList" id="marketList" onchange="changeMarket()">
 			<c:forEach items="${marketList}" var="m">
 				<option value="${m.marketNo }" ${m.marketNo eq marketNo? 'selected':' ' }>${m.marketName }</option>
@@ -43,8 +43,8 @@
 								<h4>${f.foodName }</h4>
 								<c:if test="${f.eventPercent ne 0}">
 									<p class="prd_price fw600">할인가</p>
-									<p class="prd_price2"><<fmt:formatNumber value="${ f.foodMemberPrice-f.foodMemberPrice*(f.eventPercent/100) } "
-								pattern="#,###" />>원 </p>
+									<p class="prd_price2"><fmt:formatNumber value="${ f.foodMemberPrice-f.foodMemberPrice*(f.eventPercent/100) } "
+								pattern="#,###" />원 </p>
 								</c:if>
 								<p class="prd_price"><fmt:formatNumber value="${f.foodMemberPrice }"
 								pattern="#,###" />원 </p>
@@ -59,7 +59,6 @@
 function changeMarket() {
 	var marketNo = $("#marketList option:selected").val();
 	var foodDivisionName = $("#foodDivisionNameGo").val();
-	console.log(foodDivisionName);
 	location.href = "${pageContext.request.contextPath}/food/selectBestFoodList.do?"
 		+"marketNo="+marketNo+"&foodDivisionName="+foodDivisionName;
  }

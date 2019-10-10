@@ -109,14 +109,14 @@
 			and pay_enabled = #{payEnabled}
 		</if>
 		group by p.PAY_NO, PAY_PRICE, PAY_FLAG, PAY_ENABLED, PAY_DATE, MARKET_NAME
-		order by pay_flag, pay_date) pay1
+		order by pay_date) pay1
 		left join food
 		    on pay1.food_no = food.food_no
 	</select>
 		
 	<select id="getMemberPayDetail" resultType="map">
-	select P.PAY_NO, PAY_DATE, PAY_PRICE, PAY_FLAG, DELIVER_TYPE, MARKET_NAME, PAY_DETAIL_AMOUNT,
-			FOOD_NAME, FOOD_IMG, (select count(*) from review r where r.PAY_DETAIL_NO = pd.PAY_DETAIL_NO) flag
+	select P.PAY_NO,PAY_DETAIL_NO, PAY_DATE, PAY_PRICE, PAY_FLAG, DELIVER_TYPE, MARKET_NAME, PAY_DETAIL_AMOUNT,
+			FOOD_NAME, FOOD_IMG, (select r.review_content from review r where r.PAY_DETAIL_NO = pd.PAY_DETAIL_NO and r.review_enabled = 1) review
 	from pay p
 	    left join market m
 	        on p.market_no = m.market_no

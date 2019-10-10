@@ -5,7 +5,16 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
-<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<style>
+	input[name='totalDiscountPrice']{
+		border: 0px;
+		background-color: white;
+	}
+	table#cartList td{
+		border-spacing: 15px;
+		padding: 15px 8px;
+	}
+</style>
 <script>
 	var length = ${fn:length(list)};
 	$(()=>{
@@ -138,7 +147,7 @@
 							foodInfo += "<td><input type='checkbox' name='list' id='check"+${vs.count}+"' checked='true' onclick='checkManage(this)'/>&nbsp;&nbsp;&nbsp;";
 							foodInfo += "<img src='"+data.FOOD_IMG+"' width='92px' height='130px'/></td>";
 							foodInfo += "<td name='foodName'>[" + data.FOOD_COMPANY + "] " + data.FOOD_NAME + "</td>";
-							foodInfo += "<td> <input type='button' value='-' onclick='del(this);'>&nbsp;<input type='text' name='amount' value='" + ${l.cartAmount} + "' size='5' style='text-align:center;' onchange='change(this);'>&nbsp;<input type='button' value='+' onclick='add(this);'></td>";
+							foodInfo += "<td> <input type='button' class='btn btn3' style='width:30px; background-color:#ccffff; color: black; border:0;' value='-' onclick='del(this);'>&nbsp;<input type='text' name='amount' value='" + ${l.cartAmount} + "' size='5' style='text-align:center;' onchange='change(this);'>&nbsp;<input type='button' class='btn btn3' style='width:30px; background-color:#ccffff; color: black; border:0;' value='+' onclick='add(this);'></td>";
 							foodInfo += "<td><input type='text' name='totalDiscountPrice' value='"+Math.floor((data.FOOD_MEMBER_PRICE * (1-dc/100))/10)*10 * ${l.cartAmount}+"' size='11' style='text-align:center;' readonly></td>";
 							foodInfo += "<input type='hidden' name='totalPrice' value='" + data.FOOD_MEMBER_PRICE * ${l.cartAmount} + "' size='11' style='text-align:center;' readonly>"
 							foodInfo += "</tr>";
@@ -382,9 +391,10 @@
 	}
 	
 	function deleteSel(){
-		for(var i = 1; i <= $("input:checkbox[name='list']").length; i++){
-			if($("#item"+i).find("input:checkbox[name='list']").is(":checked")==true){
-				var foodNo = $("#item"+i).find("input:hidden[name='foodNo']").val();
+		for(var i = 0; i <= $("input:checkbox[name='list']").length; i++){
+			var id = $($("input:checkbox[name='list']")[i]).parents("tr").prop("id");
+			if($("#"+id).find("input:checkbox[name='list']").is(":checked")==true){
+				var foodNo = $("#"+id).find("input:hidden[name='foodNo']").val();
 				$.ajax({
 					url: "${pageContext.request.contextPath}/cart/deleteCart.do",
 					data: {
@@ -393,8 +403,9 @@
 					},
 					async: false,
 					success: function(data){
-						$("#item"+i).remove();						
+						$("#"+id).remove();						
 						//console.log(data);
+						//location.reload();
 					},
 					error: function(xhr, txtStatus, err){
 						console.log("ajax처리실패!", xhr, txtStatus, err);
@@ -445,14 +456,13 @@
 
 </script>
 
-<section class="sub_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
+<section class="sub_bg"> 
 	<article class="subPage inner">
 	    <h2 class="sub_tit">장바구니</h2>
-	    <table class="tbl txt_center" id="cartList"> <!--가운데 정렬 아니면 txt_center 빼셔도 됩니다.
-	                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->
+	    <table class="tbl txt_center" id="cartList"> 
             <tr id="head">
-                <th>
-                	<input type="checkbox" name="listAll" id="checkAll" checked="true" onchange="checkAll(this);"/>                
+                <th style="width: 30px;">
+                	<input type="checkbox" name="listAll" id="checkAll" checked="true" onchange="checkAll(this);"/>             
                 	<label for="checkAll"></label>
                 </th>
                 <th>
@@ -472,21 +482,21 @@
                 	<label for="checkAll"></label>
             	</td>	
             	<td>
-            		<button type="button" class="btn" onclick="deleteSel()">선택삭제</button>
-            		<button type="button" class="btn" onclick="deleteAll()">전체삭제</button>
+            		<button type="button" class="btn btn2" onclick="deleteSel()">선택삭제</button>
+            		<button type="button" class="btn btn2" onclick="deleteAll()">전체삭제</button>
             	</td>	
             	<td colspan="2">
             		<input type="radio" name="delivery" id="dawn" value="d" onchange="deliveryCost(this.value)"/>
-            		<label for="dawn">샛별배송</label>
+            		<label for="dawn">샛별배송</label>&nbsp;
             		<input type="radio" name="delivery" id="nomal" value="n" onchange="deliveryCost(this.value)" checked/>
-            		<label for="nomal">일반배송</label>
+            		<label for="nomal">일반배송</label>&nbsp;
             		<input type="radio" name="delivery" id="regular" value="r" onchange="deliveryCost(this.value)"/>
-            		<label for="regular">정기배송</label>
+            		<label for="regular">정기배송</label>&nbsp;
             	</td>	
             </tr>
             <tr>
             	<td>
-            		<input type="button" class="btn" id="searchMarket" value="매장찾기"/>
+            		<input type="button" class="btn btn2" style="border-radius:0px; width:164px; font-size:14px;" id="searchMarket" value="매장찾기"/>
             	</td>
             	<td colspan="3">
             		<input type="text" id="market" size="80" readonly/>
@@ -495,8 +505,8 @@
             </tr>
             <tr>
             	<td>
-            		<input type="button" class="btn" id="deliveryAddress" value="배송지변경" />
-            		<input type="button" class="btn" id="addressList" value="배송지목록" />
+            		<input type="button" class="btn btn2" style="border-radius:0px; width:80px;" id="deliveryAddress" value="배송지변경" />
+            		<input type="button" class="btn btn2" style="border-radius:0px; width:80px;" id="addressList" value="배송지목록" />
             	</td>
             	<td colspan="3">
             		<input type="text" id="userAddressField" size="80" readonly/>    		            	
@@ -511,7 +521,7 @@
 	           	</td>
             </tr>
         </table>
-        <table class="tbl tbl_view">
+        <table class="tbl tbl_view" style="margin:30px 0;">
             <tr>
                 <th>총 상품금액</th>
                 <td id="priceSum"></td>
@@ -533,24 +543,23 @@
                 <td id="totalPayment"></td>
             </tr>
         </table>
-        <hr />
         <form action="${pageContext.request.contextPath}/pay/order.do" method="post" id="doOrder">
         	<input type="hidden" name="cartInfo" />        	
-	        <div class="btn">
-		        <button type="button" class="btn" id="order"><h2>주문하기</h2></button>
+	        <div class="container txt_center" >
+		        <button type="button" class="btn" id="order"><h2 style="font-size:17px;">주문하기</h2></button>
 		    </div>        
         </form>
     </article>
     <div class="modal txt_center" id="selectAddressModal">
 		<form class="modal-content animate">
 			<div class="container txt_center">
-				<span>배송지를 선택하세요(새 배송지 등록은 마이페이지에서 가능합니다.)</span><br />
+				<span>배송지를 선택하세요(새 배송지 등록은 마이페이지에서 가능합니다.)</span><br /><hr />
 				<select class="select" name="address" id="addressListModal">
 				</select>
 			</div>
-			<div class="container txt_center" style="background-color:#f4f4f0;">
+			<div class="container txt_center clearfix" style="background-color:#f4f4f0;">
 				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" onclick="closeModal();">취소</button>
-				<button type="button" class="btn btn2 cancelbtn" style="float:right; margin-right: 10px;" onclick="submitAddress();">선택</button>
+				<button type="button" class="btn btn2" style="float:right; margin-right: 10px; background-color:#374818; color:white;" onclick="submitAddress();">선택</button>
 		    </div>
 		</form>
 	</div>

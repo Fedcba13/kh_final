@@ -154,7 +154,7 @@ var timer = null;
 		
 		//modal창이 열려 있을 경우, 바탕 클릭시 모달 닫기
 		//닫기 전에 한번 물어보기.
-		$(window).click(function(e){
+		$(window).mousedown(function(e){
 			if (e.target == find_modal[0]) {
 				if(find_modal.hasClass('pw')){
 					if(confirm('정말 취소하시겠습니까?')){

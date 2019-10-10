@@ -25,14 +25,14 @@ table.eventTBL {
 <section>
 	<article class="subPage inner">
 		<h3 class="sub_tit">지점 이벤트 관리</h3>
-		<div class="txt_right">
+		<div class="txt_right" style="margin: 0 0 20px;">
 			<a
 				href="${pageContext.request.contextPath }/event/marketEventEnroll.do?memberId=${memberLoggedIn.memberId}"
 				class="btn txt_center dp_block"> 이벤트 등록 </a>
 		</div>
 
 		<table class="tbl txt_center eventTBL">
-			<tr>
+			<tr class="sec_bg">
 				<th>이벤트 제목</th>
 				<th>시작 일자</th>
 				<th>종료 일자</th>
@@ -40,7 +40,7 @@ table.eventTBL {
 				<th>적용 매장</th>
 				<th></th>
 			</tr>
-			<tr>
+			<tr class="sec_bg">
 				<th colspan="5">이벤트 내용</th>
 				<th></th>
 			</tr>
@@ -58,7 +58,7 @@ table.eventTBL {
 					<tr>
 						<td colspan="5">${e.eventContent }</td>
 						<td>
-						<a href="${pageContext.request.contextPath }/event/deleteEvent.do?eventId=${e.eventId }" class="btn txt_center"> 삭제</a>
+						<a href="${pageContext.request.contextPath }/event/deleteEvent.do?eventId=${e.eventId }" class="btn txt_center" style="width: 60px;"> 삭제</a>
 						</td>
 					</tr>
 			</c:forEach>

@@ -69,44 +69,52 @@
 		}
 	});
 	 //Urban의 추천
-	$.ajax({
-		 url: "${pageContext.request.contextPath}/food/selectFoodInMain2.do", 
-		 dataType: "json",
-		type: "POST",
-		success: (data)=> {
-			var html = '<ul class="main_prd_list clearfix">';
-			for(var i in data){
-				
-				html += '<li> <a href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo='+data[i].foodNo+'&marketNo=mar00012" class="dp_block">';
-				html += '<div class="prd_img_area">';
-				if(data[i].eventPercent != 0){
-					html += '<p class="fw600 txt_center"><span>SALE</span><br>'+data[i].eventPercent+'%</p>';
+	 var getUrbanRecFoods = function (){
+			$.ajax({
+				 url: "${pageContext.request.contextPath}/food/selectFoodInMain2.do", 
+				 dataType: "json",
+				type: "POST",
+				success: (data)=> {
+					var html = '<ul class="main_prd_list clearfix">';
+					for(var i in data){
+						
+						html += '<li> <a href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo='+data[i].foodNo+'&marketNo=mar00012" class="dp_block">';
+						html += '<div class="prd_img_area">';
+						if(data[i].eventPercent != 0){
+							html += '<p class="fw600 txt_center"><span>SALE</span><br>'+data[i].eventPercent+'%</p>';
+						}
+						if(data[i].foodImg != null){
+							html += '<img src="'+data[i].foodImg+'" alt="상품 사진">';
+						}else if(data[i].foodOriginalFileName != null){
+							html += ' <img src="${pageContext.request.contextPath}/resources/upload/food/'+data[i].foodRenamedFileName+'" alt="상품 사진">';
+						}
+						html += ' </div><div class="prd_info_area"> <h4>'+data[i].foodName+'</h4> ';
+						if(data[i].eventPercent != 0){
+							var afterEventPrice = Math.floor(data[i].foodMemberPrice-data[i].foodMemberPrice*(data[i].eventPercent/100));
+							
+							html += ' <p class="prd_price fw600">'+afterEventPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원</p>';
+							html += '<p class="prd_price2">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원 </p>';
+						}else{
+							html += ' <p class="prd_price fw600">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
+						}
+						
+						html += '</div></a> </li> ';
+						
+					} 
+						html += '</ul><a href="${pageContext.request.contextPath}/food/selectBestFoodList.do" class="dp_block">베스트 전체보기 <img src="${pageContext.request.contextPath }/resources/images/more.png" alt="" /></a>';
+						$("#recom1").html(html); 
+				},
+				error: (xhr, txtStatus, err)=> {
+					console.log("ajax 처리실패!", xhr, txtStatus, err);
 				}
-				if(data[i].foodImg != null){
-					html += '<img src="'+data[i].foodImg+'" alt="상품 사진">';
-				}else if(data[i].foodOriginalFileName != null){
-					html += ' <img src="${pageContext.request.contextPath}/resources/upload/food/'+data[i].foodRenamedFileName+'" alt="상품 사진">';
-				}
-				html += ' </div><div class="prd_info_area"> <h4>'+data[i].foodName+'</h4> ';
-				if(data[i].eventPercent != 0){
-					var afterEventPrice = Math.floor(data[i].foodMemberPrice-data[i].foodMemberPrice*(data[i].eventPercent/100));
-					
-					html += ' <p class="prd_price fw600">'+afterEventPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원</p>';
-					html += '<p class="prd_price2">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원 </p>';
-				}else{
-					html += ' <p class="prd_price fw600">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
-				}
-				
-				html += '</div></a> </li> ';
-				
-			} 
-				html += '</ul><a href="${pageContext.request.contextPath}/food/selectBestFoodList.do" class="dp_block">베스트 전체보기 <img src="${pageContext.request.contextPath }/resources/images/more.png" alt="" /></a>';
-				$("#recom1").html(html); 
-		},
-		error: (xhr, txtStatus, err)=> {
-			console.log("ajax 처리실패!", xhr, txtStatus, err);
-		}
-	});
+			});
+	 }
+	 
+	 getUrbanRecFoods();
+	 
+	 $('#allRecFood').click(function(){
+		 
+	  });
 	 
 	 
     $(".recom_conts > div").hide();
@@ -131,35 +139,38 @@
     	url: "${pageContext.request.contextPath}/food/selectFoodInMain3.do",
     	type: "get",
 		data: param,
-		dataType:"json",
    		success: (data)=> {
    			var html = '<ul class="main_prd_list clearfix">';
-   			for(var i in data){
-   				
-   				html += '<li> <a href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo='+data[i].foodNo+'&marketNo=mar00012" class="dp_block">';
-   				html += '<div class="prd_img_area">';
-   				if(data[i].eventPercent != 0){
-   					html += '<p class="fw600 txt_center"><span>SALE</span><br>'+data[i].eventPercent+'%</p>';
-   				}
-   				if(data[i].foodImg != null){
-   					html += '<img src="'+data[i].foodImg+'" alt="상품 사진">';
-   				}else if(data[i].foodOriginalFileName != null){
-   					html += ' <img src="${pageContext.request.contextPath}/resources/upload/food/'+data[i].foodRenamedFileName+'" alt="상품 사진">';
-   				}
-   				html += ' </div><div class="prd_info_area"> <h4>'+data[i].foodName+'</h4> ';
-   				if(data[i].eventPercent != 0){
-   					var afterEventPrice = Math.floor(data[i].foodMemberPrice-data[i].foodMemberPrice*(data[i].eventPercent/100));
-					
-					html += ' <p class="prd_price fw600">'+afterEventPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원</p>';
-					html += '<p class="prd_price2">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원 </p>';
-   				}else{
-   					html += ' <p class="prd_price fw600">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
-   				}
-   				
-   				html += '</div></a> </li> ';
-   				
-   			} 
-   				html += '</ul><a href="${pageContext.request.contextPath}/food/selectBestFoodList.do?foodDivisionName='+foodDivisionName+'" class="dp_block">'+foodDivisionName+' 베스트 전체보기 <img src="${pageContext.request.contextPath }/resources/images/more.png" alt="" /></a>';
+   			if(data.length != 0){
+	   			for(var i in data){
+	   				
+	   				html += '<li> <a href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo='+data[i].foodNo+'&marketNo=mar00012" class="dp_block">';
+	   				html += '<div class="prd_img_area">';
+	   				if(data[i].eventPercent != 0){
+	   					html += '<p class="fw600 txt_center"><span>SALE</span><br>'+data[i].eventPercent+'%</p>';
+	   				}
+	   				if(data[i].foodImg != null){
+	   					html += '<img src="'+data[i].foodImg+'" alt="상품 사진">';
+	   				}else if(data[i].foodOriginalFileName != null){
+	   					html += ' <img src="${pageContext.request.contextPath}/resources/upload/food/'+data[i].foodRenamedFileName+'" alt="상품 사진">';
+	   				}
+	   				html += ' </div><div class="prd_info_area"> <h4>'+data[i].foodName+'</h4> ';
+	   				if(data[i].eventPercent != 0){
+	   					var afterEventPrice = Math.floor(data[i].foodMemberPrice-data[i].foodMemberPrice*(data[i].eventPercent/100));
+						
+						html += ' <p class="prd_price fw600">'+afterEventPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원</p>';
+						html += '<p class="prd_price2">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원 </p>';
+	   				}else{
+	   					html += ' <p class="prd_price fw600">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+' 원</p>';
+	   				}
+	   				
+	   				html += '</div></a> </li> ';
+	   				
+	   			} 
+	   				html += '</ul><a href="${pageContext.request.contextPath}/food/selectBestFoodList.do?foodDivisionName='+foodDivisionName+'" class="dp_block">'+foodDivisionName+' 베스트 전체보기 <img src="${pageContext.request.contextPath }/resources/images/more.png" alt="" /></a>';
+   			}else if(data.length == 0){
+   				html += '<img src="${pageContext.request.contextPath}/resources/images/food/ready.jpg" alt="상품 준비중" />';
+   			}
    				var recomId = $('[name="'+foodDivisionNo+'"]').attr('id');
    				$("#"+recomId).html(html); 
    		},
@@ -326,6 +337,7 @@ function bannerSlide(){
         <h3 class="main_tit txt_center">Urban의 추천</h3>
         <div class="recom_tab txt_center">
             <ul class="clearfix">
+                <li data-target="recomAll" id="allRecFood" class="ac_recom" >전체보기</li>
             <%
             	int i = 1;
             	for (FoodDivision foodDivision : new FoodServiceImpl().foodDivisionList ){
