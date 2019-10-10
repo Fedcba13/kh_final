@@ -19,7 +19,7 @@
 }
 
 .review_tbl tr th{
-	padding: 20px 0;
+	padding: 15px 0;
 }
 
 .review_tbl .btn{
@@ -212,30 +212,30 @@ function cancleModify(e){
 	<article class="subPage inner">
 	    <h3 class="sub_tit">상품정보</h3>
 		 <div id="foodExpression">
-		<div id="foodExpressionImg">
-			<c:if test="${not empty food.foodImg }">
-				<img src="${food.foodImg }" alt="상품 사진">
-			</c:if>
-			<c:if test="${not empty food.foodRenamedFileName }">
-				<img
-					src="${pageContext.request.contextPath}/resources/upload/food/${food.foodRenamedFileName}"
-					alt="상품 사진">
-			</c:if>
-			<div id="good">
-				<div id="dislike">
+			<div id="foodExpressionImg">
+				<c:if test="${not empty food.foodImg }">
+					<img src="${food.foodImg }" alt="상품 사진">
+				</c:if>
+				<c:if test="${not empty food.foodRenamedFileName }">
 					<img
-						src="${pageContext.request.contextPath }/resources/images/food/dislike.png" alt="싫어요" id="badImg" name="BAD" />
-						<p id="badText">&lpar;${food.bad }&rpar;</p>
-				</div>
-				<div id="like">
-					<img
-						src="${pageContext.request.contextPath }/resources/images/food/like.png" id="goodImg" alt="좋아요" name="GOOD"/>
-						<p id="goodText">&lpar;${food.good }&rpar;</p>
+						src="${pageContext.request.contextPath}/resources/upload/food/${food.foodRenamedFileName}"
+						alt="상품 사진">
+				</c:if>
+				<div id="good">
+					<div id="dislike">
+						<img
+							src="${pageContext.request.contextPath }/resources/images/food/dislike.png" alt="싫어요" id="badImg" name="BAD" />
+							<p id="badText">&lpar;${food.bad }&rpar;</p>
+					</div>
+					<div id="like">
+						<img
+							src="${pageContext.request.contextPath }/resources/images/food/like.png" id="goodImg" alt="좋아요" name="GOOD"/>
+							<p id="goodText">&lpar;${food.good }&rpar;</p>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div id="foodExpressionTb">
-				<p> ${food.foodName }</p>
+			<div id="foodExpressionTb">
+				<p>${food.foodName }</p>
 				<table class="tbl">
 					<tr>
 						<th>판매가</th>
@@ -250,7 +250,7 @@ function cancleModify(e){
 	                        <td><p class="prd_price"><fmt:formatNumber value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) } "
 								pattern="#,###" />원 </p></td>
 	                    </tr>
-                    </c:if>
+	                   </c:if>
 					<tr>
 						<th>배송구분</th>
 						<td>샛별배송/택배배송</td>
@@ -284,35 +284,50 @@ function cancleModify(e){
 						<td>별도의 유통기한은 없으나 식품 특성상 가급적 빨리 드시기 바랍니다.</td>
 					</tr>
 				</table>
-					<div class="txt_right">
-						<c:if test="${empty food.marketName }">
-							<input type="button" id="noticeStock" value="재고 알림" class="btn btn2" >
+				<div class="txt_right">
+					<c:if test="${empty food.marketName }">
+						<input type="button" id="noticeStock" value="재고 알림" class="btn btn2" >
+					</c:if>
+					<c:if test="${not empty food.marketName }">
+						<p id="finalPrice">총 상품 금액 : 
+						<c:if test="${food.eventPercent ne 0}">
+								<span class="dp_ib fw600"><fmt:formatNumber value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) } "
+								pattern="#,###" /></span>원 
 						</c:if>
-						<c:if test="${not empty food.marketName }">
-							<p id="finalPrice">총 상품 금액 : 
-							<c:if test="${food.eventPercent ne 0}">
-									<span class="dp_ib fw600"><fmt:formatNumber value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) } "
-									pattern="#,###" /></span>원 
-							</c:if>
-							<c:if test="${food.eventPercent eq 0}">
-								<span class="dp_ib fw600"><fmt:formatNumber value="${food.foodMemberPrice }" pattern="#,###" /></span>원 
-							</c:if>
+						<c:if test="${food.eventPercent eq 0}">
+							<span class="dp_ib fw600"><fmt:formatNumber value="${food.foodMemberPrice }" pattern="#,###" /></span>원 
 						</c:if>
-						</p>
-					</div>
-					<div id="buttons">
-						<c:if test="${not empty food.marketName }">
-							<input type="button" id="noticeStock" value="재고 알림" class="btn btn2" >
-							<input type="button" value="장바구니 담기" class="btn btn" onclick="cartValidate();"/>
-						</c:if>
-						<!-- <button id="noticeStock">재고알림</button> -->
-					</div>
+					</c:if>
+					</p>
+				</div>
+				<div id="buttons">
+					<c:if test="${not empty food.marketName }">
+						<input type="button" id="noticeStock" value="재고 알림" class="btn btn2" >
+						<input type="button" value="장바구니 담기" class="btn btn" onclick="cartValidate();"/>
+					</c:if>
+					<!-- <button id="noticeStock">재고알림</button> -->
+				</div>
 			</div>
 			</div>
-			 <section class="sec_bg">
-			 <h3 class="main_tit txt_center">상품 이미지</h3>
-			 <div id="detailView">
-					 <c:if test="${not empty food.foodImg }">
+			<div id="fv_recipe"> <!-- 관련레시피 -->
+				<h3 class="fv_tit">RELATED RECIPE</h3>
+		        <ul class="main_event_list main_receipe txt_center clearfix" id="toAppend">
+		            <li>
+		                <a href="" class="dp_block">
+		                    <div class="event_img_area">
+		                        <img src="${pageContext.request.contextPath }/resources/images/example2.PNG" alt="이벤트 사진">
+		                    </div>
+		                    <div class="event_info_area">
+		                        <p>레시피명</p>
+		                    </div>
+		                </a>
+		            </li> 
+		        </ul>
+			</div>
+			 <div id="fv_image">
+			 	<h3 class="fv_tit">PRODUCT IMAGE</h3>
+				 <div id="detailView" class="txt_center">
+					<c:if test="${not empty food.foodImg }">
 						<img src="${food.foodImg }" alt="상품 사진">
 					</c:if>
 					<c:if test="${not empty food.foodRenamedFileName }">
@@ -320,29 +335,25 @@ function cancleModify(e){
 							src="${pageContext.request.contextPath}/resources/upload/food/${food.foodRenamedFileName}"
 							alt="상품 사진">
 					</c:if>
+					<h4 class="txt_center">${food.foodName }</h4>
+					<p class="txt_center">
+						<span class="fw600">[ ${market.marketName } ]</span>의 영업시간은 ${market.marketTime }, 휴점일은 ${market.marketHoliday } 입니다.<br>
+						해당 상품에 대해 문의사항이 있으시면 ${market.marketTelephone } 로 문의바랍니다. <br />
+						<span class="red">*별도의 유통기한은 없으나 식품 특성상 가급적 빨리 드시기 바랍니다.</span>
+					</p>
+				 </div>
 			 </div>
-			 </section>
-			 <h3 class="main_tit txt_center">관련 레시피</h3>
-	        <ul class="main_event_list main_receipe txt_center clearfix" id="toAppend">
-	            <li>
-	                <a href="" class="dp_block">
-	                    <div class="event_img_area">
-	                        <img src="${pageContext.request.contextPath }/resources/images/example2.PNG" alt="이벤트 사진">
-	                    </div>
-	                    <div class="event_info_area">
-	                        <p>레시피명</p>
-	                    </div>
-	                </a>
-	            </li> 
-	        </ul>
-        <table class="tbl txt_center review_tbl">
-            <tr>
-                <th>작성자</th>
-                <th>한줄평</th>
-                <th>작성일</th>
-                <th></th>
-            </tr>
-        </table>
+			 <div id="fv_review">
+			 	<h3 class="fv_tit">고객 한 줄 평</h3>
+			 	<table class="tbl txt_center review_tbl">
+		            <tr>
+		                <th>작성자</th>
+		                <th>한 줄 평</th>
+		                <th>작성일</th>
+		                <th></th>
+		            </tr>
+		        </table>
+			 </div>
         
         <input type="hidden" name="" id="foodNoToRe" value="${food.foodNo }" />
         <input type="hidden" name="" id="memberLoggedInView" value="${memberLoggedIn.memberId }" />
@@ -593,7 +604,7 @@ function cancleModify(e){
 		   			} 
 	   				
 	   			}else if(data.length == 0){
-	   				html += '<p>관련 레시피가 없습니다.</p>';
+	   				html += '<li class="no_recipe">관련 레시피가 없습니다.</li>';
 	   			}
 	   				$("#toAppend").html(html); 
 	   		},

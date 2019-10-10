@@ -16,11 +16,13 @@
 <section class="main_sec">
 	<article class="inner">
 	    <h3 class="sub_tit">신상품</h3>
-	    <select name="marketList" id="marketList" onchange="changeMarket()">
-			<c:forEach items="${marketList}" var="m">
-				<option value="${m.marketNo }" ${m.marketNo eq marketNo? 'selected':' ' }>${m.marketName }</option>
-			</c:forEach>
-	    </select>
+	    <div class="txt_right marketList_wrap">
+		    <select name="marketList" id="marketList" onchange="changeMarket()">
+				<c:forEach items="${marketList}" var="m">
+					<option value="${m.marketNo }" ${m.marketNo eq marketNo? 'selected':' ' }>${m.marketName }</option>
+				</c:forEach>
+		    </select>
+	    </div>
        <ul class="main_prd_list clearfix">
         <c:forEach items="${foodList }" var="f">
 					<li><a
