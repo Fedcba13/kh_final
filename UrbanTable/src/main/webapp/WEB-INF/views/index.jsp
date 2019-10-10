@@ -106,13 +106,17 @@
 				},
 				error: (xhr, txtStatus, err)=> {
 					console.log("ajax 처리실패!", xhr, txtStatus, err);
-				}
+				} 
+				
 			});
 	 }
 	 
 	 getUrbanRecFoods();
 	 
 	 $('#allRecFood').click(function(){
+		 getUrbanRecFoods();
+		 $(".otherCat").removeClass("ac_recom");
+		 $("#allRecFood").addClass("ac_recom");
 		 
 	  });
 	 
@@ -120,7 +124,7 @@
     $(".recom_conts > div").hide();
     $(".recom_conts > div:first").show();
     
-	 $('.recom_tab li').click(function(){
+	 $('.otherCat').click(function(){
 		 $(".recom_tab li").removeClass("ac_recom");
 	    	$(this).addClass("ac_recom");
 	    	var tab = $(this).data("target");
@@ -189,7 +193,38 @@
 				var html = ' ';
 				for(var i in data){
 					if(data[i].eventPercent != 0){
+						html += '<li><a href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo='+data[i].foodNo+'&marketNo=mar00012" class="dp_block"><div class="prd_img_area">';
+						html +=  '<p class="fw600 txt_center"><span>SALE</span><br>'+data[i].eventPercent+'%</p>';
+						if(data[i].foodImg != null){
+							html += '<img src="'+data[i].foodImg+'" alt="상품 사진">';
+						}else if(data[i].foodOriginalFileName != null){
+							html += ' <img src="${pageContext.request.contextPath}/resources/upload/food/'+data[i].foodRenamedFileName+'" alt="상품 사진">';
+						}
+						html += '</div>';
+						html += '<div class="prd_info_area"><h4>'+data[i].foodName+'</h4>';
+							var afterEventPrice = Math.floor(data[i].foodMemberPrice-data[i].foodMemberPrice*(data[i].eventPercent/100));
+							
+							html += ' <p class="prd_price fw600">'+afterEventPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원</p>';
+							html += '<p class="prd_price2">'+data[i].foodMemberPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+'원 </p>';
+						html += '</div> </a> </li> ';
+					} 
+				}
+					$("#foodListMain4").html(html); 
+			},
+			error: (xhr, txtStatus, err)=> {
+				console.log("ajax 처리실패!", xhr, txtStatus, err);
+			}
+		});
+/* 		$.ajax({
+			 url: "${pageContext.request.contextPath}/food/selectFoodInMain4.do", 
+			 dataType: "json",
+			type: "POST",
+			success: (data)=> {
+				var html = ' ';
+				for(var i in data){
+					if(data[i].eventPercent != 0){
 					html += '<li><a href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo='+data[i].foodNo+'&marketNo=mar00012" class="dp_block"><div class="prd_img_area">';
+					
 					if(data[i].eventPercent != 0){
 						html +=  '<p class="fw600 txt_center"><span>SALE</span><br>'+data[i].eventPercent+'%</p>';
 					}
@@ -211,13 +246,13 @@
 					
 					html += '</div> </a> </li> ';
 				} 
-					$("#foodListMain4").html(html); 
 				}
+					$("#foodListMain4").html(html); 
 			},
 			error: (xhr, txtStatus, err)=> {
 				console.log("ajax 처리실패!", xhr, txtStatus, err);
 			}
-		});
+		}); */
 	
 	// 이벤트 List
 		$.ajax({
@@ -342,7 +377,7 @@ function bannerSlide(){
             	int i = 1;
             	for (FoodDivision foodDivision : new FoodServiceImpl().foodDivisionList ){
            %>
-                <li data-target="recom<%=i%>"><%=foodDivision.getFoodDivisionName() %>
+                <li class="otherCat" data-target="recom<%=i%>"><%=foodDivision.getFoodDivisionName() %>
                 <input type="hidden" name="<%=foodDivision.getFoodDivisionName() %>" value="<%=foodDivision.getFoodDivisionNo()%>"/>
                 </li>
            <%
@@ -356,7 +391,7 @@ function bannerSlide(){
 				int k = 1;
 				for (FoodDivision foodDivision : new FoodServiceImpl().foodDivisionList) {
 			%>
-				<div id="recom<%=k%>" name="<%=foodDivision.getFoodDivisionNo()%>"></div>
+				<div  id="recom<%=k%>" name="<%=foodDivision.getFoodDivisionNo()%>"></div>
 			<%
 				k++;
 				}

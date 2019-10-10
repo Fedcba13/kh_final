@@ -42,12 +42,15 @@
 							<div class="prd_info_area">
 								<h4>${f.foodName }</h4>
 								<c:if test="${f.eventPercent ne 0}">
-									<p class="prd_price fw600">할인가</p>
-									<p class="prd_price2"><fmt:formatNumber value="${ f.foodMemberPrice-f.foodMemberPrice*(f.eventPercent/100) } "
+									<p class="prd_price"><fmt:formatNumber value="${ f.foodMemberPrice-f.foodMemberPrice*(f.eventPercent/100) } "
+								pattern="#,###" />원 </p>
+								<p class="prd_price2"><fmt:formatNumber value="${f.foodMemberPrice }"
 								pattern="#,###" />원 </p>
 								</c:if>
+								<c:if test="${f.eventPercent eq 0}">
 								<p class="prd_price"><fmt:formatNumber value="${f.foodMemberPrice }"
 								pattern="#,###" />원 </p>
+								</c:if>
 							</div>
 					</a></li>
         </c:forEach>

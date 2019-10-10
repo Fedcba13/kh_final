@@ -15,7 +15,7 @@
 
 <section class="main_sec">
 	<article class="inner">
-	    <h3 class="sub_tit">서브페이지 제목</h3>
+	    <h3 class="sub_tit">신상품</h3>
 	    <select name="marketList" id="marketList" onchange="changeMarket()">
 			<c:forEach items="${marketList}" var="m">
 				<option value="${m.marketNo }" ${m.marketNo eq marketNo? 'selected':' ' }>${m.marketName }</option>
@@ -41,13 +41,16 @@
 							</div>
 							<div class="prd_info_area">
 								<h4>${f.foodName }</h4>
-								<c:if test="${f.eventPercent ne 0 }">
-									<p class="prd_price fw600">할인가</p>
+								<c:if test="${f.eventPercent ne 0}">
 									<p class="prd_price"><fmt:formatNumber value="${ f.foodMemberPrice-f.foodMemberPrice*(f.eventPercent/100) } "
 								pattern="#,###" />원 </p>
+								<p class="prd_price2"><fmt:formatNumber value="${f.foodMemberPrice }"
+								pattern="#,###" />원 </p>
 								</c:if>
+								<c:if test="${f.eventPercent eq 0}">
 								<p class="prd_price"><fmt:formatNumber value="${f.foodMemberPrice }"
 								pattern="#,###" />원 </p>
+								</c:if>
 							</div>
 					</a></li>
         </c:forEach>

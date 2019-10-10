@@ -14,7 +14,6 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 
 	<article class="subPage inner">
-	    <h3 class="sub_tit">서브페이지 제목</h3>
         <form action="${pageContext.request.contextPath}/food/admin/foodInsert.do" id="foodInsertFrm"  method="post" enctype="multipart/form-data">
 	    <table class="tbl" id="insertFoodTb"> <!--가운데 정렬 아니면 txt_center 빼셔도 됩니다.
 	                                    width 값은 th에 width="150" 이런식으로 써주시면 됩니다.-->

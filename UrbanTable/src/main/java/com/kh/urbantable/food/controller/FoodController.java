@@ -77,7 +77,7 @@ public class FoodController {
 	@RequestMapping("/selectNewFoodList.do")
 	public String selectNewFoodList(Model model,
 			@RequestParam(value = "marketNo", required = false, defaultValue = "mar00012") String marketNo) {
-
+	
 		List<FoodWithStockAndEvent> foodList = foodService.selectNewFoodList(marketNo);
 		List<Market> marketList = foodService.selectMarketList();
 		model.addAttribute("foodList", foodList);
