@@ -103,12 +103,12 @@ public class CheckController {
 //			
 //		}
 		
+
+		model.addAttribute("msg", "발주처리완료되었습니다.");
+		model.addAttribute("loc", "/check/marketOrderCheckList.do");
 		
-		List<Map<String, Object>> list = checkService.selectAllList();
-		
-		model.addAttribute("list", list);
 				
-		return "/admin/marketOrderCheck";
+		return "/common/msg";
 	}
 	
 	@RequestMapping("/blameList.do")
@@ -129,11 +129,9 @@ public class CheckController {
 		// blame신고액션변경및 댓글 비노출
 		int result = checkService.blameActionChk(b);
 		
-		List<Blame> list = checkService.selectBlameList();
-		
-		model.addAttribute("list", list);
-		
-		return "/admin/blameList";
+		model.addAttribute("msg", "블럭처리 완료되었습니다. ");
+		model.addAttribute("loc", "/check/blameList.do");
+		return "/common/msg";
 	}
 	
 	@RequestMapping("/notBlame.do")
@@ -143,10 +141,9 @@ public class CheckController {
 		
 		int result = checkService.notBlameChk(b);
 		
-		List<Blame> list = checkService.selectBlameList();
-		
-		model.addAttribute("list", list);
-		
-		return "/admin/blameList";
+
+		model.addAttribute("msg", "허위신고입니다. ");
+		model.addAttribute("loc", "/check/blameList.do");
+		return "/common/msg";
 	}
 }
