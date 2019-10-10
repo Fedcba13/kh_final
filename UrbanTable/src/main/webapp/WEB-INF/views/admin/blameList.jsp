@@ -81,8 +81,8 @@ function notBlame(no){
 	    			</c:if>
 	    			<c:if test="${b.blameAction eq 1 }">
 	    			<td>
-	    			<input type="button" value="+" class="btn" style="width:50px;" onclick="notBlame(${vs.index})"/>
-	    			<input type="button" value="ㅡ" class="btn" style="width:50px;" onclick="blameChk(${vs.index})"/>
+	    			<input type="button" value="허위" class="btn" style="width:70px;" onclick="notBlame(${vs.index})"/>
+	    			<input type="button" value="처리" class="btn" style="width:70px;" onclick="blameChk(${vs.index})"/>
 	    			</td>
 	    			</c:if>
 	    			</tr>
