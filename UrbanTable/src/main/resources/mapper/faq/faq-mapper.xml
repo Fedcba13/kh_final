@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="faq">
+
+	<select id="selectFaqList" resultType="faq">
+		select * from notice
+		where notice_category = 'FAQ' and notice_enabled = 1
+		order by notice_date desc
+	</select>
+	
+	<insert id="insertFaq">
+		insert into notice(notice_no,notice_title,
+		notice_writer,notice_content,notice_date,
+		notice_readcount,notice_category,notice_enabled,
+		notice_date_modified)
+		values('nseq' || lpad (notiseq_seq.nextval,5,'0'),
+		#{noticeTitle},'UrbanTable',#{noticeContent},
+		#{noticeCategory},sysdate,0,'FAQ',1,sysdate)
+	</insert>
+	
+	<select id="selectOneFaq" resultType="faq">
+		select * from notice
+		where notice_no = #{noticeNo}
+	</select>
+	
+	<update id="faqUpdate">
+		update notice
+		set notice_title = #{noticeTitle},
+		notice_content = #{noticeContent},
+		notice_category = #{noticeCategory},
+		notice_date_modieifed = sysdate
+		where notice_no = #{noticeNo}			   
+	</update>
+	
+	<update id="deleteFaq">
+		update notice set notice_enabled = 0
+		where notice_no = #{noticeNo}
+	</update>
+	
+	<select id="selectPreNext" resultType="map">
+	select A.*
+	from (
+		select
+			LEAD(notice_no, 1) OVER (ORDER BY notice_date DESC) AS PRE_NO,
+			LEAD(notice_title, 1, '이전글이 없습니다') OVER (ORDER BY notice_date desc) AS PRE_TITLE,
+			notice_no, notice_title, notice_date,
+			LAG(notice_no, 1) OVER (ORDER BY notice_date DESC) AS NEXT_NO,
+			LAG(notice_title, 1, '다음글이 없습니다') OVER (ORDER BY notice_date desc) AS NEXT_TITLE
+		from notice
+		where notice_category = 'FAQ' and notice_enabled = 1
+		order by notice_date desc
+	) A
+	where notice_no = #{noticeNo}
+	</select>
+</mapper>  
