@@ -64,7 +64,6 @@ $(()=>{
 			foodNo : foodNo
 	}
 	
-	console.log(param);
 	$("#noticeStock").click(()=>{
 		
 		$.ajax({
@@ -89,24 +88,28 @@ $(()=>{
 		success: (data)=>{
 			console.log(data.length);
 			console.log(data[0]);
-			for(var i=0; i<data.length; i++){
-				
-				var reviewDate = toDate(data[i].REVIEW_DATE);
-				
-				var html = '';
-				html += '<tr>';
-				html += '	<td>'+data[i].MEMBER_ID+'<input type="hidden" class="pay_detail_no" value="'+data[i].PAY_DETAIL_NO+'"></td>';
-				html += '	<td>'+data[i].REVIEW_CONTENT+'</td>';
-				html += '	<td>'+reviewDate+'</td>';
-				if(data[i].MEMBER_ID == memberId){
-					html += '	<td><p class="modify">수정</p>&nbsp;&nbsp;&nbsp;<p class="delete">삭제</p></td>';
-				}else{
-					html += '	<td><p class="report">신고</p></td>';
+			var html = '';
+			if(data.length != 0){
+				for(var i=0; i<data.length; i++){
+					
+					var reviewDate = toDate(data[i].REVIEW_DATE);
+					
+					html += '<tr>';
+					html += '	<td>'+data[i].MEMBER_ID+'<input type="hidden" class="pay_detail_no" value="'+data[i].PAY_DETAIL_NO+'"></td>';
+					html += '	<td>'+data[i].REVIEW_CONTENT+'</td>';
+					html += '	<td>'+reviewDate+'</td>';
+					if(data[i].MEMBER_ID == memberId){
+						html += '	<td><p class="modify">수정</p>&nbsp;&nbsp;&nbsp;<p class="delete">삭제</p></td>';
+					}else{
+						html += '	<td><p class="report">신고</p></td>';
+					}
+					html += '</tr>';
+					
 				}
-				html += '</tr>';
-				
-				$(".review_tbl").append(html);
+			}else if(data.length == 0){
+				html += '<tr><td colspan="3">관련 리뷰가 없습니다.</td></tr>';	
 			}
+					$(".review_tbl").append(html);
 			
 			$(".review_tbl .modify").on('click', modifyReview);
 			$(".review_tbl .delete").on('click', deleteReview);
@@ -205,7 +208,6 @@ function cancleModify(e){
 	});
 	
 }
-
 </script>
 	<article class="subPage inner">
 	    <h3 class="sub_tit">상품정보</h3>
@@ -238,17 +240,17 @@ function cancleModify(e){
 					<tr>
 						<th>판매가</th>
 						<td id="foodPrice">
-						<c:if test="${ food.eventPercent ne 0}">
-								<p class="prd_price"><fmt:formatNumber value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) } "
-								pattern="#,###" />원 </p>
-							<p class="prd_price2"><fmt:formatNumber value="${food.foodMemberPrice }" pattern="#,###" />원 </p>
-						</c:if>
-						<c:if test="${ food.eventPercent eq 0}">
 							<p class="prd_price"><fmt:formatNumber value="${food.foodMemberPrice }" pattern="#,###" />원 </p>
-						</c:if>
 							<input type="hidden" id="hiddenPrice" value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) }" />
 						</td>
 					</tr>
+					<c:if test="${ food.eventPercent ne 0}">
+						<tr>
+	                        <th>할인가</th>
+	                        <td><p class="prd_price"><fmt:formatNumber value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) } "
+								pattern="#,###" />원 </p></td>
+	                    </tr>
+                    </c:if>
 					<tr>
 						<th>배송구분</th>
 						<td>샛별배송/택배배송</td>
@@ -306,7 +308,7 @@ function cancleModify(e){
 			</div>
 			</div>
 			<hr>
-			 <section class="sec_bg">
+			 <section class="sec_bg" >
 			 <br />
 			 <h3 class="main_tit txt_center">상품 이미지</h3>
 			 <div id="detailView">
@@ -322,20 +324,13 @@ function cancleModify(e){
 			 <br />
 			 </section>
 			<hr>
-			        <h3 class="main_tit txt_center">관련 레시피</h3>
+			<section class="sec_bg" style="height: 300px;">
+			 <br />
+		<h3 class="main_tit txt_center">관련 레시피</h3>
         <ul class="main_event_list main_receipe txt_center clearfix" id="toAppend">
-            <li>
-                <a href="" class="dp_block">
-                    <div class="event_img_area">
-                        <img src="${pageContext.request.contextPath }/resources/images/example2.PNG" alt="이벤트 사진">
-                    </div>
-                    <div class="event_info_area">
-                        <p>레시피명</p>
-                    </div>
-                </a>
-            </li> 
         </ul>
-        
+        <br />
+         </section>
         <table class="tbl txt_center review_tbl">
             <tr>
                 <th>작성자</th>
@@ -491,17 +486,21 @@ function cancleModify(e){
 		   	}); 
 		}
 		
-		
-		/* 1. 좋아요 싫어요 출력
-			2. 멤버 체크 확인  => 일반회원이면 did, didnt 먹이기
-		 */
-		 
-		 
-/* 		if((memberId.trim().length != 0)){
-			getGoodInView();
-		} */
 			getGoodInView();
 		
+			$(document).on('click', '#like', function(){
+				var memberId = $("#memberLoggedInView").val();
+				if(memberId.trim().length == 0 ){
+					alert("로그인 후 이용가능합니다!");
+				}
+			});
+			$(document).on('click', '#dislike', function(){
+				var memberId = $("#memberLoggedInView").val();
+				if(memberId.trim().length == 0 ){
+					alert("로그인 후 이용가능합니다!");
+				}
+			});
+			
 		$(document).on('click', '.did', function(){
 			$.ajax({
 		    	url: "${pageContext.request.contextPath}/food/cancelGood.do",
@@ -579,13 +578,19 @@ function cancleModify(e){
 			data: param,
 			dataType:"json",
 	   		success: (data)=> {
+	   			
 	   			var html = ' ';
-	   			for(var i in data){
-	   				html += '<li>  <a href="${pageContext.request.contextPath}/recipe/recipeView.do?recipeNo='+data[i].recipeNo+'&memberId='+memberId+'" class="dp_block"><div class="event_img_area">';
-	   				html += '<img src="${pageContext.request.contextPath }/resources/upload/recipe/'+data[i].renamedRecipePic+'">';
-	   				html += '</div><div class="event_info_area">  <p>'+data[i].recipeTitle+'</p>';
-	   				html += '</div> </a> </li> ';
-	   			} 
+	   			if(data.length != 0){
+		   			for(var i in data){
+		   				html += '<li>  <a href="${pageContext.request.contextPath}/recipe/recipeView.do?recipeNo='+data[i].recipeNo+'&memberId='+memberId+'" class="dp_block"><div class="event_img_area">';
+		   				html += '<img src="${pageContext.request.contextPath }/resources/upload/recipe/'+data[i].renamedRecipePic+'">';
+		   				html += '</div><div class="event_info_area">  <p>'+data[i].recipeTitle+'</p>';
+		   				html += '</div> </a> </li> ';
+		   			} 
+	   				
+	   			}else if(data.length == 0){
+	   				html += '<p>관련 레시피가 없습니다.</p>';
+	   			}
 	   				$("#toAppend").html(html); 
 	   		},
 	   		error: (xhr, txtStatus, err)=> {
