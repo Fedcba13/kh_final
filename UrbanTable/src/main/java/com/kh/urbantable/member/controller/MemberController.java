@@ -415,7 +415,12 @@ public class MemberController {
 			curMember.setMemberAddress(memberAddress);
 			curMember.setMemberAddress2(memberAddress2);
 			updateResult = memberService.modifyMember(curMember);
-			result.put("msg", updateResult > 0 ? "회원정보 수정 성공" : "회원정보 수정 실패");
+			if(updateResult > 0) {
+				result.put("msg", "회원정보 수정 성공");
+				model.addAttribute("memberLoggedIn", curMember);
+			}else {
+				result.put("msg", "회원정보 수정 실패");
+			}
 		}		
 		
 		return result;

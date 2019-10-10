@@ -66,7 +66,7 @@ $(document).ready(function(){
 			type: "POST",
 			success: (data)=>{
 				alert(data.msg);
-				if(data.msg == '로그인 성공'){
+				if(data.msg.indexOf('환영') != -1){
 					location.reload();
 				}else if(data.msg == '비밀번호가 틀립니다'){
 					$("input[type=password][name=password]").val("");

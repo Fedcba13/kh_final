@@ -25,7 +25,7 @@ public class Scheduler {
 	MemberService memberService;
 	
 	//9-18시 정각마다 알림
-	@Scheduled(cron="0 0 09-18 * * ?")
+	@Scheduled(cron="0 * 09-22 * * ?")
 	public void curTime() {
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
