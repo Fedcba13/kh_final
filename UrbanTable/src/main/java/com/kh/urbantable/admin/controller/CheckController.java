@@ -136,4 +136,17 @@ public class CheckController {
 		return "/admin/blameList";
 	}
 	
+	@RequestMapping("/notBlame.do")
+	public String notBlame(String blameId, Model model) {
+		
+		Blame b = checkService.selectBlame(blameId);
+		
+		int result = checkService.notBlameChk(b);
+		
+		List<Blame> list = checkService.selectBlameList();
+		
+		model.addAttribute("list", list);
+		
+		return "/admin/blameList";
+	}
 }

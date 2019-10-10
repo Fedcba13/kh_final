@@ -10,7 +10,7 @@ import com.kh.urbantable.member.model.vo.Member;
 
 public interface EventService {
 
-	int insertCoupon1(Map<String, String> event);
+	int insertCoupon1(Map<String, Object> event);
 
 	Member selectOne(String memberId);
 

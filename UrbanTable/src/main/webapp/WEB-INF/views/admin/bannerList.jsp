@@ -76,7 +76,7 @@ function insertBanner(){
 <section>
 	<article class="subPage inner">
 
-		<h3 class="sub_tit">배너 리스트</h3>
+		<h3 class="sub_tit">배너 관리</h3>
 
 		<div class="bannerList">
 			<div class="insertButton txt_right">
@@ -124,7 +124,7 @@ function insertBanner(){
 							<td colspan="3"><input type="text" class="view"
 								name="bannerContent" value="${b.bannerContent }" /></td>
 							<td><input type="submit" class="btn" value="수정"
-								style="width: 60px;" /> <input type="button" class="btn2"
+								style="width: 60px;" /> <input type="button" class="btn btn2"
 								value="삭제" style="width: 60px;"
 								onclick="deleteBanner(${vs.index})" /></td>
 						</tr>

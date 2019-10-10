@@ -229,7 +229,7 @@
 				console.log(data);
 					html = '';
 				for(var i in data){
-					html += '<li><a href="" class="dp_block">'
+					html += '<li><a href="${pageContext.request.contextPath}/event/eventMain.do" class="dp_block">'
 					html += '<div class="event_img_area"><img src="${pageContext.request.contextPath }/resources/images/event/'+data[i].eventFile +'" alt="이벤트 사진" >';
 					html += '</div>';
 					html += '<div class="event_info_area">';
