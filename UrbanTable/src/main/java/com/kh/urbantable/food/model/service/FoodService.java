@@ -53,7 +53,7 @@ public interface FoodService {
 
 	List<FoodWithStockAndEvent> selectBestFoodList(Map<String, String> param);
 
-	List<RelatedRecipe> selectRelatedRecipe(String foodNo);
+	List<RelatedRecipe> selectRelatedRecipe(Map<String, String> param);
 
 	List<FoodWithStockAndEvent> selectNeedToOrderListListByCat(Map<String, String> param);
 

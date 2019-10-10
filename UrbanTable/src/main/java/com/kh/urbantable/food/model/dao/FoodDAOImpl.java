@@ -122,8 +122,8 @@ public class FoodDAOImpl implements FoodDAO {
 	}
 
 	@Override
-	public List<RelatedRecipe> selectRelatedRecipe(String foodNo) {
-		return sqlSession.selectList("food.selectRelatedRecipe", foodNo);
+	public List<RelatedRecipe> selectRelatedRecipe(Map<String, String> param) {
+		return sqlSession.selectList("food.selectRelatedRecipe", param);
 	}
 
 	@Override

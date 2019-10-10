@@ -588,16 +588,16 @@ function cancleModify(e){
 			
 		
 		// 관련 레시피 출력
-	 	$.ajax({
+		$.ajax({
 	    	url: "${pageContext.request.contextPath}/food/selectRelatedRecipe.do",
 	    	type: "get",
 			data: param,
-			dataType:"json",
 	   		success: (data)=> {
-	   			
+	   			console.log(data);
 	   			var html = ' ';
 	   			if(data.length != 0){
 		   			for(var i in data){
+		   				console.log('<img src="${pageContext.request.contextPath }/resources/upload/recipe/'+data[i].renamedRecipePic+'">');
 		   				html += '<li>  <a href="${pageContext.request.contextPath}/recipe/recipeView.do?recipeNo='+data[i].recipeNo+'&memberId='+memberId+'" class="dp_block"><div class="event_img_area">';
 		   				html += '<img src="${pageContext.request.contextPath }/resources/upload/recipe/'+data[i].renamedRecipePic+'">';
 		   				html += '</div><div class="event_info_area">  <p>'+data[i].recipeTitle+'</p>';

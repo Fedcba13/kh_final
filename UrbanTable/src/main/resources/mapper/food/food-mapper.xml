@@ -297,17 +297,21 @@
 	]]>
 	</select>
 	<select id="selectRelatedRecipe" resultType="relatedRecipe">
-		<![CDATA[SELECT R.*, S.*
-		FROM RECIPE_SEQUENCE S  LEFT JOIN RECIPE R ON S.RECIPE_NO = R.RECIPE_NO
-                                                LEFT JOIN RECIPE_INGREDIENT I ON R.RECIPE_NO = I.RECIPE_NO
-                                                LEFT JOIN FOOD F ON F.FOOD_NO = I.FOOD_NO
-		WHERE I.FOOD_NO = #{foodNo} AND S.RECIPE_ORDER  = 
-		    (SELECT MAX(RECIPE_ORDER)
-		    FROM RECIPE_SEQUENCE S  LEFT JOIN RECIPE R ON S.RECIPE_NO = R.RECIPE_NO
-		    LEFT JOIN RECIPE_INGREDIENT I ON R.RECIPE_NO = I.RECIPE_NO
-		    LEFT JOIN FOOD F ON F.FOOD_NO = I.FOOD_NO
-		    WHERE I.FOOD_NO = #{foodNo})
-	    AND ROWNUM <= 4]]>
+		<![CDATA[
+		select distinct(recipe_no), recipe_title, renamed_recipe_pic 
+from( select ra.*, food_no, ri.food_section_no 
+        from (select r.recipe_no, r.recipe_title, rs.renamed_recipe_pic 
+                from (select *
+                            from recipe
+                            where recipe_enabled = 1) r
+       left join recipe_sequence rs
+           on r.recipe_no = rs.recipe_no
+   where (rs.recipe_no, rs.recipe_order) in ( select recipe_no, max(recipe_order) as recipe_order from recipe_sequence group by recipe_no) ) ra
+   left join recipe_ingredient ri
+       on ra.recipe_no = ri.recipe_no)
+   where food_no = #{foodNo}
+           or (food_no = null and food_section_no = #{foodSectionNo})
+		]]>
 	</select> 
 	<select id="selectGoodOne" resultType="good">
 		<choose>

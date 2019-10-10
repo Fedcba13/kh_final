@@ -134,8 +134,8 @@ public class FoodServiceImpl implements FoodService {
 	}
 
 	@Override
-	public List<RelatedRecipe> selectRelatedRecipe(String foodNo) {
-		return foodDAO.selectRelatedRecipe(foodNo);
+	public List<RelatedRecipe> selectRelatedRecipe(Map<String, String> param) {
+		return foodDAO.selectRelatedRecipe(param);
 	}
 
 	@Override

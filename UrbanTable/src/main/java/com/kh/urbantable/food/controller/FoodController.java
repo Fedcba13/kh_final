@@ -206,6 +206,7 @@ public class FoodController {
 		model.addAttribute("food", food);
 		model.addAttribute("marketNo", marketNo);
 		model.addAttribute("market", market);
+		model.addAttribute("foodSectionNo", food.getFoodSectionNo());
 
 		return "food/foodView";
 	}
@@ -236,10 +237,18 @@ public class FoodController {
 
 	@RequestMapping(value = "/selectRelatedRecipe.do")
 	@ResponseBody
-	public List<RelatedRecipe> selectRelatedRecipe(String foodNo) {
-
-		List<RelatedRecipe> relatedRecipeList = foodService.selectRelatedRecipe(foodNo);
-
+	public List<RelatedRecipe> selectRelatedRecipe(String foodNo, String foodSectionNo) {
+		Map<String, String> param = new HashMap<String, String>();
+		param.put("foodNo", foodNo);
+		param.put("foodSectionNo", foodSectionNo);
+		
+		List<RelatedRecipe> relatedRecipeList = foodService.selectRelatedRecipe(param);
+		System.out.println("dddddddddddd");
+		System.out.println("dddddddddddd");
+		System.out.println(relatedRecipeList.toString());
+		System.out.println("dddddddddddd");
+		System.out.println("dddddddddddd");
+		
 		return relatedRecipeList;
 
 	}
