@@ -62,6 +62,9 @@ function notBlame(no){
 	    			</tr>
 	    		<c:forEach items="${list }" var="b" varStatus="vs">
 	    			<tr>
+	    			<c:if test="${b.targetType eq 2}">
+	    			<td>리뷰</td>
+	    			</c:if>
 	    			<c:if test="${b.targetType eq 4}">
 	    			<td>댓글</td>
 	    			</c:if>
