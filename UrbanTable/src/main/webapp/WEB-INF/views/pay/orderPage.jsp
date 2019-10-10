@@ -257,7 +257,7 @@
 		var payPrice = cartInfoArr[0].payPrice;
 		var dcRate = $("#couponDiscount").val();
 		var delCost = $("#deliveryCost").val();
-		$("#totalPrice").val(((payPrice - delCost) * (1-(dcRate/100))) + " 원");
+		$("#totalPrice").val(parseInt((payPrice - delCost) * (1-(dcRate/100))) + " 원");
 		var totalPrice = parseInt($("#totalPrice").val());
 		var totalPayment = totalPrice + parseInt(delCost);
 		$("#totalPaymentCost").val(totalPayment+ " 원");

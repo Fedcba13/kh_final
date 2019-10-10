@@ -9,7 +9,7 @@
 <section class="sec_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 	    <h2>주문이 완료되었습니다.</h2><br />
-	    <span>주문번호: <a href="#">${payNo}</a> | <a href="#">마이페이지</a> 가기 </span>
+	    <span>주문번호: <a href="${pageContext.request.contextPath}/member/payDetail?payNo=${payNo}">${payNo}</a> | <a href="${pageContext.request.contextPath }/member/myPage">마이페이지</a> 가기 </span>
 	   	
     </article>
 </section>

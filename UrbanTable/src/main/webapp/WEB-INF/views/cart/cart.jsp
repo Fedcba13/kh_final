@@ -14,6 +14,9 @@
 		border-spacing: 15px;
 		padding: 15px 8px;
 	}
+	input[name='list']{
+		vertical-align: 44px;
+	}
 </style>
 <script>
 	var length = ${fn:length(list)};
