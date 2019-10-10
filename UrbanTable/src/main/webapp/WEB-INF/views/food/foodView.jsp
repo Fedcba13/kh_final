@@ -100,6 +100,8 @@ $(()=>{
 					html += '	<td>'+reviewDate+'</td>';
 					if(data[i].MEMBER_ID == memberId){
 						html += '	<td><p class="modify">수정</p>&nbsp;&nbsp;&nbsp;<p class="delete">삭제</p></td>';
+					}else if (memberId == null || memberId == ''){
+						html += '	<td></td>';
 					}else{
 						html += '	<td><p class="report">신고</p></td>';
 					}
@@ -113,6 +115,7 @@ $(()=>{
 			
 			$(".review_tbl .modify").on('click', modifyReview);
 			$(".review_tbl .delete").on('click', deleteReview);
+			$(".review_tbl .report").on('click', reportReview);
 			
 		},
 		error: (xhr, txtStatus, err)=> {
@@ -122,6 +125,15 @@ $(()=>{
 
 	
 });
+
+function reportReview(e){
+	var marketNo = '${marketNo}';
+	var foodNo = '${food.foodNo}';
+	var detailNo = $(e.target).parents("tr").find(".pay_detail_no").val();
+	var loc = "${pageContext.request.contextPath}/recipe/recipeBlame?recipeNo=" + detailNo+"&type=2&foodNo="+foodNo+"&marketNo="+marketNo;
+	
+	window.open(loc,'신고','width=430,height=500,location=no,status=no,scrollbars=no');
+}
 
 function modifyReview(e){
 	var txt = $(e.target).parents("tr").children().eq(1).text();

@@ -24,6 +24,7 @@
 	
 	.pay_list_tbl > tr > td:nth-child(4) {
 		width: 90px;
+		text-align: center;`z
 	}
 
 </style>
@@ -53,8 +54,8 @@ function getMemberPayList(){
 				
 				var date = toDate(data[i].PAY_DATE);
 				var flag = '';
-				if(data[i].FLAG == 1){
-					flag = '배송 준비중';
+				if(data[i].PAY_FLAG == 1){
+					flag = '배송<br>준비중';
 				}else{
 					flag = '배송 완료';
 				}

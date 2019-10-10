@@ -5,6 +5,13 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <fmt:requestEncoding value="utf-8"/>
 <script>
+window.onload = function(){
+	var type = '${type}';
+	if(type == 2){
+		document.getElementsByName("targetType")[0].value = 2;
+	}
+}
+
 function goOpener() {
 	opener.name = "insertBlame";
 	document.blameFrm.target = opener.name;
@@ -23,5 +30,7 @@ function goOpener() {
 	<input type="hidden" name="targetType" value="3" />
 	<input type="hidden" name="blameTargetId" value="${recipeNo}" />
 	<input type="hidden" name="recipeNo" value="${recipeNo}" />
+	<input type="hidden" name="foodNo" value="${foodNo}" />
+	<input type="hidden" name="marketNo" value="${marketNo}" />
 	<button class="btn" onclick="goOpener();">신고</button>
 </form>

@@ -461,7 +461,12 @@ public class RecipeController {
 	}
 	
 	@RequestMapping("/blameComment")
-	public String boardCommentBlame(Blame blame, @RequestParam String recipeNo, Model model) {
+	public String boardCommentBlame(Blame blame,
+										@RequestParam String recipeNo,
+										Model model,
+										@RequestParam String targetType,
+										@RequestParam(defaultValue="") String foodNo,
+										@RequestParam(defaultValue="") String marketNo) {
 		
 		try {
 			int result = recipeService.boardCommentBlame(blame);
@@ -469,6 +474,10 @@ public class RecipeController {
 			
 			model.addAttribute("msg", msg);
 			model.addAttribute("loc", "/recipe/recipeView.do?recipeNo=" + recipeNo + "&memberId=");
+			if(targetType.equals("2")) {
+				model.addAttribute("loc", "/food/goFoodView.do?foodNo="+foodNo+"&marketNo="+marketNo);
+			}
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -552,9 +561,16 @@ public class RecipeController {
 	}
 	
 	@RequestMapping("/recipeBlame")
-	public String recipeBlame(@RequestParam("recipeNo") String recipeNo, HttpServletRequest request) {
+	public String recipeBlame(@RequestParam("recipeNo") String recipeNo, 
+			HttpServletRequest request, 
+			@RequestParam(value="type", defaultValue="") String type,
+			@RequestParam(value="foodNo", defaultValue="") String foodNo,
+			@RequestParam(value="marketNo", defaultValue="") String marketNo) {
 		
 		request.setAttribute("recipeNo", recipeNo);
+		request.setAttribute("foodNo", foodNo);
+		request.setAttribute("marketNo", marketNo);
+		request.setAttribute("type", type);
 		return "recipe/blame";
 	}
 	
