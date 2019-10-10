@@ -236,19 +236,19 @@ function cancleModify(e){
 				<p> ${food.foodName }</p>
 				<table class="tbl">
 					<tr>
-						<th>판매가</th>
-						<td id="foodPrice">
-						<c:if test="${ food.eventPercent ne 0}">
-								<p class="prd_price"><fmt:formatNumber value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) } "
-								pattern="#,###" />원 </p>
-							<p class="prd_price2"><fmt:formatNumber value="${food.foodMemberPrice }" pattern="#,###" />원 </p>
-						</c:if>
-						<c:if test="${ food.eventPercent eq 0}">
-							<p class="prd_price"><fmt:formatNumber value="${food.foodMemberPrice }" pattern="#,###" />원 </p>
-						</c:if>
-							<input type="hidden" id="hiddenPrice" value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) }" />
-						</td>
-					</tr>
+                        <th>판매가</th>
+                        <td id="foodPrice">
+                            <p class="prd_price"><fmt:formatNumber value="${food.foodMemberPrice }" pattern="#,###" />원 </p>
+                            <input type="hidden" id="hiddenPrice" value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) }" />
+                        </td>
+                    </tr>
+                    <c:if test="${ food.eventPercent ne 0}">
+                       <tr>
+                           <th>할인가</th>
+                           <td><p class="prd_price"><fmt:formatNumber value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) } "
+                               pattern="#,###" />원 </p></td>
+                       </tr>
+                   </c:if>
 					<tr>
 						<th>배송구분</th>
 						<td>샛별배송/택배배송</td>
@@ -277,25 +277,27 @@ function cancleModify(e){
 						
 						</td>
 					</tr>
+					<tr>
+						<th>안내사항</th>
+						<td>별도의 유통기한은 없으나 식품 특성상 가급적 빨리 드시기 바랍니다.</td>
+					</tr>
 				</table>
-					<br />
-					<div style="float: right;">
+					<div class="txt_right">
 						<c:if test="${empty food.marketName }">
 							<input type="button" id="noticeStock" value="재고 알림" class="btn btn2" >
 						</c:if>
 						<c:if test="${not empty food.marketName }">
-							<p id="finalPrice">주문금액 : 
+							<p id="finalPrice">총 상품 금액 : 
 							<c:if test="${food.eventPercent ne 0}">
-									<fmt:formatNumber value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) } "
-									pattern="#,###" />원 
+									<span class="dp_ib fw600"><fmt:formatNumber value="${ food.foodMemberPrice-food.foodMemberPrice*(food.eventPercent/100) } "
+									pattern="#,###" /></span>원 
 							</c:if>
 							<c:if test="${food.eventPercent eq 0}">
-								<fmt:formatNumber value="${food.foodMemberPrice }" pattern="#,###" />원 
+								<span class="dp_ib fw600"><fmt:formatNumber value="${food.foodMemberPrice }" pattern="#,###" /></span>원 
 							</c:if>
 						</c:if>
 						</p>
 					</div>
-					<br />
 					<div id="buttons">
 						<c:if test="${not empty food.marketName }">
 							<input type="button" id="noticeStock" value="재고 알림" class="btn btn2" >
@@ -305,9 +307,7 @@ function cancleModify(e){
 					</div>
 			</div>
 			</div>
-			<hr>
 			 <section class="sec_bg">
-			 <br />
 			 <h3 class="main_tit txt_center">상품 이미지</h3>
 			 <div id="detailView">
 					 <c:if test="${not empty food.foodImg }">
@@ -319,22 +319,20 @@ function cancleModify(e){
 							alt="상품 사진">
 					</c:if>
 			 </div>
-			 <br />
 			 </section>
-			<hr>
-			        <h3 class="main_tit txt_center">관련 레시피</h3>
-        <ul class="main_event_list main_receipe txt_center clearfix" id="toAppend">
-            <li>
-                <a href="" class="dp_block">
-                    <div class="event_img_area">
-                        <img src="${pageContext.request.contextPath }/resources/images/example2.PNG" alt="이벤트 사진">
-                    </div>
-                    <div class="event_info_area">
-                        <p>레시피명</p>
-                    </div>
-                </a>
-            </li> 
-        </ul>
+			 <h3 class="main_tit txt_center">관련 레시피</h3>
+	        <ul class="main_event_list main_receipe txt_center clearfix" id="toAppend">
+	            <li>
+	                <a href="" class="dp_block">
+	                    <div class="event_img_area">
+	                        <img src="${pageContext.request.contextPath }/resources/images/example2.PNG" alt="이벤트 사진">
+	                    </div>
+	                    <div class="event_info_area">
+	                        <p>레시피명</p>
+	                    </div>
+	                </a>
+	            </li> 
+	        </ul>
         
         <table class="tbl txt_center review_tbl">
             <tr>
@@ -355,11 +353,11 @@ function cancleModify(e){
 		var html = "";		
 		if(amount <=0){
 			$("#amount").val(0);
-			html = "총 상품금액 : 0원"; 
+			html = "총 상품금액 : <span class='dp_ib fw600'>0</span>원"; 
 		}else{
 		var finalPrice = $("#hiddenPrice").val()*amount;
 		var ppp =  finalPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-		html = "총 상품금액 : "+ppp+"원" 
+		html = "총 상품금액 : <span class='dp_ib fw600'>"+ppp+"</span>원" 
 			
 		}
 		 $("#finalPrice").html(html);  
@@ -459,25 +457,25 @@ function cancleModify(e){
 			   				
 			   				//좋아요
 			   				if(data.good == 1 ){
-			   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/liked.png" class="did" id="goodImg" alt="좋아요" name="GOOD"/> <br /> <p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
-			   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png" class="didnt" id="badImg" alt="싫어요" name="BAD"/><br /> <p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
+			   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/liked.png" class="did" id="goodImg" alt="좋아요" name="GOOD"/><p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
+			   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png" class="didnt" id="badImg" alt="싫어요" name="BAD"/><p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
 			   						
 			   				}//싫어요
 			   				else if (data.bad == 1){
-			   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png" class="didnt"  id="goodImg" alt="좋아요" name="GOOD"/> <br /> <p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
-			   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/disliked.png" class="did"  id="badImg" alt="싫어요" name="BAD"/><br /> <p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
+			   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png" class="didnt"  id="goodImg" alt="좋아요" name="GOOD"/><p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
+			   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/disliked.png" class="did"  id="badImg" alt="싫어요" name="BAD"/><p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
 			   				
 			   				}
 			   			}
 			   			//한적만 있음.
 		   				else if((data.good==0) && (data.good==0)){
-		   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png"  class="didntX"  id="goodImg" alt="좋아요" name="GOOD"/> <br /> <p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
-		   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png" class="didntX" id="badImg" alt="싫어요" name="BAD"/><br /> <p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
+		   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png"  class="didntX"  id="goodImg" alt="좋아요" name="GOOD"/><p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
+		   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png" class="didntX" id="badImg" alt="싫어요" name="BAD"/><p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
 		   				}
 			   			//좋아요 싫어요 한번도 안함
 		   				else if(!data ){
-		   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png" class="didntXX" id="goodImg" alt="좋아요" name="GOOD"/> <br /> <p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
-		   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png" class="didntXX" id="badImg" alt="싫어요" name="BAD"/><br /> <p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
+		   					htmlInLike += '<img src="${pageContext.request.contextPath }/resources/images/food/like.png" class="didntXX" id="goodImg" alt="좋아요" name="GOOD"/><p id="goodText">&lpar;'+data.totalGood+'&rpar;</p> ';
+		   					htmlInBad += '<img src="${pageContext.request.contextPath }/resources/images/food/dislike.png" class="didntXX" id="badImg" alt="싫어요" name="BAD"/><p id="badText">&lpar;'+data.totalBad+'&rpar;</p> ';
 		   				}
 	   				}
 		   			

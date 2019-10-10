@@ -1,21 +1,46 @@
 @charset "UTF-8";
-#foodListDiv{
-	margin:0px 30px -10px 30px
-}
 .main_sec {
     padding: 30px 0;
 }
-#foodList_Cat{
-	margin: 0px, 10px, 0px, 10px;
+
+.hasCate .sub_tit {
+	padding-bottom:10px;
 }
 
 #foodList_Cat li {
-	display: inline; /* 세로나열을 가로나열로 변경 */
-	border-left: 1px solid #999; /* 각 메뉴의 왼쪽에 "|" 표시(분류 표시) */
-	padding: 0 10px; /* 각 메뉴 간격 */
+	/* display: inline; 세로나열을 가로나열로 변경
+	border-left: 1px solid #999; 각 메뉴의 왼쪽에 "|" 표시(분류 표시)
+	padding: 0 10px; 각 메뉴 간격 */
+	
+	float:left;
 }
+
+#foodList_Cat li a {
+	position:relative;
+	display:block;
+	margin-left:10px;
+	padding-left:10px;
+	font-size:14px;
+	background:url('../images/bar.png') no-repeat left center;
+}
+
+#foodList_Cat li a:hover {
+	color:#374818;
+	font-weight:600;
+}
+
+#foodList_Cat li:first-child a {
+	margin-left:0;
+	padding-left:0;
+	background:none;
+}
+
+.marketList_wrap {
+	padding:15px 0 30px;
+}
+
 #marketList{
-	margin : -5px 0px 17px -6px;
+	width:180px;
 }
 
 .prd_img_area{ 
@@ -25,7 +50,7 @@
 	width: 300px;
 	height: 300px;
     position:absolute; 
-    background:rgba(0,0,0,0.5);
+    background:rgba(0,0,0,0.6);
     top:50%; 
     left:50%; 
     transform:translate(-50%,-50%); 
@@ -36,11 +61,10 @@
 .prd_img_area .inner_box h2{ 
     font-family:arial; 
     text-align:center; 
-    font-size:26px; 
+    font-size:23px; 
     font-weight:normal; 
-    color: gray; 
+    color: #fff; 
     padding: 100px 0px;
-
 } 
 
 
@@ -49,6 +73,11 @@
 #good {
 	overflow: hidden;
 }
+
+#foodExpression {
+	padding-bottom:40px;
+}
+
  #foodExpressionImg{
 	float:left;
 	width:350px;
@@ -80,16 +109,13 @@
 	width: 534px;
 }
 
-#foodExpressionTb .tbl th {
-	padding: 10px 0 10px 20px;
-    box-sizing: border-box;
-    text-align: left;
-    width: 150px;
-}
-
 #foodExpressionTb p{
 	font-size: 17px;
 	font-weight: 600;
+}
+
+#foodExpressionTb .tbl p {
+	font-size: 15px;
 }
 
 #foodExpressionTb > p{
@@ -98,13 +124,37 @@
 	text-align:left;
 }
 
+#foodExpressionTb #finalPrice {
+	font-weight:400;
+	font-size:16px;
+	padding:27px 0 34px;
+}
+
+#foodExpressionTb #finalPrice span {
+	font-size:30px;
+	padding:0 5px 0 7px;
+}
+
+#foodExpressionTb .tbl tr th, 
+#foodExpressionTb .tbl tr td {
+	padding:13px 0;
+	font-size:14px;
+}
+
+#foodExpressionTb .tbl tr th {
+    box-sizing: border-box;
+    text-align: left;
+    width: 150px;
+    padding:13px 0 13px 20px;
+}
+
 #amount{
 	width: 70px;
 	text-align: center;
 }
 #buttons {
     text-align: right;
-    margin: 17px 0px 10px 0px;
+    margin: 0 0px 10px 0px;
 }
 .btn2 {
     background: #fff;
@@ -138,6 +188,10 @@
 	height:54px;
 	line-height:54px;
 	font-size:16px;
+}
+
+#finalPrice > p {
+	font-weight:400;
 }
 
 /* insertFood.jsp */

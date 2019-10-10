@@ -12,34 +12,35 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/food.css">
 <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/main.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath }/resources/js/foodList.js"></script>
-<br />
-<div id= "foodListDiv">
-	<ul id="foodList_Cat">
-		<c:if test="${not empty subUpperList }">
-			<c:forEach items="${subUpperList }" var="u">
-				<li><a href="${pageContext.request.contextPath }/food/selectFoodByCat.do?searchNo=${u.foodUpperNo }&searchKeyword=${u.foodUpperName}">${u.foodUpperName}</a></li>
-			</c:forEach>
-		</c:if>
-		<c:if test="${not empty subSectList }">
-			<c:forEach items="${subSectList }" var="s">
-				<li><a href="${pageContext.request.contextPath }/food/selectFoodByCat.do?searchNo=${s.foodSectionNo }&searchKeyword=${s.foodSectionName}">${s.foodSectionName }</a></li>
-			</c:forEach>
-		</c:if>
-		<c:if test="${not empty brotherSectList }">
-			<c:forEach items="${brotherSectList }" var="b">
-				<li><a href="${pageContext.request.contextPath }/food/selectFoodByCat.do?searchNo=${b.foodSectionNo }&searchKeyword=${b.foodSectionName}">${b.foodSectionName }</a></li>
-			</c:forEach>
-		</c:if>
-	</ul>
-</div>
-<section class="main_sec">
+<section class="main_sec hasCate">
 	<article class="inner">
-	    <h3 class="sub_tit">${searchKeyword }의 검색결과</h3>
-	    <select name="marketList" id="marketList" onchange="changeMarket()">
-			<c:forEach items="${marketList}" var="m">
-				<option value="${m.marketNo }" ${m.marketNo eq marketNo? 'selected':' ' }>${m.marketName }</option>
-			</c:forEach>
-	    </select>
+	    <h3 class="sub_tit">${searchKeyword }</h3>
+	    <div id= "foodListDiv">
+			<ul id="foodList_Cat" class="clearfix">
+				<c:if test="${not empty subUpperList }">
+					<c:forEach items="${subUpperList }" var="u">
+						<li><a href="${pageContext.request.contextPath }/food/selectFoodByCat.do?searchNo=${u.foodUpperNo }&searchKeyword=${u.foodUpperName}">${u.foodUpperName}</a></li>
+					</c:forEach>
+				</c:if>
+				<c:if test="${not empty subSectList }">
+					<c:forEach items="${subSectList }" var="s">
+						<li><a href="${pageContext.request.contextPath }/food/selectFoodByCat.do?searchNo=${s.foodSectionNo }&searchKeyword=${s.foodSectionName}">${s.foodSectionName }</a></li>
+					</c:forEach>
+				</c:if>
+				<c:if test="${not empty brotherSectList }">
+					<c:forEach items="${brotherSectList }" var="b">
+						<li><a href="${pageContext.request.contextPath }/food/selectFoodByCat.do?searchNo=${b.foodSectionNo }&searchKeyword=${b.foodSectionName}">${b.foodSectionName }</a></li>
+					</c:forEach>
+				</c:if>
+			</ul>
+		</div>
+		<div class="txt_right marketList_wrap">
+			<select name="marketList" id="marketList" class="txt_center" onchange="changeMarket()">
+				<c:forEach items="${marketList}" var="m">
+					<option value="${m.marketNo }" ${m.marketNo eq marketNo? 'selected':' ' }>${m.marketName }</option>
+				</c:forEach>
+		    </select>
+		</div>
        <ul class="main_prd_list clearfix">
         <c:forEach items="${foodList }" var="f">
 <%--             <li onclick="goFoodView('${f.foodNo}');"> --%>
@@ -73,8 +74,7 @@
            
         </c:forEach>
         </ul>
-        <hr />
-         <ul class="main_prd_list clearfix">
+        <ul class="main_prd_list clearfix">
         <c:forEach items="${needToOrderList }" var="f">
             <li>
                 <a href="${pageContext.request.contextPath}/food/goFoodView.do?foodNo=${f.foodNo }&marketNo=${marketNo}" class="dp_block">
