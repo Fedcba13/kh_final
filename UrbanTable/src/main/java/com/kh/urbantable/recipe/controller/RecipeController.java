@@ -1,15 +1,13 @@
 package com.kh.urbantable.recipe.controller;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.kh.urbantable.admin.model.vo.Good;
 import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.recipe.model.service.RecipeService;
@@ -106,6 +105,8 @@ public class RecipeController {
 		Recipe recipe = recipeService.selectOneRecipe(recipeNo);
 		List<MaterialWithSection> materialList = recipeService.selectMaterial(recipeNo);
 		List<BoardComment> commentList = recipeService.selectBoardCommentList(recipeNo);
+		int goodCount = recipeService.goodCount(recipeNo);
+		int badCount = recipeService.badCount(recipeNo);
 		
 		
 		if(!recipe.getMemberId().equals(memberId)) {
@@ -116,6 +117,8 @@ public class RecipeController {
 		model.addAttribute("recipe", recipe);
 		model.addAttribute("material", materialList);
 		model.addAttribute("comment", commentList);
+		model.addAttribute("goodCount", goodCount);
+		model.addAttribute("badCount", badCount);
 		return "recipe/recipeView";
 	}
 	
@@ -256,11 +259,14 @@ public class RecipeController {
 	}
 	
 	@RequestMapping("/recipeUpdateEnd.do")
-	public String recipeUpdateEnd(RecipeVO recipeVo, MultipartFile[] recipePic,
-			@RequestParam("materialSet") String materialSet, @RequestParam("memberId") String memberId,
+	public String recipeUpdateEnd(RecipeVO recipeVo, 
+			MultipartFile[] recipePic,
+			@RequestParam("materialSet") String materialSet,
+			@RequestParam("updateLastOrder") int updateLastOrder, @RequestParam("sequenceLast") int sequenceLast,
 			Model model, HttpServletRequest request) {
 		logger.debug(materialSet);
-		recipeVo.setMemberId(memberId);
+		String[] uploadNames = request.getParameterValues("upload_name_origin");
+		logger.info(Arrays.toString(uploadNames));
 		
 		int recipe_result = recipeService.updateRecipe(recipeVo);
 		
@@ -280,6 +286,8 @@ public class RecipeController {
 			String saveDirectory = request.getSession().getServletContext().getRealPath("/resources/upload/recipe");
 			
 			List<RecipeSequence> sequenceList = new ArrayList<RecipeSequence>();
+			List<RecipeSequence> updateSequenceList = new ArrayList<RecipeSequence>();
+			RecipeSequence deleteSequence = new RecipeSequence();
 			String originalFileName = "";
 			String renamedFileName = "";
 			int i = 0;
@@ -297,53 +305,79 @@ public class RecipeController {
 					} catch(Exception e) {
 						e.printStackTrace();
 					}
+				} else {
+					if(!uploadNames[i].equals("")) {
+						RecipeSequence rs = new RecipeSequence();
+						originalFileName = uploadNames[i];
+						rs.setRecipeNo(recipeNo);
+						rs.setRecipeOrder(i+1);
+						renamedFileName = recipeService.selectRenamedFileName(rs);
+					}
 				}
 				
 				RecipeSequence recipeSequence = new RecipeSequence();
+				
 				recipeSequence.setRecipeNo(recipeNo);
 				recipeSequence.setRecipeOrder(recipeVo.getRecipeSequenceList().get(i).getRecipeOrder());
 				recipeSequence.setRecipeContent(recipeVo.getRecipeSequenceList().get(i).getRecipeContent());
 				recipeSequence.setOriginalRecipePic(originalFileName);
 				recipeSequence.setRenamedRecipePic(renamedFileName);
-				sequenceList.add(recipeSequence);
+				
+				if(recipeVo.getRecipeSequenceList().get(i).getRecipeOrder() <= sequenceLast) {
+					updateSequenceList.add(recipeSequence);
+				} else {
+					sequenceList.add(recipeSequence);
+				}
 				
 				i++;
 			}
 			
-			logger.debug(sequenceList.toString());
+			int sequence_delete_result = 0;
+			int sequence_result = 0;
 			
-			int sequence_result = recipeService.insertRecipeSequence(sequenceList);
-			
-			List<Material> materialList = new ArrayList<Material>();
-			
-			String[] materialArr = materialSet.split(",");
-			
-			
-			logger.debug(Arrays.toString(materialArr));
-			
-			for(int j = 0; j<materialArr.length; j++) {
-				logger.debug(materialArr[j]);
-				String[] ingreArray = materialArr[j].split("-");
-				logger.debug(Arrays.toString(ingreArray));
-				String foodSectionNo = recipeService.selectFoodSectionNo(ingreArray[0]);
+			if(updateLastOrder < sequenceLast) {
+				int deleteSequenceOrder = recipeVo.getRecipeSequenceList().get(recipeVo.getRecipeSequenceList().size()-1).getRecipeOrder();
+				String deleteSequenceRecipeNo = recipeVo.getRecipeSequenceList().get(recipeVo.getRecipeSequenceList().size()-1).getRecipeNo();
 				
-				Material material = new Material();
-				material.setRecipeNo(recipeNo);
-				material.setFoodSectionNo(foodSectionNo);
-				if(ingreArray.length == 2) {
-					material.setFoodNo(ingreArray[1]);									
-					logger.debug(ingreArray[1]);
+				deleteSequence.setRecipeOrder(deleteSequenceOrder);
+				deleteSequence.setRecipeNo(deleteSequenceRecipeNo);
+				sequence_delete_result = recipeService.deleteRecipeSequence(deleteSequence);
+				msg = sequence_delete_result>0?"레시피 수정 성공!":"레시피 수정 실패!";
+			} else if(updateLastOrder > sequenceLast) {
+				sequence_result = recipeService.insertRecipeSequence(sequenceList);
+				msg = sequence_result>0?"레시피 수정 성공!":"레시피 수정 실패!";
+			}
+			
+			int sequence_update_result = recipeService.updateRecipeSequence(updateSequenceList);
+			
+			int ingredient_result = 0;
+			
+			if(materialSet != null && !materialSet.equals("")) {
+				List<Material> materialList = new ArrayList<Material>();
+				
+				String[] materialArr = materialSet.split(",");
+				
+				
+				logger.info(Arrays.toString(materialArr));
+				
+				for(int j = 0; j<materialArr.length; j++) {
+					String[] ingreArray = materialArr[j].split("-");
+					String foodSectionNo = recipeService.selectFoodSectionNo(ingreArray[0]);
+					
+					Material material = new Material();
+					material.setRecipeNo(recipeNo);
+					material.setFoodSectionNo(foodSectionNo);
+					if(ingreArray.length == 2) {
+						material.setFoodNo(ingreArray[1]);		
+					}
+					materialList.add(material);
 				}
-				materialList.add(material);
+				
+				ingredient_result = recipeService.insertRecipeIngredient(materialList);
+				msg = ingredient_result>0?"레시피 수정 성공!":"레시피 수정 실패!";
 			}
 			
-			int ingredient_result = recipeService.insertRecipeIngredient(materialList);
-			
-			if(sequence_result>0 && ingredient_result>0) {
-				msg = "레시피 수정 성공!";
-			} else {
-				msg = "레시피 수정 실패!";
-			}
+			msg = "레시피 수정 성공!";
 			
 			model.addAttribute("msg", msg);
 			model.addAttribute("loc", "/recipe/recipe");
@@ -518,10 +552,117 @@ public class RecipeController {
 	}
 	
 	@RequestMapping("/recipeBlame")
-	public String recipeBlame(@RequestParam("recipeNo") String recipeNo, Model model) {
+	public String recipeBlame(@RequestParam("recipeNo") String recipeNo, HttpServletRequest request) {
 		
-		model.addAttribute(recipeNo);
+		request.setAttribute("recipeNo", recipeNo);
 		return "recipe/blame";
+	}
+	
+	@ResponseBody
+	@RequestMapping("/selectGood")
+	public int selectGood(@RequestParam("memberId") String memberId, @RequestParam("recipeNo") String recipeNo) {
+		
+		Recipe r = new Recipe();
+		r.setRecipeNo(recipeNo);
+		r.setMemberId(memberId);
+		String good_string = recipeService.selectGood(r);
+		
+		int good = 0;
+		
+		if(good_string != null) {
+			good = Integer.parseInt(good_string);
+		}
+		
+		return good;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/selectBad")
+	public int selectBad(@RequestParam("memberId") String memberId, @RequestParam("recipeNo") String recipeNo) {
+		
+		Recipe r = new Recipe();
+		r.setRecipeNo(recipeNo);
+		r.setMemberId(memberId);
+		String bad_string = recipeService.selectBad(r);
+		
+		int bad = 0;
+		
+		if(bad_string != null) {
+			bad = Integer.parseInt(bad_string);
+		}
+		
+		return bad;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/insertGoodorBad")
+	public int insertGoodorBad(Good good,@RequestParam("type") String type, @RequestParam("check") int check) {
+		
+		Good g = recipeService.selectOneGood(good);
+		
+		int result = 0;
+		
+		if(g != null) {
+			if(type.equals("good")) {
+				good.setGood(check);
+				result = recipeService.updateGood(good);
+			} else {
+				good.setBad(check);
+				result = recipeService.updateBad(good);
+			}
+		} else {
+			if(type.equals("good")) {
+				result = recipeService.insertGood(good);
+			} else {
+				result = recipeService.insertBad(good);
+			}
+		}
+		
+		return result;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/countGoodorBad")
+	public int countGoodorBad(@RequestParam("type") String type, @RequestParam("targetId") String targetId) {
+		
+		int result = 0;
+		
+		if(type.equals("good")) {
+			result = recipeService.goodCount(targetId);
+		} else {
+			result = recipeService.badCount(targetId);
+		}
+		
+		return result;
+	}
+	
+	@RequestMapping("/recipeSearch")
+	public String recipeSearch(@RequestParam("searchName") String searchName, HttpServletRequest request) {
+
+		int totalCount = recipeService.selectRecipeListCnt();
+
+        Paging paging = new Paging();
+        paging.setPageNo(1);
+        paging.setPageSize(10);
+        paging.setTotalCount(totalCount);
+        
+        List<Recipe> list = recipeService.selectRecipeSearchList(searchName);
+        List<String> imageList = new ArrayList<String>();
+        for(int i=0; i<list.size(); i++) {
+        	String renamedFileName = recipeService.selectLastImage(list.get(i).getRecipeNo());
+        	
+        	if(renamedFileName != null && renamedFileName != "") {
+        		imageList.add(renamedFileName);        		
+        	}
+        	
+        }
+		
+		request.setAttribute("list", list);
+		request.setAttribute("paging", paging);
+		request.setAttribute("image", imageList);
+//		logger.debug("list=" + list);
+		
+		return "recipe/search";
 	}
 
 }

@@ -62,7 +62,7 @@ $(()=> {
 		html += "<div id='recipe_content_div" + index + "'>";
 		html += "<input type='hidden' name='recipeSequenceList[" + (index-1) + "].recipeOrder' id='recipeOrder" + index + "' value='" + index + "' />";
 		html += "<textarea name='recipeSequenceList[" + (index-1) + "].recipeContent' class='recipe_content' id='recipe_content" + index + "' cols='100' rows='5' placeholder='레시피 내용&#13;&#10;ex)중약불로 달군 팬에 올리브유를 두르고 앞뒤로 노릇하게 구워주세요.' style='border: 1px solid #e9e9e9; border-radius: 5px; color: #555; resize: none;'></textarea> <br /><br />";
-		html += "<input type='text' class='upload_name' id='upload_name" + index + "' disabled /><input type='file' name='recipePic' id='upload_file" + index + "' style='display:none;' /> <button class='btn btn_upload' id='btn_upload" + index + "' type='button'>사진 가져오기</button> <br /><br />";
+		html += "<input type='text' name='upload_name_origin' class='upload_name' id='upload_name" + index + "' disabled /><input type='file' name='recipePic' id='upload_file" + index + "' style='display:none;' /> <button class='btn btn_upload' id='btn_upload" + index + "' type='button'>사진 가져오기</button> <br /><br />";
 		html += "</div>";
 		
 		tab += "<li><button type='button' class='btn btn_content' value='"+ index +"'>"+ index +"</button></li>";
@@ -84,7 +84,7 @@ $(()=> {
 		$("ul>li>button[value='"+ index +"']").css("background", "#fff");
 		$("ul>li>button[value='"+ index +"']").css("color", "#374818");
 		
-		$("#updateLastOrder").val(index);
+		$("#updateLastOrder").val(Number($("#updateLastOrder").val())+1);
 		
 		index ++;
 		
@@ -104,8 +104,9 @@ $(()=> {
 			$("#tab_remove").css("display", "");
 		}
 		
+		$("#updateLastOrder").val(Number($("#updateLastOrder").val())-1);
+		
 		index --;
-		$("#updateLastOrder").val(index-1);
 	});
 	
 	$(".btn_material").on("click", materialInsert);
@@ -113,6 +114,16 @@ $(()=> {
 	pic_Event();
 	
 	$(".btn_insert").on("click", function() {
+		if($("#recipe_title").val() == null || $("#recipe_title").val() == "") {
+			alert("레시피 제목을 입력해주세요!");
+			return false;
+		}
+		
+		if($(".recipe_content").val() == null || $(".recipe_content").val() == "") {
+			alert("레시피를 입력해주세요!");
+			return false;
+		}
+		
 		if(index != 2) {
 			if($("#upload_name" + (index-1)).val() == null || $("#upload_name" + (index-1)).val() == "") {
 				alert("마지막 탭에 사진을 첨부해주세요!");
@@ -276,6 +287,7 @@ function pic_Event() {
 var pic_index = $("#tab_remove").val();
 
 	$("#btn_upload" + pic_index).click(function(e) {
+		alert(pic_index);
 		e.preventDefault();
 		$("#upload_file" + pic_index).click();
 		var ext = $("#upload_file" + pic_index).val().split(".").pop().toLowerCase();
@@ -373,10 +385,11 @@ function setChildNoValue(searchResultNo){
 				                	<div id="recipe_content_div${vs.count}">
 				                		<input type="hidden" value="${rec.recipeOrder}" name="recipeSequenceList[${vs.index}].recipeOrder" id="recipeOrder${vs.count}" value="${vs.count}" />
 					                	<textarea name="recipeSequenceList[${vs.index}].recipeContent" id="recipe_content${vs.count}" class="recipe_content" cols="100" rows="5" placeholder="레시피 내용&#13;&#10;ex)중약불로 달군 팬에 올리브유를 두르고 앞뒤로 노릇하게 구워주세요." style="border: 1px solid #e9e9e9; border-radius: 5px; color: #555; resize: none;">${rec.recipeContent}</textarea> <br /><br />
-					                	<input type="text" class="upload_name" id="upload_name${vs.count}" value="${rec.originalRecipePic}" disabled /><input type="file" name="recipePic" id="upload_file${vs.count}" style="display:none;" /> <button class="btn btn_upload" id="btn_upload${vs.count}" type="button">사진 가져오기</button> <br /><br />
+					                	<input type="text" name='upload_name_origin' class="upload_name" id="upload_name${vs.count}" value="${rec.originalRecipePic}" readonly /><input type="file" name="recipePic" id="upload_file${vs.count}" style="display:none;" /> <button class="btn btn_upload" id="btn_upload${vs.count}" type="button">사진 가져오기</button> <br /><br />
 				                	</div>
 				                	<c:if test="${vs.last}">
-				                		<input type="hidden" name="sequenceLast" value="${rec.recipeOrder}" />
+				                		<input type="hidden" id="sequenceLast" name="sequenceLast" value="${rec.recipeOrder}" />
+				                		<input type="hidden" id="updateLastOrder" name="updateLastOrder" value="${rec.recipeOrder}" />
 				                	</c:if>            		
 		                		</c:forEach>              		
 	                		</c:if>
@@ -399,7 +412,6 @@ function setChildNoValue(searchResultNo){
 	        <input type="hidden" id="materialSet" name="materialSet" />
 	        <input type="hidden" id="materialOldSet" name="materialOldSet" value="${set}" />
 	        <input type="hidden" id="recipeNo" name="recipeNo" value="${recipe.recipeNo}" />
-	        <input type="hidden" id="updateLastOrder" name="updateLastOrder" />
 	        <div class="btn_submit">
 	        	<input type="submit" class="btn btn_insert" value="글 등록하기" />	        
 	        </div>

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.kh.urbantable.admin.model.vo.Good;
 import com.kh.urbantable.food.model.vo.Food;
 import com.kh.urbantable.food.model.vo.FoodSection;
 import com.kh.urbantable.recipe.model.dao.RecipeDAO;
@@ -156,5 +157,70 @@ public class RecipeServiceImpl implements RecipeService {
 	@Override
 	public int updateRecipe(RecipeVO recipeVo) {
 		return recipeDAO.updateRecipe(recipeVo);
+	}
+
+	@Override
+	public int updateRecipeSequence(List<RecipeSequence> updateSequenceList) {
+		return recipeDAO.updateRecipeSequence(updateSequenceList);
+	}
+
+	@Override
+	public int deleteRecipeSequence(RecipeSequence deleteSequence) {
+		return recipeDAO.deleteRecipeSequence(deleteSequence);
+	}
+
+	@Override
+	public String selectRenamedFileName(RecipeSequence rs) {
+		return recipeDAO.selectRenamedFileName(rs);
+	}
+
+	@Override
+	public String selectGood(Recipe r) {
+		return recipeDAO.selectGood(r);
+	}
+
+	@Override
+	public String selectBad(Recipe r) {
+		return recipeDAO.selectBad(r);
+	}
+
+	@Override
+	public int insertGood(Good good) {
+		return recipeDAO.insertGood(good);
+	}
+
+	@Override
+	public int insertBad(Good good) {
+		return recipeDAO.insertBad(good);
+	}
+
+	@Override
+	public Good selectOneGood(Good good) {
+		return recipeDAO.selectOneGood(good);
+	}
+
+	@Override
+	public int updateGood(Good good) {
+		return recipeDAO.updateGood(good);
+	}
+
+	@Override
+	public int updateBad(Good good) {
+		return recipeDAO.updateBad(good);
+	}
+
+	@Override
+	public int goodCount(String recipeNo) {
+		return recipeDAO.goodCount(recipeNo);
+	}
+
+	@Override
+	public int badCount(String recipeNo) {
+		return recipeDAO.badCount(recipeNo);
+	}
+
+	@Override
+	public List<Recipe> selectRecipeSearchList(String searchName) {
+		return recipeDAO.selectRecipeSearchList(searchName);
 	}
 }

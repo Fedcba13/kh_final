@@ -240,8 +240,8 @@ hr {
 }
 
 #recipeRecomImage {
-	width: 400px;
-	height: 400px;
+	width: 450px;
+	height: 450px;
 }
 
 .recipeList {
@@ -250,7 +250,7 @@ hr {
 
 .recipeList>a>li {
 	border: 1px solid #c0c0c0;
-	width: 400px;
+	width: 450px;
 	text-align: center;
 	font-size: 25px;
 	float: left;
@@ -258,9 +258,13 @@ hr {
 	margin-bottom: 20px;
 }
 
+.recipeList li:nth-child(2n) {
+	background: red;
+	margin-right: 0px;
+}
+
 .recipeListDiv {
 	overflow: hidden;
-	text-align: center;
 }
 
 #recomOlDiv {
@@ -291,4 +295,43 @@ hr {
 
 .recipe_sequence_table {
 	margin-top: 20px;
+}
+
+.reaction_div {
+	text-align: center;
+}
+
+.reaction {
+	background: white;
+	width: 150px;
+	height: 50px;
+	font-size: 18px;
+	padding-left: 20px;
+	cursor: pointer;
+	cursor: hand;
+}
+
+.reaction img {
+	position: absolute;
+	margin-left: -40px;
+	margin-top: -5px;
+}
+
+#good {
+	border: 1px solid #FF3C3C;
+	color: #FF3C3C;
+}
+
+#bad {
+	border: 1px solid #5383D6;
+	color: #5383D6;
+}
+
+.best {
+	color: #ff8080;
+	font-style: italic;
+}
+
+.searchDiv {
+	text-align: right;
 }

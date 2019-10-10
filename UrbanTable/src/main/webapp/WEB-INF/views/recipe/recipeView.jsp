@@ -9,6 +9,105 @@
 <script>
 $(()=> {
 	
+	var memberId = "${memberLoggedIn.memberId}";
+	var recipeNo = "${recipe.recipeNo}";
+	
+	if(memberId != "") {
+		$.ajax({
+			url: "${pageContext.request.contextPath}/recipe/selectGood",
+			data: {memberId: memberId, recipeNo: recipeNo},
+			dataType: "json",
+			type: "GET",
+			success: (data)=>{
+				console.log(data);
+				$("#good").val(data);
+			},
+			error: (xhr, txtStatus, err)=> {
+				console.log("ajax 처리실패!", xhr, txtStatus, err);
+			}
+		});
+		
+		$.ajax({
+			url: "${pageContext.request.contextPath}/recipe/selectBad",
+			data: {memberId: memberId, recipeNo: recipeNo},
+			dataType: "json",
+			type: "GET",
+			success: (data)=>{
+				console.log(data);
+				$("#bad").val(data);
+			},
+			error: (xhr, txtStatus, err)=> {
+				console.log("ajax 처리실패!", xhr, txtStatus, err);
+			}
+		});
+	}
+	
+	$(".reaction").on("click", function(e) {
+		if($("#memberId").val() == "") {
+			alert("로그인을 해주세요!");
+			return false;
+		}
+		
+		var checkMember = "${recipe.memberId}";
+		if(memberId == checkMember) {
+			alert("본인의 글에 좋아요 혹은 싫어요를 누를 수 없습니다.");
+			return false;
+		}
+		
+		var type = $(this).attr("id");
+		var check = $(this).val();
+		var targetId = recipeNo;
+		$.ajax({
+			url: "${pageContext.request.contextPath}/recipe/insertGoodorBad",
+			data: {type: type, check: check, memberId: memberId, targetId: targetId},
+			dataType: "json",
+			type: "GET",
+			success: (data)=>{
+				console.log(data);
+				if(data > 0) {
+					if(type == "good") {
+						if(check == 0) {
+							$(this).val(1);
+						} else {
+							$(this).val(0);
+						}
+					} else {
+						if(check == 0) {
+							$(this).val(1);
+						} else {
+							$(this).val(0);
+						}
+					}
+					alert("a" + $(this).val());
+				}
+			},
+			error: (xhr, txtStatus, err)=> {
+				console.log("ajax 처리실패!", xhr, txtStatus, err);
+			},complete: ()=>{
+				$.ajax({
+					url: "${pageContext.request.contextPath}/recipe/countGoodorBad",
+					data: {type: type, targetId: targetId},
+					dataType: "json",
+					type: "GET",
+					success: (data)=>{
+						if(type == "good") {
+							console.log(data);
+							alert(type);
+							$("#good>p").html(data);
+						} else {
+							$("#bad>p").html(data);
+						}
+					},
+					error: (xhr, txtStatus, err)=> {
+						console.log("ajax 처리실패!", xhr, txtStatus, err);
+					}
+				});
+			}
+		});
+		
+		
+	});
+	
 	$(".reply_btn").on("click", function(e) {
 		var html = "";
 		
@@ -212,7 +311,14 @@ $(()=> {
         <table class="recipe_sequence_table">
         	<c:forEach items="${recipe.recipeSequenceList}" var="rec">
         		<tr>
-	        		<td class="recipeImgTd"><img id="recipeImg" src="${pageContext.request.contextPath}/resources/upload/recipe/${rec.renamedRecipePic}" alt="" /></td>
+	        		<td class="recipeImgTd">
+	        		<c:if test="${rec.renamedRecipePic != null }">
+		        		<img id="recipeImg" src="${pageContext.request.contextPath}/resources/upload/recipe/${rec.renamedRecipePic}" alt="" />	        		
+	        		</c:if>
+	        		<c:if test="${rec.renamedRecipePic == null}">
+				        <img class="recipeImg" src="${pageContext.request.contextPath}/resources/images/recipe/noImage.png" alt="" />
+				    </c:if>
+	        		</td>
 		        	<td class="recipeContentTd">${rec.recipeContent}</td>        		
         		</tr>
         	</c:forEach>
@@ -236,6 +342,10 @@ $(()=> {
         	</div>
         </div>
     </article>
+    <div class="reaction_div">
+	    <button class="reaction" id="good" value=0><img src="${pageContext.request.contextPath}/resources/images/recipe/thumbs-up.png" alt="" /><p>${goodCount}</p></button>
+	    <button class="reaction" id="bad" value=0><img src="${pageContext.request.contextPath}/resources/images/recipe/thumb-down.png" alt="" /><p>${badCount}</p></button>    
+    </div>
     <hr width="97%" />
     <h2 class="comment_h2">댓글(${comment.size()})</h2>
     <table class="tbl tbl_view" style="width:90%; margin:auto; margin-top:20px;">
