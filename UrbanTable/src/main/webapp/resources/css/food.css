@@ -196,6 +196,9 @@
 #finalPrice > p {
 	font-weight:400;
 }
+.event_img_area img {
+	height: 200px;
+}
 
 /* insertFood.jsp */
 #insertFoodTb th{

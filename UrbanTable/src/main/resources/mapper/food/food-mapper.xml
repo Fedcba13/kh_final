@@ -309,8 +309,8 @@ from( select ra.*, food_no, ri.food_section_no
    where (rs.recipe_no, rs.recipe_order) in ( select recipe_no, max(recipe_order) as recipe_order from recipe_sequence group by recipe_no) ) ra
    left join recipe_ingredient ri
        on ra.recipe_no = ri.recipe_no)
-   where food_no = #{foodNo}
-           or (food_no = null and food_section_no = #{foodSectionNo})
+   where (food_no = #{foodNo}
+           or (food_no = null and food_section_no = #{foodSectionNo})) AND ROWNUM <= 4
 		]]>
 	</select> 
 	<select id="selectGoodOne" resultType="good">

@@ -311,7 +311,7 @@
 			 success: (data)=> {
 					html = '';
 				for(var i=0; i<3; i++){
-					html = '<img src="${pageContext.request.contextPath}/resources/upload/recipe/' + data[i] + '" alt="이벤트 사진">'
+					html = '<img style="height: 200px;" src="${pageContext.request.contextPath}/resources/upload/recipe/' + data[i] + '" alt="이벤트 사진">'
 					$('.event_img_area[value="' + i + '"]').html(html);
 				}
 			},
