@@ -6,25 +6,29 @@
 <fmt:requestEncoding value="utf-8" />
 <jsp:include page="/WEB-INF/views/common/header.jsp" />
 <script>
-
+function validate(){
+	var content = $("#noticeContent").trim().val();
+	
+	if(content.length == 0){
+		alert("내용을 입력하세요");
+		return false;
+	}
+	
+	return true;	
+}
 </script>
 <section class="sec_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 	    <h3 class="sub_tit">FAQ 수정</h3>
-	    <form name="faqUpdte" action="${pageContext.request.contextPath}/faq/faqUpdateEnd.do" method="post" >
+	    <form name="faqUpdte" action="${pageContext.request.contextPath}/faq/faqUpdateEnd.do" method="post"
+	    	  onsubmit="return validate();">
 			<table class="tbl tbl_view">
 			<input type="hidden" name="noticeNo" value="${faq.noticeNo }"/>
 				<tr>
 					<th>구분</th>
 					<td>
 					<select name="noticeCategory" style="height: 25px;">
-                		<option value="" disabled selected>선택</option>
-                   		<option value="회원문의">회원문의</option>
-                		<option value="주문/결제">주문/결제</option>
-                		<option value="취소/교환/반품">취소/교환/반품</option>
-                		<option value="배송문의">배송문의</option>
-                		<option value="쿠폰/적립금">쿠폰/적립금</option>
-                		<option value="서비스 이용 및 기타">서비스 이용 및 기타</option>
+                   		<option value="FAQ" selected>FAQ</option>
                 	</select>
 					</td>
 				</tr>

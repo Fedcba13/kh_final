@@ -15,11 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
-import com.kh.urbantable.faq.model.exception.FaqException;
 import com.kh.urbantable.faq.model.service.FaqService;
 import com.kh.urbantable.faq.model.vo.Faq;
 import com.kh.urbantable.member.model.vo.Member;
-import com.kh.urbantable.notice.model.vo.Notice;
 
 @Controller
 @RequestMapping("/faq")
@@ -72,24 +70,8 @@ public class FaqController {
 							 Faq faq,
 							 Model model,
 							 HttpServletRequest request) {
-		logger.debug("FAQ 저장요청!!");
-		logger.debug("faqList={}", faq);
-		Faq aq = new Faq();
 		
-		// 유효성검사
-		try {
-			aq = faqService.selectOneFaq(faq.getNoticeNo());
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
-
-		logger.debug("aq={}", aq);
-
-		if (aq == null) {
-			faqService.insertFaq(faq);
-		} else {
-			faqService.updateFaq(faq);
-		}
+		faqService.insertFaq(faq);		
 
 		logger.debug("faq={}", faq);
 		
@@ -117,8 +99,6 @@ public class FaqController {
 //		return "common/msg";
 	}
 	
-	
-	
 	//@FAQ: 수정
 	@RequestMapping("/faqUpdate.do")
 	public String faqUpdate(@RequestParam String noticeNo,
@@ -134,6 +114,24 @@ public class FaqController {
 		
 		return "faq/faqUpdate";
 	}
+	
+	//@FAQ: 수정 후
+	@RequestMapping("/faqUpdateEnd.do")
+	public String faqUpdateEnd(@SessionAttribute Member memberLoggedIn,
+							 Faq faq,
+							 Model model,
+							 HttpServletRequest request) {
+		
+		faqService.updateFaq(faq);		
+
+		logger.debug("faq={}", faq);
+		
+		List<Faq> list = faqService.selectFaqList();
+
+		model.addAttribute("list", list);
+
+		return "faq/faqList";
+	}	
 	
 	//@FAQ: 삭제
 	@RequestMapping("/deleteFaq.do")

@@ -11,13 +11,16 @@
 	</select>
 	
 	<insert id="insertFaq">
-		insert into notice(notice_no,notice_title,
-		notice_writer,notice_content,notice_date,
-		notice_readcount,notice_category,notice_enabled,
-		notice_date_modified)
+		insert into notice(notice_no,
+						   notice_title,
+						   notice_writer,
+						   notice_content,
+						   notice_category)
 		values('nseq' || lpad (notiseq_seq.nextval,5,'0'),
-		#{noticeTitle},'UrbanTable',#{noticeContent},
-		#{noticeCategory},sysdate,0,'FAQ',1,sysdate)
+			   #{noticeTitle},
+			   'UrbanTable',
+			   #{noticeContent},
+			   #{noticeCategory})
 	</insert>
 	
 	<select id="selectOneFaq" resultType="faq">
@@ -25,12 +28,12 @@
 		where notice_no = #{noticeNo}
 	</select>
 	
-	<update id="faqUpdate">
+	<update id="updateFaq">
 		update notice
 		set notice_title = #{noticeTitle},
 		notice_content = #{noticeContent},
 		notice_category = #{noticeCategory},
-		notice_date_modieifed = sysdate
+		notice_date_modified = sysdate
 		where notice_no = #{noticeNo}			   
 	</update>
 	

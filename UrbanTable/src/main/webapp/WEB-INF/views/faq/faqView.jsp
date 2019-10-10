@@ -34,11 +34,11 @@ li input.btn{
 	   	<c:if test="${memberLoggedIn.memberCheck == 9 }">
 	    <div class="txt_right">
 	    <li>
-	    <input type="button" class="btn" value="수정"  onclick="updateFrm();">
+	    <input type="button" class="btn" value="수정"  onclick="updateFaq();">
 	   	<input type="hidden" id="noticeNo" value="${faq.noticeNo }"/>
 	    </li>
 	    <li>
-	    <input type="button" value="삭제" class="btn" onclick="deleteFrm();"/>
+	    <input type="button" value="삭제" class="btn" onclick="deleteFaq();"/>
 	    </li>
 	    
 	    </div>

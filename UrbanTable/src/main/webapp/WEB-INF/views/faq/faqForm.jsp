@@ -28,12 +28,8 @@ function validate(){
 					<th>구분</th>
 					<td>
 					<select name="noticeCategory" style="height: 25px;">
-                		<option value="회원문의">회원문의</option>
-                		<option value="주문/결제">주문/결제</option>
-                		<option value="취소/교환/반품">취소/교환/반품</option>
-                		<option value="배송문의">배송문의</option>
-                		<option value="쿠폰/적립금">쿠폰/적립금</option>
-                		<option value="서비스 이용 및 기타">서비스 이용 및 기타</option>
+                		<option value="FAQ" selected>FAQ</option>
+                		
                 	</select>
 					</td>
 				</tr>
