@@ -72,4 +72,12 @@
 	<update id="updateRecipe">
 		update recipe set recipe_enabled = 0 where recipe_no = #{blameTargetId}
 	</update>
+	
+	<update id="updateReview">
+		update review set review_enabled = 0 where pay_detail_no = #{blameTargetId} and review_enabled = 1
+	</update>
+	
+	<update id="notBlameChk">
+		update blame set blame_action = 0, blame_enabled = 0 where blame_id = #{blameId}
+	</update>
 </mapper>

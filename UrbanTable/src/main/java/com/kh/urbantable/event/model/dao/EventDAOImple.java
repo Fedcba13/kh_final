@@ -19,7 +19,7 @@ public class EventDAOImple implements EventDAO{
 	SqlSessionTemplate sqlSession;
 
 	@Override
-	public int insertCoupon1(Map<String, String> event) {
+	public int insertCoupon1(Map<String, Object> event) {
 		
 		return sqlSession.insert("event.insertCoupon1", event);
 	}

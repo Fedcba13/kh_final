@@ -38,7 +38,7 @@ li.event_item{
 	    			</a>
 	    		</li>	    		
 	    		<li class="event_item" style="">
-	    			<a href='${pageContext.request.contextPath}/event/insertCoupon.do?couponDiscount=30'>
+	    			<a href='${pageContext.request.contextPath}/event/insertCoupon.do?couponDiscount=30&couponMinPrice=50000'>
 	    				<img src="${pageContext.request.contextPath }/resources/images/event/20191007_132148147_231.png" alt="" class="eventImg"/>
 	    			</a>
 	    		</li>	    		

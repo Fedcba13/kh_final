@@ -12,7 +12,7 @@
 			sysdate,
 			sysdate + 7,
 			1, 
-			5000
+			#{couponMinPrice}
 		)
 	</insert>
 	

@@ -30,4 +30,8 @@ public interface CheckDAO {
 
 	int updateRecipe(Blame b);
 
+	int updateReview(Blame b);
+
+	int notBlameChk(Blame b);
+
 }

@@ -22,4 +22,5 @@ public class Blame {
 	private int targetType;
 	private Date blameDate;
 	private int blameAction;
+	private int blameEnabled;
 }

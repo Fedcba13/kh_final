@@ -15,7 +15,32 @@ function blameChk(no){
 	location.href="${pageContext.request.contextPath}/check/blameCheck.do?blameId="+blameId;
 	
 }
+
+function notBlame(no){
+	var blameId = $("#blameId"+no).val()
+	
+	location.href="${pageContext.request.contextPath}/check/notBlame.do?blameId="+blameId;
+}
 </script>
+<style>
+.btn4{
+    background: #9d8420;
+    font-weight: 400;
+    border: 1px solid #9d8420;
+    display: inline-block;
+    width: 150px;
+    padding: 0;
+    height: 40px;
+    line-height: 40px;
+    box-sizing: border-box;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    cursor: pointer;
+    transition: all .25s linear;
+    -webkit-transition: all .25s linear;
+    }
+</style>
 <section>
 	<article class="subPage inner asda">
 	   
@@ -37,6 +62,9 @@ function blameChk(no){
 	    			</tr>
 	    		<c:forEach items="${list }" var="b" varStatus="vs">
 	    			<tr>
+	    			<c:if test="${b.targetType eq 2}">
+	    			<td>리뷰</td>
+	    			</c:if>
 	    			<c:if test="${b.targetType eq 4}">
 	    			<td>댓글</td>
 	    			</c:if>
@@ -48,11 +76,17 @@ function blameChk(no){
 	    			<td>${b.blameTargetId }</td>
 	    			<td>${b.blameDate}</td>
 	    			<input type="hidden" id="blameId${vs.index }" value="${b.blameId }"/>
-	    			<c:if test="${b.blameAction eq 0 }">
+	    			<c:if test="${b.blameAction eq 0 && b.blameEnabled eq 1}">
 	    				<td><input type="button" value="처리완료" class="btn btn2" disable/></td>
 	    			</c:if>
+	    			<c:if test="${b.blameAction eq 0 && b.blameEnabled eq 0}">
+	    				<td><input type="button" value="허위신고" class="btn4" disable/></td>
+	    			</c:if>
 	    			<c:if test="${b.blameAction eq 1 }">
-	    			<td><input type="button" value="ㅡ" class="btn" style="width:50px;" onclick="blameChk(${vs.index})"/></td>
+	    			<td>
+	    			<input type="button" value="허위" class="btn" style="width:70px;" onclick="notBlame(${vs.index})"/>
+	    			<input type="button" value="처리" class="btn" style="width:70px;" onclick="blameChk(${vs.index})"/>
+	    			</td>
 	    			</c:if>
 	    			</tr>
 	    		</c:forEach>

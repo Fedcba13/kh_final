@@ -99,12 +99,14 @@ public class BannerController {
 					  				.getRealPath("/resources/images/banner");
 			  logger.info("saveDirectory={}", saveDirectory);
 			  
-			  
-			  
+			  String renamed = "";
+			  if(bannerFile != null) {
+				  
 			  String realFile = bannerFile.getOriginalFilename(); 
-			  String renamed = FileRenameUtils.getRenamedFileName(realFile);
+			  renamed = FileRenameUtils.getRenamedFileName(realFile);
 			  banner.setBannerFileOriginal(realFile);
 			  banner.setBannerFileRenamed(renamed);
+			  }
 			  
 			  try {
 				  

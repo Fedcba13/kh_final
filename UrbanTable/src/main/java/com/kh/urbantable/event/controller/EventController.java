@@ -72,9 +72,10 @@ public class EventController {
 		
 		if(memberLoggedIn != null) {
 			
-		Map<String, String> event = new HashMap();
+		Map<String, Object> event = new HashMap();
 		event.put("memberId", memberLoggedIn.getMemberId());
 		event.put("couponDiscount", coupon.getCouponDiscount());
+		event.put("couponMinPrice", coupon.getCouponMinPrice());
 
 		int result = eventService.insertCoupon1(event);
 

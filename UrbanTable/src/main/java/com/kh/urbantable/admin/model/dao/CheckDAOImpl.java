@@ -81,5 +81,17 @@ public class CheckDAOImpl implements CheckDAO{
 
 		return sqlSession.update("check.updateRecipe", b);
 	}
+
+	@Override
+	public int updateReview(Blame b) {
+		
+		return sqlSession.update("check.updateReview", b);
+	}
+
+	@Override
+	public int notBlameChk(Blame b) {
+		
+		return sqlSession.update("check.notBlameChk", b);
+	}
 	
 }

@@ -76,8 +76,16 @@ public class CheckServiceImpl implements CheckService{
 			 result = checkDAO.updateComment(b);
 		} else if(result > 0 && b.getTargetType() == 3){
 			result = checkDAO.updateRecipe(b);
+		} else if(result > 0 && b.getTargetType() == 2) {
+			result = checkDAO.updateReview(b);
 		}
 		return result;
+	}
+
+	@Override
+	public int notBlameChk(Blame b) {
+
+		return checkDAO.notBlameChk(b);
 	}
 
 	

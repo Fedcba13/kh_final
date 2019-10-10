@@ -26,4 +26,6 @@ public interface CheckService {
 
 	int blameActionChk(Blame b);
 
+	int notBlameChk(Blame b);
+
 }
