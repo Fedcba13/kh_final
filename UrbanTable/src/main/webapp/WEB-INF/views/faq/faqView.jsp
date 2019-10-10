@@ -56,7 +56,7 @@ li input.btn{
             	<td>${faq.noticeDate }</td>
             </tr>
             <tr>
-            	<td class="txt_left sec_bg" colspan="4" style="padding:10px 30px; box-sizing:border-box;">
+            	<td class="txt_left sec_bg" colspan="3" style="padding:10px 30px; box-sizing:border-box;">
                	<pre style="font-family: 'NanumBarunGothic', sans-serif;">
                	${faq.noticeContent }
                	</pre>
