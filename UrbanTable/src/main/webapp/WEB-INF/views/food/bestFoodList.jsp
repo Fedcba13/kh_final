@@ -15,12 +15,14 @@
 
 <section class="main_sec">
 	<article class="inner">
-	    <h3 class="sub_tit">${foodDivisionName=='all'? '베스트 전체보기' : foodDivisionName }의 검색결과</h3>
-	    <select name="marketList" id="marketList" onchange="changeMarket()">
-			<c:forEach items="${marketList}" var="m">
-				<option value="${m.marketNo }" ${m.marketNo eq marketNo? 'selected':' ' }>${m.marketName }</option>
-			</c:forEach>
-	    </select>
+	    <h3 class="sub_tit">${foodDivisionName=='all'? '베스트 전체보기' : foodDivisionName }</h3>
+	    <div class="txt_right marketList_wrap">
+		    <select name="marketList" id="marketList" onchange="changeMarket()">
+				<c:forEach items="${marketList}" var="m">
+					<option value="${m.marketNo }" ${m.marketNo eq marketNo? 'selected':' ' }>${m.marketName }</option>
+				</c:forEach>
+		    </select>
+	    </div>
        <ul class="main_prd_list clearfix">
         <c:forEach items="${foodList }" var="f">
 					<li><a

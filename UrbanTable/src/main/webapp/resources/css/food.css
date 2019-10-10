@@ -36,7 +36,10 @@
 }
 
 .marketList_wrap {
-	padding:15px 0 30px;
+	padding: 0 0 15px;
+    border-bottom: 1px solid #e9e9e9;
+    background-color: white;
+    margin-bottom: 30px;
 }
 
 #marketList{
@@ -204,4 +207,50 @@
 .catSelect{
 	width: 200px;
 	margin: 0px 20px 0px 0px;
+}
+
+.fv_tit {
+	position:relative;
+	font-size:17px;
+	padding-top:10px;
+	margin-bottom:20px;
+}
+
+.fv_tit:after {
+	display:block;
+	content:'';
+	width:20px;
+	height:5px;
+	background:#000;
+	position:absolute;
+	left:0;
+	top:0;
+}
+
+.main_event_list li.no_recipe {
+	float:none;
+	width:100%;
+	text-align:center;
+	margin-right:0;
+	padding:40px 0 60px;
+}
+
+#fv_image {
+	margin:40px 0 60px;
+}
+
+#fv_image h4 {
+	font-size: 38px;
+    line-height: 46px;
+    color: #666;
+    border-bottom:1px solid #c1c1c1;
+    margin-bottom:28px;
+    padding:30px 15px 35px;
+    word-break:keep-all;
+}
+
+#fv_image p {
+	font-size: 18px;
+    line-height: 32px;
+    color: #666;
 }

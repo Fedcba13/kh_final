@@ -17,6 +17,11 @@
 		border:0px;
 		background: white;
 	}
+	
+	input[name=amount],
+	input[name=totalPrice] {
+		padding-left:0;
+	}
 </style>
 <script>
 	var cartInfoArr = JSON.parse('${cartInfo}');
@@ -171,9 +176,9 @@
 						success: function(dc){
 							foodInfo += "<tr id='item"+(i+1)+"'>";					
 							foodInfo += "<td><img src='"+data.FOOD_IMG+"' width='92px' height='130px'/></td>";
-							foodInfo += "<td>[" + data.FOOD_COMPANY + "] " + data.FOOD_NAME + "</td>";
-							foodInfo += "<td>수량 <input type='text' name='amount' value='" + cartInfoArr[i].payDetailAmount + "' size='5' style='text-align:center;' readonly></td>";
-							foodInfo += "<td>금액 <input type='text' name='totalPrice' value='" + Math.floor((data.FOOD_MEMBER_PRICE * (1-dc/100))/10)*10 * cartInfoArr[i].payDetailAmount + "' size='11' style='text-align:center;' readonly></td>";
+							foodInfo += "<td style='text-align:left;'>[" + data.FOOD_COMPANY + "] " + data.FOOD_NAME + "</td>";
+							foodInfo += "<td>수량<br><input type='text' name='amount' value='" + cartInfoArr[i].payDetailAmount + "' size='5' style='text-align:center;' readonly></td>";
+							foodInfo += "<td>금액<br><input type='text' name='totalPrice' value='" + Math.floor((data.FOOD_MEMBER_PRICE * (1-dc/100))/10)*10 * cartInfoArr[i].payDetailAmount + "' size='11' style='text-align:center;' readonly></td>";
 							foodInfo += "</tr>";
 							$("#list").append(foodInfo);	
 						},
@@ -493,7 +498,7 @@
 	                <th id="totalCost"></th>                
 	            </tr>
             </thead>
-            <tbody id="list" style="display: block;">
+            <tbody id="list">
             	
             </tbody>
             <tfoot>
