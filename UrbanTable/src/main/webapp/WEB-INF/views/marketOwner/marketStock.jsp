@@ -248,7 +248,7 @@ $(()=>{
 	$(document).on("click", ".marketOrderPopup .cancelBtn", function(){
 		$(".popupWrap").hide();
 		$(".popupWrap .marketOrderPopup").remove();
-		location.reload();
+		//location.reload();
 	});
 	
 	$(document).on('click', "#orderList .pageBar a", function(e){

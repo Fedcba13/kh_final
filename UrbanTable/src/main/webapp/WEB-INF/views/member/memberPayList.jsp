@@ -9,6 +9,10 @@
 
 <style>
 
+	.pay_list_tbl {
+		font-size:14px;
+	}
+
 	.pay_list_tbl > tr{
 		cursor: pointer;
 	}
