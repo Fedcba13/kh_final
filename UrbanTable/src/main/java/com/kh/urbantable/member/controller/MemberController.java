@@ -82,7 +82,7 @@ public class MemberController {
 
 			// 로그인 성공
 			if (passwordEncoder.matches(password, member.getMemberPassword())) {
-				msg = "로그인 성공";
+				msg = "[" + member.getMemberName() + "]님 환영합니다.";
 
 				// memberLoggedIn 세션 속성에 지정
 				model.addAttribute("memberLoggedIn", member);
