@@ -51,6 +51,10 @@
 .review_tbl .review_content{
 		width: 80%;
 	}
+	
+li:nth-child(3n) {
+	margin-right: 0;
+}
 
 </style>
 
