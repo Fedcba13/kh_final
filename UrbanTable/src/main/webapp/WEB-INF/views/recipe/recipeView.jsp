@@ -333,7 +333,7 @@ $(()=> {
 				        	<c:if test="${m.foodNo != null}">
 				        			<li>
 				        				<img class="foodImg" src="${m.foodImg}" alt="" />
-				        				${m.foodName}
+				        				<span class="foodName">${m.foodName}</span>
 				        			</li>
 				        	</c:if>
 				        </c:forEach>                	
@@ -390,10 +390,10 @@ $(()=> {
 		    					<span class="comment_content_span" value="${com.boardCommentNo}">${com.boardCommentContent}</span> <br />
 		    					<button class="reply_btn" value="${com.boardCommentNo}"><sub>답글쓰기</sub></button>
 		    					<c:if test="${memberLoggedIn != null && memberLoggedIn.memberId eq com.boardCommentWriter}">
-			    					<button class="comment_update" value="${com.boardCommentNo}"><sub>수정</sub></button>
+			    					<button class="comment comment_update" value="${com.boardCommentNo}"><sub>수정</sub></button>
 			    				</c:if>
 			    				<c:if test="${memberLoggedIn.memberId ne com.boardCommentWriter}">
-			    					<button class="comment_decla" value="${com.boardCommentNo}"><sub>신고</sub></button>
+			    					<button class="comment comment_decla" value="${com.boardCommentNo}"><sub>신고</sub></button>
 			    				</c:if>
 		    				</td>
 		    				<td style="text-align:right; vertical-align:top;">

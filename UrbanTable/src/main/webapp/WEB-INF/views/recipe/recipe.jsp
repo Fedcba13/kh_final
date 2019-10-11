@@ -33,11 +33,14 @@ $(()=> {
 	        	<c:forEach items="${list}" var="li" varStatus="vs">
 		            <c:if test="${li.recipeEnabled != 0}">
 				            <li class="recipe_link">
+				            <a href="${pageContext.request.contextPath}/recipe/recipeView.do?recipeNo=${li.recipeNo}&memberId=${memberLoggedIn.memberId}">
 				            <img id="recipeRecomImage" src="${pageContext.request.contextPath}/resources/upload/recipe/${image[vs.index]}" alt="" />
 				            <c:if test="${vs.index<5}">
+				            	<p class="fw600"></p>
 				            	<span class="best">Best</span>
 				            </c:if>
-				            <a href="${pageContext.request.contextPath}/recipe/recipeView.do?recipeNo=${li.recipeNo}&memberId=${memberLoggedIn.memberId}">${li.recipeTitle }</a>
+				            ${li.recipeTitle }
+				            </a>
 				            </li>
 		            </c:if>
 	            </c:forEach>

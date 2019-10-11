@@ -146,8 +146,8 @@ public class RecipeDAOImpl implements RecipeDAO {
 	}
 
 	@Override
-	public int MaterialOldDelete(String materialNo) {
-		return sqlSession.delete("recipe.materialOldDelete", materialNo);
+	public int MaterialOldDelete(Material deleteM) {
+		return sqlSession.delete("recipe.materialOldDelete", deleteM);
 	}
 
 	@Override

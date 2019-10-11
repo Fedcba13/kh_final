@@ -64,7 +64,7 @@ public interface RecipeService {
 
 	List<Recipe> selectRecipeIndexList();
 
-	int materialOldDelete(String materialNo);
+	int materialOldDelete(Material deleteM);
 
 	String selectMaterialNo(String materialName);
 

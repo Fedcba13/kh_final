@@ -66,6 +66,7 @@
 
 .btn_content_ar {
 	width: 50px;
+	margin-top: 30px;
 }
 
 .btn_material {
@@ -130,7 +131,8 @@
 
 .comment_insert, .comment_insert_ref2 {
 	position: relative;
-	top: -25px;
+	top: -35px;
+	width: 50px;
 }
 
 .reply_show {
@@ -197,14 +199,18 @@
 	margin-top: 20px;
 }
 
+.reply_btn {
+	top: - 10px;
+}
+
 .comment_blame_btn {
 	position: relative;
-	top: -25px;
+	top: -35px;
 }
 
 .comment_update_btn {
 	position: relative;
-	top: -25px;
+	top: -35px;
 }
 
 .recomList {
@@ -242,13 +248,15 @@ hr {
 #recipeRecomImage {
 	width: 450px;
 	height: 450px;
+	min-height: 450px;
+    display: block;
 }
 
 .recipeList {
 	display: inline-block;
 }
 
-.recipeList>a>li {
+.recipeList>li {
 	border: 1px solid #c0c0c0;
 	width: 450px;
 	text-align: center;
@@ -259,7 +267,6 @@ hr {
 }
 
 .recipeList li:nth-child(2n) {
-	background: red;
 	margin-right: 0px;
 }
 
@@ -289,7 +296,7 @@ hr {
 }
 
 .recipeImgTd {
-	width: 250px;
+	width: 200px;
 	text-align: center;
 }
 
@@ -334,4 +341,13 @@ hr {
 
 .searchDiv {
 	text-align: right;
+}
+
+.foodName {
+	padding: 1px;
+	font-size: 15px;
+}
+
+.btn_insert {
+	margin-top: 20px;
 }

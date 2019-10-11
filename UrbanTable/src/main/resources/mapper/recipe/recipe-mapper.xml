@@ -243,7 +243,7 @@
 	</select>
 	
 	<delete id="materialOldDelete">
-		delete from recipe_ingredient where food_section_no = #{materialNo}
+		delete from recipe_ingredient where recipe_no = #{recipeNo} and food_section_no = #{foodSectionNo}
 	</delete>
 	
 	<select id="selectMaterialNo" resultType="string">

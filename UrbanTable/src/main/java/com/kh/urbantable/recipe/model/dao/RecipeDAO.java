@@ -64,7 +64,7 @@ public interface RecipeDAO {
 
 	List<Recipe> selectRecipeIndexList();
 
-	int MaterialOldDelete(String materialNo);
+	int MaterialOldDelete(Material deleteM);
 
 	String selectMaterialNo(String materialName);
 

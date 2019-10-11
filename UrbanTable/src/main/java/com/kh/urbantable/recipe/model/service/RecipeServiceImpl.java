@@ -145,8 +145,8 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 
 	@Override
-	public int materialOldDelete(String materialNo) {
-		return recipeDAO.MaterialOldDelete(materialNo);
+	public int materialOldDelete(Material deleteM) {
+		return recipeDAO.MaterialOldDelete(deleteM);
 	}
 
 	@Override

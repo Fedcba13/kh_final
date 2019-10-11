@@ -150,11 +150,14 @@ $(()=> {
 		
 		window.open(loc,'추천 상품 선택','width=430,height=500,location=no,status=no,scrollbars=yes');
 	});
-	
-	$(".mate_li_delete").click((e)=>{
-		materialDeleteEvent(e);
-	});
+
 });
+
+function searchBtnEvent() {
+	var loc = "${pageContext.request.contextPath}/recipe/searchFrm";
+	
+	window.open(loc,'추천 상품 선택','width=430,height=500,location=no,status=no,scrollbars=yes');
+}
 
 function materialInsert(){
 	if($("#food_division").val() == "") {
@@ -172,7 +175,7 @@ function materialInsert(){
 	var searchResult = $("#searchResultNo").val();
 	
 	html += "<li class='mate_li' value='" + material_i + "'>" + $("#food_division").val() + ">" + section + "</li>"
-	html += "<button type='button' class='mate_li_delete' value='" + material_i + "'>x</button>";
+	html += "<button type='button' class='mate_li_delete' value='" + material_i + "' onclick='materialDeleteEvent(this);'>x</button>";
 	
 	$("#material_list").append(html);
 	
@@ -196,47 +199,34 @@ function materialInsert(){
 	
 	$("#searchResult").val("");
 	$("#searchResultNo").val("");
-	
-	$(".mate_li_delete").off();
-	$(".mate_li_delete").click((e)=>{
-		materialDeleteEvent(e);
-	});
+
 	
 	material_i++;
 }
 
-function materialDeleteEvent(e) {
-	var $this = $(e.target);
-	console.log('1');
+function materialDeleteEvent(del_btn) {
 	
-	var text = $(".mate_li[value='" + $this.val() + "']").text();
-	console.log('2');
+	var text = $(".mate_li[value='" + del_btn.value + "']").text();
 	
-	$(".mate_li[value='" + $this.val() + "']").remove();
-	console.log('3');
-	$this.remove();
-	console.log('4');
-	$this.prev().remove();
-	console.log('5');
+	$(".mate_li[value='" + del_btn.value + "']").remove();
+	del_btn.remove();
 		
 		
 		var arr = text.split(">");
 		var materialName = arr[1];
-		console.log('6');
-		console.log('7');
+		alert($("#materialDeleteSet").val());
+		
+		var materialDeleteSet = $("#materialDeleteSet").val();
 
 		if($("#materialOldSet").val().indexOf(materialName) != -1) {
 			$.ajax({
 				url: "${pageContext.request.contextPath}/recipe/materialOldDelete/" + materialName,
+				data: {materialDeleteSet: materialDeleteSet},
 				dataType: "json",
 				type: "GET",
 				success: (data)=>{
 					console.log(data);
-					if(data == 0) {
-						console.log("삭제 실패!");
-					} else {
-						console.log("삭제 성공!");
-					}
+					$("#materialDeleteSet").val(data);
 				},
 				error: (xhr, txtStatus, err)=> {
 					console.log("ajax 처리실패!", xhr, txtStatus, err);
@@ -244,12 +234,12 @@ function materialDeleteEvent(e) {
 			});
 		} else {
 			 $.ajax({
-	            url: "${pageContext.request.contextPath}/recipe/materialDelete/" + materialName,
+	            url: "${pageContext.request.contextPath}/recipe/materialDelete/" + del_btn.value,
                 data: {materialSet: $("#materialSet").val()},
 				type: "GET",
 				success: (data)=>{
 					console.log(data);
-					//$("#materialSet").val(data);
+					$("#materialSet").val(data);
 					console.log('9');
 				},
 				error: (xhr, txtStatus, err)=> {
@@ -257,7 +247,6 @@ function materialDeleteEvent(e) {
 				}
 			});	  
 		}
-		console.log('10');
 }
 
 function tabEvent() {
@@ -284,7 +273,7 @@ function tabEvent() {
 }
 
 function pic_Event() {
-var pic_index = $("#tab_remove").val();
+var pic_index = $(".btn_upload");
 
 	$("#btn_upload" + pic_index).click(function(e) {
 		alert(pic_index);
@@ -360,13 +349,13 @@ function setChildNoValue(searchResultNo){
 	                	</select>
 	                	<input type="text" id="searchResult" placeholder="추천 재료(선택 사항)" readonly />
 	            		<input type="hidden" name="searchResultNo" id="searchResultNo" />
-	            		<button type="button" class="btn search_btn" style="width:50px;">검색</button>
+	            		<button type="button" class="btn search_btn" style="width:50px;" onclick="searchBtnEvent();">검색</button>
 	                	<button type="button" class="btn btn_material">추가</button>
 	                	<br />
 	                	<ol id="material_list">
 	                		<c:forEach items="${material}" var="m" varStatus="vs">
 	                			<li class='mate_li' value="${vs.count}">${m.foodDivisionName}>${m.foodSectionName}</li>
-								<button type='button' class='mate_li_delete' value="${vs.count}">x</button>
+								<button type='button' class='mate_li_delete' value="${vs.count}" onclick="materialDeleteEvent(this);">x</button>
 	                		</c:forEach>
 	                	</ol>
 	                </td>
@@ -411,6 +400,7 @@ function setChildNoValue(searchResultNo){
 	       	</c:set>
 	        <input type="hidden" id="materialSet" name="materialSet" />
 	        <input type="hidden" id="materialOldSet" name="materialOldSet" value="${set}" />
+	        <input type="hidden" id="materialDeleteSet" name="materialDeleteSet" />
 	        <input type="hidden" id="recipeNo" name="recipeNo" value="${recipe.recipeNo}" />
 	        <div class="btn_submit">
 	        	<input type="submit" class="btn btn_insert" value="글 등록하기" />	        
