@@ -94,7 +94,7 @@
 	</select>
 	
 	<select id="getMemberPayList" resultType="map">
-		select PAY_NO, PAY_PRICE, PAY_FLAG, PAY_ENABLED, PAY_DATE, MARKET_NAME, food_name|| '외 ' || cnt || '건' as TXT, food_img
+		select PAY_NO, PAY_PRICE, PAY_FLAG, PAY_ENABLED, PAY_DATE, MARKET_NAME, food_name|| ' 포함 ' || cnt || '건' as TXT, food_img
 		from (select p.PAY_NO, PAY_PRICE, PAY_FLAG, PAY_ENABLED, PAY_DATE, MARKET_NAME, max(food_no) as food_no, count(p.pay_no) as cnt
 		from pay p
 		    left join market m

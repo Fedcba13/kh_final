@@ -110,9 +110,6 @@
 			<mapping path="/check/updateOrder.do" />
 			<mapping path="/check/blameCheck.do" />
 			<mapping path="/admin/foundationList.do" />
-			<mapping path="/event/eventList.do" />
-			<mapping path="/marketOwner/eventList" />
-			<mapping path="/event/marketEventEnroll.do" />
 			<mapping path="/notice/insertNotice.do" />
 			<mapping path="/notice/updateForm" />
 			<beans:bean id="AdminInerceptor"
