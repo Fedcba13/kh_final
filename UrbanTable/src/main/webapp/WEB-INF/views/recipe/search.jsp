@@ -21,40 +21,32 @@ $(()=> {
 <section class="sub_bg"> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->
 	<article class="subPage inner">
 	    <h3 class="sub_tit">레시피</h3>
-	    <div class="recipeListDiv">
-		    <c:if test="${not empty list}">
-	        	<c:forEach items="${list}" var="li" varStatus="vs">
-		            <c:if test="${li.recipeEnabled != 0}">
-				        <ol class="recipeList">
-				            <a href="${pageContext.request.contextPath}/recipe/recipeView.do?recipeNo=${li.recipeNo}&memberId=${memberLoggedIn.memberId}">
-				            <li class="recipe_link">
-				            <img id="recipeRecomImage" src="${pageContext.request.contextPath}/resources/upload/recipe/${image[vs.index]}" alt="" />
-				            <c:if test="${vs.index<5}">
-				            	<span class="best">Best</span>
-				            </c:if>
-				            ${li.recipeTitle }
-				            </li>
-				            </a>
-				    	</ol>            	
-		            </c:if>
-	            </c:forEach>
-	        </c:if>	    
-	    </div>
 	    <div class="searchDiv">
 		    <form action="${pageContext.request.contextPath}/recipe/recipeSearch">
 		    	<input type="text" id="searchName" name="searchName" />
 		    	<input type="submit" id="searchbtn" class="btn" width="50px" value="검색" />
 		    </form>	    
 	    </div>
-        <jsp:include page="paging.jsp" flush="true">
-		    <jsp:param name="firstPageNo" value="${paging.firstPageNo}" />
-		    <jsp:param name="prevPageNo" value="${paging.prevPageNo}" />
-		    <jsp:param name="startPageNo" value="${paging.startPageNo}" />
-		    <jsp:param name="pageNo" value="${paging.pageNo}" />
-		    <jsp:param name="endPageNo" value="${paging.endPageNo}" />
-		    <jsp:param name="nextPageNo" value="${paging.nextPageNo}" />
-		    <jsp:param name="finalPageNo" value="${paging.finalPageNo}" />
-		</jsp:include>
+	    <div class="recipeListDiv">
+		    <c:if test="${not empty list}">
+	        	<c:forEach items="${list}" var="li" varStatus="vs">
+		            <c:if test="${li.recipeEnabled != 0}">
+				        <ol class="recipeList">
+				            <li class="recipe_link">
+				            <a href="${pageContext.request.contextPath}/recipe/recipeView.do?recipeNo=${li.recipeNo}&memberId=${memberLoggedIn.memberId}">
+				            <img id="recipeRecomImage" src="${pageContext.request.contextPath}/resources/upload/recipe/${image[vs.index]}" alt="" />
+				            <c:if test="${vs.index<5}">
+				            	<p class="fw600"></p>
+				            	<span class="best">Best</span>
+				            </c:if>
+				            ${li.recipeTitle }
+				            </a>
+				            </li>
+				    	</ol>            	
+		            </c:if>
+	            </c:forEach>
+	        </c:if>	    
+	    </div>
         <div class="recipe_insert">
         	<button class="btn insert_btn" value="${memberLoggedIn.memberId}">글쓰기</button>        
         </div>
