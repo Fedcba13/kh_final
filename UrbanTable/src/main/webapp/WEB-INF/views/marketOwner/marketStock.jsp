@@ -8,12 +8,12 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath }/resources/css/marketOwner.css">
 <script>
 var orderTotal=0;
+var cPage = '${cPage}';
+var foodDivision = '${foodDivision}';
+var foodOrderSearchType = '${foodOrderSearchType}';
+var foodOrderSearchKeyword = '${foodOrderSearchKeyword}';
 $(()=>{
 	
-	var cPage = '${cPage}';
-	var foodDivision = '${foodDivision}';
-	var foodOrderSearchType = '${foodOrderSearchType}';
-	var foodOrderSearchKeyword = '${foodOrderSearchKeyword}';
 	var param = {
 		memberId: "${memberLoggedIn.memberId}",
 		cPage: cPage,
@@ -48,23 +48,7 @@ $(()=>{
 		}
 	});
 	
-	var cartParam = {
-		memberId: "${memberLoggedIn.memberId}",
-		cPage: cPage
-	}
-	
-	$.ajax({
-		url: "${pageContext.request.contextPath}/market/marketCartPage.do",
-		type: "get",
-		data: param,
-		dataType:"json",
-		success: function(data){
-			printCartData(data);
-		},
-		error: function(xhr, txtStatus, err){
-			console.log("ajax 처리 실패", xhr, txtStatus, err);
-		}
-	});
+	loadMarketCartList();
 	
 	$(".list_wrap > div").hide();
 	$(".list_wrap > div:first").show();
@@ -249,6 +233,7 @@ $(()=>{
 		$(".popupWrap").hide();
 		$(".popupWrap .marketOrderPopup").remove();
 		//location.reload();
+		loadMarketCartList();
 	});
 	
 	$(document).on('click', "#orderList .pageBar a", function(e){
@@ -272,6 +257,26 @@ $(()=>{
 		});
 	});
 });
+
+function loadMarketCartList(){
+	var cartParam = {
+		memberId: "${memberLoggedIn.memberId}",
+		cPage: cPage
+	}
+	
+	$.ajax({
+		url: "${pageContext.request.contextPath}/market/marketCartPage.do",
+		type: "get",
+		data: cartParam,
+		dataType:"json",
+		success: function(data){
+			printCartData(data);
+		},
+		error: function(xhr, txtStatus, err){
+			console.log("ajax 처리 실패", xhr, txtStatus, err);
+		}
+	});
+}
 
 function printData(data){
 	var fs = data.foodStockList;
