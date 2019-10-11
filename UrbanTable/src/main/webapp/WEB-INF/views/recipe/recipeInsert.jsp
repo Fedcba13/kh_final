@@ -113,7 +113,7 @@ $(()=> {
 		var searchResult = $("#searchResultNo").val();
 		
 		html += "<li class='mate_li' value='" + material_i + "'>" + $("#food_division").val() + ">" + section + "</li>"
-		html += "<button type='button' class='mate_li_delete' value='" + material_i + "' onclick='materialDeleteEvent(this)'>x</button>";
+		html += "<button type='button' class='mate_li_delete' value='" + material_i + "'>x</button>";
 		
 		$("#material_list").append(html);
 		
@@ -133,6 +133,27 @@ $(()=> {
 			error: (xhr, txtStatus, err)=> {
 				console.log("ajax 처리실패!", xhr, txtStatus, err);
 			}
+		});
+		
+		$(".mate_li_delete").on("click", function() {
+			$(".mate_li[value='" + this.value + "']").remove();
+			var text = $(".mate_li[value='" + this.value + "']").text();
+			this.remove();
+			
+			$.ajax({
+				url: "${pageContext.request.contextPath}/recipe/materialDelete/" + this.value,
+				data: {materialSet: materialSet},
+				dataType: "json",
+				type: "GET",
+				success: (data)=>{
+					console.log(data);
+					$("#materialSet").val(data);
+					
+				},
+				error: (xhr, txtStatus, err)=> {
+					console.log("ajax 처리실패!", xhr, txtStatus, err);
+				}
+			});
 		});
 		
 		$("#searchResult").val("");
@@ -242,28 +263,6 @@ function setChildNoValue(searchResultNo){
 
     $("#searchResultNo").val(searchResultNo);
 
-}
-
-function materialDeleteEvent(del) {
-	$(".mate_li[value='" + del.value + "']").remove();
-	var text = $(".mate_li[value='" + del.value + "']").text();
-	var materialSet = $(".materialSet").val();
-	del.remove();
-	
-	$.ajax({
-		url: "${pageContext.request.contextPath}/recipe/materialDelete/" + del.value,
-		data: {materialSet: materialSet},
-		dataType: "json",
-		type: "GET",
-		success: (data)=>{
-			console.log(data);
-			$("#materialSet").val(data);
-			
-		},
-		error: (xhr, txtStatus, err)=> {
-			console.log("ajax 처리실패!", xhr, txtStatus, err);
-		}
-	});
 }
 </script>
 <section class=""> <!--배경색이 있는 경우만 sec_bg 넣으면 됩니다.-->

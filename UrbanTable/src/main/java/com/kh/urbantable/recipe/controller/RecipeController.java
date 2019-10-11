@@ -44,7 +44,6 @@ public class RecipeController {
 	RecipeService recipeService;
 	
 	List<String> set = new ArrayList<String>();
-	List<String> materialDeleteList = new ArrayList<String>();
 	Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@RequestMapping("/recipe")
@@ -138,14 +137,24 @@ public class RecipeController {
 		
 		set.add(section + "-" + searchResult);
 		
+		logger.info("a" + set.toString());
+		
 		return set;
 	}
 	
 	@ResponseBody
 	@GetMapping("/materialDelete/{index}")
 	public List<String> materialDelete(@PathVariable("index") String index, @RequestParam("materialSet") String materialSet) {
+		
+		logger.info("a" + set.toString());
 		logger.info(index);
-		//set.remove(index-1);
+		
+		int removeIndex = set.indexOf(index);
+		if(removeIndex != -1) {
+			set.remove(removeIndex);
+		}
+		
+		logger.info("a" + set.toString());
 		
 		return set;
 	}
@@ -252,7 +261,7 @@ public class RecipeController {
 	@RequestMapping("/recipeUpdateEnd.do")
 	public String recipeUpdateEnd(RecipeVO recipeVo, 
 			MultipartFile[] recipePic,
-			@RequestParam("materialSet") String materialSet, @RequestParam("materialDeleteSet") String materialDeleteSet,
+			@RequestParam("materialSet") String materialSet,
 			@RequestParam("updateLastOrder") int updateLastOrder, @RequestParam("sequenceLast") int sequenceLast,
 			Model model, HttpServletRequest request) {
 		logger.debug(materialSet);
@@ -340,21 +349,6 @@ public class RecipeController {
 			}
 			
 			int sequence_update_result = recipeService.updateRecipeSequence(updateSequenceList);
-
-			int ingredient_delete = 0;
-			
-			if(materialDeleteSet != null && !materialDeleteSet.equals("")) {
-				String[] deleteArr = materialDeleteSet.split(",");
-				
-				for(int j = 0; j<deleteArr.length; j++) {
-					Material deleteM = new Material();
-					
-					String foodSectionNo = recipeService.selectFoodSectionNo(deleteArr[j]);
-					deleteM.setRecipeNo(recipeNo);
-					deleteM.setFoodSectionNo(foodSectionNo);
-					ingredient_delete = recipeService.materialOldDelete(deleteM);
-				}
-			}
 			
 			int ingredient_result = 0;
 			
@@ -467,7 +461,12 @@ public class RecipeController {
 	}
 	
 	@RequestMapping("/blameComment")
-	public String boardCommentBlame(Blame blame, @RequestParam String recipeNo, Model model) {
+	public String boardCommentBlame(Blame blame,
+										@RequestParam String recipeNo,
+										Model model,
+										@RequestParam String targetType,
+										@RequestParam(defaultValue="") String foodNo,
+										@RequestParam(defaultValue="") String marketNo) {
 		
 		try {
 			int result = recipeService.boardCommentBlame(blame);
@@ -475,6 +474,10 @@ public class RecipeController {
 			
 			model.addAttribute("msg", msg);
 			model.addAttribute("loc", "/recipe/recipeView.do?recipeNo=" + recipeNo + "&memberId=");
+			if(targetType.equals("2")) {
+				model.addAttribute("loc", "/food/goFoodView.do?foodNo="+foodNo+"&marketNo="+marketNo);
+			}
+			
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
@@ -543,21 +546,31 @@ public class RecipeController {
 	
 	@ResponseBody
 	@RequestMapping("/materialOldDelete/{materialName}")
-	public List<String> materialOldDelete(@PathVariable("materialName") String materialName, @RequestParam("materialDeleteSet") String materialDeleteSet) {
+	public int materialOldDelete(@PathVariable("materialName") String materialName) {
 		
-		if(materialDeleteSet.equals("")) {
-			materialDeleteList = new ArrayList<String>();
+		int result = 0;
+		String materialNo = recipeService.selectMaterialNo(materialName);
+		
+		try {
+			//result = recipeService.materialOldDelete(materialNo);
+		} catch(Exception e) {
+			e.printStackTrace();
 		}
 		
-		materialDeleteList.add(materialName);
-		
-		return materialDeleteList;
+		return result;
 	}
 	
 	@RequestMapping("/recipeBlame")
-	public String recipeBlame(@RequestParam("recipeNo") String recipeNo, HttpServletRequest request) {
+	public String recipeBlame(@RequestParam("recipeNo") String recipeNo, 
+			HttpServletRequest request, 
+			@RequestParam(value="type", defaultValue="") String type,
+			@RequestParam(value="foodNo", defaultValue="") String foodNo,
+			@RequestParam(value="marketNo", defaultValue="") String marketNo) {
 		
 		request.setAttribute("recipeNo", recipeNo);
+		request.setAttribute("foodNo", foodNo);
+		request.setAttribute("marketNo", marketNo);
+		request.setAttribute("type", type);
 		return "recipe/blame";
 	}
 	
@@ -663,6 +676,7 @@ public class RecipeController {
 		request.setAttribute("list", list);
 		request.setAttribute("paging", paging);
 		request.setAttribute("image", imageList);
+//		logger.debug("list=" + list);
 		
 		return "recipe/search";
 	}
