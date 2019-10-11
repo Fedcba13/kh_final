@@ -258,3 +258,8 @@
     line-height: 32px;
     color: #666;
 }
+
+#fv_recipe .main_event_list li,
+#fv_recipe .main_event_list li img {
+	width:302.5px;
+}

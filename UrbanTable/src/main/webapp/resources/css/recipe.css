@@ -26,7 +26,6 @@
 
 .recipe_view_h3 {
 	font-size: 30px;
-	margin-left: 20px;
 	margin-top: 40px;
 }
 
@@ -38,7 +37,6 @@
 .recipe_insert {
 	text-align: right;
 	margin-top: 20px;
-	margin-right: 30px;
 }
 
 .btn_content {
@@ -113,6 +111,7 @@
 	text-align: right;
 	margin-top: 20px;
 	margin-right: 20px;
+	margin-bottom:40px;
 }
 
 .comment_h2 {
@@ -131,8 +130,9 @@
 
 .comment_insert, .comment_insert_ref2 {
 	position: relative;
-	top: -35px;
-	width: 50px;
+    top: -29px;
+    width: 55px;
+    height: 65px;
 }
 
 .reply_show {
@@ -219,17 +219,16 @@
 
 .recomOl {
 	overflow:hidden;
-	display: inline-block;
 }
 
 .recomOl>li {
-	width: 150px;
-	height: 300px;
-	border: 1px solid #c0c0c0;
-	float: left;
-	margin-right: 10px;
-	text-align: center;
-	display: inline-block;
+	width: 172px;
+    height: 300px;
+    border: 1px solid #c0c0c0;
+    float: left;
+    margin-right: 15px;
+    text-align: center;
+    box-sizing: border-box;
 }
 
 .update_div {
@@ -246,10 +245,11 @@ hr {
 }
 
 #recipeRecomImage {
-	width: 450px;
-	height: 450px;
-	min-height: 450px;
+	width: 462px;
+	height: 462px;
+	min-height: 462px;
     display: block;
+    margin-bottom:10px;
 }
 
 .recipeList {
@@ -258,12 +258,13 @@ hr {
 
 .recipeList>li {
 	border: 1px solid #c0c0c0;
-	width: 450px;
+	width: 462px;
 	text-align: center;
 	font-size: 25px;
 	float: left;
 	margin-right: 20px;
 	margin-bottom: 20px;
+	padding-bottom:10px;
 }
 
 .recipeList li:nth-child(2n) {
@@ -279,28 +280,35 @@ hr {
 }
 
 .foodImg {
-	width: 148px;
+	width: 170px;
 	height: 200px;
 }
 
 #recipeImg {
-	width: 200px;
-	height: 200px;
-	diplay: block;
+	width: 450px;
+	display: block;
 }
 
 .recipeContentTd {
-	width: 400px;
-	height: 300px;
-	padding-left: 100px;
+	width: 474px;
+	padding-left: 60px;
+	vertical-align:top;
+	word-break:keep-all;
+    padding-top: 60px;
+    font-size: 17px;
+    line-height: 29px;
 }
 
 .recipeImgTd {
-	width: 200px;
+	width: 470px;
 	text-align: center;
+	padding-left:20px;
+	padding-bottom:20px;
+	box-sizing:border-box;
 }
 
 .recipe_sequence_table {
+	width:100%;
 	margin-top: 20px;
 }
 
@@ -310,21 +318,22 @@ hr {
 
 .reaction {
 	background: white;
-	width: 150px;
-	height: 50px;
+	width: 100px;
+	padding:6px 0;
 	font-size: 18px;
-	padding-left: 20px;
 	cursor: pointer;
-	cursor: hand;
+}
+
+.reaction p {
+	font-size:15px;
 }
 
 .reaction img {
-	position: absolute;
-	margin-left: -40px;
-	margin-top: -5px;
+	width:21p;
 }
 
 #good {
+	margin-right:5px;
 	border: 1px solid #FF3C3C;
 	color: #FF3C3C;
 }
@@ -341,11 +350,23 @@ hr {
 
 .searchDiv {
 	text-align: right;
+	padding-bottom:15px;
+}
+
+.searchDiv input[name=searchName] {
+	width:250px;
+}
+
+.searchDiv #searchbtn {
+	width:70px;
+	margin-left:5px;
 }
 
 .foodName {
-	padding: 1px;
-	font-size: 15px;
+	padding: 5px;
+    font-size: 15px;
+    display: block;
+    word-break: keep-all;
 }
 
 .btn_insert {
