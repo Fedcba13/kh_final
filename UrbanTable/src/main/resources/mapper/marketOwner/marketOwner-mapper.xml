@@ -184,11 +184,13 @@
 	<select id="selectTotalContents" resultType="_int">
 		select count(*)
 		from food F left join stock S on F.food_no=S.food_no
-		left join food_section D on F.food_section_no=D.food_section_no
+       	LEFT JOIN FOOD_SECTION SC ON F.FOOD_SECTION_NO = SC.FOOD_SECTION_NO
+       	LEFT JOIN FOOD_UPPER U ON SC.FOOD_UPPER_NO = U.FOOD_UPPER_NO
+       	LEFT JOIN FOOD_DIVISION D ON U.FOOD_DIVISION_NO = D.FOOD_DIVISION_NO
 		<trim prefix="where" suffixOverrides="and">
 			S.market_no=#{marketNo}
 			<if test="foodDivision!=null and foodDivision!=''">
-			and food_division_no=#{foodDivision}
+			and D.food_division_no=#{foodDivision}
 			</if>
 			<if test="foodOrderSearchType=='food_name'">
 			and F.food_name like '%'||#{foodOrderSearchKeyword}||'%'
