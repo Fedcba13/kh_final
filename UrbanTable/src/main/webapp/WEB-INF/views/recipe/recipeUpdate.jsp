@@ -274,26 +274,26 @@ function tabEvent() {
 
 function pic_Event() {
 var pic_index = $(".btn_upload");
+var pic_index = $("#tab_remove").val();
 
-	$("#btn_upload" + pic_index).click(function(e) {
-		alert(pic_index);
-		e.preventDefault();
-		$("#upload_file" + pic_index).click();
-		var ext = $("#upload_file" + pic_index).val().split(".").pop().toLowerCase();
-		if(ext.length > 0) {
-			if($.inArray(ext, ["gif", "png", "jpg", "jpeg"]) == -1) {
-				alert("gif, png, jpg 파일만 업로드 할 수 있습니다.");
-				return false;
-			}
+$("#btn_upload" + pic_index).click(function(e) {
+	e.preventDefault();
+	$("#upload_file" + pic_index).click();
+	var ext = $("#upload_file" + pic_index).val().split(".").pop().toLowerCase();
+	if(ext.length > 0) {
+		if($.inArray(ext, ["gif", "png", "jpg", "jpeg"]) == -1) {
+			alert("gif, png, jpg 파일만 업로드 할 수 있습니다.");
+			return false;
 		}
-		$("#upload_file" + pic_index).val().toLowerCase();
-	});
+	}
+	$("#upload_file" + pic_index).val().toLowerCase();
+});
+
+$("#upload_file" + pic_index).change(function() {
+	var name = this.value.split("\\");
 	
-	$("#upload_file" + pic_index).change(function() {
-		var name = this.value.split("\\");
-		
-		$("#upload_name" + pic_index).val(name[name.length-1]);
-	});
+	$("#upload_name" + pic_index).val(name[name.length-1]);
+});
 }
 
 function setChildValue(searchResult){

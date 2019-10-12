@@ -332,8 +332,10 @@ $(()=> {
 				        <c:forEach items="${material}" var="m">
 				        	<c:if test="${m.foodNo != null}">
 				        			<li>
-				        				<img class="foodImg" src="${m.foodImg}" alt="" />
-				        				<span class="foodName">${m.foodName}</span>
+				        				<a href="">
+					        				<img class="foodImg" src="${m.foodImg}" alt="" />
+					        				<span class="foodName">${m.foodName}</span>
+				        				</a>
 				        			</li>
 				        	</c:if>
 				        </c:forEach>                	
